@@ -72,7 +72,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'gestion.urls'
+ROOT_URLCONF = 'GestionItem.urls'
 
 TEMPLATES = [
     {
@@ -90,7 +90,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gestion.wsgi.application'
+WSGI_APPLICATION = 'GestionItem.wsgi.application'
 
 
 # Database
