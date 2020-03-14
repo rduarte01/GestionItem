@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if request.user.is_authenticated == False %}
+        <h1>HOLA MUNDO, AUN NO TENEMOS NADA Que hacer</h1>>
+        <li >
+            <a  href="/login/auth0">Log In</a>
+        </li>
+    {% endif %}
+
+    {% if request.user.is_authenticated == True %}
+        <li >
+            <a  href="/perfil">Profile</a>
+        </li>
+        <li >
+            <a  href="/logout">Log Out</a>
+        </li>
+    {% endif %}
+</body>
+</html>
