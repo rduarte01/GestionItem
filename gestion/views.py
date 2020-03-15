@@ -40,7 +40,8 @@ def perfil(request):
 
     return render(request, 'perfil.html', {
         'auth0User': auth0user,
-        'userdata': json.dumps(userdata, indent=4)
+        'userdata': userdata,
+        'nombre': user,
     })
 
 
