@@ -1,0 +1,4 @@
+**//idea/*
+myenv/**
+**/migrations/*
+__pycache__

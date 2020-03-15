@@ -98,14 +98,16 @@ WSGI_APPLICATION = 'GestionItem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'login_jesus',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mysite',
         'USER':'postgres',
-        'PASSWORD':'admin',
+        'PASSWORD':'root',
         'HOST':'127.0.0.1',
-        'PORT':'5433',
+        'DATABASE_PORT':'5432'
+
     }
 }
+
 
 
 # Password validation
