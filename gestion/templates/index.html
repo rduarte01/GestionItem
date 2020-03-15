@@ -2,23 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Gestion de Items</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
 <body>
-    {% if request.user.is_authenticated == False %}
-        <h1>HOLA MUNDO, AUN NO TENEMOS NADA Que hacer</h1>>
-        <li >
-            <a  href="/login/auth0">Log In</a>
-        </li>
-    {% endif %}
+    <br><br>
+    <div class="container">
+        <div class="row">
+            {% if request.user.is_authenticated == False %}
+                <h1 class="display-3">Bienvenidos a Gestion Items</h1>
+                </div>
+                <ul class="list-group">
+                    <a class="btn btn-primary" href="/login/auth0" role="button">Login</a>
+                </ul>
+            {% endif %}
+            </div>
 
-    {% if request.user.is_authenticated == True %}
-        <li >
-            <a  href="/perfil">Profile</a>
-        </li>
-        <li >
-            <a  href="/logout">Log Out</a>
-        </li>
-    {% endif %}
+            {% if request.user.is_authenticated == True %}
+             <ul class="list-group">
+                 <li class="list-group-item">
+                    <a  class="btn btn-primary" href="/perfil">Profile</a>
+                 </li>
+                 <li class="list-group-item">
+                    <a  class="btn btn-primary" href="/logout">Log Out</a>
+                 </li>
+             </ul>
+            {% endif %}
+        </div>
+
 </body>
 </html>
