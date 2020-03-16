@@ -9,8 +9,8 @@ urlpatterns: LAS URL QUE SE UTILIZARAN EN LA WEB
 """
 urlpatterns = [
     path('', views.index, name='index'),
-    path('logout/', views.logout),
-    path('perfil/',views.perfil),
-    path('listarUsuarios/',views.getUsers)
+    path('logout/', views.logout, name = 'logout'),
+    path('perfil/',views.perfil, name = 'perfil'),
+    path('listarUsuarios/',views.getUsers, name = 'getUser')
 # Create your views here.
 ]
