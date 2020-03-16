@@ -1,9 +1,5 @@
-"""
-SE POSEEN LOS METODOS DEL INICIO DE SESION
-
-"""
-
 from django.shortcuts import render
+# ... other import statements ...
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -13,12 +9,8 @@ from django.contrib.auth.models import User
 
 
 def index(request):
-    """
-    FUNCION QUE SE ACTIVARA EN LA PAGINA DE INICIO
-    SI SE AUTENTICA MUESTRA EL PERIL, CASO CONTRARIO EL INICIO
-    """
     user = request.user
-    #return render(request, 'index.html')
+    return render(request, 'index.html')
     if user.is_authenticated:
         return redirect(perfil)
     else:
@@ -30,7 +22,6 @@ def index(request):
 
 @login_required
 def perfil(request):
-    """ PROTEGIDA POR @login_required OBLIGA AL USUARIO A REGISTRARSE"""
     user = request.user
     print(user)
     print("aqui no hay error")
@@ -55,16 +46,13 @@ def perfil(request):
 
 
 def logout(request):
-    """PARA CERRAR SESION, VUELVE A LA PAGINA DE INICIO """
     django_logout(request)
     domain = 'dev-bmi8oyu1.auth0.com'
     client_id = 'YgcE1EravfahIBTJFWC0QOW8vPEugXYs'
     return_to = 'http://djangoproyect.herokuapp.com'
     return HttpResponseRedirect(f'https://{domain}/v2/logout?client_id={client_id}&returnTo={return_to}')
 
-
 def getUsers(request):
-    """TRAE INFORMACION DEL USUARIO"""
     #usuarios=User.Objects.getall()
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})

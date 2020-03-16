@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import django_heroku
 import os
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -97,7 +96,6 @@ WSGI_APPLICATION = 'GestionItem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-import psycopg2
 
 DATABASES = {
     'default': {
@@ -111,6 +109,8 @@ DATABASES = {
     }
 }
 
+
+django_heroku.settings(locals())
 
 
 # Password validation
@@ -135,7 +135,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-django_heroku.settings(locals())
 
 
 LANGUAGE_CODE = 'en-us'
