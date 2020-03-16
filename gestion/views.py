@@ -59,7 +59,7 @@ def logout(request):
     django_logout(request)
     domain = 'dev-bmi8oyu1.auth0.com'
     client_id = 'YgcE1EravfahIBTJFWC0QOW8vPEugXYs'
-    return_to = 'http://localhost:8000'
+    return_to = 'http://djangoproyect.herokuapp.com'
     return HttpResponseRedirect(f'https://{domain}/v2/logout?client_id={client_id}&returnTo={return_to}')
 
 
