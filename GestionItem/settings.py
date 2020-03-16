@@ -95,10 +95,10 @@ WSGI_APPLICATION = 'GestionItem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
+import psycopg2
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'gestionItem', #igual
         'USER':'postgres',#igual
         'PASSWORD':'root', #este se modifica
