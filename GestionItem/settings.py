@@ -95,13 +95,14 @@ WSGI_APPLICATION = 'GestionItem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+import psycopg2
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', #### se agrego pycopg2 #########
         'NAME': 'mysite',
         'USER':'postgres',
-        'PASSWORD':'root',
+        'PASSWORD':'postgres',  #### SE CAMBIO ########
         'HOST':'127.0.0.1',
         'DATABASE_PORT':'5432'
 
