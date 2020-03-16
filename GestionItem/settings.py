@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import django_heroku
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -100,11 +99,11 @@ WSGI_APPLICATION = 'GestionItem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mysite',
+        'NAME': 'login_jesus',
         'USER':'postgres',
-        'PASSWORD':'root',
+        'PASSWORD':'admin',
         'HOST':'127.0.0.1',
-        'DATABASE_PORT':'5432'
+        'PORT':'5433'
 
     }
 }
@@ -133,7 +132,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-django_heroku.settings(locals())
 
 
 LANGUAGE_CODE = 'en-us'
