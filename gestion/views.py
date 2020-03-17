@@ -7,12 +7,14 @@ import json
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 
-
+###### FALTA ENLAZAR Y AGREGAR URL EN LA PLANTILLA PARA LA REDIRECCION
 def menu(request):
+    """MENU PRINCIPAL AL INICIAR SESION"""
     return render(request,'menu.html')
 
 
 def index(request):
+    """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION"""
     user = request.user
     return render(request, 'index.html')
     if user.is_authenticated:
@@ -26,6 +28,7 @@ def index(request):
 
 @login_required
 def perfil(request):
+    """SOLICITUD DE AUTENTICACION PARA MOSTRAR EL PERFIL DEL USUARIO"""
     user = request.user
     print(user)
     print("aqui no hay error")
@@ -49,6 +52,7 @@ def perfil(request):
 
 
 def logout(request):
+    """PARA DESLOGUEARSE"""
     django_logout(request)
     domain = 'dev-bmi8oyu1.auth0.com'
     client_id = 'YgcE1EravfahIBTJFWC0QOW8vPEugXYs'
@@ -56,6 +60,7 @@ def logout(request):
     return HttpResponseRedirect(f'https://{domain}/v2/logout?client_id={client_id}&returnTo={return_to}')
 
 def getUsers(request):
+    """"TRAE INFORMACION DE USUARIO"""
     #usuarios=User.Objects.getall()
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
