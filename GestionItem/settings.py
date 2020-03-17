@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import django_heroku
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -100,17 +99,16 @@ WSGI_APPLICATION = 'GestionItem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gestionItem', #igual
-        'USER':'postgres',#igual
-        'PASSWORD':'root', #este se modifica
-        'HOST':'127.0.0.1',#igual
-        'PORT':'5432'#ger modifica
+        'NAME': 'gestionItem',
+        'USER':'postgres',
+        'PASSWORD':'root',
+        'HOST':'127.0.0.1',
+        'PORT':'5432',
 
     }
 }
 
 
-django_heroku.settings(locals())
 
 
 # Password validation
