@@ -99,11 +99,11 @@ WSGI_APPLICATION = 'GestionItem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gestionItem', #igual
-        'USER':'postgres',#igual
-        'PASSWORD':'root', #este se modifica
-        'HOST':'127.0.0.1',#igual
-        'PORT':'5432'#ger modifica
+        'NAME': 'gestionItem',
+        'USER':'postgres',
+        'PASSWORD':'root',
+        'HOST':'127.0.0.1',
+        'PORT':'5432',
 
     }
 }
