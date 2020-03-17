@@ -8,6 +8,10 @@ from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 
 
+def menu(request):
+    return render(request,'menu.html')
+
+
 def index(request):
     user = request.user
     return render(request, 'index.html')
@@ -55,3 +59,4 @@ def getUsers(request):
     #usuarios=User.Objects.getall()
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
+
