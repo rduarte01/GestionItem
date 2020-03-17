@@ -55,4 +55,5 @@ def logout(request):
 def getUsers(request):
     #usuarios=User.Objects.getall()
     users = User.objects.all()
+    print("hola mundo")
     return render(request,'perfil_usuarios.html',{'usuarios':users})
