@@ -1,0 +1,50 @@
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Creacion de proyecto</title>
+</head>
+<body>
+    <form>
+
+    <div class="form-group"> <!-- Full Name -->
+        <label for="full_name_id" class="control-label">NOMBRE DEL PROYECTO</label>
+        <input type="text" class="form-control" id="full_name_id" name="NOMBRE" placeholder="PON EL NOMBRE AQUI">
+    </div>
+
+    <div class="form-group"> <!-- Street 1 -->
+        <label for="street1_id" class="control-label">DESCRIPCION</label>
+        <input type="text" class="form-control" id="street1_id" name="DESCRIPCION" placeholder="AÑADE ALGO AQUI">
+    </div>
+
+    <div class="form-group"> <!-- Street 2 -->
+        <label for="street2_id" class="control-label">CANTIDAD DE FASES</label>
+        <input type="text" class="form-control" id="street2_id" name="CANTIDAD DE FASES" placeholder="1, 2, 3...">
+    </div>
+
+
+    <div class="form-group"> <!-- State Button -->
+        <label for="state_id" class="control-label">AGREGAR USUARIOS</label>
+        <select class="form-control" id="state_id">
+            <option value="AL">Walter</option>
+            <option value="AK">Presi</option>
+            <option value="AZ">Ger</option>
+            <option value="AR">el que documenta</option>
+
+        </select>
+    </div>
+
+
+    <div class="form-group"> <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Siguiente</button>
+    </div>
+
+
+</form>
+</body>
+</html>
+

@@ -11,14 +11,18 @@ from django.contrib.auth.models import User
 def menu(request):
     """MENU PRINCIPAL AL INICIAR SESION"""
     return render(request,'Menu.html')
+############ FALTA MEJORAR, ES EL COMIENZO #################
+def creacionProyecto(request):
+    """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
+    return render(request,'creacionProyecto.html')
 
 
 def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION"""
     user = request.user
-    return render(request, 'index.html')
+   # return render(request, 'index.html')
     if user.is_authenticated:
-        return redirect(perfil)
+        return redirect(menu)
     else:
         return render(request, 'index.html')
 
@@ -54,9 +58,9 @@ def perfil(request):
 def logout(request):
     """PARA DESLOGUEARSE"""
     django_logout(request)
-    domain = 'dev-bmi8oyu1.auth0.com'
-    client_id = 'YgcE1EravfahIBTJFWC0QOW8vPEugXYs'
-    return_to = 'http://djangoproyect.herokuapp.com'
+    domain = 'ruben-dev.auth0.com'
+    client_id = 'q8WImi9pV1hGFO62esYPTyhtoBey1Tlk'
+    return_to = 'http://localhost:8000'
     return HttpResponseRedirect(f'https://{domain}/v2/logout?client_id={client_id}&returnTo={return_to}')
 
 def getUsers(request):
