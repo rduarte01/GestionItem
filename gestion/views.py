@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 ###### FALTA ENLAZAR Y AGREGAR URL EN LA PLANTILLA PARA LA REDIRECCION
 def menu(request):
     """MENU PRINCIPAL AL INICIAR SESION"""
-    return render(request,'menu.html')
+    return render(request,'Menu.html')
 
 
 def index(request):

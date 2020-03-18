@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gestion.apps.GestionConfig',
     'social_django',
+    'bootstrap4',
 ]
 
 # Auth0 settings
@@ -77,7 +78,7 @@ ROOT_URLCONF = 'GestionItem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
