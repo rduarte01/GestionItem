@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-import json
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 
@@ -56,3 +55,8 @@ def getUsers(request):
     #usuarios=User.Objects.getall()
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
+
+
+"""def crearRol(request):
+        if request.method == 'POST':
+"""
