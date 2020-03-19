@@ -6,15 +6,42 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
+from post import POST
+
+from .models import Proyecto
+
+from .forms import form_Proyecto, RegModelForm
 
 ###### FALTA ENLAZAR Y AGREGAR URL EN LA PLANTILLA PARA LA REDIRECCION
 def menu(request):
     """MENU PRINCIPAL AL INICIAR SESION"""
     return render(request,'Menu.html')
+
+"""
+obtener datos de la plantilla, cuando se utiliza form
+if form.is_valid()
+email=form.cleaned_data.get("email")
+"""
+
+
 ############ FALTA MEJORAR, ES EL COMIENZO #################
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
-    return render(request,'creacionProyecto.html')
+
+    form = RegModelForm(request.POST or None)   ######## forms con proyecto
+    if form.is_valid():
+        instance = form.save(commit=False)########## impide que se guarde a la BD
+        if not instance.nombre or instance.description:
+            ###### retornar error
+            return HttpResponseRedirect("falta completar campos")
+
+        instance.save()######## guarda a la BD, en medio se puede manipular el texto
+        print(instance)
+        print(instance.timestamp)
+    context ={
+        "el_form": form,
+    }
+    return render(request,'creacionProyecto2.html', context)
 
 
 def index(request):
