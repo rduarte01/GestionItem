@@ -32,7 +32,15 @@
             <h6 class="display-6">Mi token: {{ auth0User.access_token }} </h6>
         </li>
             <li class="list-group-item">
-            <h6 class="display-6">Mi estado:  </h6>
+            <h6 class="display-6">Mi estado:</h6>
+                {% if userdata.estado == False %}
+                    <h6 class="display-6">En espera de ser aprobadado</h6>
+                {% else %}
+                    <h6 class="display-6">Activo</h6>
+                {% endif %}
+
+
+
         </li>
     </div>
 </body>
