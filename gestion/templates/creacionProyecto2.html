@@ -1,8 +1,16 @@
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
 <h1>Creacion de Proyecto</h1>
 
+{% block contect %}
+
  <form method="POST" action="">{% csrf_token %}
-      {{ el_form.as_p }}
-     <input type="submit" value="Siguiente">
+      {{ formProyecto.as_p }}
+     <input type="submit"  value="Siguiente">
  </form>
 
+{% endblock %}
 

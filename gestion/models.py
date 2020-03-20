@@ -1,7 +1,7 @@
 from django.db import models
 
-# Create your models here.
-
+from django.contrib.auth.models import User
+#    Proyecto= models.ForeignKey(Proyecto, null=False, blank=False)
 
 class Proyecto(models.Model):
     """
@@ -15,10 +15,18 @@ class Proyecto(models.Model):
     CANCELADO=4
     POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO
     """
-    id_proyecto= models.IntegerField(auto_created = True, primary_key = True, serialize = False) ###### clave de proyecto
+    #id_proyecto= models.IntegerField(auto_created = True, primary_key = True, serialize = False) ###### clave de proyecto
+    id_proyecto= models.IntegerField(primary_key = True)
     nombre= models.CharField(max_length=30)#####3required=false para que no sea obligatorio
     descripcion= models.CharField(max_length=100)
     ###-Usuarios: Usuario[*]    FALTA CREAR
     ###-Fases: Fases[*]
     estado= models.IntegerField()
     ###-Rol: Rol[*]
+    usuario = models.ManyToManyField(User)
+
+    """
+    MENU---> GERENTE, ADMINISTRADOR, USUARIO SIN SER ACEPTADO, USUARIO ACEPTADO
+    PLANTILLA
+        
+    """

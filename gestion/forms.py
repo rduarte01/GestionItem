@@ -1,14 +1,42 @@
 from django import forms
 from django.forms import Textarea
 
-from .models import Proyecto
+from .models import Proyecto   #, Usuario
 
 ####### se escribe formulario
 
-class RegModelForm(forms.ModelForm):
+"""class FormUsuario(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields=["nombre"]
+"""
+
+class FormProyecto(forms.ModelForm):
     class Meta:
         model = Proyecto
-        fields = ["nombre","descripcion"]
+        fields = [
+                "id_proyecto",
+                "nombre",
+                "descripcion",
+                "estado",
+                "usuario"
+                  ]
+        labels= {
+            "id_proyecto": "N° ID",
+            "nombre":"Nombre",
+            "descripcion":"Descripcion",
+            "estado":"Estado",
+            "usuario": "Agregar Usuarios al Proyecto"
+        }
+        widgets={
+            "id_proyecto": forms.TextInput(attrs={'class': 'form-control'}),
+            "nombre": forms.TextInput(attrs={'class': 'form-control'}),
+            "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
+            "estado":forms.TextInput(attrs={'class': 'form-control'}),
+            "usuario": forms.CheckboxSelectMultiple(),
+        }
+
+
 
 class form_Proyecto(forms.Form):
     """
