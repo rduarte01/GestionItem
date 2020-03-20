@@ -1,3 +1,4 @@
+from django.core.mail import EmailMessage
 from django.shortcuts import render
 # ... other import statements ...
 from django.contrib.auth import logout as django_logout
@@ -13,6 +14,18 @@ from .models import Proyecto
 from .forms import FormProyecto #, FormUsuario
 
 
+def CorreoMail():
+    #correo='waltergautofcb@gmail.com'
+    #correo='gerardocabrer@gmail.com'
+    correo='jesusromanm99@gmail.com'
+
+    mail=EmailMessage('Un Usuario en espera','Verifica al usuario ta..',to={correo})
+    mail.send()
+
+
+
+def Contactos(request):
+    return render(request,'Contactos.html')
 
 """
 def agregarUsuarios(request):
@@ -43,7 +56,11 @@ def menu(request):
     """MENU PRINCIPAL AL INICIAR SESION ADMINISTRADOR SISTEMA"""
     #return render(request,'MenuAdminSistema.html')
     """MENU PRINCIPAL EN ESPERA DE ACEPTACION"""
-    #return render(request,'MenuEnEspera.html')
+    CorreoMail()
+    #correo = str(User) + '@gmail.com'
+    #mensaje='favor verificar si el usuario cumple los requisitos para ser aceptado'#+ str(User)
+    #CorreoMail('Usuario en Espera',mensaje,'rduarte0997@qgmail.com')
+    return render(request,'MenuEnEspera.html')
 
 
 

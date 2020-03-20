@@ -9,6 +9,6 @@ urlpatterns = [
     path('listarUsuarios/',views.getUsers),
     path('menu/', views.menu),
     path('creacionProyecto/', views.creacionProyecto),
-   # path('agregarUsuarios/', views.agregarUsuarios),
+    path('Contactos/', views.Contactos),
 ]
 
