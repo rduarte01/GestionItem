@@ -26,7 +26,7 @@ class FormProyecto(forms.ModelForm):
             "nombre":"Nombre",
             "descripcion":"Descripcion",
             "estado":"Estado",
-            "usuario": "Agregar Usuarios al Proyecto"
+            "usuario": "Selecciona Usuarios para Agregar al Proyecto"
         }
         widgets={
             "id_proyecto": forms.TextInput(attrs={'class': 'form-control'}),

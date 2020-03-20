@@ -6,11 +6,13 @@
 <h1>Creacion de Proyecto</h1>
 
 {% block contect %}
+      <div class="jumbotron">
 
  <form method="POST" action="">{% csrf_token %}
       {{ formProyecto.as_p }}
      <input type="submit"  value="Siguiente">
  </form>
 
+      </div>
 {% endblock %}
 
