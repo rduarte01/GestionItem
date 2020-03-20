@@ -1,28 +1,33 @@
-from django.db import models
+from email.policy import default
 
+from django.db import models
+from django.contrib.auth.models import User
 # Create your models here.
 
-class Proyecto(models.Model):
-    nombre:models.CharField(max_length=10,default='nombre de tu usuario')
+class TipoItem(models.Model):
+    id_ti = models.AutoField(primary_key=True,default=1)
+    nombre = models.CharField(max_length=20, default="Nombre Para el tipo de Item", help_text='Nombre del Tipo de Item')
+
     class Meta:
         permissions = (
-            ("cerrar_proyecto", "Cerrar Proyectos"),
-            #("cre_proyecto", "Cerrar Proyectos"),
+            ("importar_tipo_item", "Poder importar Tipo Item"),
+            ("crear_tipo_item", "Puede crear un Tipo de Item"),
         )
+        ordering=['nombre']
 
 
-class Fase(models.Model):
-    nombre:models.CharField(max_length=10,default="nombre de la fase")
-    cantida=models.IntegerField()
+class Atributo(models.Model):
+    choises_data_type = (
+        ("Decimal", "Decimal"),
+        ("Date", "Date"),
+        ("File", "File"),
+        ("String", "Cadena"),
+        ("Boolean", "Boolean")
+    )
+    id_atributo=models.AutoField(primary_key=True)
+    nombre=models.CharField(max_length=20,default="atriuto",help_text='Nombre del atributo del Tipo de Item')
+    es_obligatorio= models.BooleanField(default=True)
+    tipo_dato=models.CharField(max_length=8,choices=choises_data_type,default='Decimal')
+    ti=models.ForeignKey(TipoItem,on_delete=models.CASCADE)
     class Meta:
-        permissions=(
-            ("cerrar_fase","Cerrar Fases"),
-        )
-
-class TipoItem(models.Model):
-    codigo=models.CharField(max_length=10,default="codigo Tipo Item")
-    class Meta:
-        permissions=(
-            ("importar_tipo_item","Poder importar Tipo Item"),
-        )
-
+        ordering=['nombre']
