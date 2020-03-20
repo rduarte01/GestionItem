@@ -5,6 +5,11 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class TipoItem(models.Model):
+    """"
+        Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
+    """
+
+
     id_ti = models.AutoField(primary_key=True,default=1)
     nombre = models.CharField(max_length=20, default="Nombre Para el tipo de Item", help_text='Nombre del Tipo de Item')
 
@@ -17,6 +22,10 @@ class TipoItem(models.Model):
 
 
 class Atributo(models.Model):
+    """"
+       Este es el modelo Atributo, que se relaciona con Tipo de Item
+    """
+
     choises_data_type = (
         ("Decimal", "Decimal"),
         ("Date", "Date"),

@@ -58,20 +58,3 @@ def getUsers(request):
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
-
-
-def crear_Proyecto(request):
-    user=request.user
-    if user.has_perm("gestion.add_proyecto"):
-        print("El usuario puede crear Proyecto")
-    else :
-        print("El usuario no puede crear el proyecto")
-'''
-
-
-'''
-
-#funciones normales python
-def agregar_permisos_usuarios(request):
-    use
-
