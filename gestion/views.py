@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
-
+from django.contrib.auth.models import Permission,Group
+p=Group.objects.get_or_create()
 
 def index(request):
     user = request.user
@@ -56,3 +57,21 @@ def getUsers(request):
     #usuarios=User.Objects.getall()
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
+
+
+
+def crear_Proyecto(request):
+    user=request.user
+    if user.has_perm("gestion.add_proyecto"):
+        print("El usuario puede crear Proyecto")
+    else :
+        print("El usuario no puede crear el proyecto")
+'''
+
+
+'''
+
+#funciones normales python
+def agregar_permisos_usuarios(request):
+    use
+
