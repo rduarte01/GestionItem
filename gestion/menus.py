@@ -1,19 +1,19 @@
-from menu import Menu, MenuItem
+#from menu import Menu, MenuItem
 
 """
 La Menu clase expone un método de clase llamado add_itemque acepta dos argumentos; 
 el nombre del menú al que desea agregar y el MenuItemque va a agregar.
 """
 
-from django.core.urlresolvers import resolve
+"""from django.core.urlresolvers import resolve
 
 
 class ViewMenuItem(MenuItem):
-    """Custom MenuItem that checks permissions based on the view associated
-    with a URL"""
+    "Custom MenuItem that checks permissions based on the view associated
+    with a URL
 
     def check(self, request):
-         """Check permissions based on our view"""
+         Check permissions based on our view
          is_visible = True
          match = resolve(self.url)
 
@@ -21,3 +21,4 @@ class ViewMenuItem(MenuItem):
 
          self.visible = is_visible
 
+"""
