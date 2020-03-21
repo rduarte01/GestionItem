@@ -11,6 +11,7 @@ urlpatterns = [
     path('creacionProyecto/', views.creacionProyecto),
     path('Contactos/', views.Contactos),
     path('enEspera/',views.verSolicitudesenEspera),
+
 ]
 
 

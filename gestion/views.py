@@ -11,80 +11,61 @@ from .models import Proyecto
 from .forms import FormProyecto #, FormUsuario
 
 
-def CorreoMail():
-    #correo='waltergautofcb@gmail.com'
-    #correo='gerardocabrer@gmail.com'
-    correo='jesusromanm99@gmail.com'
-
-    mail=EmailMessage('Un Usuario en espera','Verifica al usuario ta..',to={correo})
+def CorreoMail(asunto,mensaje,correo):
+    """ FUNCION QUE RECIBE UN ASUNTO, MENSAJE Y UN CORRREO ELECTRONICO AL CUAL SE LE ENVIA UN CORREO
+    ELECTRONICO DE ACUERDO A UNA ACCION"""
+    mail=EmailMessage(asunto,mensaje,to={correo})
     mail.send()
 
 
 
 def Contactos(request):
+    """MUESTRA UN CORREO EN DONDE PUEDE CONTACTAR CON NOSOTROS"""
     return render(request,'Contactos.html')
 
-"""
-def agregarUsuarios(request):
-    ##MENU PRINCIPAL AL INICIAR SESION
-    ####################### USUARIO
-    formUsuario = FormUsuario(request.POST or None)   ######## forms con proyecto
-    if formUsuario.is_valid():
-        instanceUsuario = formUsuario.save(commit=False)########## impide que se guarde a la BD
-        if not instanceUsuario.nombre:
-            ###### retornar error
-            return HttpResponseRedirect("falta completar campos")
 
-        instanceUsuario.save()######## guarda a la BD, en medio se puede manipular el texto
-        print(instanceUsuario)
-        print(instanceUsuario.timestamp)
+###### FALTA FILTRAR POR PERMISOS
 
-    context ={
-        "formUsuario": formUsuario,
-    }
-    return render(request,'agregarUsuarios.html', context)
-
-"""
-
-###### FALTA ENLAZAR Y AGREGAR URL EN LA PLANTILLA PARA LA REDIRECCION
 def menu(request):
-    """MENU PRINCIPAL AL INICIAR SESION GERENTE"""
+    """
+    DE ACUERDO AL ROL DEL USUARIO MUESTRA EL MENU CORRESPONDIENTE, SIENDO LOS MENUS:
+    MENU PRINCIPAL AL INICIAR SESION GERENTE, MENU PRINCIPAL AL INICIAR SESION ADMINISTRADOR SISTEMA,
+    MENU PRINCIPAL EN ESPERA DE ACEPTACION
+    AL USUARIO QUE SE REGISTRE POR PRIMERA VEZ SE CREARA UN CORREO Y SE ENVIARA AL ADMINISTRADOR DEL SISTEMA
+    SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
+    """
+    if user.is_staff is True:
+        return render(request,'MenuAdminSistema.html')
+
+    # falta if de consulta si es gerente
     return render(request,'Menu.html')
-    """MENU PRINCIPAL AL INICIAR SESION ADMINISTRADOR SISTEMA"""
-    #return render(request,'MenuAdminSistema.html')
-    """MENU PRINCIPAL EN ESPERA DE ACEPTACION"""
-    CorreoMail()
-    #correo = str(User) + '@gmail.com'
-    #mensaje='favor verificar si el usuario cumple los requisitos para ser aceptado'#+ str(User)
-    #CorreoMail('Usuario en Espera',mensaje,'rduarte0997@qgmail.com')
+
+    #si no tiene rol le tira el menu de espera
+    #envia correo al admin para que acepte
+    correo = 'rduarte0997@gmail.com'   #correo de administrador del sistema
+    asunto='Solicitud de ingreso al sistema'
+    mensaje='favor verificar si el usuario cumple los requisitos para ser aceptado'+ str(User)
+    CorreoMail(asunto,mensaje,correo)
+
+    #si no tiene rol le tira el menu de espera
+    #envia correo a usuario en espera para que espere
+    correo = str(User) + '@gmail.com'   #correo de administrador del sistema
+    asunto='Se encuentra en verificacion favor aguarde'
+    mensaje='Favor aguardar a ser aceptado por el administrador del sistema usuario: '+ str(User)
+    CorreoMail(asunto,mensaje,correo)
+
     return render(request,'MenuEnEspera.html')
 
 
 
-"""
-obtener datos de la plantilla, cuando se utiliza form
-if form.is_valid()
-email=form.cleaned_data.get("email")
-"""
-
-
-############ FALTA MEJORAR, ES EL COMIENZO #################
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
-
-    ####################### PROYECTO
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
-        #agregarUsuarios(request)
-       # if not instanceProyecto.nombre:
-            ###### retornar error
-       #     return HttpResponseRedirect("falta completar campos")
 
-      #  instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
-        #print(instanceProyecto)
-        #print(instanceProyecto.timestamp)
+        ### AGREGAR MODIFICACIONES DE DATOS ANTES DE GUARDAR
 
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
     context ={
@@ -94,23 +75,20 @@ def creacionProyecto(request):
 
 
 def index(request):
-    """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION"""
+    """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
     user = request.user
-   # return render(request, 'index.html')
     if user.is_authenticated:
         return redirect(menu)
     else:
         return render(request, 'index.html')
 
 
-# ... index, profile ...
-
-
 @login_required
 def perfil(request):
-    """SOLICITUD DE AUTENTICACION PARA MOSTRAR EL PERFIL DEL USUARIO"""
-    """"Realiza consultas de los datos del usuario que esta realizando la
+    """SOLICITUD DE AUTENTICACION PARA MOSTRAR EL PERFIL DEL USUARIO||
+    Realiza consultas de los datos del usuario que esta realizando la
     solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario"""
+
     user = request.user
     auth0user = user.social_auth.filter(provider='auth0')[0]
     userdata = {
@@ -127,7 +105,7 @@ def perfil(request):
 
 
 def logout(request):
-    """PARA DESLOGUEARSE"""
+    """PARA DESLOGUEARSE, CERRAR SESION DEL SSO VUELVE A MOSTRAR INICIO"""
     django_logout(request)
     #modificar para mi app
     domain = 'ruben-dev.auth0.com'
@@ -137,9 +115,7 @@ def logout(request):
 
 def getUsers(request):
     """"TRAE INFORMACION DE USUARIO"""
-    #usuarios=User.Objects.getall()
     users = User.objects.all()
-
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
 

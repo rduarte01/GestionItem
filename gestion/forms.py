@@ -1,17 +1,13 @@
 from django import forms
 from django.forms import Textarea
+from .models import Proyecto
 
-from .models import Proyecto   #, Usuario
-
-####### se escribe formulario
-
-"""class FormUsuario(forms.ModelForm):
-    class Meta:
-        model = Usuario
-        fields=["nombre"]
-"""
 
 class FormProyecto(forms.ModelForm):
+    """
+    FORMULARIO PARA INICIO DE PROYECTO EN DONDE SE MOSTRARN LOS CAMPOS COMO NOMBRE DE PROYECTO,
+    DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN CREACION
+    """
     class Meta:
         model = Proyecto
         fields = [
