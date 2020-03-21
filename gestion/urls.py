@@ -1,10 +1,14 @@
 from django.urls import path
-from . import  views
+from . import views
+
+
 urlpatterns = [
     path('', views.index, name='index'),
-    path('logout/', views.logout),
-    path('perfil/',views.perfil),
+    path('menu/logout/', views.logout),
+    path('menu/perfil/',views.perfil),
     path('listarUsuarios/',views.getUsers),
-   path('crearProyecto',views.crear_Proyecto)
-# Create your views here.
+    path('menu/', views.menu),
+    path('creacionProyecto/', views.creacionProyecto),
+    path('Contactos/', views.Contactos),
 ]
+

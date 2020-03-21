@@ -37,13 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gestion.apps.GestionConfig',
     'social_django',
+    'bootstrap4',
 ]
 
 # Auth0 settings
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove trailing slash from routes
-SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-bmi8oyu1.auth0.com'
-SOCIAL_AUTH_AUTH0_KEY = 'YgcE1EravfahIBTJFWC0QOW8vPEugXYs'
-SOCIAL_AUTH_AUTH0_SECRET = 'RazqUlPx9XgddxLAeDDFab5zaA5ZEnv3x6GZ5ZEfBCox1jc8CYG7CNBc-32LzsFs'
+#modificar con mi app
+SOCIAL_AUTH_AUTH0_DOMAIN = 'ruben-dev.auth0.com'
+SOCIAL_AUTH_AUTH0_KEY = 'q8WImi9pV1hGFO62esYPTyhtoBey1Tlk'
+SOCIAL_AUTH_AUTH0_SECRET = '9sruysUq2lR46e5UmOzMgMmrl9gLaFCMMUP7dq-MpxB-PXYE8foxhg2bHVt8jsAp'
 SOCIAL_AUTH_AUTH0_SCOPE = [
     'openid',
     'profile',
@@ -75,7 +77,7 @@ ROOT_URLCONF = 'GestionItem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,6 +96,10 @@ WSGI_APPLICATION = 'GestionItem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+
+"""
+DATOS CAMBIADOS
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -102,7 +108,6 @@ DATABASES = {
         'PASSWORD':'root',
         'HOST':'127.0.0.1',
         'PORT':'5432',
-
     }
 }
 
@@ -148,3 +153,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#configuracion de email
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'GestionItems.FPUNA@gmail.com'
+EMAIL_HOST_PASSWORD = 'GestionItems2020'
+EMAIL_PORT = 587

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Usuarios</title>
+</head>
+<body>
+
+
+ <form method="POST" action="/agregarUsuarios/">{% csrf_token %}
+      {{ formUsuario.as_p }}
+     <input type="submit" value="Agregar mas usuarios">
+
+ </form>
+        <button type="submit"    href=""  class="btn btn-primary">Listo</button>
+
+</body>
+</html>
