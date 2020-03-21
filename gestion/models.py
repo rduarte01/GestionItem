@@ -1,12 +1,17 @@
 from django.db import models
+from django.contrib.auth import User
+
 
 # Create your models here.
 
 class Fase(models.Model):
-    """"""
-    id_Fase = models.AutoField(primary_key = True, blank = False, null = False)
+    """Se tiene el modelo fase, el cual será utilizado en el proyecto para albergar a los items y poder
+    dividirlos en etapas.
+    Las fases tendrán dos estados: Abierta y Cerrada."""
+    id_Fase = models.AutoField(primary_key = True, blank = False, null = False, default = 1)
     nombre = models.CharField(max_length = 100, blank = False, null = False)
     descripcion = models.TextField(blank = False, null = False)
+    estado = models.CharField(max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'Abierta')
     #id_Proyecto = models.ForeignKeyField(Proyecto, on_delete = models.CASCADE)
     choises_data_type = (
         ("1", "Abierta")
