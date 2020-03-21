@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/home/jesus/Escritorio/Gestion/GestionItem/myenv/bin/python
+=======
+#!/home/gerardo/Desktop/GestionItems/GestionItem/myenv/bin/python
+>>>>>>> Gerardo
 # -*- coding: utf-8 -*-
 import re
 import sys

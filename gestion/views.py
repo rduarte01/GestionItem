@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-import json
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
@@ -110,22 +109,16 @@ def index(request):
 @login_required
 def perfil(request):
     """SOLICITUD DE AUTENTICACION PARA MOSTRAR EL PERFIL DEL USUARIO"""
+    """"Realiza consultas de los datos del usuario que esta realizando la
+    solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario"""
     user = request.user
-    print(user)
-    print("aqui no hay error")
     auth0user = user.social_auth.filter(provider='auth0')[0]
-    #usuario=User.objects.get(username=request.user.username)
-    #print(user.email_addess)
-
-    print("aqui tampoco")
-    print(auth0user.extra_data)
     userdata = {
         'user_id': auth0user.uid,
         'name': user.first_name,
+        'estado': user.is_approbated,
         'picture': auth0user.extra_data['picture'],
-        #'email': auth0user.extra_data['email'],
     }
-
     return render(request, 'perfil.html', {
         'auth0User': auth0user,
         'userdata': userdata,
@@ -146,5 +139,22 @@ def getUsers(request):
     """"TRAE INFORMACION DE USUARIO"""
     #usuarios=User.Objects.getall()
     users = User.objects.all()
+
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
+
+@login_required
+def verSolicitudesenEspera(request):
+    """Si el usuario que solicita la pagina es staff(ADMINISTRADOR)
+    entonce carga los usuarios que esperan ser aprobados y lo manda a
+    a la pagina ListaUser que muestra la lista. Caso contrario muestra
+    una pagina de que no es administrador"""
+    user = request.user
+    if user.is_staff is True:
+        print("Si sos Admin")
+        users = User.objects.filter(is_approbated=False)
+        return render(request,'ListaUser.html',{
+        'usuarios': users,
+        })
+    else:
+        print("No sos Admin")
