@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
-from post import POST
+#from post import POST
 from .models import Proyecto
 from .forms import FormProyecto #, FormUsuario
 

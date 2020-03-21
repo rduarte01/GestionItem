@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-<<<<<<< HEAD
 class TipoItem(models.Model):
     """"
         Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
