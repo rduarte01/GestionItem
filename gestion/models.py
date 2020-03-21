@@ -2,7 +2,7 @@ from email.policy import default
 
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Gruop
 
 # Create your models here.
 
@@ -14,7 +14,7 @@ class TipoItem(models.Model):
 
     id_ti = models.AutoField(primary_key=True,default=1)
     nombre = models.CharField(max_length=20, default="Nombre Para el tipo de Item", help_text='Nombre del Tipo de Item')
-
+    fase=models.ForeignKey(Fase,on_delete=models.CASCADE)
     class Meta:
         permissions = (
             ("importar_tipo_item", "Poder importar Tipo Item"),
@@ -87,13 +87,7 @@ class Fase(models.Model):
     nombre = models.CharField(max_length = 100, blank = False, null = False)
     descripcion = models.TextField(blank = False, null = False)
     estado = models.CharField(max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'Abierta')
-    #id_Proyecto = models.ForeignKeyField(Proyecto, on_delete = models.CASCADE)
-    #Items = [*]
-    #TI = [*]
-    #id_Rol = models.ManyToMany(Rol)
-    #Falta agregar relacion con LB e Item, cada uno de ellos en los modelos respectivos como FK ID_Fase
-    #PRESI, EN TU MODELO DE TI DEBE IR COMO FK EL ID_FASE
-
+    proyecto = models.ForeignKeyField(Proyecto, on_delete = models.CASCADE)
     class Meta:
         """Las fases son manejadas por roles, por tanto, el modelo Fase tiene sus respectivos roles, los cuales seran
         iguales para todas las fases de un proyecto, la diferencia radica en el usuario que posea un determinado rol ya
@@ -118,3 +112,8 @@ class Fase(models.Model):
         verbose_name = 'Fase'
         verbose_name_plural = 'Fases'
         ordering = ['id_Fase']
+
+#esta es la tabla para personalizar la tabla mucho a mucho entre fase y rol
+def FASE_ROL(models.Model):
+    id_fase=models.ForeignKey(Fase,on_delete=models.CASCADE)
+    id_rol=models.ForeignKey(Gruop,on_delete=models.CASCADE)
