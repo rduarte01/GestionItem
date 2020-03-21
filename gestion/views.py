@@ -6,9 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
-#from post import POST
 from .models import Proyecto
-from .forms import FormProyecto #, FormUsuario
+from .forms import FormProyecto
 
 
 def CorreoMail(asunto,mensaje,correo):
@@ -34,8 +33,8 @@ def menu(request):
     AL USUARIO QUE SE REGISTRE POR PRIMERA VEZ SE CREARA UN CORREO Y SE ENVIARA AL ADMINISTRADOR DEL SISTEMA
     SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
     """
-    if user.is_staff is True:
-        return render(request,'MenuAdminSistema.html')
+
+    #return render(request,'MenuAdminSistema.html')
 
     # falta if de consulta si es gerente
     return render(request,'Menu.html')
@@ -51,11 +50,10 @@ def menu(request):
     #envia correo a usuario en espera para que espere
     correo = str(User) + '@gmail.com'   #correo de administrador del sistema
     asunto='Se encuentra en verificacion favor aguarde'
-    mensaje='Favor aguardar a ser aceptado por el administrador del sistema usuario: '+ str(User)
+    mensaje='Gracias por registrarte en nuestro sistema, favor aguardar a ser aceptado por el administrador del sistema usuario: '+ str(User)
     CorreoMail(asunto,mensaje,correo)
 
     return render(request,'MenuEnEspera.html')
-
 
 
 def creacionProyecto(request):

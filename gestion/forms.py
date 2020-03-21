@@ -9,7 +9,9 @@ class FormProyecto(forms.ModelForm):
     DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN CREACION
     """
     class Meta:
+        """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
         model = Proyecto
+        """SE REALIZA FORMULARIO DEL MODELO PROYECTO"""
         fields = [
                 "id_proyecto",
                 "nombre",
@@ -17,6 +19,7 @@ class FormProyecto(forms.ModelForm):
                 "estado",
                 "usuario"
                   ]
+        """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {
             "id_proyecto": "N° ID",
             "nombre":"Nombre",
@@ -24,6 +27,7 @@ class FormProyecto(forms.ModelForm):
             "estado":"Estado",
             "usuario": "Selecciona Usuarios para Agregar al Proyecto"
         }
+        """LA ETIQUETA DE CADA CAMPO"""
         widgets={
             "id_proyecto": forms.TextInput(attrs={'class': 'form-control'}),
             "nombre": forms.TextInput(attrs={'class': 'form-control'}),
@@ -31,25 +35,5 @@ class FormProyecto(forms.ModelForm):
             "estado":forms.TextInput(attrs={'class': 'form-control'}),
             "usuario": forms.CheckboxSelectMultiple(),
         }
+        """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
 
-
-
-class form_Proyecto(forms.Form):
-    """
-    PRIMARY_KEY AUTOMATICO A MEDIDA QUE SE AGREGA PROYECTOS
-    MODELO DE PROYECTO GUARDARA EL NOMBRE, DESCRIPCION, LISTA DE USUARIOS AÑADIDOS A EL
-    LA LISTA DE FASES QUE PERTENECEN AL MISMO,
-    UN ESTADO QUE SERA IDENTIFICADO EN LA BD COMO
-    CREADO=1
-    INICIADO=2
-    FINALIZADO=3
-    CANCELADO=4
-    POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO
-    """
-    ###id_proyecto= forms.IntegerField(auto_created = True, primary_key = True, serialize = False) ###### clave de proyecto
-    nombre= forms.CharField(max_length=30)
-    descripcion= forms.CharField(widget=Textarea)
-    ###-Usuarios: Usuario[*]    FALTA CREAR
-    ###-Fases: Fases[*]
-    estado= forms.IntegerField()
-    ###-Rol: Rol[*]

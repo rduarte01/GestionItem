@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests</a></li>
 </ul>
 
             
@@ -256,29 +257,25 @@ POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO</p>
 <dl class="attribute">
 <dt id="gestion.models.Proyecto.descripcion">
 <code class="sig-name descname">descripcion</code><a class="headerlink" href="#gestion.models.Proyecto.descripcion" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>INFORMACION REFERENTE AL PROYECTO A CREAR</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Proyecto.estado">
 <code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.Proyecto.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Proyecto.id_proyecto">
 <code class="sig-name descname">id_proyecto</code><a class="headerlink" href="#gestion.models.Proyecto.id_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Proyecto.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Proyecto.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>SERA EL NOMBRE DEL PROYECTO A CREAR</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -289,17 +286,8 @@ object the first time, the query is executed.</p>
 <dl class="attribute">
 <dt id="gestion.models.Proyecto.usuario">
 <code class="sig-name descname">usuario</code><a class="headerlink" href="#gestion.models.Proyecto.usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Accessor to the related objects manager on the forward and reverse sides of
-a many-to-many relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
-instances.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+<dd><p>RELACION CON LA TABLA USUARIOS EN LA CUAL SE REFLEJARA SI EL USUARIO SE ENCUENTRA
+ASIGNADO O NO AL PROYECTO</p>
 </dd></dl>
 
 </dd></dl>

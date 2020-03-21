@@ -52,11 +52,17 @@ class Proyecto(models.Model):
     """
     #id_proyecto= models.IntegerField(auto_created = True, primary_key = True, serialize = False) ###### clave de proyecto
     id_proyecto= models.IntegerField(primary_key = True)
-    nombre= models.CharField(max_length=30)#####3required=false para que no sea obligatorio
+    """SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD"""
+    nombre= models.CharField(max_length=30)
+    """SERA EL NOMBRE DEL PROYECTO A CREAR"""
     descripcion= models.CharField(max_length=100)
+    """INFORMACION REFERENTE AL PROYECTO A CREAR"""
+    estado= models.IntegerField()
+    """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO"""
+    usuario = models.ManyToManyField(User)
+    """RELACION CON LA TABLA USUARIOS EN LA CUAL SE REFLEJARA SI EL USUARIO SE ENCUENTRA
+    ASIGNADO O NO AL PROYECTO"""
     ###-Usuarios: Usuario[*]    FALTA CREAR
     ###-Fases: Fases[*]
-    estado= models.IntegerField()
     ###-Rol: Rol[*]
-    usuario = models.ManyToManyField(User)
 
