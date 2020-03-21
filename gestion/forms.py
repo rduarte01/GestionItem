@@ -1,8 +1,7 @@
 from django import forms
 from django.forms import Textarea
 
-from .models import Proyecto   #, Usuario
-
+from .models import Proyecto,TipoItem,Atributo   #, Usuario
 ####### se escribe formulario
 
 """class FormUsuario(forms.ModelForm):
@@ -35,7 +34,16 @@ class FormProyecto(forms.ModelForm):
             "estado":forms.TextInput(attrs={'class': 'form-control'}),
             "usuario": forms.CheckboxSelectMultiple(),
         }
-
+class TipoItemForm(forms.ModelForm):
+    """
+        En esta clase se define la estrutura del formulario para crear un tipo de item
+    """
+    class Meta:
+        model=TipoItem
+        fields = [
+            "nombre",
+                ]
+#    cantidad=forms.IntegerField()
 
 
 class form_Proyecto(forms.Form):

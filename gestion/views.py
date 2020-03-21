@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 #from post import POST
 from .models import Proyecto
-from .forms import FormProyecto #, FormUsuario
+from .forms import FormProyecto,TipoItemForm#, FormUsuario
 
 
 def CorreoMail():
@@ -68,12 +68,10 @@ email=form.cleaned_data.get("email")
 """
 
 
-############ FALTA MEJORAR, ES EL COMIENZO #################
+
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
-
-    ####################### PROYECTO
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
@@ -143,6 +141,7 @@ def getUsers(request):
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
 
+
 @login_required
 def verSolicitudesenEspera(request):
     """Si el usuario que solicita la pagina es staff(ADMINISTRADOR)
@@ -158,3 +157,19 @@ def verSolicitudesenEspera(request):
         })
     else:
         print("No sos Admin")
+
+
+
+#Vistas agregadas por jesus
+def tipo_item_views_create(request):
+    if request.method == "POST":
+        tipo_item_form=TipoItemForm(request.POST)
+        if(tipo_item_form.is_valid()):
+            print(tipo_item_form)
+
+    print("es un metodo get")
+    tipo_item_form= TipoItemForm()
+    context={
+            'tipo_item_form': tipo_item_form
+        }
+    return render(request, 'crear_tipo_item.html', context)
