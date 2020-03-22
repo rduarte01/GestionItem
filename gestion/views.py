@@ -50,7 +50,7 @@ def agregarUsuarios(request):
 ###### FALTA ENLAZAR Y AGREGAR URL EN LA PLANTILLA PARA LA REDIRECCION
 def menu(request):
     """MENU PRINCIPAL AL INICIAR SESION GERENTE"""
-    return render(request,'Menu.html')
+    return render(request,'MenuAdminSistema.html')
     """MENU PRINCIPAL AL INICIAR SESION ADMINISTRADOR SISTEMA"""
     #return render(request,'MenuAdminSistema.html')
     """MENU PRINCIPAL EN ESPERA DE ACEPTACION"""

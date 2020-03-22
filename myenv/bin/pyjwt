@@ -1,4 +1,4 @@
-#!/home/gerardo/Desktop/GestionItems/GestionItem/myenv/bin/python3
+#!/home/gerardo/Desktop/GestionItems/GestionItem/myenv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
