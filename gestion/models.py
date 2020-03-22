@@ -70,11 +70,9 @@ class TipoItem(models.Model):
     """"
         Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
     """
-
-
     id_ti = models.AutoField(primary_key=True,default=1)
     nombre = models.CharField(max_length=20, default="Nombre Para el tipo de Item", help_text='Nombre del Tipo de Item')
-    fase=models.ForeignKey(Fase,on_delete=models.CASCADE,default=1)
+    fase=models.ForeignKey(Fase,on_delete=models.CASCADE,null=True,blank=True)
     class Meta:
         permissions = (
             ("importar_tipo_item", "Poder importar Tipo Item"),
@@ -100,7 +98,7 @@ class Atributo(models.Model):
     nombre=models.CharField(max_length=20,default="atriuto",help_text='Nombre del atributo del Tipo de Item')
     es_obligatorio= models.BooleanField(default=True)
     tipo_dato=models.CharField(max_length=8,choices=choises_data_type,default='Decimal')
-    ti=models.ForeignKey(TipoItem,on_delete=models.CASCADE)
+    ti=models.ForeignKey(TipoItem,on_delete=models.CASCADE,default=1)
     class Meta:
         ordering=['nombre']
 

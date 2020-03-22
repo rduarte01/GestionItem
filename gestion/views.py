@@ -7,10 +7,11 @@ from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 #from post import POST
-from .models import Proyecto
-from .forms import FormProyecto,TipoItemForm#, FormUsuario
+from .models import Proyecto,TipoItem,Atributo
+from .forms import FormProyecto,TipoItemForm,AtributeForm#, FormUsuario
 
-
+CANTIDAD_ATRIBUTOS_TI=1
+NOMBRE_TI="hola"
 def CorreoMail():
     #correo='waltergautofcb@gmail.com'
     #correo='gerardocabrer@gmail.com'
@@ -159,17 +160,57 @@ def verSolicitudesenEspera(request):
         print("No sos Admin")
 
 
-
 #Vistas agregadas por jesus
 def tipo_item_views_create(request):
+    global CANTIDAD_ATRIBUTOS_TI,NOMBRE_TI
     if request.method == "POST":
-        tipo_item_form=TipoItemForm(request.POST)
-        if(tipo_item_form.is_valid()):
-            print(tipo_item_form)
+        my_form=TipoItemForm(request.POST)
+        if(my_form.is_valid()):
+           NOMBRE_TI,CANTIDAD_ATRIBUTOS_TI=recoger_datos_tipo_item(my_form)
+        return redirect('add_atribute')
+    else:
+        my_form= TipoItemForm()
+        context={
+            'tipo_item_form': my_form
+           }
+        return render(request, 'crear_tipo_item.html', context)
 
-    print("es un metodo get")
-    tipo_item_form= TipoItemForm()
-    context={
-            'tipo_item_form': tipo_item_form
-        }
-    return render(request, 'crear_tipo_item.html', context)
+
+from django.forms import formset_factory
+
+def add_atribute(request):
+    my_form = formset_factory(AtributeForm, extra=CANTIDAD_ATRIBUTOS_TI)
+    if request.method == 'POST':
+        my_form_set=my_form(request.POST)
+        if(my_form_set.is_valid()):
+            #tipo_item=TipoItem(nombre=NOMBRE_TI)
+            #tipo_item.save()
+            #print(tipo_item.id_ti)
+            for form in my_form_set:
+               # nombre_atributo,es_obligatorio,tipo_dato=recoge_datos_atributo(form)
+                #atributo=Atributo(nombre=nombre_atributo,es_obligatorio=obligatoriedad,
+                 #                 tipo_dato=tipo_dato_atibuto,
+                  #                ti=tipo_item.id_ti
+                  #                )
+                #atributo.save()
+                pass
+        return redirect('menu')
+    else:
+        contexto={'formset':my_form,
+                 'cant_atributos': list(range(1,CANTIDAD_ATRIBUTOS_TI+1))
+                }
+        return render(request,'crear_atributo.html',contexto)
+
+
+
+def recoger_datos_tipo_item(my_form):
+    nombre = my_form.cleaned_data['nombre']
+    valor = my_form.cleaned_data['cantidad']
+    return nombre,valor
+
+
+def recoge_datos_atributo(my_form):
+    nombre_atributo = form.cleaned_data.get('nombre')
+    obligatoriedad = form.cleaned_data.get('es_obligatorio')
+    tipo_dato_atibuto = form.cleaned_data.get('tipo_dato')
+    return nombre_atributo,obligatoriedad,tipo_dato_atibuto

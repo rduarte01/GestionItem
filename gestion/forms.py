@@ -34,17 +34,26 @@ class FormProyecto(forms.ModelForm):
             "estado":forms.TextInput(attrs={'class': 'form-control'}),
             "usuario": forms.CheckboxSelectMultiple(),
         }
-class TipoItemForm(forms.ModelForm):
+class TipoItemForm(forms.Form):
     """
         En esta clase se define la estrutura del formulario para crear un tipo de item
     """
-    class Meta:
-        model=TipoItem
-        fields = [
-            "nombre",
-                ]
-#    cantidad=forms.IntegerField()
+    nombre=forms.CharField(label="Nombre del Tipo de Item ",max_length=100,required=True,
+                           widget=forms.TextInput(
+                                            attrs={"placeholder":"Nombre Tipo Item",
+                                                   }
+                                                 )
+                           )
+    cantidad=forms.IntegerField(label="Cantidad de Atributos del Tipo de Item",max_value=10,required=True,
+                                widget=forms.TextInput(attrs={"placeholder": "Cantidad Tipo Item",
+                                                            })
+                                )
 
+
+class AtributeForm(forms.ModelForm):
+    class Meta:
+        model=Atributo
+        fields=('nombre','es_obligatorio','tipo_dato')
 
 class form_Proyecto(forms.Form):
     """
