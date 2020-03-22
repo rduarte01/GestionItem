@@ -142,7 +142,6 @@ def getUsers(request):
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
 
-
 @login_required
 def verSolicitudesenEspera(request):
     """Si el usuario que solicita la pagina es staff(ADMINISTRADOR)
@@ -157,8 +156,7 @@ def verSolicitudesenEspera(request):
         'usuarios': users,
         })
     else:
-        print("No sos Admin")
-
+        return  redirect('menu')
 
 #Vistas agregadas por jesus
 def tipo_item_views_create(request):
