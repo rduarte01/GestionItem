@@ -13,7 +13,6 @@ class FormProyecto(forms.ModelForm):
         model = Proyecto
         """SE REALIZA FORMULARIO DEL MODELO PROYECTO"""
         fields = [
-                "id_proyecto",
                 "nombre",
                 "descripcion",
                 "estado",
@@ -21,18 +20,16 @@ class FormProyecto(forms.ModelForm):
                   ]
         """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {
-            "id_proyecto": "N° ID",
-            "nombre":"Nombre",
-            "descripcion":"Descripcion",
-            "estado":"Estado",
+            "nombre":"Ingrese un Nombre para el proyecto",
+            "descripcion":"Ingrese una descripcion si lo desea",
+            "estado":"Selecciona el estado que tendra el proyecto",
             "usuario": "Selecciona Usuarios para Agregar al Proyecto"
         }
         """LA ETIQUETA DE CADA CAMPO"""
         widgets={
-            "id_proyecto": forms.TextInput(attrs={'class': 'form-control'}),
             "nombre": forms.TextInput(attrs={'class': 'form-control'}),
             "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
-            "estado":forms.TextInput(attrs={'class': 'form-control'}),
+            "estado":forms.CheckboxSelectMultiple(),
             "usuario": forms.CheckboxSelectMultiple(),
         }
         """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""

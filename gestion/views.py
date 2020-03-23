@@ -6,8 +6,16 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
-from .models import Proyecto
+from .models import Proyecto, Auditar
 from .forms import FormProyecto
+from time import gmtime, strftime
+
+
+def registrarAuditoria(user,accion):
+    """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
+    showtime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    p = Auditar(usuario= user,fecha=showtime, accion=accion)###### FALTA ARREGLAR USER
+    p.save()
 
 
 def CorreoMail(asunto,mensaje,correo):
@@ -15,8 +23,6 @@ def CorreoMail(asunto,mensaje,correo):
     ELECTRONICO DE ACUERDO A UNA ACCION"""
     mail=EmailMessage(asunto,mensaje,to={correo})
     mail.send()
-
-
 
 def Contactos(request):
     """MUESTRA UN CORREO EN DONDE PUEDE CONTACTAR CON NOSOTROS"""
@@ -36,12 +42,17 @@ def menu(request):
 
     #return render(request,'MenuAdminSistema.html')
 
+    registrarAuditoria(request.user ,'Inicio Menu del Gerente')
+
     # falta if de consulta si es gerente
     return render(request,'Menu.html')
 
+    registrarAuditoria(request.user ,'Inicio Menu en espera de aprobacion')
+
     #si no tiene rol le tira el menu de espera
     #envia correo al admin para que acepte
-    correo = 'rduarte0997@gmail.com'   #correo de administrador del sistema
+    correo='rduarte0997@gmail.com'
+    #correo de administrador del sistema
     asunto='Solicitud de ingreso al sistema'
     mensaje='favor verificar si el usuario cumple los requisitos para ser aceptado'+ str(User)
     CorreoMail(asunto,mensaje,correo)
@@ -59,6 +70,8 @@ def menu(request):
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
+    registrarAuditoria(request.user,'Selecciono creacion de proyecto')
+
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
@@ -66,9 +79,12 @@ def creacionProyecto(request):
         ### AGREGAR MODIFICACIONES DE DATOS ANTES DE GUARDAR
 
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
+    registrarAuditoria(request.user ,'Proyecto guardado en la BD')
+
     context ={
         "formProyecto": formProyecto,
     }
+
     return render(request,'creacionProyecto2.html', context)
 
 
@@ -95,6 +111,8 @@ def perfil(request):
         'estado': user.is_approbated,
         'picture': auth0user.extra_data['picture'],
     }
+    registrarAuditoria(request.user ,'Selecciono creacion de proyecto')
+
     return render(request, 'perfil.html', {
         'auth0User': auth0user,
         'userdata': userdata,
@@ -104,6 +122,9 @@ def perfil(request):
 
 def logout(request):
     """PARA DESLOGUEARSE, CERRAR SESION DEL SSO VUELVE A MOSTRAR INICIO"""
+
+    registrarAuditoria(request.user ,'Cerro sesión')
+
     django_logout(request)
     #modificar para mi app
     domain = 'ruben-dev.auth0.com'
