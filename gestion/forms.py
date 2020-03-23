@@ -74,3 +74,20 @@ class form_Proyecto(forms.Form):
     ###-Fases: Fases[*]
     estado= forms.IntegerField()
     ###-Rol: Rol[*]
+
+class SettingsUserForm(forms.Form):
+
+    is_admin=forms.BooleanField(required=False)
+    is_manager=forms.BooleanField(required=False)
+
+    State_CHOICES = [
+        ('True', 'Aprobado'),
+        ('False', 'Desactivado'),
+    ]
+
+
+    estado=forms.ChoiceField(
+        required=True,
+        widget=forms.Select,
+        choices=State_CHOICES,
+    )
