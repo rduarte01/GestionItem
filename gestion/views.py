@@ -6,12 +6,13 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
-from django.views.generic import TemplateView,ListView
+from django.views.generic import TemplateView,ListView,UpdateView
+from django.urls import reverse_lazy
 #from post import POST
 
 
 from .models import Proyecto,TipoItem,Atributo
-from .forms import FormProyecto,TipoItemForm,AtributeForm, UsuarioForm#, FormUsuario
+from .forms import FormProyecto,TipoItemForm,AtributeForm, SettingsUserForm#, FormUsuario
 
 CANTIDAD_ATRIBUTOS_TI=1
 NOMBRE_TI="hola"
@@ -151,6 +152,11 @@ class VerSolicitudesEspera(ListView):
     template_name = "ListaUser.html"
     queryset = User.objects.filter(esta_aprobado = False)
 
+class ActualizarUser(UpdateView):
+    model = User
+    form_class = SettingsUserForm
+    template_name = 'perfilUsuario.html'
+    success_url = reverse_lazy('gestion:listaDeEspera')
 
 
 
@@ -169,6 +175,37 @@ def verSolicitudesenEspera(request):
     return render(request,'ListaUser.html',{
     'usuarios': users,
     })
+
+def get_user(request,pk):
+    form=SettingsUserForm()
+    if( request.method == 'POST' ):
+        form=SettingsUserForm(request.POST)
+        if(form.is_valid()):
+            user = User.objects.get(id=pk)
+            is_admin,estado = recoger_datos_usuario_settings(form)
+            content_type = ContentType.objects.get_for_model(User)
+            if(is_admin): #se agrega el permiso
+                permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
+                user.user_permissions.add(permission)
+            else: #se elimina el permiso
+                name_permission='es_administrador'
+                permission=Permission.objects.get(content_type=content_type, codename=name_permission)
+                user.user_permissions.remove(permission)
+            user.esta_aprobado=estado
+            user.save()
+            #print(form.cleaned_data)
+        else:
+            print("no es valido")
+          #   return  HttpResponse("HELLOW")
+        return redirect('ver_usuarios_aprobados')
+    else:
+        print("es get")
+        user = User.objects.get(id=pk)
+        context = {
+            'user': user,
+            'form':form
+        }
+        return render(request,"perfilUsuario.html",context)
 
 
 

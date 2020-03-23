@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import VerSolicitudesEspera
+from .views import VerSolicitudesEspera, ActualizarUser
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -12,7 +12,9 @@ urlpatterns = [
     path('Contactos/', views.Contactos),
     path('enEspera/',VerSolicitudesEspera.as_view(), name="listaDeEspera"),
     path('crear/TipoItem',views.tipo_item_views_create,name='tipo_item_views_create'),
-    path('crear/atributo',views.add_atribute,name='add_atribute')
+    path('crear/atributo',views.add_atribute,name='add_atribute'),
+    path('getUser/<int:pk>', ActualizarUser.as_view(),name='get_user'),
+
 ]
 
 

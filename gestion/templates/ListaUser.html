@@ -36,7 +36,7 @@
 
                             <td><strong>En Espera</strong></td>
                             <td>
-                                <a href="#" class="btn btn-primary">Editar</a>
+                                <a href="{% url 'gestion:get_user' user.id%}" class="btn btn-primary">Editar</a>
                             </td>
                         </tr>
                     {% endfor %}

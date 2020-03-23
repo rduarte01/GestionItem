@@ -75,8 +75,48 @@ class form_Proyecto(forms.Form):
     estado= forms.IntegerField()
     ###-Rol: Rol[*]
 
-class UsuarioForm(forms.ModelForm):
-
+class SettingsUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["username","email","esta_aprobado"]
+        fields = ['id','username','email','esta_aprobado']
+        labels = {
+            'id': 'ID del usuario',
+            'username': 'Nombre de Usuario',
+            'email': 'Correo Electronico del Usuario',
+            'esta_aprobado': 'Estado del usuario',
+        }
+        State_CHOICES = [
+            ('True', 'Aprobado'),
+            ('False', 'Desactivado'),
+        ]
+        widgets = {
+            'id': forms.NumberInput(
+                attrs={
+                    'class':'form-control',
+                    'placeholder': 'Es el Campo de ID',
+                    'id': 'id'
+                }
+            ),
+            'username': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Nombre de usuario',
+                    'id': 'username'
+                }
+            ),
+            'email': forms.EmailInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Correo Electronico del Usuario',
+                    'id': 'email'
+                }
+            ),
+
+        }
+
+    OPTIONS = (
+        ('True', "Aprobado"),
+        ('False', "En Espera"),
+    )
+    esta_aprobado = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                          choices=OPTIONS)
