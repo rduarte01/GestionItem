@@ -68,7 +68,7 @@ class Proyecto(models.Model):
     """SERA EL NOMBRE DEL PROYECTO A CREAR"""
     descripcion= models.CharField(max_length=100)
     """INFORMACION REFERENTE AL PROYECTO A CREAR"""
-    estado= models.IntegerField(choices=choises_data_type)
+    estado= models.IntegerField(choices=choises_data_type,default=1)
     """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO"""
     usuario = models.ManyToManyField(User)
     """RELACION CON LA TABLA USUARIOS EN LA CUAL SE REFLEJARA SI EL USUARIO SE ENCUENTRA
