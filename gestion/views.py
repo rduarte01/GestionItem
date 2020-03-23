@@ -9,6 +9,8 @@ from django.contrib.auth.models import Permission,Group
 #from post import POST
 from .models import Proyecto,TipoItem,Atributo
 from .forms import FormProyecto,TipoItemForm,AtributeForm,SettingsUserForm#, FormUsuario
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 CANTIDAD_ATRIBUTOS_TI=1
 NOMBRE_TI="hola"
@@ -168,16 +170,20 @@ def get_user(request,pk):
     form=SettingsUserForm()
     if( request.method == 'POST' ):
         form=SettingsUserForm(request.POST)
-        if( form.is_valid() ):
-            print("es valido")
-            is_admin=form.cleaned_data['is_admin']
-            is_gerente = form.cleaned_data['is_manager']
-            estado=form.cleaned_data['estado']
-            user=User.objects.get(id=pk)
+        if(form.is_valid()):
+            user = User.objects.get(id=pk)
+            is_admin,is_gerente,estado = recoger_datos_usuario_settings(form)
+            content_type = ContentType.objects.get_for_model(User)
+            if(is_admin): #se agrega el permiso
+                permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
+                user.user_permissions.add(permission)
+            else: #se elimina el permiso
+                name_permission='es_administrador'
+                permission=Permission.objects.get(content_type=content_type, codename=name_permission)
+                user.user_permissions.remove(permission)
             user.esta_aprobado=estado
             user.save()
-            print(form.cleaned_data)
-
+            #print(form.cleaned_data)
         else:
             print("no es valido")
           #   return  HttpResponse("HELLOW")
@@ -245,3 +251,9 @@ def recoge_datos_atributo(my_form):
     obligatoriedad = form.cleaned_data.get('es_obligatorio')
     tipo_dato_atibuto = form.cleaned_data.get('tipo_dato')
     return nombre_atributo,obligatoriedad,tipo_dato_atibuto
+
+def recoger_datos_usuario_settings(form):
+    is_admin = form.cleaned_data['is_admin']
+    is_gerente = form.cleaned_data['is_manager']
+    estado = form.cleaned_data['estado']
+    return is_admin,is_gerente,estado

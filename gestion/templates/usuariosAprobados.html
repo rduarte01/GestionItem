@@ -1,7 +1,7 @@
 {% if users%}
     <h1> Lista de Usuarios Aprobados</h1>
     {% for user in users %}
-<a href=""> {{user.email}}</a>
+<a href="{% url 'get_user' user.id %}"> {{user.email}}</a>
     {% endfor %}
 
 {%else%}
