@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from .forms import FaseForm
 
 
 def index(request):
@@ -56,3 +57,17 @@ def getUsers(request):
     #usuarios=User.Objects.getall()
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
+
+def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/forms
+    """
+    Método para crear fases de un proyecto dado
+    """
+    if request.method == 'POST': #preguntamos primero si la petición Http es POST
+        fase_form = FaseForm(request.POST)
+        if fase_form.is_valid():
+            fase_form.save()
+            return redirect('index')
+    else:
+        fase_form = FaseForm() #sin parametros ya que se van a cargar los valores en el formulario
+    return render(request, 'crear_fase.html', {'fase_form': fase_form})
+

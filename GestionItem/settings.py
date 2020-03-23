@@ -77,7 +77,7 @@ ROOT_URLCONF = 'GestionItem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['gestiontemplates'],
+        'DIRS': ['gestion/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

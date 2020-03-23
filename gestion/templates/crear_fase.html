@@ -1,0 +1,18 @@
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<h1>Creación de Fase</h1>
+
+{% block contect %}
+<a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
+
+      <div class="jumbotron">
+
+ <form method="POST" action="">{% csrf_token %}
+      {{ fase_form.as_p }}
+     <input type="submit"  value="Siguiente">
+ </form>
+
+      </div>
+{% endblock %}
