@@ -78,25 +78,17 @@ class form_Proyecto(forms.Form):
 class SettingsUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['id','username','email','esta_aprobado']
+        fields = ['username','email','esta_aprobado']
         labels = {
-            'id': 'ID del usuario',
             'username': 'Nombre de Usuario',
             'email': 'Correo Electronico del Usuario',
             'esta_aprobado': 'Estado del usuario',
         }
-        State_CHOICES = [
-            ('True', 'Aprobado'),
-            ('False', 'Desactivado'),
-        ]
+        OPTIONS = (
+            ('True', "Aprobado"),
+            ('False', "En Espera"),
+        )
         widgets = {
-            'id': forms.NumberInput(
-                attrs={
-                    'class':'form-control',
-                    'placeholder': 'Es el Campo de ID',
-                    'id': 'id'
-                }
-            ),
             'username': forms.TextInput(
                 attrs={
                     'class': 'form-control',
@@ -111,12 +103,10 @@ class SettingsUserForm(forms.ModelForm):
                     'id': 'email'
                 }
             ),
-
+            'esta_aprobado': forms.RadioSelect(choices=[
+                (True, 'Activo'),
+                (False, 'En Espera')
+            ]),
         }
 
-    OPTIONS = (
-        ('True', "Aprobado"),
-        ('False', "En Espera"),
-    )
-    esta_aprobado = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          choices=OPTIONS)
+

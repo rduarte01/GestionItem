@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    {% if object_list %}
     <br><br>
     <li class="list-group-item">
        <a href="javascript:history.back()" class="btn btn-primary"> Volver atras</a>
@@ -45,5 +46,8 @@
         </div>
 
     </div>
+    {% else %}
+        <h1>No exite usuarios</h1>
+    {% endif %}
 </body>
 </html>

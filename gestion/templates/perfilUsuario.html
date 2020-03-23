@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <form method="POST" action="{% url 'gestion:menu'%}">
+    <form action="#" method="POST">
   {% csrf_token %}
   {% if error %}
     <h2>{{ error }}</h2>
@@ -19,7 +19,7 @@
               <strong>Edicion de Usuario</strong>
           </div>
           <div class="card-body card-block">
-              <form action="{% url 'gestion:listaDeEspera'%}" method="post" enctype="multipart/form-data" class="form-horizontal">
+              <form method="post" enctype="multipart/form-data" class="form-horizontal">
                   <div class="row form-group">
                       <div class="col col-md-3">{{ form.id.label }}</div>
                       <div class="col-12 col-md-9">{{ form.id }}</div>
