@@ -1,0 +1,7 @@
+<h3> HELLOW {{user.username }}</h3>
+<h2>TU correo es: {{user.email}}</h2>
+ <form method="POST">{% csrf_token%}
+     {{form.as_p}}}
+     <input type='submit' value= 'Save' />
+ </form>
+

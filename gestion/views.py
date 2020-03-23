@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 #from post import POST
 from .models import Proyecto,TipoItem,Atributo
-from .forms import FormProyecto,TipoItemForm,AtributeForm#, FormUsuario
+from .forms import FormProyecto,TipoItemForm,AtributeForm,SettingsUserForm#, FormUsuario
 
 CANTIDAD_ATRIBUTOS_TI=1
 NOMBRE_TI="hola"
@@ -115,7 +115,7 @@ def perfil(request):
     userdata = {
         'user_id': auth0user.uid,
         'name': user.first_name,
-        'estado': user.is_approbated,
+        'estado': user.esta_aprobado,
         'picture': auth0user.extra_data['picture'],
     }
     return render(request, 'perfil.html', {
@@ -151,12 +151,45 @@ def verSolicitudesenEspera(request):
     user = request.user
     if user.is_staff is True:
         print("Si sos Admin")
-        users = User.objects.filter(is_approbated=False)
+        users = User.objects.filter(esta_aprobado=False)
         return render(request,'ListaUser.html',{
         'usuarios': users,
         })
     else:
         return  redirect('menu')
+
+
+def ver_usuarios_aprobados(request):
+    users=User.objects.filter(esta_aprobado=True)
+    context={'users':users}
+    return render(request,'usuariosAprobados.html',context)
+
+def get_user(request,pk):
+    form=SettingsUserForm()
+    if( request.method == 'POST' ):
+        form=SettingsUserForm(request.POST)
+        if( form.is_valid() ):
+            print("es valido")
+            is_admin=form.cleaned_data['is_admin']
+            is_gerente = form.cleaned_data['is_manager']
+            estado=form.cleaned_data['estado']
+            user=User.objects.get(id=pk)
+            user.esta_aprobado=estado
+            user.save()
+            print(form.cleaned_data)
+
+        else:
+            print("no es valido")
+          #   return  HttpResponse("HELLOW")
+        return redirect('ver_usuarios_aprobados')
+    else:
+        print("es get")
+        user = User.objects.get(id=pk)
+        context = {
+            'user': user,
+            'form':form
+        }
+        return render(request,"perfilUsuario.html",context)
 
 #Vistas agregadas por jesus
 def tipo_item_views_create(request):

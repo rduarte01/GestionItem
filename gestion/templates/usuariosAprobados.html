@@ -1,0 +1,9 @@
+{% if users%}
+    <h1> Lista de Usuarios Aprobados</h1>
+    {% for user in users %}
+<a href=""> {{user.email}}</a>
+    {% endfor %}
+
+{%else%}
+    <h2>No hay usuarios aprobados</h2>
+{% endif %}
