@@ -6,11 +6,12 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
+from django.views.generic import TemplateView,ListView
 #from post import POST
 
 
 from .models import Proyecto,TipoItem,Atributo
-from .forms import FormProyecto,TipoItemForm,AtributeForm, estadoUsuario#, FormUsuario
+from .forms import FormProyecto,TipoItemForm,AtributeForm, UsuarioForm#, FormUsuario
 
 CANTIDAD_ATRIBUTOS_TI=1
 NOMBRE_TI="hola"
@@ -52,9 +53,9 @@ def agregarUsuarios(request):
 ###### FALTA ENLAZAR Y AGREGAR URL EN LA PLANTILLA PARA LA REDIRECCION
 def menu(request):
     """MENU PRINCIPAL AL INICIAR SESION GERENTE"""
-    return render(request,'MenuAdminSistema.html')
+    #return render(request,'Menu.html')
     """MENU PRINCIPAL AL INICIAR SESION ADMINISTRADOR SISTEMA"""
-    #return render(request,'MenuAdminSistema.html')
+    return render(request,'MenuAdminSistema.html')
     """MENU PRINCIPAL EN ESPERA DE ACEPTACION"""
     CorreoMail()
     #correo = str(User) + '@gmail.com'
@@ -145,6 +146,14 @@ def getUsers(request):
 
 
 
+class VerSolicitudesEspera(ListView):
+    model = User
+    template_name = "ListaUser.html"
+    queryset = User.objects.filter(esta_aprobado = False)
+
+
+
+
 
 @login_required
 @permission_required('auth.es_admin', raise_exception=True)
@@ -163,7 +172,6 @@ def verSolicitudesenEspera(request):
 
 
 
-#Vistas agregadas por jesus
 def tipo_item_views_create(request):
     global CANTIDAD_ATRIBUTOS_TI,NOMBRE_TI
     if request.method == "POST":
@@ -177,6 +185,7 @@ def tipo_item_views_create(request):
             'tipo_item_form': my_form
            }
         return render(request, 'crear_tipo_item.html', context)
+#Vistas agregadas por jesus
 
 
 from django.forms import formset_factory

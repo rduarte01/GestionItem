@@ -75,9 +75,8 @@ class form_Proyecto(forms.Form):
     estado= forms.IntegerField()
     ###-Rol: Rol[*]
 
-class estadoUsuario(forms.ModelForm):
+class UsuarioForm(forms.ModelForm):
+
     class Meta:
         model = User
-        fields = [
-            "esta_aprobado"
-        ]
+        fields = ["username","email","esta_aprobado"]
