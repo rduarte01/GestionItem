@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import Textarea
-
+from django.contrib.auth.models import User
 from .models import Proyecto,TipoItem,Atributo   #, Usuario
 ####### se escribe formulario
 
@@ -74,3 +74,10 @@ class form_Proyecto(forms.Form):
     ###-Fases: Fases[*]
     estado= forms.IntegerField()
     ###-Rol: Rol[*]
+
+class estadoUsuario(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            "esta_aprobado"
+        ]

@@ -2,13 +2,15 @@ from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 #from post import POST
+
+
 from .models import Proyecto,TipoItem,Atributo
-from .forms import FormProyecto,TipoItemForm,AtributeForm#, FormUsuario
+from .forms import FormProyecto,TipoItemForm,AtributeForm, estadoUsuario#, FormUsuario
 
 CANTIDAD_ATRIBUTOS_TI=1
 NOMBRE_TI="hola"
@@ -115,7 +117,7 @@ def perfil(request):
     userdata = {
         'user_id': auth0user.uid,
         'name': user.first_name,
-        'estado': user.is_approbated,
+        'estado': user.esta_aprobado,
         'picture': auth0user.extra_data['picture'],
     }
     return render(request, 'perfil.html', {
@@ -143,21 +145,22 @@ def getUsers(request):
 
 
 
+
 @login_required
+@permission_required('auth.es_admin', raise_exception=True)
 def verSolicitudesenEspera(request):
     """Si el usuario que solicita la pagina es staff(ADMINISTRADOR)
     entonce carga los usuarios que esperan ser aprobados y lo manda a
     a la pagina ListaUser que muestra la lista. Caso contrario muestra
     una pagina de que no es administrador"""
-    user = request.user
-    if user.is_staff is True:
-        print("Si sos Admin")
-        users = User.objects.filter(is_approbated=False)
-        return render(request,'ListaUser.html',{
-        'usuarios': users,
-        })
-    else:
-        print("No sos Admin")
+    print("Si sos Admin")
+
+    users = User.objects.filter(esta_aprobado=False)
+
+    return render(request,'ListaUser.html',{
+    'usuarios': users,
+    })
+
 
 
 #Vistas agregadas por jesus
