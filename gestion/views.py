@@ -4,7 +4,7 @@ from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import json
-from django.shortcuts import  render,redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 
 
