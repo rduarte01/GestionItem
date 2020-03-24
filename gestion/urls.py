@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import crearFase, listar_auditoria
+from .views import crearFase, listar_auditoria, listar_usuarios_registrar
 from . import views
 
 
@@ -14,7 +14,8 @@ urlpatterns = [
     path('enEspera/',views.verSolicitudesenEspera),
     path('crear_fase/', views.crearFase, name='crearFase'),
     path('auditoria/', listar_auditoria),
-    path('AggUser/', views.AggUser)
+    path('AggUser/', listar_usuarios_registrar),
+
 ]
 
 

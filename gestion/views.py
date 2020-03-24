@@ -9,7 +9,11 @@ from django.contrib.auth.models import Permission,Group
 from .models import Proyecto, Auditoria
 from .forms import FormProyecto, FormUser_Proyecto
 from time import gmtime, strftime
-from .forms import FaseForm
+from .forms import FaseForm, FormUserAgg
+
+
+
+
 
 
 def registrarAuditoria(user,accion):
@@ -189,6 +193,23 @@ def listar_auditoria(request):
     }
     return render(request, 'Auditoria.html', context)
 
+
+
+def listar_usuarios_registrar(request):
+    """ LISTA LOS USUARIOS PARA AGREGAR AL PROYECTO"""
+    form = User.objects.all()
+    if request.method=='POST':
+        print('imprimiio:')
+#        print(request.POST)
+
+    context={
+        'form':form
+    }
+    return render(request, 'AggUser.html', context)
+
+
+
+##########3 no se usa
 def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     Método para crear fases de un proyecto dado

@@ -1,6 +1,17 @@
 from django import forms
 from django.forms import Textarea
 from .models import Proyecto, User_Proyecto
+from django.contrib.auth.models import User
+
+
+
+class FormUserAgg(forms.ModelForm):
+    class Meta:
+        model= User
+        fields=['username']
+     #   widgets = {
+      #  "username": forms.CheckBoxSelectMultiple(),
+       # }
 
 
 class FormUser_Proyecto(forms.ModelForm):
