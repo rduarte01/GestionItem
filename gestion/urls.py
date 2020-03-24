@@ -7,7 +7,7 @@ urlpatterns = [
     path('logout/', views.logout),
     path('perfil/',views.perfil),
     path('listarUsuarios/',views.getUsers),
-    path('crear_fase/', crearFase, name = 'crear_fase')
+    path('crear_fase/', views.crearFase)
 
 # Create your views here.
 

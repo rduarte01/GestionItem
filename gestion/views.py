@@ -70,4 +70,3 @@ def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/f
     else:
         fase_form = FaseForm() #sin parametros ya que se van a cargar los valores en el formulario
     return render(request, 'crear_fase.html', {'fase_form': fase_form})
-
