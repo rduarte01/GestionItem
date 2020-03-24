@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import Textarea
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from .models import Proyecto,TipoItem,Atributo   #, Usuario
 ####### se escribe formulario
 
@@ -110,3 +110,15 @@ class SettingsUserForm(forms.ModelForm):
         }
 
 
+class RolForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = "__all__"
+        permissions = forms.ModelMultipleChoiceField(
+            queryset=Permission.objects.all(),
+            widget=forms.CheckboxSelectMultiple(attrs={
+               'class': 'form-control',
+            }),
+            required=False,
+        )
+   # temas = forms.ModelMultipleChoiceField(queryset=Tema.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)

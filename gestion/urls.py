@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import VerSolicitudesEspera, ActualizarUser, VerPermisos
+from .views import VerSolicitudesEspera, ActualizarUser, VerPermisos, CrearRol
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -15,6 +15,7 @@ urlpatterns = [
     path('crear/TipoItem',views.tipo_item_views_create,name='tipo_item_views_create'),
     path('crear/atributo',views.add_atribute,name='add_atribute'),
     path('getUser/<int:pk>', ActualizarUser.as_view(),name='get_user'),
+    path('crearRol', CrearRol.as_view(),name='get_user'),
 
 ]
 

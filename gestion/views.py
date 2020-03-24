@@ -6,13 +6,13 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
-from django.views.generic import TemplateView,ListView,UpdateView
+from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
 #from post import POST
 
 
 from .models import Proyecto,TipoItem,Atributo
-from .forms import FormProyecto,TipoItemForm,AtributeForm, SettingsUserForm#, FormUsuario
+from .forms import FormProyecto,TipoItemForm,AtributeForm, SettingsUserForm, RolForm#, FormUsuario
 
 CANTIDAD_ATRIBUTOS_TI=1
 NOMBRE_TI="hola"
@@ -152,6 +152,7 @@ class VerSolicitudesEspera(ListView):
     template_name = "ListaUser.html"
     queryset = User.objects.filter(esta_aprobado = False)
 
+
 class ActualizarUser(UpdateView):
     model = User
     form_class = SettingsUserForm
@@ -164,6 +165,11 @@ class VerPermisos(ListView):
     template_name = "ListaPermisos.html"
     queryset = Permission.objects.all()
 
+class CrearRol(CreateView):
+    model = Group
+    form_class = RolForm
+    template_name = "CrearRol.html"
+    success_url = reverse_lazy("gestion:menu")
 
 
 @login_required
