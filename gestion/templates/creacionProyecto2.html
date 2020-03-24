@@ -6,15 +6,15 @@
 <h1>Creacion de Proyecto</h1>
 
 {% block contect %}
-<a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
+<a class="btn btn-primary" href="" role="button">Volver Atras</a>
 
       <div class="jumbotron">
 
  <form method="POST" action="">{% csrf_token %}
       {{ formProyecto.as_p }}
-     <input type="submit"  value="Siguiente">
+     <input type="submit"  value="Guardar">
  </form>
-
       </div>
+
 {% endblock %}
 

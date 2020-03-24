@@ -1,7 +1,15 @@
 from django import forms
 from django.forms import Textarea
-from .models import Proyecto
+from .models import Proyecto, User_Proyecto
 
+
+class  FormUser_Proyecto(forms.ModelForm):
+    class Meta:
+        model = User_Proyecto
+        fields=["user"]
+        widgets = {
+            "user": forms.CheckboxSelectMultiple(),
+        }
 
 class FormProyecto(forms.ModelForm):
     """
@@ -16,21 +24,24 @@ class FormProyecto(forms.ModelForm):
                 "nombre",
                 "descripcion",
                 "estado",
-                "usuario"
+
                   ]
         """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {
             "nombre":"Ingrese un Nombre para el proyecto",
             "descripcion":"Ingrese una descripcion si lo desea",
             "estado":"Selecciona el estado que tendra el proyecto",
-            "usuario": "Selecciona Usuarios para Agregar al Proyecto"
+
         }
         """LA ETIQUETA DE CADA CAMPO"""
         widgets={
             "nombre": forms.TextInput(attrs={'class': 'form-control'}),
             "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
-            "estado":forms.CheckboxSelectMultiple(),
-            "usuario": forms.CheckboxSelectMultiple(),
+            "estado":forms.RadioSelect(choices=[
+                (1, 'Creado'),
+                (2, 'Iniciado')
+            ]),
+
         }
         """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
 

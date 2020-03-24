@@ -3,12 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Auditar(models.Model):
-    usuario= models.CharField(max_length=50)
-    fecha= models.CharField(max_length=50)
-    accion= models.CharField(max_length=100)
-
-
 class TipoItem(models.Model):
     """"
         Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
@@ -56,27 +50,21 @@ class Proyecto(models.Model):
     CANCELADO=4
     POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO
     """
-    choises_data_type = (
-        (1, "CREADO"),
-        (2, "INICIADO"),
-    )
 
     #id_proyecto= models.IntegerField(auto_created = True, primary_key = True, serialize = False) ###### clave de proyecto
-    id_proyecto= models.AutoField(primary_key=True,default=1)
+    id_proyecto= models.AutoField(primary_key=True,default=11)
     """SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD"""
     nombre= models.CharField(max_length=30)
     """SERA EL NOMBRE DEL PROYECTO A CREAR"""
     descripcion= models.CharField(max_length=100)
     """INFORMACION REFERENTE AL PROYECTO A CREAR"""
-    estado= models.IntegerField(choices=choises_data_type,default=1)
+    estado= models.IntegerField()
     """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO"""
-    usuario = models.ManyToManyField(User)
+  #  usuario = models.ManyToManyField(User)
     """RELACION CON LA TABLA USUARIOS EN LA CUAL SE REFLEJARA SI EL USUARIO SE ENCUENTRA
     ASIGNADO O NO AL PROYECTO"""
-    ###-Usuarios: Usuario[*]    FALTA CREAR
     ###-Fases: Fases[*]
     ###-Rol: Rol[*]
-
 
 
 class Fase(models.Model):
@@ -89,7 +77,7 @@ class Fase(models.Model):
         ("2", "Cerrada")
     )
 
-    id_Fase = models.AutoField(primary_key = True, default = 1)
+    id_Fase = models.AutoField(primary_key = True, default = 13)
     nombre = models.CharField('Nombre', max_length = 100, blank = False, null = False)
     descripcion = models.TextField('Descripción', blank = False, null = False)
     estado = models.CharField('Estado', max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'Abierta')
@@ -123,3 +111,16 @@ class Fase(models.Model):
         verbose_name = 'Fase'
         verbose_name_plural = 'Fases'
         ordering = ['id_Fase']
+
+class Auditoria(models.Model):
+    usuario= models.CharField(max_length=50)
+    fecha= models.CharField(max_length=50)
+    accion= models.CharField(max_length=100)
+
+
+
+class User_Proyecto(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
+    is_valido = models.BooleanField()
+

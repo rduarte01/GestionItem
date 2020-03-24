@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
-from .models import Proyecto, Auditar
-from .forms import FormProyecto
+from .models import Proyecto, Auditoria
+from .forms import FormProyecto, FormUser_Proyecto
 from time import gmtime, strftime
 from .forms import FaseForm
 
@@ -15,7 +15,7 @@ from .forms import FaseForm
 def registrarAuditoria(user,accion):
     """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
     showtime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    p = Auditar(usuario= user,fecha=showtime, accion=accion)###### FALTA ARREGLAR USER
+    p = Auditoria(usuario= user,fecha=showtime, accion=accion)###### FALTA ARREGLAR USER
     p.save()
 
 
@@ -78,7 +78,7 @@ def creacionProyecto(request):
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
 
         ### AGREGAR MODIFICACIONES DE DATOS ANTES DE GUARDAR
-
+        print("se guardo en bd--------------------------------------------------------------")
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
     registrarAuditoria(request.user ,'Proyecto guardado en la BD')
 
@@ -88,6 +88,11 @@ def creacionProyecto(request):
 
     return render(request,'creacionProyecto2.html', context)
 
+def recoger_datos_proyecto(my_form):
+    nombre = my_form.cleaned_data['nombre']
+    descripcion = my_form.cleaned_data['descripcion']
+    estado = my_form.cleaned_data['estado']
+    return nombre,descripcion,estado
 
 def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
@@ -159,11 +164,29 @@ def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/f
     """
     Método para crear fases de un proyecto dado
     """
-    if request.method == 'POST': #preguntamos primero si la petición Http es POST
-        fase_form = FaseForm(request.POST)
-        if fase_form.is_valid():
-            fase_form.save()
-            return redirect('index')
-    else:
-        fase_form = FaseForm() #sin parametros ya que se van a cargar los valores en el formulario
+   #if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+    fase_form = FaseForm(request.POST)
+    if fase_form.is_valid():
+        fase_form.save()
+    fase_form = FaseForm() #sin parametros ya que se van a cargar los valores en el formulario
     return render(request, 'crear_fase.html', {'fase_form': fase_form})
+
+
+def listar_auditoria(request):
+    auditoria = Auditoria.objects.all()
+    context={
+        'auditoria':auditoria
+    }
+    return render(request, 'Auditoria.html', context)
+
+def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/forms
+    """
+    Método para crear fases de un proyecto dado
+    """
+   #if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+    form = FormUser_Proyecto (request.POST)
+    if form.is_valid():
+        form.save()
+     #sin parametros ya que se van a cargar los valores en el formulario
+    return render(request, 'AggUser.html', {'form': form})
+
