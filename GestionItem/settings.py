@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gestion.apps.GestionConfig',
     'social_django',
+    'bootstrap4',
 ]
 
 # Auth0 settings

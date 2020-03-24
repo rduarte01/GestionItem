@@ -19,6 +19,7 @@ class Fase(models.Model):
     #id_Proyecto = models.ForeignKeyField(Proyecto, on_delete = models.CASCADE)
     #Items = [*]
     #TI = [*]
+    #ti = models.ForeignKey('TI', on_delete = models.CASCADE, blank = False, null = False)
     #id_Rol = models.ManyToMany(Rol)
     #Falta agregar relacion con LB e Item, cada uno de ellos en los modelos respectivos como FK ID_Fase
     #PRESI, EN TU MODELO DE TI DEBE IR COMO FK EL ID_FASE
