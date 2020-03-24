@@ -159,6 +159,11 @@ class ActualizarUser(UpdateView):
     success_url = reverse_lazy('gestion:listaDeEspera')
 
 
+class VerPermisos(ListView):
+    model = Permission
+    template_name = "ListaPermisos.html"
+    queryset = Permission.objects.all()
+
 
 
 @login_required
