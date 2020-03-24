@@ -3,19 +3,20 @@ from django.forms import Textarea
 from .models import Proyecto, User_Proyecto
 
 
-class  FormUser_Proyecto(forms.ModelForm):
+class FormUser_Proyecto(forms.ModelForm):
+
     class Meta:
         model = User_Proyecto
         fields=["user"]
-        widgets = {
-            "user": forms.CheckboxSelectMultiple(),
-        }
+
 
 class FormProyecto(forms.ModelForm):
     """
     FORMULARIO PARA INICIO DE PROYECTO EN DONDE SE MOSTRARN LOS CAMPOS COMO NOMBRE DE PROYECTO,
     DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN CREACION
     """
+    fase = forms.IntegerField()
+
     class Meta:
         """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
         model = Proyecto
@@ -23,25 +24,16 @@ class FormProyecto(forms.ModelForm):
         fields = [
                 "nombre",
                 "descripcion",
-                "estado",
-
                   ]
         """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {
             "nombre":"Ingrese un Nombre para el proyecto",
             "descripcion":"Ingrese una descripcion si lo desea",
-            "estado":"Selecciona el estado que tendra el proyecto",
-
         }
         """LA ETIQUETA DE CADA CAMPO"""
         widgets={
             "nombre": forms.TextInput(attrs={'class': 'form-control'}),
             "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
-            "estado":forms.RadioSelect(choices=[
-                (1, 'Creado'),
-                (2, 'Iniciado')
-            ]),
-
         }
         """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
 
@@ -70,3 +62,4 @@ class FaseForm(forms.ModelForm):
             "descripcion": forms.TextInput(attrs = {'class': 'form-control'}),
             "estado": forms.TextInput(attrs = {'class': 'form-control'}),
         }
+

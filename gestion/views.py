@@ -73,13 +73,21 @@ def creacionProyecto(request):
 
     registrarAuditoria(request.user,'Selecciono creacion de proyecto')
 
+    formFase = FormsProyectoFase(request.POST or None)
+
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
 
+        cantidad = formProyecto.cleaned_data
+
         ### AGREGAR MODIFICACIONES DE DATOS ANTES DE GUARDAR
         print("se guardo en bd--------------------------------------------------------------")
+        print(cantidad.get("fase"))
+
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
+        return redirect('crearFase',cantidad)
+
     registrarAuditoria(request.user ,'Proyecto guardado en la BD')
 
     context ={
@@ -88,11 +96,6 @@ def creacionProyecto(request):
 
     return render(request,'creacionProyecto2.html', context)
 
-def recoger_datos_proyecto(my_form):
-    nombre = my_form.cleaned_data['nombre']
-    descripcion = my_form.cleaned_data['descripcion']
-    estado = my_form.cleaned_data['estado']
-    return nombre,descripcion,estado
 
 def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
@@ -160,7 +163,13 @@ def verSolicitudesenEspera(request):
     else:
         print("No sos Admin")
 
-def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/forms
+
+
+"""
+SE PASA LA CANTIDAD DE FASES
+"""
+
+def crearFase(request,cantidad):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     Método para crear fases de un proyecto dado
     """
@@ -173,6 +182,7 @@ def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/f
 
 
 def listar_auditoria(request):
+    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA"""
     auditoria = Auditoria.objects.all()
     context={
         'auditoria':auditoria
@@ -184,7 +194,7 @@ def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/for
     Método para crear fases de un proyecto dado
     """
    #if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
-    form = FormUser_Proyecto (request.POST)
+    form = FormUser_Proyecto (request.GET)
     if form.is_valid():
         form.save()
      #sin parametros ya que se van a cargar los valores en el formulario

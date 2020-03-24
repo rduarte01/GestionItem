@@ -52,17 +52,14 @@ class Proyecto(models.Model):
     """
 
     #id_proyecto= models.IntegerField(auto_created = True, primary_key = True, serialize = False) ###### clave de proyecto
-    id_proyecto= models.AutoField(primary_key=True,default=11)
+    id_proyecto= models.AutoField(primary_key=True,default=1)
     """SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD"""
     nombre= models.CharField(max_length=30)
     """SERA EL NOMBRE DEL PROYECTO A CREAR"""
     descripcion= models.CharField(max_length=100)
     """INFORMACION REFERENTE AL PROYECTO A CREAR"""
-    estado= models.IntegerField()
-    """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO"""
-  #  usuario = models.ManyToManyField(User)
-    """RELACION CON LA TABLA USUARIOS EN LA CUAL SE REFLEJARA SI EL USUARIO SE ENCUENTRA
-    ASIGNADO O NO AL PROYECTO"""
+    estado= models.IntegerField(default=1)
+    """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO, POR DEFAULT QUEDA EN CREADO"""
     ###-Fases: Fases[*]
     ###-Rol: Rol[*]
 
@@ -77,7 +74,7 @@ class Fase(models.Model):
         ("2", "Cerrada")
     )
 
-    id_Fase = models.AutoField(primary_key = True, default = 13)
+    id_Fase = models.AutoField(primary_key = True, default = 1)
     nombre = models.CharField('Nombre', max_length = 100, blank = False, null = False)
     descripcion = models.TextField('Descripción', blank = False, null = False)
     estado = models.CharField('Estado', max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'Abierta')
@@ -112,15 +109,17 @@ class Fase(models.Model):
         verbose_name_plural = 'Fases'
         ordering = ['id_Fase']
 
+
 class Auditoria(models.Model):
+    """TABLA EN DONDE SE GUARDAN LAS MODIFICACIONES QUE REALIZAN TODOS LOS USUARIOS EN EL SISTEMA"""
     usuario= models.CharField(max_length=50)
     fecha= models.CharField(max_length=50)
     accion= models.CharField(max_length=100)
 
 
-
 class User_Proyecto(models.Model):
+    """MODELO PROYECTO CON USER EN DONDE SE SOLUCIONA LA RELACION MUCHOS A MUCHOS, GUARDA
+    LAS RELACIONES ENTRE USUARIOS Y PROYECTOS
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
-    is_valido = models.BooleanField()
-
