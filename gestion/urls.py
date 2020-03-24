@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import crearFase
 from . import views
 
 
@@ -11,6 +12,7 @@ urlpatterns = [
     path('creacionProyecto/', views.creacionProyecto),
     path('Contactos/', views.Contactos),
     path('enEspera/',views.verSolicitudesenEspera),
+    path('crear_fase/', views.crearFase)
 ]
 
 

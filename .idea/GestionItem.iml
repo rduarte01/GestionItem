@@ -16,6 +16,7 @@
     <content url="file://$MODULE_DIR$" />
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="Python 3.6 (GestionItem) (6)" jdkType="Python SDK" />
 =======
     <orderEntry type="jdk" jdkName="Python 3.7 (GestionItem)" jdkType="Python SDK" />
@@ -23,6 +24,9 @@
 =======
     <orderEntry type="jdk" jdkName="Python 3.6 (GestionItem) (2)" jdkType="Python SDK" />
 >>>>>>> Gerardo
+=======
+    <orderEntry type="jdk" jdkName="Python 3.6 (GestionItem)" jdkType="Python SDK" />
+>>>>>>> RamaWalter17
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jquery-3.4.1" level="application" />
     <orderEntry type="library" name="html5shiv" level="application" />

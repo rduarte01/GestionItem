@@ -9,6 +9,7 @@ from django.contrib.auth.models import Permission,Group
 from .models import Proyecto, Auditar
 from .forms import FormProyecto
 from time import gmtime, strftime
+from .forms import FaseForm
 
 
 def registrarAuditoria(user,accion):
@@ -153,3 +154,16 @@ def verSolicitudesenEspera(request):
         })
     else:
         print("No sos Admin")
+
+def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/forms
+    """
+    Método para crear fases de un proyecto dado
+    """
+    if request.method == 'POST': #preguntamos primero si la petición Http es POST
+        fase_form = FaseForm(request.POST)
+        if fase_form.is_valid():
+            fase_form.save()
+            return redirect('index')
+    else:
+        fase_form = FaseForm() #sin parametros ya que se van a cargar los valores en el formulario
+    return render(request, 'crear_fase.html', {'fase_form': fase_form})
