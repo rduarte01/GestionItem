@@ -51,8 +51,7 @@ class Proyecto(models.Model):
     POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO
     """
 
-    #id_proyecto= models.IntegerField(auto_created = True, primary_key = True, serialize = False) ###### clave de proyecto
-    id_proyecto= models.AutoField(primary_key=True,default=1)
+    id_proyecto= models.AutoField(primary_key = True) ###### clave de proyecto
     """SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD"""
     nombre= models.CharField(max_length=30)
     """SERA EL NOMBRE DEL PROYECTO A CREAR"""
@@ -60,6 +59,7 @@ class Proyecto(models.Model):
     """INFORMACION REFERENTE AL PROYECTO A CREAR"""
     estado= models.IntegerField(default=1)
     """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO, POR DEFAULT QUEDA EN CREADO"""
+    users= models.ManyToManyField(User, blank=True)
     ###-Fases: Fases[*]
     ###-Rol: Rol[*]
 
@@ -116,10 +116,10 @@ class Auditoria(models.Model):
     fecha= models.CharField(max_length=50)
     accion= models.CharField(max_length=100)
 
-
 class User_Proyecto(models.Model):
     """MODELO PROYECTO CON USER EN DONDE SE SOLUCIONA LA RELACION MUCHOS A MUCHOS, GUARDA
     LAS RELACIONES ENTRE USUARIOS Y PROYECTOS
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
+    user_id = models.IntegerField()
+    proyecto_id = models.IntegerField()
+    activo = models.BooleanField(default=False)

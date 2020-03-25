@@ -1,24 +1,18 @@
 from django import forms
 from django.forms import Textarea
-from .models import Proyecto, User_Proyecto
-from django.contrib.auth.models import User
+from .models import Proyecto
+from django.contrib.auth.models import User, Permission
 
 
 
 class FormUserAgg(forms.ModelForm):
     class Meta:
-        model= User
+        model = User
         fields=['username']
-     #   widgets = {
-      #  "username": forms.CheckBoxSelectMultiple(),
-       # }
-
-
-class FormUser_Proyecto(forms.ModelForm):
-
-    class Meta:
-        model = User_Proyecto
-        fields=["user"]
+        permissions =forms.ModelMultipleChoiceField(
+            queryset = Permission.objects.all(),
+            required= False,
+        )
 
 
 class FormProyecto(forms.ModelForm):
@@ -35,16 +29,19 @@ class FormProyecto(forms.ModelForm):
         fields = [
                 "nombre",
                 "descripcion",
+                "users",
                   ]
         """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {
             "nombre":"Ingrese un Nombre para el proyecto",
             "descripcion":"Ingrese una descripcion si lo desea",
+            "users":"Seleccione los usuarios a añadir",
         }
         """LA ETIQUETA DE CADA CAMPO"""
         widgets={
             "nombre": forms.TextInput(attrs={'class': 'form-control'}),
             "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
+            "users": forms.CheckboxSelectMultiple(),
         }
         """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
 

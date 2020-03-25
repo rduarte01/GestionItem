@@ -6,14 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
-from .models import Proyecto, Auditoria
-from .forms import FormProyecto, FormUser_Proyecto
+from .models import Proyecto, Auditoria, User_Proyecto
+from .forms import FormProyecto
 from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg
-
-
-
-
+from django.db.models import Count
 
 
 def registrarAuditoria(user,accion):
@@ -77,20 +74,24 @@ def creacionProyecto(request):
 
     registrarAuditoria(request.user,'Selecciono creacion de proyecto')
 
-    formFase = FormsProyectoFase(request.POST or None)
-
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
 
         cantidad = formProyecto.cleaned_data
+        q = cantidad.get("users")
+        q.count()
+        id_proyecto = Proyecto.objects.all().count()+1
+        x=q.count()
 
-        ### AGREGAR MODIFICACIONES DE DATOS ANTES DE GUARDAR
-        print("se guardo en bd--------------------------------------------------------------")
-        print(cantidad.get("fase"))
+        for i in range(x):
+            id_user =q[i].id
+            p = User_Proyecto(user_id= id_user ,proyecto_id= id_proyecto,activo= True)
+            p.save()
 
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
-        return redirect('crearFase',cantidad)
+
+        return redirect('crearFase')
 
     registrarAuditoria(request.user ,'Proyecto guardado en la BD')
 
@@ -173,7 +174,7 @@ def verSolicitudesenEspera(request):
 SE PASA LA CANTIDAD DE FASES
 """
 
-def crearFase(request,cantidad):#esta enlazado con la clase FaseForm del archivo getion/forms
+def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     Método para crear fases de un proyecto dado
     """
@@ -200,7 +201,10 @@ def listar_usuarios_registrar(request):
     form = User.objects.all()
     if request.method=='POST':
         print('imprimiio:')
-#        print(request.POST)
+        print(request.POST)
+  #  form = FormUserAgg(request.POST)
+ #   if form.is_valid():
+#        form.save()
 
     context={
         'form':form
@@ -215,7 +219,7 @@ def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/for
     Método para crear fases de un proyecto dado
     """
    #if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
-    form = FormUser_Proyecto (request.GET)
+    form = FormUserAgg(request.POST)
     if form.is_valid():
         form.save()
      #sin parametros ya que se van a cargar los valores en el formulario
