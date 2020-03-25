@@ -28,6 +28,7 @@ def CorreoMail(asunto,mensaje,correo):
 
 def Contactos(request):
     """MUESTRA UN CORREO EN DONDE PUEDE CONTACTAR CON NOSOTROS"""
+    registrarAuditoria(request.user ,'Ingreso en el apartado contactos')
     return render(request,'Contactos.html')
 
 
@@ -42,7 +43,7 @@ def menu(request):
     SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
     """
 
-    #return render(request,'MenuAdminSistema.html')
+    return render(request,'MenuAdminSistema.html')
 
     registrarAuditoria(request.user ,'Inicio Menu del Gerente')
 
@@ -83,17 +84,16 @@ def creacionProyecto(request):
         q.count()
         id_proyecto = Proyecto.objects.all().count()+1
         x=q.count()
+        registrarAuditoria(request.user,'Creo el proyecto: '+str(cantidad.get("nombre")))
 
         for i in range(x):
+            registrarAuditoria(request.user, 'En el proyecto: ' + str(cantidad.get("nombre")+' añadio al usuario: '+str(q[i])+' en el proyecto'))
             id_user =q[i].id
             p = User_Proyecto(user_id= id_user ,proyecto_id= id_proyecto,activo= True)
             p.save()
-
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
 
         return redirect('crearFase')
-
-    registrarAuditoria(request.user ,'Proyecto guardado en la BD')
 
     context ={
         "formProyecto": formProyecto,
@@ -117,6 +117,8 @@ def perfil(request):
     Realiza consultas de los datos del usuario que esta realizando la
     solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario"""
 
+    registrarAuditoria(request.user, 'Ingreso en el apartado perfil')
+
     user = request.user
     auth0user = user.social_auth.filter(provider='auth0')[0]
     userdata = {
@@ -137,7 +139,7 @@ def perfil(request):
 def logout(request):
     """PARA DESLOGUEARSE, CERRAR SESION DEL SSO VUELVE A MOSTRAR INICIO"""
 
-    registrarAuditoria(request.user ,'Cerro sesión')
+    registrarAuditoria(request.user,'Cerro sesión')
 
     django_logout(request)
     #modificar para mi app
@@ -158,6 +160,7 @@ def verSolicitudesenEspera(request):
     entonce carga los usuarios que esperan ser aprobados y lo manda a
     a la pagina ListaUser que muestra la lista. Caso contrario muestra
     una pagina de que no es administrador"""
+
     user = request.user
     if user.is_staff is True:
         print("Si sos Admin")
@@ -188,6 +191,9 @@ def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/f
 
 def listar_auditoria(request):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA"""
+
+    registrarAuditoria(request.user, 'Ingreso al apartado Auditoria')
+
     auditoria = Auditoria.objects.all()
     context={
         'auditoria':auditoria
@@ -212,13 +218,14 @@ def listar_usuarios_registrar(request):
     return render(request, 'AggUser.html', context)
 
 
-
-##########3 no se usa
+########3 se debe usar para añadir usuarios luego a un proyecto
 def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     Método para crear fases de un proyecto dado
     """
-   #if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+    registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
+
+    #if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
     form = FormUserAgg(request.POST)
     if form.is_valid():
         form.save()

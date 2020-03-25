@@ -155,6 +155,12 @@
   <div class="section" id="module-gestion.views">
 <span id="views"></span><h1>Views<a class="headerlink" href="#module-gestion.views" title="Enlazar permanentemente con este título">¶</a></h1>
 <dl class="function">
+<dt id="gestion.views.AggUser">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">AggUser</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.AggUser" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para crear fases de un proyecto dado</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.Contactos">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">Contactos</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.Contactos" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MUESTRA UN CORREO EN DONDE PUEDE CONTACTAR CON NOSOTROS</p>
@@ -174,6 +180,12 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.crearFase">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">crearFase</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.crearFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para crear fases de un proyecto dado</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.getUsers">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">getUsers</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.getUsers" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>«TRAE INFORMACION DE USUARIO</p>
@@ -183,6 +195,18 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dt id="gestion.views.index">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.index" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.listar_auditoria">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_auditoria</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_auditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS REGISTROS DE LA TABLA AUDITORIA</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.listar_usuarios_registrar">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_usuarios_registrar</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_usuarios_registrar" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS USUARIOS PARA AGREGAR AL PROYECTO</p>
 </dd></dl>
 
 <dl class="function">
@@ -207,6 +231,12 @@ SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO</p
 <dd><p>SOLICITUD DE AUTENTICACION PARA MOSTRAR EL PERFIL DEL USUARIO||
 Realiza consultas de los datos del usuario que esta realizando la
 solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.registrarAuditoria">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">registrarAuditoria</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">accion</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.registrarAuditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA</p>
 </dd></dl>
 
 <dl class="function">
