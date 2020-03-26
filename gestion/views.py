@@ -35,7 +35,6 @@ def Contactos(request):
     return render(request,'Contactos.html')
 
 
-###### FALTA FILTRAR POR PERMISOS
 
 def CantProyectos(request):
     """ RETORNA LA LISTA DE ID DE LOS PROYECTOS ASOCIADOS AL USUARIO ACTUAL """
@@ -57,12 +56,6 @@ def menu(request):
     AL USUARIO QUE SE REGISTRE POR PRIMERA VEZ SE CREARA UN CORREO Y SE ENVIARA AL ADMINISTRADOR DEL SISTEMA
     SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
     """
-
-    PROYECTOS_USUARIO= CantProyectos(request)
-    print(PROYECTOS_USUARIO)
-
-    #PROYECTOS_USUARIO=GuardaProyectos##### DE FORMA GLOBAL SE TIENEN TODOS LOS PROYECTOS DEL USUARIO
-
 
     #return render(request,'MenuAdminSistema.html')
 
@@ -110,7 +103,7 @@ def creacionProyecto(request):
 
         q = cantidad.get("users")
         q.count()
-        id_proyecto = Proyecto.objects.all().count()+1
+        id_proyecto = Proyecto.objects.last().id_proyecto + 1
         x=q.count()
         registrarAuditoria(request.user,'Creo el proyecto: '+str(cantidad.get("nombre")))
 
@@ -283,6 +276,7 @@ def listar_proyectos(request):
     PROYECTOS_USUARIO= CantProyectos(request)
     print(PROYECTOS_USUARIO)
 
+    print(proyectos)
     cant = len(PROYECTOS_USUARIO)
 
     context={

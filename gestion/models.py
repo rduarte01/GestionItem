@@ -51,13 +51,21 @@ class Proyecto(models.Model):
     POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO
     """
 
+    choises_data_type = (
+        ("CREADO", "CREADO"),
+        ("INICIADO", "INICIADO"),
+        ("FINALIZADO", "FINALIZADO"),
+        ("CANCELADO", "CANCELADO")
+    )
+
+
     id_proyecto= models.AutoField(primary_key = True) ###### clave de proyecto
     """SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD"""
     nombre= models.CharField(max_length=30)
     """SERA EL NOMBRE DEL PROYECTO A CREAR"""
     descripcion= models.CharField(max_length=100)
     """INFORMACION REFERENTE AL PROYECTO A CREAR"""
-    estado= models.IntegerField(default=1)
+    estado= models.CharField('Estado', max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'CREADO')
     """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO, POR DEFAULT QUEDA EN CREADO"""
     users= models.ManyToManyField(User, blank=True)
     ###-Fases: Fases[*]
