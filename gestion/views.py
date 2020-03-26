@@ -12,6 +12,44 @@ from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg
 from django.db.models import Count
 
+PROYECTOS_USUARIO=[]
+
+def get_proyectos(request, pk):
+    form = FormProyecto()
+    if (request.method == 'POST'):
+        form = FormProyecto(request.POST)
+        if (form.is_valid()):
+            user = User.objects.get(id=pk)
+
+            is_admin, estado = recoger_datos_usuario_settings(form)
+            content_type = ContentType.objects.get_for_model(User)
+            if (is_admin):  # se agrega el permiso
+                permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
+                user.user_permissions.add(permission)
+            else:  # se elimina el permiso
+                name_permission = 'es_administrador'
+                permission = Permission.objects.get(content_type=content_type, codename=name_permission)
+                user.user_permissions.remove(permission)
+            user.esta_aprobado = estado
+            user.save()
+            # print(form.cleaned_data)
+        else:
+            print("no es valido")
+        #   return  HttpResponse("HELLOW")
+        return redirect('ver_usuarios_aprobados')
+    else:
+        print("es get")
+        userProject = User_Proyecto.objects.get(user_id=pk)
+        x=userProject.count()
+
+        for i in x:
+            projectUser[i] = userProject[i]
+
+        context = {
+            'project': projectUser,
+            'form': form
+        }
+        return render(request, "verProyectos.html", context)
 
 def registrarAuditoria(user,accion):
     """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
@@ -42,10 +80,24 @@ def menu(request):
     AL USUARIO QUE SE REGISTRE POR PRIMERA VEZ SE CREARA UN CORREO Y SE ENVIARA AL ADMINISTRADOR DEL SISTEMA
     SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
     """
+    user = request.user#### SE UTILIZA PARA QUITAR EL ID DEL USUARIO ACTUAL
+    NroProyectos = User_Proyecto.objects.all()### QUERY DE TODOS LOS PROYECTOS
+    GuardaProyectos=[]### GUARDA LOS PROYECTOS EN LOS QUE SE ENCUENTRA ASOCIADO EL USUARIO
 
-    return render(request,'MenuAdminSistema.html')
+    for i in range(NroProyectos.count()):###### RECORRE TODOS LOS PROYECTOS
+        if (NroProyectos[i].user_id==user.id):#### CONSULTA SI EL PROYECCTO PERTENECE AL USUARIO
+            GuardaProyectos.append(NroProyectos[i].proyecto_id)###### GUARDA EL ID PROYECTO DEL USUARIO
+            #print(NroProyectos[i])
 
-    registrarAuditoria(request.user ,'Inicio Menu del Gerente')
+    #print(GuardaProyectos)
+    #print(NroProyectos)
+    # print(user.id)
+
+    PROYECTOS_USUARIO=GuardaProyectos##### DE FORMA GLOBAL SE TIENEN TODOS LOS PROYECTOS DEL USUARIO
+    print(PROYECTOS_USUARIO)
+
+    #return render(request,'MenuAdminSistema.html')
+
 
     # falta if de consulta si es gerente
     return render(request,'Menu.html')
@@ -232,3 +284,17 @@ def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/for
      #sin parametros ya que se van a cargar los valores en el formulario
     return render(request, 'AggUser.html', {'form': form})
 
+def listar_proyectos(request):
+    """ LISTA LOS PROYECTOS DEL USUARIO"""
+
+    registrarAuditoria(request.user, 'Lista sus proyectos existentes')
+
+    proyectos = Proyecto.objects.all()
+    print(proyectos)
+    ### PROYECTOS_USUARIO con este filtrar
+
+    context={
+        'proyectos':proyectos,
+        'pro': PROYECTOS_USUARIO
+    }
+    return render(request, 'verProyectos.html', context)

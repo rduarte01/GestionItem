@@ -45,7 +45,6 @@ class FormProyecto(forms.ModelForm):
         }
         """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
 
-
 from django import forms
 from .models import Fase
 

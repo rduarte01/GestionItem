@@ -1,0 +1,38 @@
+
+    <title>Mis proyectos</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<h1>Mis Proyectos</h1>
+
+{% block content %}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <td>Nombre de proyecto</td>
+        <td>id</td>
+        <td>Descripcion</td>
+        <td>Estado</td>
+
+
+    </tr>
+    </thead>
+    <tbody>
+
+    {%for proyectos in proyectos%}
+    <tr>
+        <td>{{proyectos.nombre}}</td>
+        <td>{{proyectos.id_proyecto}}</td>
+        <td>{{proyectos.descripcion}}</td>
+        <td>{{proyectos.estado}}</td>
+
+
+    </tr>
+    {%endfor%}
+    </tbody>
+
+</table>
+
+
+{% endblock %}
