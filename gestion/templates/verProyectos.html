@@ -21,18 +21,21 @@
     <tbody>
 
     {%for proyectos in proyectos%}
-    <tr>
-        <td>{{proyectos.nombre}}</td>
-        <td>{{proyectos.id_proyecto}}</td>
-        <td>{{proyectos.descripcion}}</td>
-        <td>{{proyectos.estado}}</td>
 
+        {%for list in list %}
+        {% if list == proyectos.id_proyecto  %}
+        <tr>
+            <td>{{proyectos.nombre}}</td>
+            <td>{{proyectos.id_proyecto}}</td>
+            <td>{{proyectos.descripcion}}</td>
+            <td>{{proyectos.estado}}</td>
+        </tr>
+        {%endif%}
+        {%endfor%}
 
-    </tr>
     {%endfor%}
     </tbody>
 
 </table>
-
 
 {% endblock %}

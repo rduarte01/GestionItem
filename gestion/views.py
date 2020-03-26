@@ -37,14 +37,8 @@ def Contactos(request):
 
 ###### FALTA FILTRAR POR PERMISOS
 
-def menu(request):
-    """
-    DE ACUERDO AL ROL DEL USUARIO MUESTRA EL MENU CORRESPONDIENTE, SIENDO LOS MENUS:
-    MENU PRINCIPAL AL INICIAR SESION GERENTE, MENU PRINCIPAL AL INICIAR SESION ADMINISTRADOR SISTEMA,
-    MENU PRINCIPAL EN ESPERA DE ACEPTACION
-    AL USUARIO QUE SE REGISTRE POR PRIMERA VEZ SE CREARA UN CORREO Y SE ENVIARA AL ADMINISTRADOR DEL SISTEMA
-    SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
-    """
+def CantProyectos(request):
+    """ RETORNA LA LISTA DE ID DE LOS PROYECTOS ASOCIADOS AL USUARIO ACTUAL """
     user = request.user#### SE UTILIZA PARA QUITAR EL ID DEL USUARIO ACTUAL
     NroProyectos = User_Proyecto.objects.all()### QUERY DE TODOS LOS PROYECTOS
     GuardaProyectos=[]### GUARDA LOS PROYECTOS EN LOS QUE SE ENCUENTRA ASOCIADO EL USUARIO
@@ -53,13 +47,22 @@ def menu(request):
         if (NroProyectos[i].user_id==user.id):#### CONSULTA SI EL PROYECCTO PERTENECE AL USUARIO
             GuardaProyectos.append(NroProyectos[i].proyecto_id)###### GUARDA EL ID PROYECTO DEL USUARIO
             #print(NroProyectos[i])
+    return GuardaProyectos
 
-    #print(GuardaProyectos)
-    #print(NroProyectos)
-    # print(user.id)
+def menu(request):
+    """
+    DE ACUERDO AL ROL DEL USUARIO MUESTRA EL MENU CORRESPONDIENTE, SIENDO LOS MENUS:
+    MENU PRINCIPAL AL INICIAR SESION GERENTE, MENU PRINCIPAL AL INICIAR SESION ADMINISTRADOR SISTEMA,
+    MENU PRINCIPAL EN ESPERA DE ACEPTACION
+    AL USUARIO QUE SE REGISTRE POR PRIMERA VEZ SE CREARA UN CORREO Y SE ENVIARA AL ADMINISTRADOR DEL SISTEMA
+    SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
+    """
 
-    PROYECTOS_USUARIO=GuardaProyectos##### DE FORMA GLOBAL SE TIENEN TODOS LOS PROYECTOS DEL USUARIO
+    PROYECTOS_USUARIO= CantProyectos(request)
     print(PROYECTOS_USUARIO)
+
+    #PROYECTOS_USUARIO=GuardaProyectos##### DE FORMA GLOBAL SE TIENEN TODOS LOS PROYECTOS DEL USUARIO
+
 
     #return render(request,'MenuAdminSistema.html')
 
@@ -95,9 +98,9 @@ def creacionProyecto(request):
     registrarAuditoria(request.user,'Selecciono creacion de proyecto')
 
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
+
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
-
 
 
         cantidad = formProyecto.cleaned_data
@@ -271,15 +274,20 @@ def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/for
 
 def listar_proyectos(request):
     """ LISTA LOS PROYECTOS DEL USUARIO"""
-
     registrarAuditoria(request.user, 'Lista sus proyectos existentes')
 
     proyectos = Proyecto.objects.all()
-    print(proyectos)
+
     ### PROYECTOS_USUARIO con este filtrar
+
+    PROYECTOS_USUARIO= CantProyectos(request)
+    print(PROYECTOS_USUARIO)
+
+    cant = len(PROYECTOS_USUARIO)
 
     context={
         'proyectos':proyectos,
-        'pro': PROYECTOS_USUARIO
+        'list': PROYECTOS_USUARIO,
+        'cant': cant
     }
     return render(request, 'verProyectos.html', context)
