@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import crearFase, listar_auditoria, listar_usuarios_registrar, get_proyectos,listar_proyectos
+from .views import crearFase, listar_auditoria, listar_usuarios_registrar,listar_proyectos
 from . import views
 
 
@@ -8,7 +8,7 @@ urlpatterns = [
     path('menu/logout/', views.logout),
     path('menu/perfil/',views.perfil),
     path('listarUsuarios/',views.getUsers),
-    path('menu/', views.menu),
+    path('menu/', views.menu, name='menu'),
     path('creacionProyecto/', views.creacionProyecto),
     path('Contactos/', views.Contactos),
     path('enEspera/',views.verSolicitudesenEspera),

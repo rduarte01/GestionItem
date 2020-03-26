@@ -15,42 +15,6 @@ from django.db.models import Count
 PROYECTOS_USUARIO=[]
 CANTIDAD=1
 
-def get_proyectos(request, pk):
-    form = FormProyecto()
-    if (request.method == 'POST'):
-        form = FormProyecto(request.POST)
-        if (form.is_valid()):
-            user = User.objects.get(id=pk)
-
-            is_admin, estado = recoger_datos_usuario_settings(form)
-            content_type = ContentType.objects.get_for_model(User)
-            if (is_admin):  # se agrega el permiso
-                permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
-                user.user_permissions.add(permission)
-            else:  # se elimina el permiso
-                name_permission = 'es_administrador'
-                permission = Permission.objects.get(content_type=content_type, codename=name_permission)
-                user.user_permissions.remove(permission)
-            user.esta_aprobado = estado
-            user.save()
-            # print(form.cleaned_data)
-        else:
-            print("no es valido")
-        #   return  HttpResponse("HELLOW")
-        return redirect('ver_usuarios_aprobados')
-    else:
-        print("es get")
-        userProject = User_Proyecto.objects.get(user_id=pk)
-        x=userProject.count()
-
-        for i in x:
-            projectUser[i] = userProject[i]
-
-        context = {
-            'project': projectUser,
-            'form': form
-        }
-        return render(request, "verProyectos.html", context)
 
 def registrarAuditoria(user,accion):
     """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
@@ -124,6 +88,7 @@ def menu(request):
 
 global cantidad_fases
 cantidad_fases=1
+
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
@@ -253,8 +218,9 @@ def crearFase(request):
             cantidad = cantidad - 1
             cantidad_fases = cantidad
             return redirect('crearFase')
-    else:
-        return redirect('menu')
+        else:
+            return redirect('menu')
+
     context = {
     'form': fase
     }
