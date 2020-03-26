@@ -2,17 +2,16 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
-<h1>Creación de Fase</h1>
-
-{% block content %}
-<a class="btn btn-primary" href="/crear_fase/" role="button">Volver Atras</a>
-
-      <div class="jumbotron">
-
- <form method="POST" action="">{% csrf_token %}
-      {{ fase_form.as_p }}
-     <input type="submit"  value="Siguiente">
- </form>
-
-      </div>
-{% endblock %}
+<form method= "POST">
+{% csrf_token %}
+<!-- {% for form in formset %}
+<h2> Fase {{ forloop.counter}} </h2>
+{{form.as_p}}
+<button type="submit" class="btn btn-primary">Crear Tipo de Item</button>
+{% endfor %}
+-->
+{{ form.as_p}}
+<div>
+<input type = 'submit' value = 'Save' />
+</div>
+</form>

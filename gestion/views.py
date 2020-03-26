@@ -13,6 +13,7 @@ from .forms import FaseForm, FormUserAgg
 from django.db.models import Count
 
 PROYECTOS_USUARIO=[]
+CANTIDAD=1
 
 def get_proyectos(request, pk):
     form = FormProyecto()
@@ -121,7 +122,8 @@ def menu(request):
 
     return render(request,'MenuEnEspera.html')
 
-
+global cantidad_fases
+cantidad_fases=1
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
@@ -131,7 +133,13 @@ def creacionProyecto(request):
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
 
+
+
         cantidad = formProyecto.cleaned_data
+
+        cantidad_fases=cantidad.get("fase")##### PARA WALTER
+        CANTIDAD=cantidad_fases
+
         q = cantidad.get("users")
         q.count()
         id_proyecto = Proyecto.objects.all().count()+1
@@ -229,17 +237,28 @@ def verSolicitudesenEspera(request):
 SE PASA LA CANTIDAD DE FASES
 """
 
-def crearFase(request):#esta enlazado con la clase FaseForm del archivo getion/forms
-    """
-    Método para crear fases de un proyecto dado
-    """
-   #if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
-    fase_form = FaseForm(request.POST)
-    if fase_form.is_valid():
-        fase_form.save()
-    fase_form = FaseForm() #sin parametros ya que se van a cargar los valores en el formulario
-    return render(request, 'crear_fase.html', {'fase_form': fase_form})
+def crearFase(request):
 
+    fase = FaseForm(request.POST)
+
+    global cantidad_fases
+
+    cantidad = cantidad_fases
+
+    if fase.is_valid():
+        fase.save(commit = False)
+        print("Llego hasta aca1111")
+        fase.save()
+        if cantidad != 0:
+            cantidad = cantidad - 1
+            cantidad_fases = cantidad
+            return redirect('crearFase')
+    else:
+        return redirect('menu')
+    context = {
+    'form': fase
+    }
+    return render(request, 'crear_fase.html', context)
 
 def listar_auditoria(request):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA"""
