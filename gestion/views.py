@@ -159,6 +159,10 @@ class ActualizarUser(UpdateView):
     template_name = 'perfilUsuario.html'
     success_url = reverse_lazy('gestion:listaDeEspera')
 
+    def post(self, request, *args, **kwargs):
+        request.POST = request.POST.copy()
+        request.POST['username']  += 'GER'
+        return super(ActualizarUser,self).post(request,**kwargs)
 
 class VerPermisos(ListView):
     model = Permission
@@ -170,6 +174,9 @@ class CrearRol(CreateView):
     form_class = RolForm
     template_name = "CrearRol.html"
     success_url = reverse_lazy("gestion:menu")
+
+
+
 
 
 @login_required

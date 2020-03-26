@@ -3,7 +3,7 @@ from django.forms import Textarea
 from django.contrib.auth.models import User, Group, Permission
 from .models import Proyecto,TipoItem,Atributo   #, Usuario
 ####### se escribe formulario
-
+from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
 """class FormUsuario(forms.ModelForm):
     class Meta:
         model = Usuario
@@ -112,13 +112,23 @@ class SettingsUserForm(forms.ModelForm):
 
 class RolForm(forms.ModelForm):
     class Meta:
+
         model = Group
         fields = "__all__"
-        permissions = forms.ModelMultipleChoiceField(
-            queryset=Permission.objects.all(),
-            widget=forms.CheckboxSelectMultiple(attrs={
-               'class': 'form-control',
-            }),
-            required=False,
-        )
-   # temas = forms.ModelMultipleChoiceField(queryset=Tema.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for perm in self.permissions:
+                self.fields[perm].widget.attrs['class'] = 'form-control'
+
+        widgets={
+            'name':forms.TextInput(
+                attrs={
+                    'class':'form-control',
+                    'placeholder':'Ingrese nombre del Rol',
+                }
+            ),
+            'permissions':forms.CheckboxSelectMultiple(),
+        }
+
+
