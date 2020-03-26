@@ -70,3 +70,6 @@ class FaseForm(forms.ModelForm):
         "descripcion": forms.TextInput(attrs = {'class': 'form-control'}),
         "estado": forms.TextInput(attrs = {'class': 'form-control'}),
         }
+
+class FormAyuda(forms.Form):
+    Consulta = forms.CharField(widget=forms.Textarea)

@@ -7,11 +7,14 @@ from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 from .models import Proyecto, Auditoria, User_Proyecto
-from .forms import FormProyecto
+from .forms import FormProyecto,FormAyuda
 from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg
 from django.db.models import Count
 
+#### GLOBALES
+global cantidad_fases
+cantidad_fases=0
 PROYECTOS_USUARIO=[]
 CANTIDAD=1
 
@@ -29,10 +32,28 @@ def CorreoMail(asunto,mensaje,correo):
     mail=EmailMessage(asunto,mensaje,to={correo})
     mail.send()
 
+
 def Contactos(request):
-    """MUESTRA UN CORREO EN DONDE PUEDE CONTACTAR CON NOSOTROS"""
-    registrarAuditoria(request.user ,'Ingreso en el apartado contactos')
-    return render(request,'Contactos.html')
+    """DESPLIEGA UN APARTADO EN DONDE EL USUARIO INGRESA SU DUDA O INCONVENIENTE Y SE ENVIA A LOS DESARROLLADORES
+    DEL SISTEMA DE MODO A ACLARAR O SOLUCIONAR INQUIETUDES
+    """
+    form = FormAyuda(request.POST)
+    if form.is_valid():
+        user=request.user
+        mensajeOBJ = form.cleaned_data
+        mensaje = mensajeOBJ.get("Consulta")
+        asunto= "Inconveniente o consulta de: "+ str(user)
+        guardarAuditoria = "El usuario envio la siguiente consulta o inquietud: "+ mensaje
+        registrarAuditoria(request.user, guardarAuditoria)
+
+        CorreoMail(asunto,mensaje,"waltergautofcb@gmail.com")
+        return redirect('menu')
+
+    context={
+        "form":form,
+    }
+    registrarAuditoria(request.user,'Ingreso en el apartado contactos')
+    return render(request,'Contactos.html', context)
 
 
 
@@ -71,6 +92,7 @@ def menu(request):
     #correo de administrador del sistema
     asunto='Solicitud de ingreso al sistema'
     mensaje='favor verificar si el usuario cumple los requisitos para ser aceptado'+ str(User)
+
     CorreoMail(asunto,mensaje,correo)
 
     #si no tiene rol le tira el menu de espera
@@ -82,8 +104,6 @@ def menu(request):
 
     return render(request,'MenuEnEspera.html')
 
-global cantidad_fases
-cantidad_fases=1
 
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
@@ -95,24 +115,26 @@ def creacionProyecto(request):
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
 
+        ### NADA QUE TOCAR
+
+        instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
 
         cantidad = formProyecto.cleaned_data
-
         cantidad_fases=cantidad.get("fase")##### PARA WALTER
         CANTIDAD=cantidad_fases
 
         q = cantidad.get("users")
         q.count()
-        id_proyecto = Proyecto.objects.last().id_proyecto + 1
-        x=q.count()
+        z= Proyecto.objects.last()
+        id_proyecto = z.id_proyecto ## ID DEL PROYECTO CREADO
+        x=q.count()##### CANTIDAD DE PROYECTOS
         registrarAuditoria(request.user,'Creo el proyecto: '+str(cantidad.get("nombre")))
 
-        for i in range(x):
+        for i in range(x):###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
             registrarAuditoria(request.user, 'En el proyecto: ' + str(cantidad.get("nombre")+' añadio al usuario: '+str(q[i])+' en el proyecto'))
             id_user =q[i].id
             p = User_Proyecto(user_id= id_user ,proyecto_id= id_proyecto,activo= True)
             p.save()
-        instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
 
         return redirect('crearFase')
 
@@ -201,9 +223,7 @@ SE PASA LA CANTIDAD DE FASES
 def crearFase(request):
 
     fase = FaseForm(request.POST)
-
     global cantidad_fases
-
     cantidad = cantidad_fases
 
     if fase.is_valid():
@@ -222,11 +242,10 @@ def crearFase(request):
     }
     return render(request, 'crear_fase.html', context)
 
+
 def listar_auditoria(request):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA"""
-
     registrarAuditoria(request.user, 'Ingreso al apartado Auditoria')
-
     auditoria = Auditoria.objects.all()
     context={
         'auditoria':auditoria
@@ -234,7 +253,7 @@ def listar_auditoria(request):
     return render(request, 'Auditoria.html', context)
 
 
-
+### SE PUEDE USAR DESPUES
 def listar_usuarios_registrar(request):
     """ LISTA LOS USUARIOS PARA AGREGAR AL PROYECTO"""
     form = User.objects.all()
@@ -265,23 +284,22 @@ def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/for
      #sin parametros ya que se van a cargar los valores en el formulario
     return render(request, 'AggUser.html', {'form': form})
 
+
+
 def listar_proyectos(request):
     """ LISTA LOS PROYECTOS DEL USUARIO"""
     registrarAuditoria(request.user, 'Lista sus proyectos existentes')
-
     proyectos = Proyecto.objects.all()
 
-    ### PROYECTOS_USUARIO con este filtrar
-
+    ### PROYECTOS_USUARIO
     PROYECTOS_USUARIO= CantProyectos(request)
     print(PROYECTOS_USUARIO)
-
     print(proyectos)
     cant = len(PROYECTOS_USUARIO)
 
     context={
-        'proyectos':proyectos,
-        'list': PROYECTOS_USUARIO,
-        'cant': cant
+        'proyectos':proyectos,###### TODOS LOS PROYECTOS
+        'list': PROYECTOS_USUARIO,##PROYECTOS DEL USUARIO LOS CUAL SE DEBE MOSTRAR, SOLO ID
+        'cant': cant####CANTIDAD DE PROYECTOS QUE POSEE
     }
     return render(request, 'verProyectos.html', context)
