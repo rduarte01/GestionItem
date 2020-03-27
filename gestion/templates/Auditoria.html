@@ -1,0 +1,35 @@
+
+    <title>Auditoria</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<h1>Auditoria</h1>
+<a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
+{% block content %}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <td>Usuario</td>
+        <td>Fecha</td>
+        <td>Accion</td>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    {% if auditoria %}
+    {%for auditoria in auditoria%}
+    <tr>
+        <td>{{auditoria.usuario}}</td>
+        <td>{{auditoria.fecha}}</td>
+        <td>{{auditoria.accion}}</td>
+    </tr>
+    {%endfor%}
+    {%endif%}
+    </tbody>
+
+</table>
+
+
+{% endblock %}

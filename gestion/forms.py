@@ -1,38 +1,79 @@
 from django import forms
 from django.forms import Textarea
-from django.contrib.auth.models import User, Group, Permission
-from .models import Proyecto,TipoItem,Atributo   #, Usuario
+from .models import Fase
+from django.contrib.auth.models import User, Permission,Group
+from .models import Proyecto,TipoItem,Atributo
 ####### se escribe formulario
 from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
+
+class FormUserAgg(forms.ModelForm):
+    class Meta:
+        model = User
+        fields=['username']
+        permissions =forms.ModelMultipleChoiceField(
+            queryset = Permission.objects.all(),
+            required= False,
+        )
+
+
+class FormProyecto(forms.ModelForm):
+    """
+    FORMULARIO PARA INICIO DE PROYECTO EN DONDE SE MOSTRARN LOS CAMPOS COMO NOMBRE DE PROYECTO,
+    DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN CREACION
+    """
+    fase = forms.IntegerField()
+   
+    class Meta:
+        """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
+        model = Proyecto
+        """SE REALIZA FORMULARIO DEL MODELO PROYECTO"""
+        fields = [
+                "nombre",
+                "descripcion",
+                "users",
+                  ]
+        """CAMPOS A MOSTRAR EN EL FORMULARIO"""
+        labels= {
+            "nombre":"Ingrese un Nombre para el proyecto",
+            "descripcion":"Ingrese una descripcion si lo desea",
+            "users":"Seleccione los usuarios a añadir",
+        }
+        """LA ETIQUETA DE CADA CAMPO"""
+        widgets={
+            "nombre": forms.TextInput(attrs={'class': 'form-control'}),
+            "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
+            "users": forms.CheckboxSelectMultiple(),
+        }
+        """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
+
+
+
 """class FormUsuario(forms.ModelForm):
     class Meta:
         model = Usuario
         fields=["nombre"]
 """
 
-class FormProyecto(forms.ModelForm):
     class Meta:
+        """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
         model = Proyecto
+        """SE REALIZA FORMULARIO DEL MODELO PROYECTO"""
         fields = [
-                "id_proyecto",
                 "nombre",
                 "descripcion",
-                "estado",
-                "usuario"
+                "users",
                   ]
+        """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {
-            "id_proyecto": "N° ID",
-            "nombre":"Nombre",
-            "descripcion":"Descripcion",
-            "estado":"Estado",
-            "usuario": "Selecciona Usuarios para Agregar al Proyecto"
+            "nombre":"Ingrese un Nombre para el proyecto",
+            "descripcion":"Ingrese una descripcion si lo desea",
+            "users":"Seleccione los usuarios a añadir",
         }
+        """LA ETIQUETA DE CADA CAMPO"""
         widgets={
-            "id_proyecto": forms.TextInput(attrs={'class': 'form-control'}),
             "nombre": forms.TextInput(attrs={'class': 'form-control'}),
             "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
-            "estado":forms.TextInput(attrs={'class': 'form-control'}),
-            "usuario": forms.CheckboxSelectMultiple(),
+            "users": forms.CheckboxSelectMultiple(),
         }
 class TipoItemForm(forms.ModelForm):
     """
@@ -62,7 +103,36 @@ class TipoItemForm(forms.ModelForm):
                                         )
                                 )
 
+class FaseForm(forms.ModelForm):
+    """
+    HACE REFERENCIA AL MODELO FASE QUE SERA REPRESENTADO POR MEDIO DE ESTA CLASE FORMLARIO EN EL NAVEGADOR WEB
+    CON SUS RESPECTIVOS CAMPOS A COMPLETAR
+    """
+    class Meta:
+        model = Fase
+        fields = [#'id_Fase',
+                  'nombre',
+                  'descripcion'
+        ]
+        """CAMPOS A SER COMPLETADOS EN EL FORMULARIO WEB A PRESENTAR"""
 
+        labels = {
+        #"id_Fase": "N° Fase",
+        "nombre": "Nombre",
+        "descripcion": "Descripción",
+        #"estado": "Estado",
+        #"id_Proyecto": "ID_Proyecto",
+        }
+
+        widgets = {
+        #"id_Fase": forms.IntegerField(),
+        "nombre" : forms.TextInput(attrs = {'class': 'form-control'}),
+        "descripcion": forms.TextInput(attrs = {'class': 'form-control'}),
+        #"estado": forms.TextInput(attrs = {'class': 'form-control'}),
+        }
+
+class FormAyuda(forms.Form):
+    Consulta = forms.CharField(widget=forms.Textarea)
 
 class AtributeForm(forms.ModelForm):
     class Meta:
@@ -95,26 +165,6 @@ class AtributeForm(forms.ModelForm):
         super(AtributeForm, self).__init__(*arg, **kwarg)
         self.empty_permitted = True
 
-
-class form_Proyecto(forms.Form):
-    """
-    PRIMARY_KEY AUTOMATICO    A MEDIDA QUE SE AGREGA PROYECTOS
-    MODELO DE PROYECTO GUARDARA EL NOMBRE, DESCRIPCION, LISTA DE USUARIOS AÑADIDOS A EL
-    LA LISTA DE FASES QUE PERTENECEN AL MISMO,
-    UN ESTADO QUE SERA IDENTIFICADO EN LA BD COMO
-    CREADO=1
-    INICIADO=2
-    FINALIZADO=3
-    CANCELADO=4
-    POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO
-    """
-    ###id_proyecto= forms.IntegerField(auto_created = True, primary_key = True, serialize = False) ###### clave de proyecto
-    nombre= forms.CharField(max_length=30)
-    descripcion= forms.CharField(widget=Textarea)
-    ###-Usuarios: Usuario[*]    FALTA CREAR
-    ###-Fases: Fases[*]
-    estado= forms.IntegerField()
-    ###-Rol: Rol[*]
 
 class SettingsUserFormJesus(forms.Form):
     is_admin=forms.BooleanField(

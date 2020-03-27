@@ -2,8 +2,10 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
-<!DOCTYPE html>
-<html lang="es">
+
+    <!-- ESTILOS PARA EL MENU -->
+
+    <html lang="es">
   <head>
     <meta charset="utf-8">
     <title>{% block title %} Gestion Items  {% endblock title %}</title>
@@ -11,41 +13,41 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    {%block extracss %}
-      <!-- Le styles -->
-      <link href="../static_pro/static/css/bootstrap.css" rel="stylesheet">
-      <style type="text/css">
-        body {
-          padding-top: 20px;
-          padding-bottom: 60px;
-        }
-        /* Custom container */
-        .container {
-          margin: 0 auto;
-          max-width: 1000px;
-        }
-        .container > hr {
-          margin: 80px 0;
-        }
-        /* Main marketing message and sign up button */
-        .jumbotron {
-          margin: 80px 0;
-          text-align: center;
-        }
-        .jumbotron h1 {
-          font-size: 70px;
-          line-height: 1;
-        }
-        .jumbotron .lead {
-          font-size: 24px;
-          line-height: 1.25;
-        }
-        .jumbotron .btn {
-          font-size: 21px;
-          padding: 14px 24px;
-        }
+    <!-- Le styles -->
 
-        /* Supporting marketing content */
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 60px;
+      }
+
+      /* Custom container */
+      .container {
+        margin: 0 auto;
+        max-width: 1000px;
+      }
+      .container > hr {
+        margin: 80px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 80px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 70px;
+        line-height: 1;
+      }
+      .jumbotron .lead {
+        font-size: 24px;
+        line-height: 1.25;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+      /* Supporting marketing content */
       .marketing {
         margin: 60px 0;
       }
@@ -80,13 +82,13 @@
         border-right: 0;
         border-radius: 0 3px 3px 0;
       }
-      </style>
-      <link href="../static_pro/static/css/bootstrap-responsive.css" rel="stylesheet">
+    </style>
+    <link href="../static_pro/static/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 
 <! - [if lt IE 9]> <script src = "https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"> </script> <! [endif] ->
-    {% endblock extracss %}
+
   </head>
 
   <body>
@@ -115,10 +117,14 @@
       </div>
 
     {%block body %}
+      <!-- Jumbotron -->
       <div class="jumbotron">
         <h1>Usted es un Gerente!</h1>
         <!-- <p class="lead">Usted es un Gerente!</p> -->
-        <a class="btn btn-large btn-success" href="{% url 'gestion:crearProyecto' %}">Cree un Proyecto!</a>
+        {% if perms.gestion.is_gerente %}
+        <a class="btn btn-large btn-success" href="/creacionProyecto">Cree un Proyecto!</a>
+        {% endif %}
+        <a class="btn btn-large btn-success" href="/proyectos/">Vea sus proyectos</a>
       </div>
       {% endblock body %}
       <div class="footer">

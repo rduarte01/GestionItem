@@ -12,4 +12,7 @@ Bienvenido a la Documentacion de Gestion de Items de Proyecto
    
    module/models.rst
 
+   module/forms.rst
+
+   module/tests.rst
 

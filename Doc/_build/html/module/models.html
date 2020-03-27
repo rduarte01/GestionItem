@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="Forms" href="forms.html" />
     <link rel="prev" title="Views" href="views.html" /> 
 </head>
 
@@ -80,19 +81,13 @@
               
             
             
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-=======
               <p class="caption"><span class="caption-text">Contenidos:</span></p>
->>>>>>> Desarrollo
-=======
-              <p class="caption"><span class="caption-text">Contenidos:</span></p>
->>>>>>> Ruben
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests</a></li>
 </ul>
 
             
@@ -159,13 +154,364 @@
             
   <div class="section" id="module-gestion.models">
 <span id="models"></span><h1>Models<a class="headerlink" href="#module-gestion.models" title="Enlazar permanentemente con este título">¶</a></h1>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<p>IRAN LOS MODELOS DE LA BD</p>
-=======
->>>>>>> Desarrollo
-=======
->>>>>>> Ruben
+<dl class="class">
+<dt id="gestion.models.Atributo">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Atributo</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>»
+Este es el modelo Atributo, que se relaciona con Tipo de Item</p>
+<dl class="exception">
+<dt id="gestion.models.Atributo.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Atributo.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Atributo.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Atributo.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo.choises_data_type">
+<code class="sig-name descname">choises_data_type</code><em class="property"> = (('Decimal', 'Decimal'), ('Date', 'Date'), ('File', 'File'), ('String', 'Cadena'), ('Boolean', 'Boolean'))</em><a class="headerlink" href="#gestion.models.Atributo.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo.es_obligatorio">
+<code class="sig-name descname">es_obligatorio</code><a class="headerlink" href="#gestion.models.Atributo.es_obligatorio" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.models.Atributo.get_tipo_dato_display">
+<code class="sig-name descname">get_tipo_dato_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: tipo_dato&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo.get_tipo_dato_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo.id_atributo">
+<code class="sig-name descname">id_atributo</code><a class="headerlink" href="#gestion.models.Atributo.id_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo.nombre">
+<code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Atributo.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Atributo.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo.ti">
+<code class="sig-name descname">ti</code><a class="headerlink" href="#gestion.models.Atributo.ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo.ti_id">
+<code class="sig-name descname">ti_id</code><a class="headerlink" href="#gestion.models.Atributo.ti_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo.tipo_dato">
+<code class="sig-name descname">tipo_dato</code><a class="headerlink" href="#gestion.models.Atributo.tipo_dato" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.Auditoria">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Auditoria</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Auditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TABLA EN DONDE SE GUARDAN LAS MODIFICACIONES QUE REALIZAN TODOS LOS USUARIOS EN EL SISTEMA</p>
+<dl class="exception">
+<dt id="gestion.models.Auditoria.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Auditoria.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Auditoria.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Auditoria.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Auditoria.accion">
+<code class="sig-name descname">accion</code><a class="headerlink" href="#gestion.models.Auditoria.accion" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Auditoria.fecha">
+<code class="sig-name descname">fecha</code><a class="headerlink" href="#gestion.models.Auditoria.fecha" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Auditoria.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Auditoria.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Auditoria.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Auditoria.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Auditoria.usuario">
+<code class="sig-name descname">usuario</code><a class="headerlink" href="#gestion.models.Auditoria.usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.Fase">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Fase</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Se tiene el modelo fase, el cual será utilizado en el proyecto para albergar a los items y poder
+dividirlos en etapas.
+Las fases tendrán dos estados: Abierta y Cerrada, por defecto adoptará el estado de Abierto.</p>
+<dl class="exception">
+<dt id="gestion.models.Fase.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Fase.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Fase.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Fase.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.choises_data_type">
+<code class="sig-name descname">choises_data_type</code><em class="property"> = (('1', 'Abierta'), ('2', 'Cerrada'))</em><a class="headerlink" href="#gestion.models.Fase.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.descripcion">
+<code class="sig-name descname">descripcion</code><a class="headerlink" href="#gestion.models.Fase.descripcion" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.estado">
+<code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.Fase.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.models.Fase.get_estado_display">
+<code class="sig-name descname">get_estado_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: estado&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Fase.get_estado_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.id_Fase">
+<code class="sig-name descname">id_Fase</code><a class="headerlink" href="#gestion.models.Fase.id_Fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.nombre">
+<code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Fase.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Fase.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.Proyecto">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Proyecto</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PRIMARY_KEY AUTOMATICO A MEDIDA QUE SE AGREGA PROYECTOS
+MODELO DE PROYECTO GUARDARA EL NOMBRE, DESCRIPCION, LISTA DE USUARIOS AÑADIDOS A EL
+LA LISTA DE FASES QUE PERTENECEN AL MISMO,
+UN ESTADO QUE SERA IDENTIFICADO EN LA BD COMO
+CREADO=1
+INICIADO=2
+FINALIZADO=3
+CANCELADO=4
+POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO</p>
+<dl class="exception">
+<dt id="gestion.models.Proyecto.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Proyecto.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Proyecto.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Proyecto.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Proyecto.descripcion">
+<code class="sig-name descname">descripcion</code><a class="headerlink" href="#gestion.models.Proyecto.descripcion" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>INFORMACION REFERENTE AL PROYECTO A CREAR</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Proyecto.estado">
+<code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.Proyecto.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO, POR DEFAULT QUEDA EN CREADO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Proyecto.id_proyecto">
+<code class="sig-name descname">id_proyecto</code><a class="headerlink" href="#gestion.models.Proyecto.id_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Proyecto.nombre">
+<code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Proyecto.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SERA EL NOMBRE DEL PROYECTO A CREAR</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Proyecto.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Proyecto.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Proyecto.users">
+<code class="sig-name descname">users</code><a class="headerlink" href="#gestion.models.Proyecto.users" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.TipoItem">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">TipoItem</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.TipoItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>»
+Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string</p>
+<dl class="exception">
+<dt id="gestion.models.TipoItem.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.TipoItem.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.TipoItem.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.TipoItem.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.TipoItem.atributo_set">
+<code class="sig-name descname">atributo_set</code><a class="headerlink" href="#gestion.models.TipoItem.atributo_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.TipoItem.id_ti">
+<code class="sig-name descname">id_ti</code><a class="headerlink" href="#gestion.models.TipoItem.id_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.TipoItem.nombre">
+<code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.TipoItem.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.TipoItem.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.TipoItem.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.User_Proyecto">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">User_Proyecto</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.User_Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MODELO PROYECTO CON USER EN DONDE SE SOLUCIONA LA RELACION MUCHOS A MUCHOS, GUARDA
+LAS RELACIONES ENTRE USUARIOS Y PROYECTOS</p>
+<dl class="exception">
+<dt id="gestion.models.User_Proyecto.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.User_Proyecto.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.User_Proyecto.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.User_Proyecto.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.User_Proyecto.activo">
+<code class="sig-name descname">activo</code><a class="headerlink" href="#gestion.models.User_Proyecto.activo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.User_Proyecto.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.User_Proyecto.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.User_Proyecto.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.User_Proyecto.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.User_Proyecto.proyecto_id">
+<code class="sig-name descname">proyecto_id</code><a class="headerlink" href="#gestion.models.User_Proyecto.proyecto_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.User_Proyecto.user_id">
+<code class="sig-name descname">user_id</code><a class="headerlink" href="#gestion.models.User_Proyecto.user_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -175,6 +521,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="forms.html" class="btn btn-neutral float-right" title="Forms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="views.html" class="btn btn-neutral float-left" title="Views" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

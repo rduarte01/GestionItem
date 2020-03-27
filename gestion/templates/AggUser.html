@@ -1,0 +1,34 @@
+<title>Agrega Usuarios</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<h1>Añade usuarios a tu proyecto!</h1>
+
+{% block contect %}
+<a class="btn btn-primary" href="" role="button">Volver Atras</a>
+
+      <div class="jumbotron">
+
+ <form method="POST" action="">{% csrf_token %}
+{% block content %}
+<table class="table table-bordered">
+    <form method="POST" action="">{% csrf_token %}
+    <tr>
+        <td><h3>Usuarios, selecciona para añadir</h3></td>
+    </tr>
+    {% if form %}
+    {%for form in form%}
+    <tr>
+        <td><input type="checkbox"  id="cbox1" value="first_checkbox"> {{form}} </td>
+
+    </tr>
+    {%endfor%}
+    {%endif%}
+    </form>
+</table>
+{% endblock %}
+     <input type="submit"  value="Guardar">
+ </form>
+      </div>
+{% endblock %}

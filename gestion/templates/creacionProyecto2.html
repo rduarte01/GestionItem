@@ -3,18 +3,27 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
-<h1>Creacion de Proyecto</h1>
+{% block title %}
+    <h1>Creacion de Proyecto</h1>
+{% endblock title%}
+
 
 {% block contect %}
-<a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
+{% if perms.gestion.is_gerente %}
+    <a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
 
       <div class="jumbotron">
 
- <form method="POST" action="">{% csrf_token %}
+    <form method="POST" action="">{% csrf_token %}
       {{ formProyecto.as_p }}
-     <input type="submit"  value="Siguiente">
- </form>
 
+         <input type="submit"  value="Guardar">
+    </form>
       </div>
+{% else %}
+    <h1>Usted no es gerente de este proyecto, por tanto no puede crear proyectos</h1>
+    <a class="btn btn-primary" href="/menu/" role="button">Volver al menu principal</a>
+{% endif %}
+
 {% endblock %}
 

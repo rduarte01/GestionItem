@@ -1,0 +1,43 @@
+
+    <title>Mis proyectos</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<h1>Mis Proyectos</h1>
+<a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
+{% block content %}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <td>Nombre de proyecto</td>
+        <td>id</td>
+        <td>Descripcion</td>
+        <td>Estado</td>
+        <td><h5>Visualizalo!</h5></td>
+
+    </tr>
+    </thead>
+    <tbody>
+
+    {%for proyectos in proyectos%}
+
+        {%for list in list %}
+        {% if list == proyectos.id_proyecto  %}
+        <tr>
+            <td>{{proyectos.nombre}}</td>
+            <td>{{proyectos.id_proyecto}}</td>
+            <td>{{proyectos.descripcion}}</td>
+            <td>{{proyectos.estado}}</td>
+            <td><a href="" class="btn btn-primary">Ver detalles</a></td>
+        </tr>
+        {%endif%}
+        {%endfor%}
+
+    {%endfor%}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
