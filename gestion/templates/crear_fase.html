@@ -2,9 +2,13 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
+{% if perms.gestion.is_gerente %}
+
+
 <a class="btn btn-primary" href="/cancelado/" role="button">cancelar</a>
 
 <form method= "POST">
+
 {% csrf_token %}
 <!-- {% for form in formset %}
 <h2> Fase {{ forloop.counter}} </h2>
@@ -17,3 +21,8 @@
 <input type = 'submit' value = 'Save' />
 </div>
 </form>
+
+{% else %}
+<h1> NO POSEE EL PERMISO PARA CREAR FASE</h1>
+<a class="btn btn-primary" href="/menu/" role="button">Volver a menu principal</a>
+{% endif %}
