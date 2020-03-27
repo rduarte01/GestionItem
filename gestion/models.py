@@ -67,6 +67,12 @@ class Proyecto(models.Model):
     ###-Fases: Fases[*]
     ###-Rol: Rol[*]
 
+    class Meta:
+        """ SE AGREGAN DOS PERMISOS NECESARIOS, UNO PARA EL GERENTE Y OTRO PARA EL ADMINISTRADOR DEL SISTEMA"""
+        permissions = (("is_gerente", "Permiso de gerente de proyectos"),
+                       ("is_administradorSistema", "Permiso de Administrador del sistema"),
+                       )
+
 
 class Fase(models.Model):
     """Se tiene el modelo fase, el cual será utilizado en el proyecto para albergar a los items y poder

@@ -11,6 +11,8 @@ from .forms import FormProyecto,FormAyuda
 from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg
 from django.db.models import Count
+from django.contrib.auth.decorators import permission_required
+
 
 #### GLOBALES
 PROYECTOS_USUARIO=[]
@@ -78,11 +80,9 @@ def menu(request):
     SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
     """
 
-    return render(request,'MenuAdminSistema.html')
+    ##### PREGUNTAR SI ES VALIDO, CASO CONTRARIO MOSTRAR MENU DE ESPERA
 
-
-    # falta if de consulta si es gerente
-    #return render(request,'Menu.html')
+    return render(request,'Menu.html')
 
     registrarAuditoria(request.user ,'Inicio Menu en espera de aprobacion')
 
@@ -97,14 +97,15 @@ def menu(request):
 
     #si no tiene rol le tira el menu de espera
     #envia correo a usuario en espera para que espere
-    correo = str(User) + '@gmail.com'   #correo de administrador del sistema
+    user=request.user
+    correo = user.email   #correo de administrador del sistema
     asunto='Se encuentra en verificacion favor aguarde'
     mensaje='Gracias por registrarte en nuestro sistema, favor aguardar a ser aceptado por el administrador del sistema usuario: '+ str(User)
    # CorreoMail(asunto,mensaje,correo)
 
     return render(request,'MenuEnEspera.html')
 
-
+@permission_required('gestion.is_gerente')
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
@@ -223,7 +224,7 @@ def verSolicitudesenEspera(request):
 """
 SE PASA LA CANTIDAD DE FASES
 """
-
+@permission_required('gestion.is_gerente')
 def crearFase(request):
 
     fase = FaseForm(request.POST)
@@ -289,7 +290,6 @@ def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/for
         form.save()
      #sin parametros ya que se van a cargar los valores en el formulario
     return render(request, 'AggUser.html', {'form': form})
-
 
 
 def listar_proyectos(request):
