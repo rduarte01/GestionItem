@@ -4,7 +4,7 @@
         <h3> Lista de Usuarios Aprobados</h3>
         <div class="list-group">
             {% for user in users %}
-                 <a href="{% url 'get_user' user.id %} " class="list-group-item list-group-item-action " > {{user.email}}</a>
+                 <a href="{% url 'gestion:get_user' user.id %} " class="list-group-item list-group-item-action " > {{user.email}}</a>
              {% endfor %}
         </div>
     {%else%}

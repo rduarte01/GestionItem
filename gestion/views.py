@@ -10,7 +10,7 @@ from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
 #from post import POST
 from .models import Proyecto, Auditoria, User_Proyecto,Fase
-from .forms import FormProyecto,FormAyuda
+from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus
 from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg
 from django.db.models import Count
@@ -82,7 +82,7 @@ def CantProyectos(request):
 def menu(request):
     user = request.user
 
-    if(user.esta_aprobado):
+    if( user.esta_aprobado):
         if user.has_perm('auth.es_administrador'):
              return render(request,'MenuAdminSistema.html')
         else:
@@ -139,7 +139,7 @@ def creacionProyecto(request):
             p = User_Proyecto(user_id= id_user ,proyecto_id= id_proyecto,activo= True)
             p.save()
 
-        return redirect('crearFase')
+        return redirect('gestion:crearFase')
 
 
     context ={
@@ -215,7 +215,7 @@ def ver_usuarios_aprobados(request):
 
 def get_user(request,pk):
     if( request.method == 'POST' ):
-        form=SettingsUserForm(request.POST)
+        form=SettingsUserFormJesus(request.POST)
         print(request.POST)
         if(form.is_valid()):
             user = User.objects.get(id=pk)
@@ -227,13 +227,13 @@ def get_user(request,pk):
         else:
             print("no es valido")
 
-        return redirect('ver_usuarios_aprobados')
+        return redirect('gestion:ver_usuarios_aprobados')
     else:
         usuario=User.objects.get(id=pk)
         banManager=request.user.has_perm('proyecto.is_gerente')
         banGerente=request.user.has_perm('auth.is_administrador')
         print(banGerente,banManager)
-        form=SettingsUserForm()
+        form=SettingsUserFormJesus()
         context = {
             'user': usuario,
             'form':form
@@ -355,9 +355,9 @@ def crearFase(request):
         if cantidad != 0:
             cantidad = cantidad - 1
             CANTIDAD = cantidad
-            return redirect('crearFase')
+            return redirect('gestion:crearFase')
         else:
-            return redirect('menu')
+            return redirect('gestion:menu')
 
     context = {
     'form': fase

@@ -92,7 +92,7 @@ DATOS CAMBIADOS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gestionItem',
+        'NAME': 'prueba',
         'USER':'postgres',
         'PASSWORD':'root',
         'HOST':'127.0.0.1',

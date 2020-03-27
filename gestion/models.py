@@ -2,40 +2,6 @@ from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User,Group
 
-class TipoItem(models.Model):
-    """"
-        Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
-    """
-    id_ti = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=20)
-    fase=models.ForeignKey(Fase,on_delete=models.CASCADE,null=True,blank=True)
-    class Meta:
-        permissions = (
-            ("importar_tipo_item", "Poder importar Tipo Item"),
-            ("crear_tipo_item", "Puede crear un Tipo de Item"),
-        )
-        ordering=['nombre']
-
-class Atributo(models.Model):
-    """"
-       Este es el modelo Atributo, que se relaciona con Tipo de Item
-    """
-    choises_data_type = (
-        ("Decimal", "Decimal"),
-        ("Date", "Date"),
-        ("File", "File"),
-        ("String", "Cadena"),
-        ("Boolean", "Boolean"),
-    )
-
-    id_atributo=models.AutoField(primary_key=True,blank=False)
-    nombre=models.CharField(max_length=20,blank=False)
-    es_obligatorio= models.BooleanField(default=True,blank=False)
-    tipo_dato=models.CharField(max_length=8,choices=choises_data_type,default='Decimal',blank=False)
-    ti=models.ForeignKey(TipoItem,on_delete=models.CASCADE)
-    class Meta:
-        ordering=['nombre']
-
 class Proyecto(models.Model):
     """
     PRIMARY_KEY AUTOMATICO A MEDIDA QUE SE AGREGA PROYECTOS
@@ -105,6 +71,41 @@ class Fase(models.Model):
     verbose_name = 'Fase'
     verbose_name_plural = 'Fases'
     ordering = ['id_Fase']
+class TipoItem(models.Model):
+    """"
+        Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
+    """
+    id_ti = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=20)
+    fase=models.ForeignKey(Fase,on_delete=models.CASCADE,null=True,blank=True)
+    class Meta:
+        permissions = (
+            ("importar_tipo_item", "Poder importar Tipo Item"),
+            ("crear_tipo_item", "Puede crear un Tipo de Item"),
+        )
+        ordering=['nombre']
+
+class Atributo(models.Model):
+    """"
+       Este es el modelo Atributo, que se relaciona con Tipo de Item
+    """
+    choises_data_type = (
+        ("Decimal", "Decimal"),
+        ("Date", "Date"),
+        ("File", "File"),
+        ("String", "Cadena"),
+        ("Boolean", "Boolean"),
+    )
+
+    id_atributo=models.AutoField(primary_key=True,blank=False)
+    nombre=models.CharField(max_length=20,blank=False)
+    es_obligatorio= models.BooleanField(default=True,blank=False)
+    tipo_dato=models.CharField(max_length=8,choices=choises_data_type,default='Decimal',blank=False)
+    ti=models.ForeignKey(TipoItem,on_delete=models.CASCADE)
+    class Meta:
+        ordering=['nombre']
+
+
 
 
 class Auditoria(models.Model):

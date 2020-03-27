@@ -11,7 +11,7 @@ urlpatterns = [
     path('menu/', views.menu, name='menu'),
     path('creacionProyecto/', views.creacionProyecto),
     path('Contactos/', views.Contactos,name='Contactos'),
-    path('enEspera/',views.verSolicitudesenEspera),
+    #path('enEspera/',views.verSolicitudesenEspera),
     path('crear_fase/', views.crearFase, name='crearFase'),
     path('auditoria/', listar_auditoria),
     path('AggUser/', listar_usuarios_registrar),

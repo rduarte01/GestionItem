@@ -48,33 +48,6 @@ class FormProyecto(forms.ModelForm):
 
 
 
-"""class FormUsuario(forms.ModelForm):
-    class Meta:
-        model = Usuario
-        fields=["nombre"]
-"""
-
-    class Meta:
-        """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
-        model = Proyecto
-        """SE REALIZA FORMULARIO DEL MODELO PROYECTO"""
-        fields = [
-                "nombre",
-                "descripcion",
-                "users",
-                  ]
-        """CAMPOS A MOSTRAR EN EL FORMULARIO"""
-        labels= {
-            "nombre":"Ingrese un Nombre para el proyecto",
-            "descripcion":"Ingrese una descripcion si lo desea",
-            "users":"Seleccione los usuarios a añadir",
-        }
-        """LA ETIQUETA DE CADA CAMPO"""
-        widgets={
-            "nombre": forms.TextInput(attrs={'class': 'form-control'}),
-            "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
-            "users": forms.CheckboxSelectMultiple(),
-        }
 class TipoItemForm(forms.ModelForm):
     """
         En esta clase se define la estrutura del formulario para crear un tipo de item

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#!/home/jesus/Escritorio/Gestion/GestionItem/myenv/bin/python
-=======
-#!/home/walter/Escritorio/IS2/GestionItem/myenv/bin/python
->>>>>>> RamaWalter17
+#!/home/ruben/Escritorio/ProyectoIS2/GestionItem/myenv/bin/python3
 from django.core import management
 
 if __name__ == "__main__":

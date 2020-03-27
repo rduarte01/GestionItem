@@ -119,11 +119,13 @@
     {%block body %}
       <!-- Jumbotron -->
       <div class="jumbotron">
-        <h1>Usted es un Gerente!</h1>
         <!-- <p class="lead">Usted es un Gerente!</p> -->
         {% if perms.gestion.is_gerente %}
+        <h1>Usted es un Gerente!</h1>
         <a class="btn btn-large btn-success" href="/creacionProyecto">Cree un Proyecto!</a>
         {% endif %}
+
+
         <a class="btn btn-large btn-success" href="/proyectos/">Vea sus proyectos</a>
       </div>
       {% endblock body %}
