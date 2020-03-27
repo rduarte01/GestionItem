@@ -1,19 +1,30 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
+{% extends 'creacionProyecto2.html' %}
 
-<a class="btn btn-primary" href="/cancelado/" role="button">cancelar</a>
+{% if  perms.gestion.is_gerente %}
 
-<form method= "POST">
-{% csrf_token %}
-<!-- {% for form in formset %}
-<h2> Fase {{ forloop.counter}} </h2>
-{{form.as_p}}
-<button type="submit" class="btn btn-primary">Crear Tipo de Item</button>
-{% endfor %}
--->
-{{ form.as_p}}
-<div>
-<input type = 'submit' value = 'Save' />
-</div>
-</form>
+    <title>Crear Fases</title>
+    <meta charset = "UTF-8">
+
+    {% block title %}
+        <h1>Creacion de Fases</h1>
+    {% endblock title %}
+
+    {% block contect %}
+
+        <form method= "POST">
+            {% csrf_token %}
+
+            {{ form.as_p}}
+            <div>
+                <input type = 'submit' value = 'Guardar' />
+            </div>
+        </form>
+
+        <div>
+            <a class="btn btn-primary" href="/cancelado/" role="button">Cancelar</a>
+        </div>
+
+    {% endblock contect %}
+{% else  %}
+    <h1>Usted no es gerente de este proyecto, por tanto no puede crear fases</h1>
+{% endif %}

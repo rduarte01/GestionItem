@@ -1,9 +1,7 @@
 from django import forms
 from django.forms import Textarea
-from .models import Proyecto
+from .models import Proyecto, Fase
 from django.contrib.auth.models import User, Permission
-
-
 
 class FormUserAgg(forms.ModelForm):
     class Meta:
@@ -45,19 +43,21 @@ class FormProyecto(forms.ModelForm):
         }
         """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
 
-from django import forms
-from .models import Fase
-
 class FaseForm(forms.ModelForm):
-    """Hace referencia al modelo Fase que será representado por medio de esta clase formulario en el navegador web
-    con sus respectivos campos a completar
+    """
+    HACE REFERENCIA AL MODELO FASE QUE SERA REPRESENTADO POR MEDIO DE ESTA CLASE FORMLARIO EN EL NAVEGADOR WEB
+    CON SUS RESPECTIVOS CAMPOS A COMPLETAR
     """
     class Meta:
         model = Fase
-        fields = ['id_Fase', 'nombre', 'descripcion'] #campos a ser representados en el formulario web a completar
+        fields = [#'id_Fase',
+                  'nombre',
+                  'descripcion'
+        ]
+        """CAMPOS A SER COMPLETADOS EN EL FORMULARIO WEB A PRESENTAR"""
 
         labels = {
-        "id_Fase": "N° Fase",
+        #"id_Fase": "N° Fase",
         "nombre": "Nombre",
         "descripcion": "Descripción",
         #"estado": "Estado",
@@ -68,7 +68,7 @@ class FaseForm(forms.ModelForm):
         #"id_Fase": forms.IntegerField(),
         "nombre" : forms.TextInput(attrs = {'class': 'form-control'}),
         "descripcion": forms.TextInput(attrs = {'class': 'form-control'}),
-        "estado": forms.TextInput(attrs = {'class': 'form-control'}),
+        #"estado": forms.TextInput(attrs = {'class': 'form-control'}),
         }
 
 class FormAyuda(forms.Form):
