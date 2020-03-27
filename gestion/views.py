@@ -57,7 +57,7 @@ def Contactos(request):
         registrarAuditoria(request.user, guardarAuditoria)
 
         CorreoMail(asunto,mensaje,"waltergautofcb@gmail.com")
-        return redirect('menu')
+        return redirect('gestion:menu')
 
     context={
         "form":form,
@@ -266,7 +266,7 @@ def tipo_item_views_create(request):
         my_form=TipoItemForm(request.POST)
         if(my_form.is_valid()):
            nombre_ti,cantidad_atributos_ti=recoger_datos_tipo_item(my_form)
-           return redirect('add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti)
+           return redirect('gestion:add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti)
     else:
         my_form= TipoItemForm()
         context={
@@ -287,7 +287,7 @@ def add_atribute(request,nombre_ti,cantidad_atributos):
             for form in my_form_set:
                 n,o,t=recoge_datos_atributo(form)
                 atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
-            return redirect('menu')
+            return redirect('gestion:menu')
     else:
         contexto={'formset':my_form,
                  'cant_atributos': list(range(1,cantidad_atributos+1))
@@ -441,7 +441,7 @@ def proyectoCancelado(request):
     for i in instanceProyecto:
         i.delete()
 
-    return  redirect("menu")
+    return  redirect("gestion:menu")
 
 
 
