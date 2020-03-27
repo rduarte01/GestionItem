@@ -1,28 +1,28 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
 
-{% if perms.gestion.is_gerente %}
+{% if  perms.gestion.is_gerente %}
+    <title>Crear Fases</title>
+    <meta charset = "UTF-8">
+    {% block title %}
+        <h1>Creacion de Fases</h1>
+    {% endblock title %}
 
+    {% block contect %}
 
-<a class="btn btn-primary" href="/cancelado/" role="button">cancelar</a>
+        <form method= "POST">
+            {% csrf_token %}
 
-<form method= "POST">
+            {{ form.as_p}}
+            <div>
+                <input type = 'submit' value = 'Guardar' />
+            </div>
+        </form>
 
-{% csrf_token %}
-<!-- {% for form in formset %}
-<h2> Fase {{ forloop.counter}} </h2>
-{{form.as_p}}
-<button type="submit" class="btn btn-primary">Crear Tipo de Item</button>
-{% endfor %}
--->
-{{ form.as_p}}
-<div>
-<input type = 'submit' value = 'Save' />
-</div>
-</form>
+        <div>
+            <a class="btn btn-primary" href="/cancelado/" role="button">Cancelar</a>
+        </div>
 
-{% else %}
-<h1> NO POSEE EL PERMISO PARA CREAR FASE</h1>
-<a class="btn btn-primary" href="/menu/" role="button">Volver a menu principal</a>
+    {% endblock contect %}
+{% else  %}
+    <h1>Usted no es gerente de este proyecto, por tanto no puede crear fases</h1>
+    <a class="btn btn-primary" href="/menu/" role="button">Volver al menu principal</a>
 {% endif %}

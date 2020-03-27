@@ -2,7 +2,6 @@ from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class TipoItem(models.Model):
     """"
         Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string

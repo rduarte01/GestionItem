@@ -251,7 +251,7 @@ def crearFase(request):
 
 
 def listar_auditoria(request):
-    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA"""
+    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA """
     registrarAuditoria(request.user, 'Ingreso al apartado Auditoria')
     auditoria = Auditoria.objects.all()
     context={
