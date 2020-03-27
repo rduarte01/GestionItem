@@ -54,14 +54,14 @@ class FaseForm(forms.ModelForm):
     """
     class Meta:
         model = Fase
-        fields = ['id_Fase', 'nombre', 'descripcion', 'id_Proyecto'] #campos a ser representados en el formulario web a completar
+        fields = ['id_Fase', 'nombre', 'descripcion'] #campos a ser representados en el formulario web a completar
 
         labels = {
         "id_Fase": "N° Fase",
         "nombre": "Nombre",
         "descripcion": "Descripción",
         #"estado": "Estado",
-        "id_Proyecto": "ID_Proyecto",
+        #"id_Proyecto": "ID_Proyecto",
         }
 
         widgets = {

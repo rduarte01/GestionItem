@@ -6,17 +6,17 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
-from .models import Proyecto, Auditoria, User_Proyecto
+from .models import Proyecto, Auditoria, User_Proyecto,Fase
 from .forms import FormProyecto,FormAyuda
 from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg
 from django.db.models import Count
 
 #### GLOBALES
-global cantidad_fases
-cantidad_fases=0
 PROYECTOS_USUARIO=[]
 CANTIDAD=1
+DELETE=0
+
 
 
 def registrarAuditoria(user,accion):
@@ -119,12 +119,15 @@ def creacionProyecto(request):
 
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
 
+        global CANTIDAD
+
         cantidad = formProyecto.cleaned_data
+
         cantidad_fases=cantidad.get("fase")##### PARA WALTER
-        CANTIDAD=cantidad_fases
+
+        CANTIDAD=cantidad_fases-1
 
         q = cantidad.get("users")
-        q.count()
         z= Proyecto.objects.last()
         id_proyecto = z.id_proyecto ## ID DEL PROYECTO CREADO
         x=q.count()##### CANTIDAD DE PROYECTOS
@@ -137,6 +140,7 @@ def creacionProyecto(request):
             p.save()
 
         return redirect('crearFase')
+
 
     context ={
         "formProyecto": formProyecto,
@@ -223,16 +227,18 @@ SE PASA LA CANTIDAD DE FASES
 def crearFase(request):
 
     fase = FaseForm(request.POST)
-    global cantidad_fases
-    cantidad = cantidad_fases
-
+    global CANTIDAD
+    cantidad = CANTIDAD
     if fase.is_valid():
-        fase.save(commit = False)
-        print("Llego hasta aca1111")
-        fase.save()
+        x = Proyecto.objects.last()
+        nombreFase = fase.cleaned_data.get("nombre")
+        descFase = fase.cleaned_data.get("descripcion")
+        z = Fase(nombre=nombreFase,descripcion=descFase,id_Proyecto=x)
+        z.save()
+
         if cantidad != 0:
             cantidad = cantidad - 1
-            cantidad_fases = cantidad
+            CANTIDAD = cantidad
             return redirect('crearFase')
         else:
             return redirect('menu')
@@ -303,3 +309,25 @@ def listar_proyectos(request):
         'cant': cant####CANTIDAD DE PROYECTOS QUE POSEE
     }
     return render(request, 'verProyectos.html', context)
+
+
+def proyectoCancelado(request):
+    x = Proyecto.objects.last()
+    instanceFase = Fase.objects.filter(id_Proyecto = x.id_proyecto)
+    for i in instanceFase:
+        i.delete()
+
+    instanceUser = User_Proyecto.objects.filter(proyecto_id = x.id_proyecto)
+    for i in instanceUser:
+        i.delete()
+
+
+    instanceProyecto = Proyecto.objects.filter(id_proyecto=x.id_proyecto)
+    for i in instanceProyecto:
+        i.delete()
+
+    return  redirect("menu")
+
+
+
+
