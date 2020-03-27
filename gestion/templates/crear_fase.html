@@ -1,12 +1,15 @@
-
-{% if  perms.gestion.is_gerente %}
-    <title>Crear Fases</title>
-    <meta charset = "UTF-8">
-    {% block title %}
+{% extends 'creacionProyecto2.html'%}
+{% block title %}
         <h1>Creacion de Fases</h1>
     {% endblock title %}
 
-    {% block contect %}
+{% block contect %}
+
+{% if  perms.gestion.is_gerente %}
+
+
+    <title>Crear Fases</title>
+    <meta charset = "UTF-8">
 
         <form method= "POST">
             {% csrf_token %}
@@ -21,8 +24,10 @@
             <a class="btn btn-primary" href="/cancelado/" role="button">Cancelar</a>
         </div>
 
-    {% endblock contect %}
+
 {% else  %}
     <h1>Usted no es gerente de este proyecto, por tanto no puede crear fases</h1>
     <a class="btn btn-primary" href="/menu/" role="button">Volver al menu principal</a>
 {% endif %}
+
+    {% endblock contect %}

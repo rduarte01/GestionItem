@@ -82,6 +82,9 @@ def menu(request):
 
     ##### PREGUNTAR SI ES VALIDO, CASO CONTRARIO MOSTRAR MENU DE ESPERA
 
+    return render(request,'MenuAdminSistema.html')
+
+
     return render(request,'Menu.html')
 
     registrarAuditoria(request.user ,'Inicio Menu en espera de aprobacion')
@@ -105,7 +108,7 @@ def menu(request):
 
     return render(request,'MenuEnEspera.html')
 
-@permission_required('gestion.is_gerente')
+
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
@@ -224,7 +227,6 @@ def verSolicitudesenEspera(request):
 """
 SE PASA LA CANTIDAD DE FASES
 """
-@permission_required('gestion.is_gerente')
 def crearFase(request):
 
     fase = FaseForm(request.POST)
