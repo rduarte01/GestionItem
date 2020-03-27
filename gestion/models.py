@@ -7,6 +7,7 @@ from django.contrib.auth.models import User,Group
 # Create your models here.
 
 
+
 class Proyecto(models.Model):
     """
     PRIMARY_KEY AUTOMATICO A MEDIDA QUE SE AGREGA PROYECTOS
@@ -28,7 +29,10 @@ class Proyecto(models.Model):
     estado = models.IntegerField()
     ###-Rol: Rol[*]
     usuario = models.ManyToManyField(User)
-
+    class Meta:
+        permissions = (
+            ("is_gerente", "Puede hacer todas las actividades relacionadas con el geren"),
+        )
     """
     MENU---> GERENTE, ADMINISTRADOR, USUARIO SIN SER ACEPTADO, USUARIO ACEPTADO
     PLANTILLA
@@ -40,12 +44,10 @@ class Fase(models.Model):
     """Se tiene el modelo fase, el cual será utilizado en el proyecto para albergar a los items y poder
     dividirlos en etapas.
     Las fases tendrán dos estados: Abierta y Cerrada, por defecto adoptará el estado de Abierto."""
-
     choises_data_type = (
         ("1", "Abierta"),
         ("2", "Cerrada"),
     )
-
     id_Fase = models.AutoField(primary_key = True, blank = False, null = False, default = 1)
     nombre = models.CharField(max_length = 100, blank = False, null = False)
     descripcion = models.TextField(blank = False, null = False)
@@ -65,13 +67,12 @@ class Fase(models.Model):
         verbose_name_plural = 'Fases'
         ordering = ['id_Fase']
 
-
 class TipoItem(models.Model):
     """"
         Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
     """
-    id_ti = models.AutoField(primary_key=True,default=1)
-    nombre = models.CharField(max_length=20, default="Nombre Para el tipo de Item", help_text='Nombre del Tipo de Item')
+    id_ti = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=20)
     fase=models.ForeignKey(Fase,on_delete=models.CASCADE,null=True,blank=True)
     class Meta:
         permissions = (
@@ -79,7 +80,6 @@ class TipoItem(models.Model):
             ("crear_tipo_item", "Puede crear un Tipo de Item"),
         )
         ordering=['nombre']
-
 
 class Atributo(models.Model):
     """"
@@ -94,11 +94,11 @@ class Atributo(models.Model):
         ("Boolean", "Boolean"),
     )
 
-    id_atributo=models.AutoField(primary_key=True)
-    nombre=models.CharField(max_length=20,default="atriuto",help_text='Nombre del atributo del Tipo de Item')
-    es_obligatorio= models.BooleanField(default=True)
-    tipo_dato=models.CharField(max_length=8,choices=choises_data_type,default='Decimal')
-    ti=models.ForeignKey(TipoItem,on_delete=models.CASCADE,default=1)
+    id_atributo=models.AutoField(primary_key=True,blank=False)
+    nombre=models.CharField(max_length=20,blank=False)
+    es_obligatorio= models.BooleanField(default=True,blank=False)
+    tipo_dato=models.CharField(max_length=8,choices=choises_data_type,default='Decimal',blank=False)
+    ti=models.ForeignKey(TipoItem,on_delete=models.CASCADE)
     class Meta:
         ordering=['nombre']
 

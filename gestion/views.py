@@ -11,9 +11,9 @@ from .models import Proyecto,TipoItem,Atributo
 from .forms import FormProyecto,TipoItemForm,AtributeForm,SettingsUserForm#, FormUsuario
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.forms import formset_factory
 
-CANTIDAD_ATRIBUTOS_TI=1
-NOMBRE_TI="hola"
+
 def CorreoMail():
     #correo='waltergautofcb@gmail.com'
     #correo='gerardocabrer@gmail.com'
@@ -51,48 +51,25 @@ def agregarUsuarios(request):
 
 ###### FALTA ENLAZAR Y AGREGAR URL EN LA PLANTILLA PARA LA REDIRECCION
 def menu(request):
-    """MENU PRINCIPAL AL INICIAR SESION GERENTE"""
-    return render(request,'MenuAdminSistema.html')
-    """MENU PRINCIPAL AL INICIAR SESION ADMINISTRADOR SISTEMA"""
-    #return render(request,'MenuAdminSistema.html')
-    """MENU PRINCIPAL EN ESPERA DE ACEPTACION"""
-    CorreoMail()
-    #correo = str(User) + '@gmail.com'
-    #mensaje='favor verificar si el usuario cumple los requisitos para ser aceptado'#+ str(User)
-    #CorreoMail('Usuario en Espera',mensaje,'rduarte0997@qgmail.com')
-    return render(request,'MenuEnEspera.html')
+    user = request.user
 
+    if(user.esta_aprobado):
+        if user.has_perm('auth.es_administrador'):
+             return render(request,'MenuAdminSistema.html')
+        else:
+            return render(request, 'Menu.html')
+    else:
+        return render(request, 'MenuEnEspera.html')
 
-
-"""
-obtener datos de la plantilla, cuando se utiliza form
-if form.is_valid()
-email=form.cleaned_data.get("email")
-"""
-
-
-
-def creacionProyecto(request):
-    """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
-
-    formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
-    if formProyecto.is_valid():
-        instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
-        #agregarUsuarios(request)
-       # if not instanceProyecto.nombre:
-            ###### retornar error
-       #     return HttpResponseRedirect("falta completar campos")
-
-      #  instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
-        #print(instanceProyecto)
-        #print(instanceProyecto.timestamp)
-
-        instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
-    context ={
-        "formProyecto": formProyecto,
-    }
-    return render(request,'creacionProyecto2.html', context)
-
+       #     CorreoMail()
+            #correo = str(User) + '@gmail.com'
+            #mensaje='favor verificar si el usuario cumple los requisitos para ser aceptado'#+ str(User)
+            #CorreoMail('Usuario en Espera',mensaje,'rduarte0997@qgmail.com')
+        """
+        obtener datos de la plantilla, cuando se utiliza form
+        if form.is_valid()
+        email=form.cleaned_data.get("email")
+        """
 
 def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION"""
@@ -136,6 +113,7 @@ def logout(request):
     return_to = 'http://localhost:8000'
     return HttpResponseRedirect(f'https://{domain}/v2/logout?client_id={client_id}&returnTo={return_to}')
 
+
 def getUsers(request):
     """"TRAE INFORMACION DE USUARIO"""
     #usuarios=User.Objects.getall()
@@ -144,55 +122,36 @@ def getUsers(request):
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
 
-@login_required
-def verSolicitudesenEspera(request):
-    """Si el usuario que solicita la pagina es staff(ADMINISTRADOR)
-    entonce carga los usuarios que esperan ser aprobados y lo manda a
-    a la pagina ListaUser que muestra la lista. Caso contrario muestra
-    una pagina de que no es administrador"""
-    user = request.user
-    if user.is_staff is True:
-        print("Si sos Admin")
-        users = User.objects.filter(esta_aprobado=False)
-        return render(request,'ListaUser.html',{
-        'usuarios': users,
-        })
-    else:
-        return  redirect('menu')
-
 
 def ver_usuarios_aprobados(request):
     users=User.objects.filter(esta_aprobado=True)
     context={'users':users}
     return render(request,'usuariosAprobados.html',context)
 
+
 def get_user(request,pk):
-    form=SettingsUserForm()
     if( request.method == 'POST' ):
         form=SettingsUserForm(request.POST)
+        print(request.POST)
         if(form.is_valid()):
             user = User.objects.get(id=pk)
             is_admin,is_gerente,estado = recoger_datos_usuario_settings(form)
-            content_type = ContentType.objects.get_for_model(User)
-            if(is_admin): #se agrega el permiso
-                permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
-                user.user_permissions.add(permission)
-            else: #se elimina el permiso
-                name_permission='es_administrador'
-                permission=Permission.objects.get(content_type=content_type, codename=name_permission)
-                user.user_permissions.remove(permission)
+            add_permission_admin(user,is_admin)
+            add_permission_gerente(user,is_gerente)
             user.esta_aprobado=estado
             user.save()
-            #print(form.cleaned_data)
         else:
             print("no es valido")
-          #   return  HttpResponse("HELLOW")
+
         return redirect('ver_usuarios_aprobados')
     else:
-        print("es get")
-        user = User.objects.get(id=pk)
+        usuario=User.objects.get(id=pk)
+        banManager=request.user.has_perm('proyecto.is_gerente')
+        banGerente=request.user.has_perm('auth.is_administrador')
+        print(banGerente,banManager)
+        form=SettingsUserForm()
         context = {
-            'user': user,
+            'user': usuario,
             'form':form
         }
         return render(request,"perfilUsuario.html",context)
@@ -203,8 +162,8 @@ def tipo_item_views_create(request):
     if request.method == "POST":
         my_form=TipoItemForm(request.POST)
         if(my_form.is_valid()):
-           NOMBRE_TI,CANTIDAD_ATRIBUTOS_TI=recoger_datos_tipo_item(my_form)
-        return redirect('add_atribute')
+           nombre_ti,cantidad_atributos_ti=recoger_datos_tipo_item(my_form)
+           return redirect('add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti)
     else:
         my_form= TipoItemForm()
         context={
@@ -213,32 +172,23 @@ def tipo_item_views_create(request):
         return render(request, 'crear_tipo_item.html', context)
 
 
-from django.forms import formset_factory
 
-def add_atribute(request):
-    my_form = formset_factory(AtributeForm, extra=CANTIDAD_ATRIBUTOS_TI)
+def add_atribute(request,nombre_ti,cantidad_atributos):
+    my_form = formset_factory(AtributeForm, extra=cantidad_atributos)
     if request.method == 'POST':
         my_form_set=my_form(request.POST)
         if(my_form_set.is_valid()):
-            #tipo_item=TipoItem(nombre=NOMBRE_TI)
-            #tipo_item.save()
-            #print(tipo_item.id_ti)
+            tipo_item=TipoItem(nombre=nombre_ti)
+            tipo_item.save()
             for form in my_form_set:
-               # nombre_atributo,es_obligatorio,tipo_dato=recoge_datos_atributo(form)
-                #atributo=Atributo(nombre=nombre_atributo,es_obligatorio=obligatoriedad,
-                 #                 tipo_dato=tipo_dato_atibuto,
-                  #                ti=tipo_item.id_ti
-                  #                )
-                #atributo.save()
-                pass
-        return redirect('menu')
+                n,o,t=recoge_datos_atributo(form)
+                atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
+            return redirect('menu')
     else:
         contexto={'formset':my_form,
-                 'cant_atributos': list(range(1,CANTIDAD_ATRIBUTOS_TI+1))
+                 'cant_atributos': list(range(1,cantidad_atributos+1))
                 }
         return render(request,'crear_atributo.html',contexto)
-
-
 
 def recoger_datos_tipo_item(my_form):
     nombre = my_form.cleaned_data['nombre']
@@ -246,14 +196,37 @@ def recoger_datos_tipo_item(my_form):
     return nombre,valor
 
 
-def recoge_datos_atributo(my_form):
+def recoge_datos_atributo(form):
     nombre_atributo = form.cleaned_data.get('nombre')
     obligatoriedad = form.cleaned_data.get('es_obligatorio')
     tipo_dato_atibuto = form.cleaned_data.get('tipo_dato')
     return nombre_atributo,obligatoriedad,tipo_dato_atibuto
+
 
 def recoger_datos_usuario_settings(form):
     is_admin = form.cleaned_data['is_admin']
     is_gerente = form.cleaned_data['is_manager']
     estado = form.cleaned_data['estado']
     return is_admin,is_gerente,estado
+
+
+def add_permission_admin(user,is_admin):
+    content_type = ContentType.objects.get_for_model(User)
+    if (is_admin):  # se agrega el es_administrador
+        permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
+        user.user_permissions.add(permission)
+    else:  # se elimina el permiso es_administrador
+        name_permission = 'es_administrador'
+        permission = Permission.objects.get(content_type=content_type, codename=name_permission)
+        user.user_permissions.remove(permission)
+
+
+def add_permission_gerente(user,is_gerente):
+    content_type = ContentType.objects.get_for_model(Proyecto)
+    if (is_gerente):  # se agrega el es_administrador
+        permission = Permission.objects.get(content_type=content_type, codename='is_gerente')
+        user.user_permissions.add(permission)
+    else:  # se elimina el permiso es_administrador
+        name_permission = 'is_gerente'
+        permission = Permission.objects.get(content_type=content_type, codename=name_permission)
+        user.user_permissions.remove(permission)

@@ -1,4 +1,9 @@
+{% extends 'Menu.html' %}
+{% block body %}
 <form  method='POST'>{% csrf_token%}
     {{tipo_item_form.as_p}}
     <input type='submit' value= 'Siguiente' />
 </form>
+
+
+{% endblock %}
