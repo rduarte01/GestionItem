@@ -1,9 +1,9 @@
 from django import forms
 from django.forms import Textarea
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import User, Group, Permission
 from .models import Proyecto,TipoItem,Atributo   #, Usuario
 ####### se escribe formulario
-
+from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
 """class FormUsuario(forms.ModelForm):
     class Meta:
         model = Usuario
@@ -116,7 +116,7 @@ class form_Proyecto(forms.Form):
     estado= forms.IntegerField()
     ###-Rol: Rol[*]
 
-class SettingsUserForm(forms.Form):
+class SettingsUserFormJesus(forms.Form):
     is_admin=forms.BooleanField(
                                 required=False,
                                 label="ES ADMINISTRADOR",
@@ -132,3 +132,64 @@ class SettingsUserForm(forms.Form):
         widget=forms.Select(attrs={"class":"form-control" }),
         choices=State_CHOICES,
     )
+
+class SettingsUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username','email','esta_aprobado']
+        labels = {
+            'username': 'Nombre de Usuario',
+            'email': 'Correo Electronico del Usuario',
+            'esta_aprobado': 'Estado del usuario',
+        }
+        OPTIONS = (
+            ('True', "Aprobado"),
+            ('False', "En Espera"),
+        )
+        widgets = {
+            'username': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Nombre de usuario',
+                    'id': 'username'
+                }
+            ),
+            'email': forms.EmailInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Correo Electronico del Usuario',
+                    'id': 'email'
+                }
+            ),
+            'esta_aprobado': forms.RadioSelect(choices=[
+                (True, 'Activo'),
+                (False, 'En Espera')
+            ]),
+        }
+
+
+class RolForm(forms.ModelForm):
+    class Meta:
+
+        model = Group
+        fields = "__all__"
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+
+            for perm in self.permissions:
+                self.fields[perm].widget.attrs['class'] = 'form-control'
+
+
+        widgets={
+            'name':forms.TextInput(
+                attrs={
+                    'class':'form-control',
+                    'placeholder':'Ingrese nombre del Rol',
+                }
+            ),
+            'permissions':forms.CheckboxSelectMultiple(),
+        }
+
+

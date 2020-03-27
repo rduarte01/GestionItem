@@ -8,24 +8,46 @@
 </head>
 
 <body>
+    {% if object_list %}
     <br><br>
     <li class="list-group-item">
        <a href="javascript:history.back()" class="btn btn-primary"> Volver atras</a>
 
     </li>
-    <div class="container">
-        <p class="top"> <h2>Usuario <span class="float-right">Estado</span></h2> </p>
+    <div class="card">
+        <div class="card-header">
+            <strong class="card-title">Lista de Usuarios</strong>
+        </div>
+        <div class="table-stats order-table ov-h">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th><strong>Estado</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in object_list %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
 
-
-        {% for users in usuarios %}
-            <div>
-                <li class="list-group-item"> {{ users.email }}  <span class="float-right">En espera</span></li>
-
-
-            </div>
-
-        {% endfor %}
+                            <td><strong>En Espera</strong></td>
+                            <td>
+                                <a href="{% url 'gestion:get_user' user.id %}" class="btn btn-primary">Editar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
     </div>
+    {% else %}
+        <h1>No exite usuarios</h1>
+    {% endif %}
 </body>
 </html>

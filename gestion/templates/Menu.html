@@ -116,9 +116,9 @@
 
     {%block body %}
       <div class="jumbotron">
-         <h1>Usted es un Gerente!</h1>
-        <!-- <p   class="lead">Usted es un Gerente!</p> -->
-        <a class="btn btn-large btn-success" href="/creacionProyecto">Cree un Proyecto!</a>
+        <h1>Usted es un Gerente!</h1>
+        <!-- <p class="lead">Usted es un Gerente!</p> -->
+        <a class="btn btn-large btn-success" href="{% url 'gestion:crearProyecto' %}">Cree un Proyecto!</a>
       </div>
       {% endblock body %}
       <div class="footer">

@@ -1,0 +1,6 @@
+
+myenv/bin/
+
+myenv/share/python-wheels/
+
+gestion/__pycache__/
