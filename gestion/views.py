@@ -78,11 +78,11 @@ def menu(request):
     SOBRE LA SOLICITUD Y AL USUARIO EN ESPERA PARA QUE AGUARDE A QUE SEA ACEPTADO
     """
 
-    #return render(request,'MenuAdminSistema.html')
+    return render(request,'MenuAdminSistema.html')
 
 
     # falta if de consulta si es gerente
-    return render(request,'Menu.html')
+    #return render(request,'Menu.html')
 
     registrarAuditoria(request.user ,'Inicio Menu en espera de aprobacion')
 
@@ -100,7 +100,7 @@ def menu(request):
     correo = str(User) + '@gmail.com'   #correo de administrador del sistema
     asunto='Se encuentra en verificacion favor aguarde'
     mensaje='Gracias por registrarte en nuestro sistema, favor aguardar a ser aceptado por el administrador del sistema usuario: '+ str(User)
-    CorreoMail(asunto,mensaje,correo)
+   # CorreoMail(asunto,mensaje,correo)
 
     return render(request,'MenuEnEspera.html')
 
