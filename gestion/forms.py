@@ -118,8 +118,11 @@ class RolForm(forms.ModelForm):
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+
+
             for perm in self.permissions:
                 self.fields[perm].widget.attrs['class'] = 'form-control'
+
 
         widgets={
             'name':forms.TextInput(

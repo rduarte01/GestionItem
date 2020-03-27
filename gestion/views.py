@@ -164,66 +164,11 @@ class ActualizarUser(UpdateView):
         request.POST['username']  += 'GER'
         return super(ActualizarUser,self).post(request,**kwargs)
 
-class VerPermisos(ListView):
-    model = Permission
-    template_name = "ListaPermisos.html"
-    queryset = Permission.objects.all()
-
 class CrearRol(CreateView):
     model = Group
     form_class = RolForm
     template_name = "CrearRol.html"
     success_url = reverse_lazy("gestion:menu")
-
-
-
-
-
-@login_required
-@permission_required('auth.es_admin', raise_exception=True)
-def verSolicitudesenEspera(request):
-    """Si el usuario que solicita la pagina es staff(ADMINISTRADOR)
-    entonce carga los usuarios que esperan ser aprobados y lo manda a
-    a la pagina ListaUser que muestra la lista. Caso contrario muestra
-    una pagina de que no es administrador"""
-    print("Si sos Admin")
-
-    users = User.objects.filter(esta_aprobado=False)
-
-    return render(request,'ListaUser.html',{
-    'usuarios': users,
-    })
-
-def get_user(request,pk):
-    form=SettingsUserForm()
-    if( request.method == 'POST' ):
-        form=SettingsUserForm(request.POST)
-        if(form.is_valid()):
-            user = User.objects.get(id=pk)
-            is_admin,estado = recoger_datos_usuario_settings(form)
-            content_type = ContentType.objects.get_for_model(User)
-            if(is_admin): #se agrega el permiso
-                permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
-                user.user_permissions.add(permission)
-            else: #se elimina el permiso
-                name_permission='es_administrador'
-                permission=Permission.objects.get(content_type=content_type, codename=name_permission)
-                user.user_permissions.remove(permission)
-            user.esta_aprobado=estado
-            user.save()
-            #print(form.cleaned_data)
-        else:
-            print("no es valido")
-          #   return  HttpResponse("HELLOW")
-        return redirect('ver_usuarios_aprobados')
-    else:
-        print("es get")
-        user = User.objects.get(id=pk)
-        context = {
-            'user': user,
-            'form':form
-        }
-        return render(request,"perfilUsuario.html",context)
 
 
 
