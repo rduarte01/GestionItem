@@ -1,0 +1,28 @@
+{% extends 'Menu.html' %}
+{% block title %} Administrador del Sistema {% endblock %}
+{% block campos %}
+  <li class="active"><a href="{% url 'menu' %}">Inicio</a></li>
+  <li><a href=" {% url 'perfil' %}">Perfil</a></li>
+   <li><a href="{% url 'ver_usuarios_aprobados' %}">Usuarios_Aceptados</a></li>
+  <li><a href="{% url 'logout' %}">Cerrar_Sesion</a></li>
+  <li><a href="#">Ayuda</a></li>
+  <li><a href="/Contactos/">Contacto</a></li>
+{% endblock campos %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+  {% block body%}
+      <div class="jumbotron">
+        <h1>Es administrador del sistema</h1>
+        <p class="lead">Debera de aceptar usuarios que se hayan registrado en el SSO para que pertenezcan al sistema, por favor labure</p>
+        <a class="btn btn-large btn-success" href="http://localhost:8000/enEspera/">Valide usuarios!</a>
+      </div>
+  {% endblock body %}
+
+  <div class="footer">
+        <p>&copy; FPUNA 2020 ADMIN</p>
+  </div>
+
+
+</html>

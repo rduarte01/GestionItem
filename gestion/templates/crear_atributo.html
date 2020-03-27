@@ -1,0 +1,33 @@
+{% extends 'Menu.html' %}
+
+
+{% block body %}
+<form  method='POST'>{% csrf_token%}
+    {{ formset.management_form }}
+    {% for form in formset %}
+        <h2> Atributo {{ forloop.counter }}  </h2>
+        <div class="form-group">
+            <label>{{form.nombre.label}}</label>
+                {{form.nombre}}
+        </div>
+        <div class="form-group">
+            {{form.es_obligatorio}}
+            <label class="form-check-label" for="defaultCheck1">
+                {{form.es_obligatorio.label}}
+            </label>
+        </div>
+        <div class="form-group">
+            <label>{{form.tipo_dato.label}}</label>
+            {{form.tipo_dato}}
+        </div>
+
+        <br>
+        <br>
+    {% endfor %}
+    <input type='submit' value= 'Save' />
+</form>
+{% endblock %}
+
+<select class="">
+  <option>Default select</option>
+</select>
