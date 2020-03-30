@@ -83,18 +83,13 @@
         border-radius: 0 3px 3px 0;
       }
     </style>
-    <link href="../static_pro/static/css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-
-<! - [if lt IE 9]> <script src = "https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"> </script> <! [endif] ->
 
   </head>
 
   <body>
     <div class="container">
       <div class="masthead">
-        <h3 class="muted">Gestion Items</h3>
+        <h2 class="muted">Gestión de Items</h2>
         <div class="navbar">
           <div class="navbar-inner">
             <div class="container">
@@ -104,11 +99,8 @@
                   <li><a href="perfil/">Perfil</a></li>
                   <li><a href="#">Configuraciones</a></li>
                   <li><a href="logout/">Cerrar_Sesion</a></li>
-                  <li><a href="#">Ayuda</a></li>
-                  <li><a href="/Contactos/">Contacto</a></li>
-                    <form class = "navbar-search pull-left" >
-                      <input type = "text" class = "search-query" placeholder = "Busca tus proyectos aquí" >
-                    </form>
+                  <li><a href="/Contactos/">Contáctanos</a></li>
+
                 {% endblock campos %}
               </ul>
             </div>
@@ -120,13 +112,14 @@
       <!-- Jumbotron -->
       <div class="jumbotron">
         <!-- <p class="lead">Usted es un Gerente!</p> -->
+        <h1>Bienvenido</h1>
+        <h3>Una herramienta de gestión de items de proyectos diseñada para el trabajo en equipo</h3>
         {% if perms.gestion.is_gerente %}
-        <h1>Usted es un Gerente!</h1>
-        <a class="btn btn-large btn-success" href="/creacionProyecto">Cree un Proyecto!</a>
+
+        <a class="btn btn-large btn-success" href="/creacionProyecto"><h4>Usted es un Gerente! Cree un Proyecto!</h4></a>
         {% endif %}
 
-
-        <a class="btn btn-large btn-success" href="/proyectos/">Vea sus proyectos</a>
+        <a class="btn btn-large btn-success" href="/proyectos/"><h4>Trabaje sobre sus proyectos!</h4></a>
       </div>
       {% endblock body %}
       <div class="footer">

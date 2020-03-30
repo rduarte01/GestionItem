@@ -11,15 +11,16 @@
     <thead>
     <tr>
         <td>Nombre de proyecto</td>
-        <td>id</td>
+        <td>ID</td>
         <td>Descripcion</td>
-        <td>Estado</td>
-        <td><h5>Visualizalo!</h5></td>
+        <td>Estado del proyecto</td>
+        <td>Cambiar Estado</td>
+        <td><h5>Echa un vistazo!</h5></td>
 
     </tr>
     </thead>
     <tbody>
-
+    {% if proyectos%}
     {%for proyectos in proyectos%}
 
         {%for list in list %}
@@ -29,13 +30,23 @@
             <td>{{proyectos.id_proyecto}}</td>
             <td>{{proyectos.descripcion}}</td>
             <td>{{proyectos.estado}}</td>
+
+        {% if proyectos.estado == "CANCELADO"  %}
+            <td>CANCELADO</td>
+        {%else%}
+            <td><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}"class="btn btn-primary">Estados</a></td>
+        {%endif%}
+
             <td><a href="" class="btn btn-primary">Ver detalles</a></td>
+
         </tr>
         {%endif%}
         {%endfor%}
 
     {%endfor%}
-
+{% else %}
+    <h1>No se encuentra asociado a ningun proyecto :(</h1>
+    {% endif %}
     </tbody>
 
 </table>

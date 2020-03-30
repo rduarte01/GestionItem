@@ -1,0 +1,44 @@
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<title>Estado del Proyecto</title>
+
+{% block title %}
+    <h1><a class="btn btn-primary" href="/proyectos/" role="button">Volver Atras</a>Cambiar estado de proyecto</h1>
+          <h5>-------------------------------------------------------------------</h5>
+          <h5>Estado del proyecto actual: ------> {{estado}} <------</h5>
+          <h5>-------------------------------------------------------------------</h5>
+
+{% endblock title%}
+
+
+{% block contect %}
+{% if perms.gestion.is_gerente %}
+
+
+      <div class="jumbotron">
+
+          <h5>Ayuda sobre la selección del estado</h5>
+
+        <h6>1- CREADO: Estado automático al crear el proyecto, no se podrá volver a este estado manualmente</h6>
+        <h6>2- INICIADO: Al iniciar un proyecto se podra trabajar sobre el proyecto, no habrá vuelta atrás</h6>
+        <h6>3- CANCELADO: Recuerde, al cancelar un proyecto ya no podra realizar acciones sobre el proyecto ni cambiar nuevamente a otro estado</h6>
+        <h6>4- FINALIZADO: Para finalizar el proyecto debe de cumplir ciertas restricciones:</h6>
+        <h7>* Las fases aprobadas</h7>
+        <h7></h7>
+          <h6>...</h6>
+
+
+    <form method="POST" action="">{% csrf_token %}
+
+      {{ form.as_p }}
+         <input type="submit"  value="Guardar nuevo estado">
+    </form>
+      </div>
+{% else %}
+    <h1>Usted no es gerente de este proyecto, por tanto no puede cambiar de estado</h1>
+    <a class="btn btn-primary" href="/menu/" role="button">Volver al menu principal</a>
+{% endif %}
+
+{% endblock %}

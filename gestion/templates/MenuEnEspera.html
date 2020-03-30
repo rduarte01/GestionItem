@@ -3,6 +3,27 @@
 {% bootstrap_javascript jquery='full' %}
 
 
+
+    <div class="container">
+      <div class="masthead">
+        <h2 class="muted">Gestión de Items</h2>
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="container">
+              <ul class="nav">
+                {% block campos %}
+                  <li><a href="perfil/">Perfil</a></li>
+                  <li><a href="logout/">Cerrar_Sesion</a></li>
+                  <li><a href="/Contactos/">Contáctanos</a></li>
+
+                {% endblock campos %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 <html lang="es">
   <head>
     <meta charset="utf-8">
@@ -12,6 +33,8 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
+
+
 
     <style type="text/css">
       body {
@@ -93,9 +116,6 @@
 
     <div class="container">
 
-      <div class="masthead">
-        <h3 class="muted">Gestión de Item</h3>
-      </div>
 
       <!-- Jumbotron -->
       <div class="jumbotron">
@@ -103,6 +123,7 @@
         <p class="lead">Debera de aguardar a ser aceptado por el administrador del sistema, le estara llegando un correo
         electrónico cuando sea aceptado
         </p>
+                <a class="btn btn-large btn-success" href="/menu/"><h4>Le llego el correo de aprobado? presione aquí!</h4></a>
       </div>
 
       <div class="footer">

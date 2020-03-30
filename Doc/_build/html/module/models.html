@@ -282,6 +282,69 @@ object the first time, the query is executed.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="gestion.models.FASE_ROL">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">FASE_ROL</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">id_fase</em>, <em class="sig-param">id_rol</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.FASE_ROL" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="exception">
+<dt id="gestion.models.FASE_ROL.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.FASE_ROL.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.FASE_ROL.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.FASE_ROL.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.FASE_ROL.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.FASE_ROL.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.FASE_ROL.id_fase">
+<code class="sig-name descname">id_fase</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.FASE_ROL.id_fase_id">
+<code class="sig-name descname">id_fase_id</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_fase_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.FASE_ROL.id_rol">
+<code class="sig-name descname">id_rol</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_rol" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.FASE_ROL.id_rol_id">
+<code class="sig-name descname">id_rol_id</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_rol_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.FASE_ROL.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.FASE_ROL.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="gestion.models.Fase">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Fase</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Se tiene el modelo fase, el cual será utilizado en el proyecto para albergar a los items y poder
@@ -299,7 +362,7 @@ Las fases tendrán dos estados: Abierta y Cerrada, por defecto adoptará el esta
 
 <dl class="attribute">
 <dt id="gestion.models.Fase.choises_data_type">
-<code class="sig-name descname">choises_data_type</code><em class="property"> = (('1', 'Abierta'), ('2', 'Cerrada'))</em><a class="headerlink" href="#gestion.models.Fase.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">choises_data_type</code><em class="property"> = (('Abierta', 'Abierta'), ('Cerrada', 'Cerrada'))</em><a class="headerlink" href="#gestion.models.Fase.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -316,6 +379,21 @@ object the first time, the query is executed.</p>
 object the first time, the query is executed.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="gestion.models.Fase.fase_rol_set">
+<code class="sig-name descname">fase_rol_set</code><a class="headerlink" href="#gestion.models.Fase.fase_rol_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="gestion.models.Fase.get_estado_display">
 <code class="sig-name descname">get_estado_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: estado&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Fase.get_estado_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -329,6 +407,24 @@ object the first time, the query is executed.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="gestion.models.Fase.id_Proyecto">
+<code class="sig-name descname">id_Proyecto</code><a class="headerlink" href="#gestion.models.Fase.id_Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.id_Proyecto_id">
+<code class="sig-name descname">id_Proyecto_id</code><a class="headerlink" href="#gestion.models.Fase.id_Proyecto_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="gestion.models.Fase.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Fase.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
@@ -340,6 +436,41 @@ object the first time, the query is executed.</p>
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Fase.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="gestion.models.Fase.ordering">
+<code class="sig-name descname">ordering</code><em class="property"> = ['id_Fase']</em><a class="headerlink" href="#gestion.models.Fase.ordering" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.permissions">
+<code class="sig-name descname">permissions</code><em class="property"> = (('Poder Aprobar Fase', 'Aprobar Fase'), ('Poder Crear Fase', 'Crear Fase'))</em><a class="headerlink" href="#gestion.models.Fase.permissions" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.tipoitem_set">
+<code class="sig-name descname">tipoitem_set</code><a class="headerlink" href="#gestion.models.Fase.tipoitem_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.verbose_name">
+<code class="sig-name descname">verbose_name</code><em class="property"> = 'Fase'</em><a class="headerlink" href="#gestion.models.Fase.verbose_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Fase.verbose_name_plural">
+<code class="sig-name descname">verbose_name_plural</code><em class="property"> = 'Fases'</em><a class="headerlink" href="#gestion.models.Fase.verbose_name_plural" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -349,10 +480,6 @@ object the first time, the query is executed.</p>
 MODELO DE PROYECTO GUARDARA EL NOMBRE, DESCRIPCION, LISTA DE USUARIOS AÑADIDOS A EL
 LA LISTA DE FASES QUE PERTENECEN AL MISMO,
 UN ESTADO QUE SERA IDENTIFICADO EN LA BD COMO
-CREADO=1
-INICIADO=2
-FINALIZADO=3
-CANCELADO=4
 POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO</p>
 <dl class="exception">
 <dt id="gestion.models.Proyecto.DoesNotExist">
@@ -362,6 +489,11 @@ POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO</p>
 <dl class="exception">
 <dt id="gestion.models.Proyecto.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Proyecto.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Proyecto.choises_data_type">
+<code class="sig-name descname">choises_data_type</code><em class="property"> = (('CREADO', 'CREADO'), ('INICIADO', 'INICIADO'), ('FINALIZADO', 'FINALIZADO'), ('CANCELADO', 'CANCELADO'))</em><a class="headerlink" href="#gestion.models.Proyecto.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -375,6 +507,26 @@ POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO</p>
 <code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.Proyecto.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO, POR DEFAULT QUEDA EN CREADO</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Proyecto.fase_set">
+<code class="sig-name descname">fase_set</code><a class="headerlink" href="#gestion.models.Proyecto.fase_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.models.Proyecto.get_estado_display">
+<code class="sig-name descname">get_estado_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: estado&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Proyecto.get_estado_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Proyecto.id_proyecto">
@@ -440,6 +592,24 @@ many-to-one relation.</p>
 <p>Most of the implementation is delegated to a dynamically defined manager
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.TipoItem.fase">
+<code class="sig-name descname">fase</code><a class="headerlink" href="#gestion.models.TipoItem.fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.TipoItem.fase_id">
+<code class="sig-name descname">fase_id</code><a class="headerlink" href="#gestion.models.TipoItem.fase_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.TipoItem.id_ti">
