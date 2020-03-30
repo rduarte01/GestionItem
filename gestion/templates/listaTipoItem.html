@@ -1,0 +1,40 @@
+{% extends 'Menu.html' %}
+{% block body %}
+
+<center><h2> Lista de Tipos de Item a importar </h2></center>
+{% for ti in tipoItems%}
+    <form method='POST'>
+        {% csrf_token%}
+        <div class="container">
+            <div class="row">
+                <div class="col ">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action ">{{ti.nombre}}</a>
+                    </div>
+                    <br>
+                </div>
+                <div class="col ">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action ">{{ti.fase_id }}</a>
+                    </div>
+                    <br>
+                </div>
+                <div class='col'>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{ti.id_ti}}" id="{{ti.id_ti}}}">
+                        <label class="form-check-label" for="{{ti.id_ti}}}">
+                            Selecciona para importar
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+{% endfor %}
+    <input type='submit' value='Guardar'/>
+    </form>
+
+<br>
+<br>
+{% endblock %}

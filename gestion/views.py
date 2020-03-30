@@ -81,7 +81,7 @@ def CantProyectos(request):
 
 def menu(request):
     user = request.user
-
+    #return render(request, 'MenuAdminSistema.html')
     if( user.esta_aprobado):
         if user.has_perm('auth.es_administrador'):
              return render(request,'MenuAdminSistema.html')
@@ -153,7 +153,7 @@ def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
     user = request.user
     if user.is_authenticated:
-        return redirect(menu)
+        return redirect('gestion:menu')
     else:
         return render(request, 'index.html')
 
@@ -260,13 +260,12 @@ class CrearRol(CreateView):
 
 
 
-def tipo_item_views_create(request):
-    global CANTIDAD_ATRIBUTOS_TI,NOMBRE_TI
+def tipo_item_views_create(request,id_fase):
     if request.method == "POST":
         my_form=TipoItemForm(request.POST)
         if(my_form.is_valid()):
            nombre_ti,cantidad_atributos_ti=recoger_datos_tipo_item(my_form)
-           return redirect('gestion:add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti)
+           return redirect('gestion:add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti,fase_id=id_fase)
     else:
         my_form= TipoItemForm()
         context={
@@ -277,17 +276,17 @@ def tipo_item_views_create(request):
 
 
 
-def add_atribute(request,nombre_ti,cantidad_atributos):
+def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
     my_form = formset_factory(AtributeForm, extra=cantidad_atributos)
     if request.method == 'POST':
         my_form_set=my_form(request.POST)
         if(my_form_set.is_valid()):
-            tipo_item=TipoItem(nombre=nombre_ti)
+            tipo_item=TipoItem(nombre=nombre_ti,fase_id=fase_id)
             tipo_item.save()
             for form in my_form_set:
                 n,o,t=recoge_datos_atributo(form)
                 atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
-            return redirect('gestion:menu')
+            return redirect('gestion:get_fase_proyecto', id_fase=fase_id)
     else:
         contexto={'formset':my_form,
                  'cant_atributos': list(range(1,cantidad_atributos+1))
@@ -443,6 +442,68 @@ def proyectoCancelado(request):
 
     return  redirect("gestion:menu")
 
+def ver_proyecto(request,pk):
+    proyecto=Proyecto.objects.get(id_proyecto=pk)
+    fases = Fase.objects.filter(id_Proyecto_id=pk)
+    contexto={
+        'proyecto':proyecto,
+        'fases':fases
+    }
+    return render(request,'opcionesProyecto.html',contexto)
 
+def get_fase_proyecto(request,id_fase):
+    fase=Fase.objects.get(id_Fase=id_fase)
+    contexto={
+        'fase':fase
+    }
+    return render(request,'opcionesFase.html',contexto)
 
+def importar_tipo_item(request,id_fase):
+    if(request.method=='POST'):
+        print('es post')
+        some_var = request.POST.getlist('checkbox')
+        for id in some_var:
+            print (id_fase)
+            ti=TipoItem.objects.get(id_ti=id)#capturamos el tipo de item
+            atributos=Atributo.objects.filter(ti_id=id) #optenemos todos los atributos de ese tipo de item
+            ti.id_ti=None #clonamos el tipo de item
+            ti.fase_id=id_fase
+            ti.save() #guardamos
+            for atributo in atributos: #iteramos cada atributo clonarlos y relacionar con el tipo de item nuevo
+                    atributo.id_atributo=None
+                    atributo.ti_id=ti.id_ti
+                    atributo.save()
+        return redirect('gestion:get_fase_proyecto',id_fase=id_fase)
+    else:
+        user=request.user #se optiene el usuario
+        list_tipo_item_a_importar=[]
+        list_tipo_item=[]
+        list_tipo_item_proyecto_actual=get_all_tipo_item(Fase.objects.get(id_Fase=id_fase).id_Proyecto_id)
+        proyectos=User_Proyecto.objects.exclude(proyecto_id=Fase.objects.get(id_Fase=id_fase).id_Proyecto_id)#obtengo el proyectos que el usuario tiene acceso
+        print('aca')
+        print(list_tipo_item_proyecto_actual)
+        for proyecto in proyectos:
+            fases=Fase.objects.filter(id_Proyecto_id=proyecto.proyecto_id) #obtengo toda las fases del proyecto
+            for fase in fases :
+                list_tipo_item+=TipoItem.objects.filter(fase_id=fase.id_Fase)
+            for ti in list_tipo_item :
+                if not ti.nombre in list_tipo_item_proyecto_actual:
+                    list_tipo_item_a_importar += [ti]
 
+        contexto={
+            'tipoItems':list_tipo_item_a_importar
+        }
+        return render(request,'listaTipoItem.html',contexto)
+
+def get_all_tipo_item(id_proyecto):
+    fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
+    list_tipo_item=[]
+    list_tipo_item_name=[]
+
+    for fase in fases:
+        list_tipo_item += TipoItem.objects.filter(fase_id=fase.id_Fase)    #optenemos todos los objetos del tipo de item
+
+    for ti in list_tipo_item:
+        list_tipo_item_name+=[ti.nombre] # de todos los objetos obtenemos el nombr
+
+    return  list_tipo_item_name

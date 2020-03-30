@@ -15,12 +15,15 @@ urlpatterns = [
     path('crear_fase/', views.crearFase, name='crearFase'),
     path('auditoria/', listar_auditoria),
     path('AggUser/', listar_usuarios_registrar),
-    path('proyectos/', listar_proyectos),
+    path('proyectos/', listar_proyectos,name='listar_proyectos'),
     path('cancelado/', proyectoCancelado),
-    path('crear/TipoItem',views.tipo_item_views_create,name='tipo_item_views_create'),
-    path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>',views.add_atribute,name='add_atribute'),
+    path('crear/TipoItem/<int:id_fase>',views.tipo_item_views_create,name='tipo_item_views_create'),
+    path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>/<int:fase_id>',views.add_atribute,name='add_atribute'),
     path('listar/usuarios/aprobados',views.ver_usuarios_aprobados,name='ver_usuarios_aprobados'),
-    path('getUser/<int:pk>',views.get_user,name='get_user')
+    path('getUser/<int:pk>',views.get_user,name='get_user'),
+    path('verProyecto/<int:pk>', views.ver_proyecto, name='ver_proyecto'),
+    path('ver/fase/<int:id_fase>/proyecto',views.get_fase_proyecto,name='get_fase_proyecto'),
+    path('importar/tipo/item/fase/<int:id_fase>', views.importar_tipo_item, name='importar_tipo_item')
 ]
 
 
