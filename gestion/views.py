@@ -452,6 +452,18 @@ def listar_proyectos(request):
     return render(request, 'verProyectos.html', context)
 
 
+def detallesProyecto(request,pk):
+    proyectos = Proyecto.objects.get(id_proyecto=pk)
+    #print(proyectos)
+    #fases = Fase.objects.get(id_Proyecto=proyectos)
+    fases= Fase.objects.all()
+    #print(fases[0].id_Proyecto)
+    context={
+        "proyectos":proyectos,
+        "fases":fases,
+    }
+    return render(request, 'detallesProyecto.html', context)
+
 def proyectoCancelado(request):
     x = Proyecto.objects.last()
     instanceFase = Fase.objects.filter(id_Proyecto = x.id_proyecto)

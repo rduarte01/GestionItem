@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import crearFase, listar_auditoria, listar_usuarios_registrar,listar_proyectos, proyectoCancelado
 from . import views
-from .views import VerSolicitudesEspera, ActualizarUser, CrearRol,estadoProyecto
+from .views import VerSolicitudesEspera, ActualizarUser, CrearRol,estadoProyecto,detallesProyecto
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -21,7 +21,8 @@ urlpatterns = [
     path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>',views.add_atribute,name='add_atribute'),
     path('listar/usuarios/aprobados',views.ver_usuarios_aprobados,name='ver_usuarios_aprobados'),
     path('getUser/<int:pk>',views.get_user,name='get_user'),
-    path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto')
+    path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto'),
+    path('detallesProyecto/<int:pk>', views.detallesProyecto, name='detalles_Proyecto')
 
 ]
 
