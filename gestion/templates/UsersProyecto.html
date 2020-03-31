@@ -1,0 +1,45 @@
+<title>Usuarios del proyecto</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<h1>USUARIOS:</h1>
+
+<style>
+#ocultar{display:none;}
+</style>
+
+{% block contect %}
+<a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' pk%}" role="button">Volver Atras</a>
+
+      <div class="jumbotron">
+
+ <form method="POST" action="">{% csrf_token %}
+{% block content %}
+<table class="table table-bordered">
+    <form method="POST" action="">{% csrf_token %}
+
+        <tr>
+            <td>NOMBRE</td>
+            <td>EMAIL</td>
+            <td>DESVINCULACIÓN</td>
+        </tr>
+
+        {%for list in list %}
+          {%for i in form%}
+                {%if list == i.id%}
+        <tr>
+            <td>{{i.username}}</td>
+            <td>{{i.email}}</td>
+            <td><a class="btn btn-primary" href="{% url 'gestion:desvinculacionProyecto' pk i.id%}" role="button">Desvincular del proyecto</a></td>
+        </tr>
+        {%endif%}
+    {%endfor%}
+    {%endfor%}
+
+    </form>
+</table>
+{% endblock %}
+ </form>
+      </div>
+{% endblock %}

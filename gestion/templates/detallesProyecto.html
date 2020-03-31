@@ -1,0 +1,92 @@
+
+    <title>Detalles de Proyecto</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<html>
+<head>
+<style>
+.cities {
+  background-color: silver;
+  color: white;
+  margin: 20px;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="cities">
+<table class="table table-bordered">
+<a class="btn btn-primary" href="/proyectos/" role="button">Volver Atras</a>
+      <thead>
+
+    <tr>
+        <td>NOMBRE DE PROYECTO</td>
+        <td>DESCRIPCION</td>
+        <td>ESTADO</td>
+    </tr>
+
+    </thead>
+<thead>
+<tr>
+        <td><h2>{{proyectos.nombre}}</h2></td>
+        <td><h4>{{proyectos.descripcion}}</h4></td>
+        <td><h2>{{proyectos.estado}}</h2></td>
+</tr>
+</thead>
+</table>
+</div>
+
+
+ <div class="cities">
+<table class="table table-bordered">
+
+    <thead>
+    <tr>
+        <td>FASES</td>
+        <td>DESCRIPCION</td>
+        <td>ESTADO</td>
+        <td>ESTADO DE FASES</td>
+        <td>TRABAJAR!</td>
+        <td>AGREGA TI</td>
+        <td>IMPORTA TI</td>
+    </tr>
+    </thead>
+    <tbody>
+        {%for fases in fases %}
+        {% if fases.id_Proyecto == proyectos  %}
+
+        <tr>
+            <td>{{fases.nombre}}</td>
+            <td>{{fases.descripcion}}</td>
+            <td>{{fases.estado}}</td>
+            <td><a href=""class="btn btn-primary">CAMBIAR ESTADO</a></td>
+            <td><a href="" class="btn btn-primary">DETALLES</a></td>
+            <td><a href=""class="btn btn-primary">✚ CREAR TI</a></td>
+            <td><a href=""class="btn btn-primary">✚ IMPORTAR TI</a></td>
+        </tr>
+        {%endif%}
+        {%endfor%}
+<tbody>
+  </table>
+ </div>
+</body>
+</html>
+
+    <div class="cities">
+<table class="table table-bordered">
+      <thead>
+
+    <tr>
+            <td><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" class="btn btn-primary">USUARIOS DEL PROYECTO</a></td>
+            <td><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}"class="btn btn-primary">✚ USUARIOS</a></td>
+                  <td><a href=""class="btn btn-primary">✚ FASES</a></td>
+                  <td><a href=""class="btn btn-primary">✚ ROL</a></td>
+
+            <td><a href=""class="btn btn-primary">VER TI DEL PROYECTO</a></td>
+    </tr>
+    </thead>
+</table>
+</div>

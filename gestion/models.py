@@ -125,18 +125,23 @@ class Atributo(models.Model):
 class Auditoria(models.Model):
     """TABLA EN DONDE SE GUARDAN LAS MODIFICACIONES QUE REALIZAN TODOS LOS USUARIOS EN EL SISTEMA"""
     usuario= models.CharField(max_length=50)
+    """GUARDA EL NOMBRE DE USUARIO"""
     fecha= models.CharField(max_length=50)
+    """GUARDA LA FECHA DE LA ACCION"""
     accion= models.CharField(max_length=100)
+    """GUARDA LA ACCION REALIZADA"""
 
 class User_Proyecto(models.Model):
     """MODELO PROYECTO CON USER EN DONDE SE SOLUCIONA LA RELACION MUCHOS A MUCHOS, GUARDA
     LAS RELACIONES ENTRE USUARIOS Y PROYECTOS
     """
     user_id = models.IntegerField()
+    """USER RELACIONADO CON PROYECTO"""
     proyecto_id = models.IntegerField()
+    """PROYECTO RELACIONADO CON USER"""
     activo = models.BooleanField(default=False)
+    """SI EL USUARIO ESTA ACTIVO EN EL PROYECTO, CASO CONTRARIO YA NO PERTENECE AL MISMO"""
 
-#esta es la tabla para personalizar la tabla mucho a mucho entre fase y rol
 class FASE_ROL(models.Model):
     id_fase=models.ForeignKey(Fase,on_delete=models.CASCADE)
     id_rol=models.ForeignKey(Group,on_delete=models.CASCADE)

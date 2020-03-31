@@ -47,6 +47,8 @@ AUTHENTICATION_BACKENDS = {
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
     #'app1.authOlogin.auth0backend.Auth0',
+    'django.contrib.auth.backends.ModelBackend',  # this is default
+    'guardian.backends.ObjectPermissionBackend',
 }
 
 LOGIN_URL = '/login/auth0'

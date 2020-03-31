@@ -1,4 +1,0 @@
-Prueba
-======
-
-.. automodule :: gestion.prueba

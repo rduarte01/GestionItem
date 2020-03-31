@@ -4,9 +4,11 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
-<h1>Mis Proyectos</h1>
-<a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
+
 {% block content %}
+    <div class="cities">
+        <h1>Mis Proyectos</h1>
+<a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
 <table class="table table-bordered">
     <thead>
     <tr>
@@ -37,7 +39,7 @@
             <td><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}"class="btn btn-primary">Estados</a></td>
         {%endif%}
 
-            <td><a href="" class="btn btn-primary">Ver detalles</a></td>
+            <td><a href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" class="btn btn-primary">Ver detalles</a></td>
 
             <td><a href="{% url 'gestion:ver_proyecto' proyectos.id_proyecto  %}" class="btn btn-primary">Ver detalles</a></td>
         </tr>
@@ -52,5 +54,16 @@
     </tbody>
 
 </table>
-
+    </div>
 {% endblock %}
+
+    <head>
+<style>
+.cities {
+  background-color: silver;
+  color: white;
+  margin: 20px;
+  padding: 20px;
+}
+</style>
+</head>
