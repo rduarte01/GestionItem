@@ -18,7 +18,6 @@ class Proyecto(models.Model):
         ("CANCELADO", "CANCELADO")
     )
 
-
     id_proyecto= models.AutoField(primary_key = True) ###### clave de proyecto
     """SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD"""
     nombre= models.CharField(max_length=30)
@@ -76,18 +75,24 @@ class TipoItem(models.Model):
         Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
     """
     id_ti = models.AutoField(primary_key=True)
+    ''' atributo que sive para identificar univocamente a cada tipo Item'''
     nombre = models.CharField(max_length=20)
+    '''atributo que sirve para para almacenar el nombre del tipo de item'''
     fase=models.ForeignKey(Fase,on_delete=models.CASCADE,null=True,blank=True)
+    ''' atributpp que sirve para hacer referencia de a que fase corresponde el tipo de  item'''
     class Meta:
+        ''' Clase que sirve para proveer metadatos al modelo TipoItem'''
         permissions = (
             ("importar_tipo_item", "Poder importar Tipo Item"),
             ("crear_tipo_item", "Puede crear un Tipo de Item"),
         )
+        '''en estas variables especificamos los permisos que vamos  tener para este modelo TipoItem'''
         ordering=['nombre']
-
+        '''en este especificamos  como vamos a ordenar '''
 class Atributo(models.Model):
     """"
-       Este es el modelo Atributo, que se relaciona con Tipo de Item
+       Este es el modelo Atributo, que se relaciona con Tipo de Item, y sirve para representa todos los valores
+       debe de tener un atributo al crearlo
     """
     choises_data_type = (
         ("Decimal", "Decimal"),
@@ -96,14 +101,23 @@ class Atributo(models.Model):
         ("String", "Cadena"),
         ("Boolean", "Boolean"),
     )
-
+    '''
+        En esta variable especificamos, las opciones que se van a tener para especificar el tipo de dato del atributo
+    '''
     id_atributo=models.AutoField(primary_key=True,blank=False)
+    ''' variable que sirve para identificar univocamente a cada atributi'''
     nombre=models.CharField(max_length=20,blank=False)
+    '''varible que sirve para almacena el nombre del atributo'''
     es_obligatorio= models.BooleanField(default=True,blank=False)
+    '''variable que sirve para identificar si un atributo es obligatorio o no'''
     tipo_dato=models.CharField(max_length=8,choices=choises_data_type,default='Decimal',blank=False)
+    ''' variable que sirve para almacenar el tipo de dato del atributo'''
     ti=models.ForeignKey(TipoItem,on_delete=models.CASCADE)
+    '''variable que sirve para hacer referencia a que tipo de item esta asociado el atributo'''
     class Meta:
+        '''Clase que provee meta datos de como para el modelo Atributo'''
         ordering=['nombre']
+        '''para saber por que atibuto vamos a ordenar'''
 
 
 

@@ -47,17 +47,21 @@ class FormProyecto(forms.ModelForm):
         """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
 
 
-
+#jesus
 class TipoItemForm(forms.ModelForm):
     """
         En esta clase se define la estrutura del formulario para crear un tipo de item
     """
     class Meta:
+        ''' Clase que se utiliza para proveer metadatos al form AtrributeForm'''
         model=TipoItem
+        ''' atributo que especifica a que modelo esta relacionado este form'''
         fields=['nombre']
+        '''atributos que vamos a desplegar en nuestro form'''
         labels={
             'nombre': 'Nombre del Tipo de Item'
         }
+        '''los labels que se mostraran para cada fields en nuestro html'''
         widgets={
             'nombre':forms.TextInput(
                 attrs={
@@ -66,6 +70,7 @@ class TipoItemForm(forms.ModelForm):
                 }
             )
         }
+        '''widget para especificar las clase de bootstap utilizada en nuestro html para nuestro form'''
     cantidad=forms.IntegerField(label="Cantidad de Atributos del Tipo de Item",
                                 max_value=10,required=True,
                                 widget=forms.TextInput(
@@ -75,6 +80,7 @@ class TipoItemForm(forms.ModelForm):
                                             }
                                         )
                                 )
+    '''este atributo se utiliza para obetener la cantidad de atributos que va a tener el tipo de item '''
 
 class FaseForm(forms.ModelForm):
     """
@@ -107,15 +113,24 @@ class FaseForm(forms.ModelForm):
 class FormAyuda(forms.Form):
     Consulta = forms.CharField(widget=forms.Textarea)
 
+
+#jesus
 class AtributeForm(forms.ModelForm):
+    '''
+        Este es el form que se va a utilizar en un HTML a la hora de crear un atributo para un tipo de Item
+    '''
     class Meta:
+        ''' Clase que se utiliza para proveer metadatos al form AtrributeForm'''
         model=Atributo
+        ''' atributo que especifica a que modelo esta relacionado este form'''
         fields=('nombre','es_obligatorio','tipo_dato')
+        '''atributos que vamos a desplegar en nuestro form'''
         labels={
             'nombre':'Nombre del atributo',
             'es_obligatorio':'Obligatoriedad del Tipo de Item',
             'tipo_dato':'Tipo de dato del atributo'
         }
+        '''los labels que se mostraran para cada fields en nuestro html'''
         widgets={
             'nombre': forms.TextInput(
                 attrs={
@@ -134,27 +149,35 @@ class AtributeForm(forms.ModelForm):
                 }
             )
         }
+        '''widget para especificar las clase de bootstap utilizada en nuestro html para nuestro form'''
     def __init__(self, *arg, **kwarg):
         super(AtributeForm, self).__init__(*arg, **kwarg)
         self.empty_permitted = True
 
-
+#jesus
 class SettingsUserFormJesus(forms.Form):
+    '''
+        Este es el form que se va a utilizar en un HTML para settear los permisos y los estados de los usuarios
+    '''
     is_admin=forms.BooleanField(
                                 required=False,
-                                label="ES ADMINISTRADOR",
+                                label="Es Administrador",
                                 )
-    is_manager=forms.BooleanField(required=False,label="ES Gerenete Proyecto")
+    '''variable boolean para settear si el usuario tendra el permiso es_administrador '''
+    is_manager=forms.BooleanField(required=False,label="Es Gerente Proyecto")
+    '''variable boolean para settear si el usuario tendra el permiso es_gerente_proyecto '''
     State_CHOICES = [
         ('True', 'Aprobado'),
         ('False', 'Desactivado'),
     ]
+    '''estan son las opciones que el usuario tedra podra seleccionar en el estado del usuario  '''
     estado=forms.ChoiceField(
         label="Estado del Usuario",
         required=True,
         widget=forms.Select(attrs={"class":"form-control" }),
         choices=State_CHOICES,
     )
+    '''variable que se utilizara para settear el estado del usuario atravez de un select '''
 
 class SettingsUserForm(forms.ModelForm):
     class Meta:

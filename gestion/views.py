@@ -8,15 +8,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
-#from post import POST
 from .models import Proyecto, Auditoria, User_Proyecto,Fase
 from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus
 from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg
 from django.db.models import Count
 from django.contrib.auth.decorators import permission_required
-
-
 #### GLOBALES
 PROYECTOS_USUARIO=[]
 CANTIDAD=1
@@ -26,7 +23,8 @@ from .forms import FormProyecto,TipoItemForm,AtributeForm,SettingsUserForm,RolFo
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
-
+from guardian.shortcuts import assign_perm
+from guardian.decorators import permission_required_or_403
 
 
 def registrarAuditoria(user,accion):
@@ -66,7 +64,6 @@ def Contactos(request):
     return render(request,'Contactos.html', context)
 
 
-
 def CantProyectos(request):
     """ RETORNA LA LISTA DE ID DE LOS PROYECTOS ASOCIADOS AL USUARIO ACTUAL """
     user = request.user#### SE UTILIZA PARA QUITAR EL ID DEL USUARIO ACTUAL
@@ -79,9 +76,10 @@ def CantProyectos(request):
             #print(NroProyectos[i])
     return GuardaProyectos
 
+
 def menu(request):
     user = request.user
-
+    #return render(request, 'MenuAdminSistema.html')
     if( user.esta_aprobado):
         if user.has_perm('auth.es_administrador'):
              return render(request,'MenuAdminSistema.html')
@@ -153,7 +151,7 @@ def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
     user = request.user
     if user.is_authenticated:
-        return redirect(menu)
+        return redirect('gestion:menu')
     else:
         return render(request, 'index.html')
 
@@ -196,34 +194,54 @@ def logout(request):
     return HttpResponseRedirect(f'https://{domain}/v2/logout?client_id={client_id}&returnTo={return_to}')
 
 
-def getUsers(request):
-    """"TRAE INFORMACION DE USUARIO"""
-    users = User.objects.all()
-    return render(request,'perfil_usuarios.html',{'usuarios':users})
-
-
-
 class VerSolicitudesEspera(ListView):
     model = User
     template_name = "ListaUser.html"
     queryset = User.objects.filter(esta_aprobado = False)
+
+
+#jesus
 def ver_usuarios_aprobados(request):
-    users=User.objects.filter(esta_aprobado=True)
+    '''Lista todos los usarios aprobados en el sistema '''
+    users=User.objects.filter(esta_aprobado=True).exclude(id=request.user.id)
     context={'users':users}
     return render(request,'usuariosAprobados.html',context)
 
 
 def get_user(request,pk):
+    ''' Sirve para poder asignar o sacar los permisos es_gerente , es_administrador
+        y cambiar el estado de un usario en especifico
+    '''
+    user_active=False
     if( request.method == 'POST' ):
         form=SettingsUserFormJesus(request.POST)
         print(request.POST)
         if(form.is_valid()):
             user = User.objects.get(id=pk)
             is_admin,is_gerente,estado = recoger_datos_usuario_settings(form)
-            add_permission_admin(user,is_admin)
-            add_permission_gerente(user,is_gerente)
-            user.esta_aprobado=estado
-            user.save()
+            ban = True
+            if estado == 'False': #si el estado es falso
+                print('estado Falso')
+                if User_Proyecto.objects.filter(user_id=user.id).exists() :  #si el usuario no esta asociado a ningun proyecto
+                    proyectos_user= User_Proyecto.objects.filter(user_id=request.user.id)
+                    print('si esta asociada a un proyecto')
+                    for pu in proyectos_user:
+                        if pu.activo:
+                            print(pu.proyecto_id)
+                            ban=False
+                            break
+            if ban:
+                print ('ban es true')
+                add_permission_admin(user, is_admin)
+                add_permission_gerente(user, is_gerente)
+                user.esta_aprobado = estado
+                user.save()
+            else:
+                contexto={
+                    'mesanje_error':'El usuario esta activo en un proyecto por lo tanto no puedes desactivarlo, para hacerlo deben de darle de baja en el proyecto que en donde esta asociado   '
+
+                }
+                return render(request,'error.html',contexto)
         else:
             print("no es valido")
 
@@ -236,7 +254,9 @@ def get_user(request,pk):
         form=SettingsUserFormJesus()
         context = {
             'user': usuario,
-            'form':form
+            'form':form,
+            'banManager':banManager,
+            'banGerente':banGerente
         }
         return render(request,"perfilUsuario.html",context)
 
@@ -259,55 +279,70 @@ class CrearRol(CreateView):
     success_url = reverse_lazy("gestion:menu")
 
 
-
-def tipo_item_views_create(request):
-    global CANTIDAD_ATRIBUTOS_TI,NOMBRE_TI
+def tipo_item_views_create(request,id_fase):
+    '''Sirve para crear un tipo de item,en una fase en especifica'''
     if request.method == "POST":
         my_form=TipoItemForm(request.POST)
         if(my_form.is_valid()):
            nombre_ti,cantidad_atributos_ti=recoger_datos_tipo_item(my_form)
-           return redirect('gestion:add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti)
+           return redirect('gestion:add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti,fase_id=id_fase)
     else:
         my_form= TipoItemForm()
+        fase=Fase.objects.get(id_Fase=id_fase)
+        proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
         context={
-            'tipo_item_form': my_form
+            'tipo_item_form': my_form,
+            'proyecto':proyecto
            }
         return render(request, 'crear_tipo_item.html', context)
 #Vistas agregadas por jesus
 
 
 
-def add_atribute(request,nombre_ti,cantidad_atributos):
+def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
+    ''' Sirve para poder crear un nuevo atributo, asociando ese atributo a un tipo de item'''
+
     my_form = formset_factory(AtributeForm, extra=cantidad_atributos)
     if request.method == 'POST':
         my_form_set=my_form(request.POST)
         if(my_form_set.is_valid()):
-            tipo_item=TipoItem(nombre=nombre_ti)
+            tipo_item=TipoItem(nombre=nombre_ti,fase_id=fase_id)
             tipo_item.save()
             for form in my_form_set:
                 n,o,t=recoge_datos_atributo(form)
                 atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
-            return redirect('gestion:menu')
+            return redirect('gestion:get_fase_proyecto', id_fase=fase_id)
     else:
         contexto={'formset':my_form,
                  'cant_atributos': list(range(1,cantidad_atributos+1))
                 }
         return render(request,'crear_atributo.html',contexto)
 
+
+#jesus
 def recoger_datos_tipo_item(my_form):
+    '''Sirve para recoger los datos despues de un POST en un formulario de tipo de item, retorna el
+        valor del nombre del tipo de item y la cantidad de atributos del tipo de item
+    '''
     nombre = my_form.cleaned_data['nombre']
     valor = my_form.cleaned_data['cantidad']
     return nombre,valor
 
-
+#jesus
 def recoge_datos_atributo(form):
+    '''Sirve para recoger los datos despues de un POST en un formulario de atributo, retorna el
+            valor del nombre del atributo, si es obligatorio, y el tipo de dato
+    '''
     nombre_atributo = form.cleaned_data.get('nombre')
     obligatoriedad = form.cleaned_data.get('es_obligatorio')
     tipo_dato_atibuto = form.cleaned_data.get('tipo_dato')
     return nombre_atributo,obligatoriedad,tipo_dato_atibuto
 
-
+#jesus
 def recoger_datos_usuario_settings(form):
+    '''Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores
+        dos booleanos para determinar si es gerente y administrador y el estado del usuario
+    '''
     is_admin = form.cleaned_data['is_admin']
     is_gerente = form.cleaned_data['is_manager']
     estado = form.cleaned_data['estado']
@@ -315,6 +350,7 @@ def recoger_datos_usuario_settings(form):
 
 
 def add_permission_admin(user,is_admin):
+    '''Funcion que permite agregar o sacar el permiso es_administrador a un usario, no retorna nada'''
     content_type = ContentType.objects.get_for_model(User)
     if (is_admin):  # se agrega el es_administrador
         permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
@@ -326,6 +362,7 @@ def add_permission_admin(user,is_admin):
 
 
 def add_permission_gerente(user,is_gerente):
+    '''Funcion que permite agregar o sacar el permiso is_gerente a un usario, no retorna nada'''
     content_type = ContentType.objects.get_for_model(Proyecto)
     if (is_gerente):  # se agrega el es_administrador
         permission = Permission.objects.get(content_type=content_type, codename='is_gerente')
@@ -351,12 +388,13 @@ def crearFase(request):
         descFase = fase.cleaned_data.get("descripcion")
         z = Fase(nombre=nombreFase,descripcion=descFase,id_Proyecto=x)
         z.save()
-
         if cantidad != 0:
             cantidad = cantidad - 1
             CANTIDAD = cantidad
+
             return redirect('gestion:crearFase')
         else:
+            assign_perm('is_gerente', request.user, x)
             return redirect('gestion:menu')
 
     context = {
@@ -374,7 +412,6 @@ def listar_auditoria(request):
     }
     return render(request, 'Auditoria.html', context)
 
-
 ### SE PUEDE USAR DESPUES
 def listar_usuarios_registrar(request):
     """ LISTA LOS USUARIOS PARA AGREGAR AL PROYECTO"""
@@ -390,7 +427,6 @@ def listar_usuarios_registrar(request):
         'form':form
     }
     return render(request, 'AggUser.html', context)
-
 
 ########3 se debe usar para añadir usuarios luego a un proyecto
 def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/forms
@@ -443,6 +479,84 @@ def proyectoCancelado(request):
 
     return  redirect("gestion:menu")
 
+def ver_proyecto(request,pk):
+    proyecto=Proyecto.objects.get(id_proyecto=pk)
+    fases = Fase.objects.filter(id_Proyecto_id=pk)
+    contexto={
+        'proyecto':proyecto,
+        'fases':fases
+    }
+    return render(request,'opcionesProyecto.html',contexto)
 
+def get_fase_proyecto(request,id_fase):
+    fase=Fase.objects.get(id_Fase=id_fase)
+    proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
+    contexto={
+        'fase':fase,
+        'proyecto':proyecto
+    }
+    return render(request,'opcionesFase.html',contexto)
 
+def importar_tipo_item(request,id_fase):
+    '''esta funcion permite importar tipos de item en un proyecto , filtrando aquellos tipo
+        items de los proyectos de los que esta asociado el usuario y que aun no se tenga en  las
+        fases dell proyecto.
+    '''
 
+    if(request.method=='POST'):
+        print('es post')
+        some_var = request.POST.getlist('checkbox')
+        for id in some_var:
+            print (id_fase)
+            ti=TipoItem.objects.get(id_ti=id)#capturamos el tipo de item
+            atributos=Atributo.objects.filter(ti_id=id) #optenemos todos los atributos de ese tipo de item
+            ti.id_ti=None #clonamos el tipo de item
+            ti.fase_id=id_fase
+            ti.save() #guardamos
+            for atributo in atributos: #iteramos cada atributo clonarlos y relacionar con el tipo de item nuevo
+                    atributo.id_atributo=None
+                    atributo.ti_id=ti.id_ti
+                    atributo.save()
+        return redirect('gestion:get_fase_proyecto',id_fase=id_fase)
+    else:
+        print('es get')
+        user=request.user #se optiene el usuario
+        list_tipo_item_a_importar=[]
+        list_tipo_item=[]
+        list_tipo_item_proyecto_actual=get_all_tipo_item(Fase.objects.get(id_Fase=id_fase).id_Proyecto_id)
+        proyectos=User_Proyecto.objects.exclude(proyecto_id=Fase.objects.get(id_Fase=id_fase).id_Proyecto_id)#obtengo el proyectos que el usuario tiene acceso
+        print('aca')
+        print(list_tipo_item_proyecto_actual)
+        for proyecto in proyectos:
+            fases=Fase.objects.filter(id_Proyecto_id=proyecto.proyecto_id) #obtengo toda las fases del proyecto
+            list_tipo_item=[]
+            for fase in fases :
+                list_tipo_item+=TipoItem.objects.filter(fase_id=fase.id_Fase)
+            for ti in list_tipo_item :
+                if not ti.nombre in list_tipo_item_proyecto_actual:
+                    list_tipo_item_a_importar += [ti]
+
+        print(list_tipo_item_a_importar)
+        fase=Fase.objects.get(id_Fase=id_fase)
+        proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
+        contexto={
+            'tipoItems':list_tipo_item_a_importar,
+            'proyecto':proyecto
+        }
+        return render(request,'listaTipoItem.html',contexto)
+
+def get_all_tipo_item(id_proyecto):
+    '''Esta funcion permite obtener todos los tipos de item de un proyecto especifico'''
+
+    fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
+    list_tipo_item=[]
+    list_tipo_item_name=[]
+    for fase in fases:
+        list_tipo_item += TipoItem.objects.filter(fase_id=fase.id_Fase)    #optenemos todos los objetos del tipo de item
+
+    for ti in list_tipo_item:
+        list_tipo_item_name+=[ti.nombre] # de todos los objetos obtenemos el nombr
+
+    print("esto imprimo aca")
+    print(list_tipo_item_name)
+    return  list_tipo_item_name

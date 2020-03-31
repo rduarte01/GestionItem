@@ -1,0 +1,58 @@
+{% extends 'Menu.html' %}
+{% block body %}
+{% load guardian_tags %}
+{% get_obj_perms request.user for proyecto as "proyecto_perms" %}
+{% if "is_gerente" in proyecto_perms %}
+    <center><h2> Lista de Tipos de Item a importar </h2></center>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                Nombre del Tipo de Item
+            </div>
+            <div class="col">
+                ID de la Fase
+            </div>
+            <div class="col">
+                Seleccione para importar
+            </div>
+        </div>
+    </div>
+    {% for ti in tipoItems%}
+    <form method='POST'>
+        {% csrf_token%}
+        <div class="container">
+            <div class="row">
+                <div class="col ">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action ">{{ti.nombre}}</a>
+                    </div>
+                    <br>
+                </div>
+                <div class="col ">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action ">{{ti.fase_id }}</a>
+                    </div>
+                    <br>
+                </div>
+                <div class='col'>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{ti.id_ti}}"
+                               id="{{ti.id_ti}}}">
+                        <label class="form-check-label" for="{{ti.id_ti}}}">
+                            Selecciona para importar
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <input type='submit' value='Guardar'/>
+    </form>
+
+    <br>
+    <br>
+{%else%}
+    <h1> Usted no es gerente de Proyecto para este {{proyecto.nombre}}, No puede importar  Tipos de Item</h1>
+{% endif %}
+
+{% endblock %}

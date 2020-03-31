@@ -1,9 +1,18 @@
+
 {% extends 'Menu.html' %}
 {% block body %}
-<form  method='POST'>{% csrf_token%}
-    {{tipo_item_form.as_p}}
-    <input type='submit' value= 'Siguiente' />
-</form>
+{% load guardian_tags %}
+{% get_obj_perms request.user for proyecto as "proyecto_perms" %}
+{% if "is_gerente" in proyecto_perms %}
+    <form  method='POST'>{% csrf_token%}
+        {{tipo_item_form.as_p}}
+        <input type='submit' value= 'Siguiente' />
+    </form>
+{%else%}
+    <h1> Usted no es gerente de Proyecto para este {{proyecto.nombre}}, No puede crear Tipo de Item</h1>
+{% endif %}
+
+
 
 
 {% endblock %}

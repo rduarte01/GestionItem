@@ -1,5 +1,5 @@
 
-    <title>Mis proyectos</title>
+<title>Mis proyectos</title>
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
@@ -29,8 +29,9 @@
             <td>{{proyectos.id_proyecto}}</td>
             <td>{{proyectos.descripcion}}</td>
             <td>{{proyectos.estado}}</td>
-            <td><a href="" class="btn btn-primary">Ver detalles</a></td>
+            <td><a href="{% url 'gestion:ver_proyecto' proyectos.id_proyecto  %}" class="btn btn-primary">Ver detalles</a></td>
         </tr>
+
         {%endif%}
         {%endfor%}
 
