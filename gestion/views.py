@@ -15,7 +15,7 @@ from .forms import FaseForm, FormUserAgg,FormProyectoEstados
 from django.db.models import Count
 from django.contrib.auth.decorators import permission_required
 from .models import Proyecto,TipoItem,Atributo
-from .forms import FormProyecto,TipoItemForm,AtributeForm,SettingsUserForm,RolForm#, FormUsuario
+from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm,SettingsUserForm#, FormUsuario
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
@@ -53,20 +53,17 @@ def estadoProyecto(request,pk):
     }
     return render(request, 'estadoProyecto.html',context)
 
-
 def registrarAuditoria(user,accion):
     """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
     showtime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     p = Auditoria(usuario= user,fecha=showtime, accion=accion)###### FALTA ARREGLAR USER
     p.save()
 
-
 def CorreoMail(asunto,mensaje,correo):
     """ FUNCION QUE RECIBE UN ASUNTO, MENSAJE Y UN CORRREO ELECTRONICO AL CUAL SE LE ENVIA UN CORREO
     ELECTRONICO DE ACUERDO A UNA ACCION"""
     mail=EmailMessage(asunto,mensaje,to={correo})
     mail.send()
-
 
 def Contactos(request):
     """DESPLIEGA UN APARTADO EN DONDE EL USUARIO INGRESA SU DUDA O INCONVENIENTE Y SE ENVIA A LOS DESARROLLADORES
@@ -81,7 +78,7 @@ def Contactos(request):
         guardarAuditoria = "El usuario envio la siguiente consulta o inquietud: "+ mensaje
         registrarAuditoria(request.user, guardarAuditoria)
 
-        CorreoMail(asunto,mensaje,"waltergautofcb@gmail.com")
+        CorreoMail(asunto,mensaje,"gerardocabrer@gmail.com")
         return redirect('gestion:menu')
 
     context={
@@ -89,8 +86,6 @@ def Contactos(request):
     }
     registrarAuditoria(request.user,'Ingreso en el apartado contactos')
     return render(request,'Contactos.html', context)
-
-
 
 def CantProyectos(request):
     """ RETORNA LA LISTA DE ID DE LOS PROYECTOS ASOCIADOS AL USUARIO ACTUAL """
@@ -130,7 +125,47 @@ def menu(request):
         mensaje='Gracias por registrarte en nuestro sistema, favor aguardar a ser aceptado por el administrador del sistema usuario: '+ str(User)
        # CorreoMail(asunto,mensaje,correo)
         return render(request, 'MenuEnEspera.html')
- 
+
+
+def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
+    """
+    Método para crear fases de un proyecto dado
+    """
+
+    registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
+    user= request.user## USER ACTUAL
+
+    form = User.objects.all()
+    registrados = User_Proyecto.objects.all()
+
+    if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+        #if form.is_valid():
+        some_var=request.POST.getlist('checkbox')
+        print(some_var)
+
+        for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
+            id_user =id
+            p = User_Proyecto(user_id= id_user ,proyecto_id= pk,activo= True)
+            p.save()
+
+        #form.save()
+        return redirect('gestion:crearFase')
+    else:
+        list=[]
+        for i in range(form.count()):
+            ok = False
+            if form[i].esta_aprobado == True and form[i].id != user.id:
+                ok=True
+                for x in range(registrados.count()):
+                    if registrados[x].proyecto_id == pk:
+                        if form[i].id == registrados[x].user_id:
+                            ok=False
+            if ok:
+               list.append(form[i].id)
+
+        return render(request, 'agregarUsuarios.html', {'form': form,'list':list,'pk':pk})
+
+
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
@@ -153,19 +188,14 @@ def creacionProyecto(request):
 
         CANTIDAD=cantidad_fases-1
 
-        q = cantidad.get("users")
+        q = request.user
         z= Proyecto.objects.last()
         id_proyecto = z.id_proyecto ## ID DEL PROYECTO CREADO
-        x=q.count()##### CANTIDAD DE PROYECTOS
-        registrarAuditoria(request.user,'Creo el proyecto: '+str(cantidad.get("nombre")))
 
-        for i in range(x):###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
-            registrarAuditoria(request.user, 'En el proyecto: ' + str(cantidad.get("nombre")+' añadio al usuario: '+str(q[i])+' en el proyecto'))
-            id_user =q[i].id
-            p = User_Proyecto(user_id= id_user ,proyecto_id= id_proyecto,activo= True)
-            p.save()
+        p = User_Proyecto(user_id= q.id ,proyecto_id= id_proyecto,activo= True)
+        p.save()
 
-        return redirect('gestion:crearFase')
+        return redirect('gestion:agregarUsuarios',id_proyecto)
 
 
     context ={
@@ -174,7 +204,6 @@ def creacionProyecto(request):
 
     return render(request,'creacionProyecto2.html', context)
 
-
 def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
     user = request.user
@@ -182,7 +211,6 @@ def index(request):
         return redirect('gestion:menu')
     else:
         return redirect('gestion:menu')
-
 
 @login_required
 def perfil(request):
@@ -208,7 +236,6 @@ def perfil(request):
         'nombre': user,
     })
 
-
 def logout(request):
     """PARA DESLOGUEARSE, CERRAR SESION DEL SSO VUELVE A MOSTRAR INICIO"""
 
@@ -221,23 +248,20 @@ def logout(request):
     return_to = 'http://localhost:8000'
     return HttpResponseRedirect(f'https://{domain}/v2/logout?client_id={client_id}&returnTo={return_to}')
 
-
 def getUsers(request):
     """"TRAE INFORMACION DE USUARIO"""
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
-
-
 class VerSolicitudesEspera(ListView):
     model = User
     template_name = "ListaUser.html"
     queryset = User.objects.filter(esta_aprobado = False)
+
 def ver_usuarios_aprobados(request):
     users=User.objects.filter(esta_aprobado=True)
     context={'users':users}
     return render(request,'usuariosAprobados.html',context)
-
 
 def get_user(request,pk):
     if( request.method == 'POST' ):
@@ -266,7 +290,6 @@ def get_user(request,pk):
         }
         return render(request,"perfilUsuario.html",context)
 
-
 class ActualizarUser(UpdateView):
     model = User
     form_class = SettingsUserForm
@@ -284,8 +307,6 @@ class CrearRol(CreateView):
     template_name = "CrearRol.html"
     success_url = reverse_lazy("gestion:menu")
 
-
-
 def tipo_item_views_create(request):
     global CANTIDAD_ATRIBUTOS_TI,NOMBRE_TI
     if request.method == "POST":
@@ -300,8 +321,6 @@ def tipo_item_views_create(request):
            }
         return render(request, 'crear_tipo_item.html', context)
 #Vistas agregadas por jesus
-
-
 
 def add_atribute(request,nombre_ti,cantidad_atributos):
     my_form = formset_factory(AtributeForm, extra=cantidad_atributos)
@@ -325,20 +344,17 @@ def recoger_datos_tipo_item(my_form):
     valor = my_form.cleaned_data['cantidad']
     return nombre,valor
 
-
 def recoge_datos_atributo(form):
     nombre_atributo = form.cleaned_data.get('nombre')
     obligatoriedad = form.cleaned_data.get('es_obligatorio')
     tipo_dato_atibuto = form.cleaned_data.get('tipo_dato')
     return nombre_atributo,obligatoriedad,tipo_dato_atibuto
 
-
 def recoger_datos_usuario_settings(form):
     is_admin = form.cleaned_data['is_admin']
     is_gerente = form.cleaned_data['is_manager']
     estado = form.cleaned_data['estado']
     return is_admin,is_gerente,estado
-
 
 def add_permission_admin(user,is_admin):
     content_type = ContentType.objects.get_for_model(User)
@@ -350,7 +366,6 @@ def add_permission_admin(user,is_admin):
         permission = Permission.objects.get(content_type=content_type, codename=name_permission)
         user.user_permissions.remove(permission)
 
-
 def add_permission_gerente(user,is_gerente):
     content_type = ContentType.objects.get_for_model(Proyecto)
     if (is_gerente):  # se agrega el es_administrador
@@ -361,11 +376,6 @@ def add_permission_gerente(user,is_gerente):
         permission = Permission.objects.get(content_type=content_type, codename=name_permission)
         user.user_permissions.remove(permission)
 
-
-
-"""
-SE PASA LA CANTIDAD DE FASES
-"""
 def crearFase(request):
 
     fase = FaseForm(request.POST)
@@ -390,7 +400,6 @@ def crearFase(request):
     }
     return render(request, 'crear_fase.html', context)
 
-
 def listar_auditoria(request):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA """
     registrarAuditoria(request.user, 'Ingreso al apartado Auditoria')
@@ -399,7 +408,6 @@ def listar_auditoria(request):
         'auditoria':auditoria
     }
     return render(request, 'Auditoria.html', context)
-
 
 ### SE PUEDE USAR DESPUES
 def listar_usuarios_registrar(request):
@@ -417,21 +425,90 @@ def listar_usuarios_registrar(request):
     }
     return render(request, 'AggUser.html', context)
 
-
 ########3 se debe usar para añadir usuarios luego a un proyecto
-def AggUser(request):#esta enlazado con la clase FaseForm del archivo getion/forms
+def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     Método para crear fases de un proyecto dado
     """
+
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
+    user= request.user## USER ACTUAL
 
-    #if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
-    form = FormUserAgg(request.POST)
-    if form.is_valid():
-        form.save()
-     #sin parametros ya que se van a cargar los valores en el formulario
-    return render(request, 'AggUser.html', {'form': form})
+    form = User.objects.all()
+    registrados = User_Proyecto.objects.all()
 
+    if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+        #if form.is_valid():
+        some_var=request.POST.getlist('checkbox')
+        print(some_var)
+
+        for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
+            id_user =id
+            p = User_Proyecto(user_id= id_user ,proyecto_id= pk,activo= True)
+            p.save()
+
+        #form.save()
+        return redirect('gestion:detalles_Proyecto',pk)
+    else:
+        list=[]
+        for i in range(form.count()):
+            ok = False
+            if form[i].esta_aprobado == True and form[i].id != user.id:
+                ok=True
+                for x in range(registrados.count()):
+                    if registrados[x].proyecto_id == pk:
+                        if form[i].id == registrados[x].user_id:
+                            ok=False
+            if ok:
+               list.append(form[i].id)
+
+        return render(request, 'AggUser.html', {'form': form,'list':list,'pk':pk})
+
+
+def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
+    """
+    Método para crear fases de un proyecto dado
+    """
+
+    registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
+    user= request.user## USER ACTUAL
+
+    form = User.objects.all()
+    registrados = User_Proyecto.objects.all()
+
+    if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+        #if form.is_valid():
+        some_var=request.POST.getlist('checkbox')
+        print(some_var)
+
+#        for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
+ #           id_user =id
+  #          p = User_Proyecto(user_id= id_user ,proyecto_id= pk,activo= True)
+   #         p.save()
+
+        #form.save()
+        return redirect('gestion:menu')
+    else:
+        list=[]
+        for i in range(form.count()):
+            ok = False
+            if form[i].id != user.id: #and form[i].esta_aprobado == True :
+                for x in range(registrados.count()):
+                    if registrados[x].proyecto_id == pk:
+                        if form[i].id == registrados[x].user_id:
+                            ok=True
+            if ok:
+               list.append(form[i].id)
+
+        return render(request, 'UsersProyecto.html', {'form': form,'list':list,'pk':pk})
+
+
+def desvinculacionProyecto(request,pk,pk_user):
+
+    instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
+    instanceUser.delete()
+
+    return redirect('gestion:UsersProyecto',pk)
 
 def listar_proyectos(request):
     """ LISTA LOS PROYECTOS DEL USUARIO"""
@@ -450,7 +527,6 @@ def listar_proyectos(request):
         'cant': cant####CANTIDAD DE PROYECTOS QUE POSEE
     }
     return render(request, 'verProyectos.html', context)
-
 
 def detallesProyecto(request,pk):
     proyectos = Proyecto.objects.get(id_proyecto=pk)
@@ -480,7 +556,3 @@ def proyectoCancelado(request):
         i.delete()
 
     return  redirect("gestion:menu")
-
-
-
-

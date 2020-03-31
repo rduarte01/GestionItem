@@ -152,8 +152,405 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="forms">
-<h1>Forms<a class="headerlink" href="#forms" title="Enlazar permanentemente con este título">¶</a></h1>
+  <div class="section" id="module-gestion.forms">
+<span id="forms"></span><h1>Forms<a class="headerlink" href="#module-gestion.forms" title="Enlazar permanentemente con este título">¶</a></h1>
+<dl class="class">
+<dt id="gestion.forms.AtributeForm">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">AtributeForm</code><span class="sig-paren">(</span><em class="sig-param">*arg</em>, <em class="sig-param">**kwarg</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.AtributeForm" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="class">
+<dt id="gestion.forms.AtributeForm.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#gestion.forms.AtributeForm.Meta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.AtributeForm.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ('nombre', 'es_obligatorio', 'tipo_dato')</em><a class="headerlink" href="#gestion.forms.AtributeForm.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.AtributeForm.Meta.labels">
+<code class="sig-name descname">labels</code><em class="property"> = {'es_obligatorio': 'Obligatoriedad del Tipo de Item', 'nombre': 'Nombre del atributo', 'tipo_dato': 'Tipo de dato del atributo'}</em><a class="headerlink" href="#gestion.forms.AtributeForm.Meta.labels" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.AtributeForm.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.forms.AtributeForm.Meta.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="models.html#gestion.models.Atributo" title="gestion.models.Atributo"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.models.Atributo</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.AtributeForm.Meta.widgets">
+<code class="sig-name descname">widgets</code><em class="property"> = {'es_obligatorio': &lt;django.forms.widgets.CheckboxInput object&gt;, 'nombre': &lt;django.forms.widgets.TextInput object&gt;, 'tipo_dato': &lt;django.forms.widgets.Select object&gt;}</em><a class="headerlink" href="#gestion.forms.AtributeForm.Meta.widgets" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.AtributeForm.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'es_obligatorio': &lt;django.forms.fields.BooleanField object&gt;, 'nombre': &lt;django.forms.fields.CharField object&gt;, 'tipo_dato': &lt;django.forms.fields.TypedChoiceField object&gt;}</em><a class="headerlink" href="#gestion.forms.AtributeForm.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.AtributeForm.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#gestion.forms.AtributeForm.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.AtributeForm.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.AtributeForm.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.FaseForm">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">FaseForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.FaseForm" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>HACE REFERENCIA AL MODELO FASE QUE SERA REPRESENTADO POR MEDIO DE ESTA CLASE FORMLARIO EN EL NAVEGADOR WEB
+CON SUS RESPECTIVOS CAMPOS A COMPLETAR</p>
+<dl class="class">
+<dt id="gestion.forms.FaseForm.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#gestion.forms.FaseForm.Meta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.FaseForm.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ['nombre', 'descripcion']</em><a class="headerlink" href="#gestion.forms.FaseForm.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>CAMPOS A SER COMPLETADOS EN EL FORMULARIO WEB A PRESENTAR</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FaseForm.Meta.labels">
+<code class="sig-name descname">labels</code><em class="property"> = {'descripcion': 'Descripción', 'nombre': 'Nombre'}</em><a class="headerlink" href="#gestion.forms.FaseForm.Meta.labels" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FaseForm.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.forms.FaseForm.Meta.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="models.html#gestion.models.Fase" title="gestion.models.Fase"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.models.Fase</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FaseForm.Meta.widgets">
+<code class="sig-name descname">widgets</code><em class="property"> = {'descripcion': &lt;django.forms.widgets.TextInput object&gt;, 'nombre': &lt;django.forms.widgets.TextInput object&gt;}</em><a class="headerlink" href="#gestion.forms.FaseForm.Meta.widgets" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FaseForm.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'descripcion': &lt;django.forms.fields.CharField object&gt;, 'nombre': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.FaseForm.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FaseForm.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#gestion.forms.FaseForm.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.FaseForm.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.FaseForm.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.FormAyuda">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">FormAyuda</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">field_order=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.FormAyuda" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.FormAyuda.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'Consulta': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormAyuda.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormAyuda.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {'Consulta': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormAyuda.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.FormAyuda.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.FormAyuda.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.FormProyecto">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">FormProyecto</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.FormProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FORMULARIO PARA INICIO DE PROYECTO EN DONDE SE MOSTRARN LOS CAMPOS COMO NOMBRE DE PROYECTO,
+DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN CREACION</p>
+<dl class="class">
+<dt id="gestion.forms.FormProyecto.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#gestion.forms.FormProyecto.Meta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO</p>
+<dl class="attribute">
+<dt id="gestion.forms.FormProyecto.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ['nombre', 'descripcion', 'users']</em><a class="headerlink" href="#gestion.forms.FormProyecto.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>CAMPOS A MOSTRAR EN EL FORMULARIO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormProyecto.Meta.labels">
+<code class="sig-name descname">labels</code><em class="property"> = {'descripcion': 'Ingrese una descripcion si lo desea', 'nombre': 'Ingrese un Nombre para el proyecto', 'users': 'Seleccione los usuarios a añadir'}</em><a class="headerlink" href="#gestion.forms.FormProyecto.Meta.labels" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LA ETIQUETA DE CADA CAMPO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormProyecto.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.forms.FormProyecto.Meta.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="models.html#gestion.models.Proyecto" title="gestion.models.Proyecto"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.models.Proyecto</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormProyecto.Meta.widgets">
+<code class="sig-name descname">widgets</code><em class="property"> = {'descripcion': &lt;django.forms.widgets.TextInput object&gt;, 'nombre': &lt;django.forms.widgets.TextInput object&gt;, 'users': &lt;django.forms.widgets.CheckboxSelectMultiple object&gt;}</em><a class="headerlink" href="#gestion.forms.FormProyecto.Meta.widgets" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormProyecto.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'descripcion': &lt;django.forms.fields.CharField object&gt;, 'fase': &lt;django.forms.fields.IntegerField object&gt;, 'nombre': &lt;django.forms.fields.CharField object&gt;, 'users': &lt;django.forms.models.ModelMultipleChoiceField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormProyecto.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormProyecto.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {'fase': &lt;django.forms.fields.IntegerField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormProyecto.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.FormProyecto.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.FormProyecto.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.FormProyectoEstados">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">FormProyectoEstados</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">field_order=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.FormProyectoEstados" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.FormProyectoEstados.State_CHOICES">
+<code class="sig-name descname">State_CHOICES</code><em class="property"> = [('INICIADO', 'INICIADO'), ('FINALIZADO', 'FINALIZADO'), ('CANCELADO', 'CANCELADO')]</em><a class="headerlink" href="#gestion.forms.FormProyectoEstados.State_CHOICES" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormProyectoEstados.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'estado': &lt;django.forms.fields.ChoiceField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormProyectoEstados.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormProyectoEstados.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {'estado': &lt;django.forms.fields.ChoiceField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormProyectoEstados.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.FormProyectoEstados.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.FormProyectoEstados.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.FormUserAgg">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">FormUserAgg</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.FormUserAgg" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="class">
+<dt id="gestion.forms.FormUserAgg.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#gestion.forms.FormUserAgg.Meta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.FormUserAgg.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ['username']</em><a class="headerlink" href="#gestion.forms.FormUserAgg.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormUserAgg.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.forms.FormUserAgg.Meta.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormUserAgg.Meta.permissions">
+<code class="sig-name descname">permissions</code><em class="property"> = &lt;django.forms.models.ModelMultipleChoiceField object&gt;</em><a class="headerlink" href="#gestion.forms.FormUserAgg.Meta.permissions" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormUserAgg.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'username': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormUserAgg.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormUserAgg.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#gestion.forms.FormUserAgg.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.FormUserAgg.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.FormUserAgg.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.RolForm">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">RolForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.RolForm" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="class">
+<dt id="gestion.forms.RolForm.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.RolForm.Meta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.RolForm.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = '__all__'</em><a class="headerlink" href="#gestion.forms.RolForm.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.RolForm.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.forms.RolForm.Meta.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.Group</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.RolForm.Meta.widgets">
+<code class="sig-name descname">widgets</code><em class="property"> = {'name': &lt;django.forms.widgets.TextInput object&gt;, 'permissions': &lt;django.forms.widgets.CheckboxSelectMultiple object&gt;}</em><a class="headerlink" href="#gestion.forms.RolForm.Meta.widgets" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.RolForm.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'name': &lt;django.forms.fields.CharField object&gt;, 'permissions': &lt;django.forms.models.ModelMultipleChoiceField object&gt;}</em><a class="headerlink" href="#gestion.forms.RolForm.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.RolForm.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#gestion.forms.RolForm.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.RolForm.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.RolForm.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.SettingsUserForm">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">SettingsUserForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.SettingsUserForm" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="class">
+<dt id="gestion.forms.SettingsUserForm.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#gestion.forms.SettingsUserForm.Meta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.SettingsUserForm.Meta.OPTIONS">
+<code class="sig-name descname">OPTIONS</code><em class="property"> = (('True', 'Aprobado'), ('False', 'En Espera'))</em><a class="headerlink" href="#gestion.forms.SettingsUserForm.Meta.OPTIONS" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.SettingsUserForm.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ['username', 'email', 'esta_aprobado']</em><a class="headerlink" href="#gestion.forms.SettingsUserForm.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.SettingsUserForm.Meta.labels">
+<code class="sig-name descname">labels</code><em class="property"> = {'email': 'Correo Electronico del Usuario', 'esta_aprobado': 'Estado del usuario', 'username': 'Nombre de Usuario'}</em><a class="headerlink" href="#gestion.forms.SettingsUserForm.Meta.labels" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.SettingsUserForm.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.forms.SettingsUserForm.Meta.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.SettingsUserForm.Meta.widgets">
+<code class="sig-name descname">widgets</code><em class="property"> = {'email': &lt;django.forms.widgets.EmailInput object&gt;, 'esta_aprobado': &lt;django.forms.widgets.RadioSelect object&gt;, 'username': &lt;django.forms.widgets.TextInput object&gt;}</em><a class="headerlink" href="#gestion.forms.SettingsUserForm.Meta.widgets" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.SettingsUserForm.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'email': &lt;django.forms.fields.EmailField object&gt;, 'esta_aprobado': &lt;django.forms.fields.BooleanField object&gt;, 'username': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.SettingsUserForm.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.SettingsUserForm.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#gestion.forms.SettingsUserForm.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.SettingsUserForm.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.SettingsUserForm.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.SettingsUserFormJesus">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">SettingsUserFormJesus</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">field_order=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.SettingsUserFormJesus" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.SettingsUserFormJesus.State_CHOICES">
+<code class="sig-name descname">State_CHOICES</code><em class="property"> = [('True', 'Aprobado'), ('False', 'Desactivado')]</em><a class="headerlink" href="#gestion.forms.SettingsUserFormJesus.State_CHOICES" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.SettingsUserFormJesus.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'estado': &lt;django.forms.fields.ChoiceField object&gt;, 'is_admin': &lt;django.forms.fields.BooleanField object&gt;, 'is_manager': &lt;django.forms.fields.BooleanField object&gt;}</em><a class="headerlink" href="#gestion.forms.SettingsUserFormJesus.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.SettingsUserFormJesus.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {'estado': &lt;django.forms.fields.ChoiceField object&gt;, 'is_admin': &lt;django.forms.fields.BooleanField object&gt;, 'is_manager': &lt;django.forms.fields.BooleanField object&gt;}</em><a class="headerlink" href="#gestion.forms.SettingsUserFormJesus.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.SettingsUserFormJesus.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.SettingsUserFormJesus.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.TipoItemForm">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">TipoItemForm</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.TipoItemForm" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>En esta clase se define la estrutura del formulario para crear un tipo de item</p>
+<dl class="class">
+<dt id="gestion.forms.TipoItemForm.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#gestion.forms.TipoItemForm.Meta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.forms.TipoItemForm.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ['nombre']</em><a class="headerlink" href="#gestion.forms.TipoItemForm.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.TipoItemForm.Meta.labels">
+<code class="sig-name descname">labels</code><em class="property"> = {'nombre': 'Nombre del Tipo de Item'}</em><a class="headerlink" href="#gestion.forms.TipoItemForm.Meta.labels" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.TipoItemForm.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.forms.TipoItemForm.Meta.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="models.html#gestion.models.TipoItem" title="gestion.models.TipoItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.models.TipoItem</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.TipoItemForm.Meta.widgets">
+<code class="sig-name descname">widgets</code><em class="property"> = {'nombre': &lt;django.forms.widgets.TextInput object&gt;}</em><a class="headerlink" href="#gestion.forms.TipoItemForm.Meta.widgets" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.TipoItemForm.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'cantidad': &lt;django.forms.fields.IntegerField object&gt;, 'nombre': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.TipoItemForm.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.TipoItemForm.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {'cantidad': &lt;django.forms.fields.IntegerField object&gt;}</em><a class="headerlink" href="#gestion.forms.TipoItemForm.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.TipoItemForm.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.TipoItemForm.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 

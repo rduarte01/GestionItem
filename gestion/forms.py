@@ -34,7 +34,6 @@ class FormProyecto(forms.ModelForm):
     DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN CREACION
     """
     fase = forms.IntegerField()
-   
     class Meta:
         """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
         model = Proyecto
@@ -42,7 +41,7 @@ class FormProyecto(forms.ModelForm):
         fields = [
                 "nombre",
                 "descripcion",
-                "users",
+
                   ]
         """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {

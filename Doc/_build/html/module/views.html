@@ -152,8 +152,243 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="views">
-<h1>Views<a class="headerlink" href="#views" title="Enlazar permanentemente con este título">¶</a></h1>
+  <div class="section" id="module-gestion.views">
+<span id="views"></span><h1>Views<a class="headerlink" href="#module-gestion.views" title="Enlazar permanentemente con este título">¶</a></h1>
+<dl class="class">
+<dt id="gestion.views.ActualizarUser">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ActualizarUser</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.views.ActualizarUser.form_class">
+<code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.ActualizarUser.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.SettingsUserForm" title="gestion.forms.SettingsUserForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.SettingsUserForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.ActualizarUser.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.ActualizarUser.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.views.ActualizarUser.post">
+<code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser.post" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Handle POST requests: instantiate a form instance with the passed
+POST variables and then check if it’s valid.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.ActualizarUser.success_url">
+<code class="sig-name descname">success_url</code><a class="headerlink" href="#gestion.views.ActualizarUser.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.ActualizarUser.template_name">
+<code class="sig-name descname">template_name</code><em class="property"> = 'perfilUsuario.html'</em><a class="headerlink" href="#gestion.views.ActualizarUser.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.AggUser">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">AggUser</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.AggUser" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para crear fases de un proyecto dado</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.CantProyectos">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CantProyectos</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CantProyectos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>RETORNA LA LISTA DE ID DE LOS PROYECTOS ASOCIADOS AL USUARIO ACTUAL</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.Contactos">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">Contactos</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.Contactos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>DESPLIEGA UN APARTADO EN DONDE EL USUARIO INGRESA SU DUDA O INCONVENIENTE Y SE ENVIA A LOS DESARROLLADORES
+DEL SISTEMA DE MODO A ACLARAR O SOLUCIONAR INQUIETUDES</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.CorreoMail">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CorreoMail</code><span class="sig-paren">(</span><em class="sig-param">asunto</em>, <em class="sig-param">mensaje</em>, <em class="sig-param">correo</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CorreoMail" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FUNCION QUE RECIBE UN ASUNTO, MENSAJE Y UN CORRREO ELECTRONICO AL CUAL SE LE ENVIA UN CORREO
+ELECTRONICO DE ACUERDO A UNA ACCION</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.views.CrearRol">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CrearRol</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearRol" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.views.CrearRol.form_class">
+<code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.CrearRol.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.RolForm" title="gestion.forms.RolForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.RolForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.CrearRol.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.CrearRol.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.Group</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.CrearRol.success_url">
+<code class="sig-name descname">success_url</code><em class="property"> = '/menu/'</em><a class="headerlink" href="#gestion.views.CrearRol.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.CrearRol.template_name">
+<code class="sig-name descname">template_name</code><em class="property"> = 'CrearRol.html'</em><a class="headerlink" href="#gestion.views.CrearRol.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.views.VerSolicitudesEspera">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">VerSolicitudesEspera</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.VerSolicitudesEspera" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.views.VerSolicitudesEspera.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.VerSolicitudesEspera.queryset">
+<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet [&lt;User: ruben2&gt;, &lt;User: ruben4&gt;]&gt;</em><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.VerSolicitudesEspera.template_name">
+<code class="sig-name descname">template_name</code><em class="property"> = 'ListaUser.html'</em><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.add_atribute">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_atribute</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">nombre_ti</em>, <em class="sig-param">cantidad_atributos</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_atribute" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.add_permission_admin">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_permission_admin</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">is_admin</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_permission_admin" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.add_permission_gerente">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_permission_gerente</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">is_gerente</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_permission_gerente" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.creacionProyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">creacionProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.creacionProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.crearFase">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">crearFase</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.crearFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.detallesProyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">detallesProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.detallesProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.estadoProyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">estadoProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.estadoProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.getUsers">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">getUsers</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.getUsers" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>«TRAE INFORMACION DE USUARIO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.get_user">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">get_user</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.get_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.index">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.index" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.listar_auditoria">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_auditoria</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_auditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS REGISTROS DE LA TABLA AUDITORIA</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.listar_proyectos">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_proyectos</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_proyectos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS PROYECTOS DEL USUARIO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.listar_usuarios_registrar">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_usuarios_registrar</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_usuarios_registrar" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS USUARIOS PARA AGREGAR AL PROYECTO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.logout">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.logout" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARA DESLOGUEARSE, CERRAR SESION DEL SSO VUELVE A MOSTRAR INICIO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.menu">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">menu</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.menu" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.perfil">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">perfil</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.perfil" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SOLICITUD DE AUTENTICACION PARA MOSTRAR EL PERFIL DEL USUARIO||
+Realiza consultas de los datos del usuario que esta realizando la
+solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.proyectoCancelado">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">proyectoCancelado</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.proyectoCancelado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.recoge_datos_atributo">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoge_datos_atributo</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoge_datos_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.recoger_datos_tipo_item">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoger_datos_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">my_form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoger_datos_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.recoger_datos_usuario_settings">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoger_datos_usuario_settings</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoger_datos_usuario_settings" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.registrarAuditoria">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">registrarAuditoria</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">accion</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.registrarAuditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.tipo_item_views_create">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">tipo_item_views_create</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.tipo_item_views_create" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.ver_usuarios_aprobados">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ver_usuarios_aprobados</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ver_usuarios_aprobados" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 

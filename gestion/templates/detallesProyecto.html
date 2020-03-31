@@ -44,7 +44,6 @@
 <table class="table table-bordered">
 
     <thead>
-
     <tr>
         <td>FASES</td>
         <td>DESCRIPCION</td>
@@ -53,7 +52,6 @@
         <td>TRABAJAR!</td>
         <td>AGREGA TI</td>
         <td>IMPORTA TI</td>
-
     </tr>
     </thead>
     <tbody>
@@ -68,12 +66,9 @@
             <td><a href="" class="btn btn-primary">DETALLES</a></td>
             <td><a href=""class="btn btn-primary">✚ CREAR TI</a></td>
             <td><a href=""class="btn btn-primary">✚ IMPORTAR TI</a></td>
-
-
         </tr>
         {%endif%}
         {%endfor%}
-
 <tbody>
   </table>
  </div>
@@ -85,12 +80,13 @@
       <thead>
 
     <tr>
-            <td><a href=""class="btn btn-primary">USUARIOS DEL PROYECTO</a></td>
-            <td><a href=""class="btn btn-primary">✚ USUARIOS</a></td>
+            <td><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" class="btn btn-primary">USUARIOS DEL PROYECTO</a></td>
+            <td><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}"class="btn btn-primary">✚ USUARIOS</a></td>
                   <td><a href=""class="btn btn-primary">✚ FASES</a></td>
+                  <td><a href=""class="btn btn-primary">✚ ROL</a></td>
+
             <td><a href=""class="btn btn-primary">VER TI DEL PROYECTO</a></td>
     </tr>
-
     </thead>
 </table>
 </div>

@@ -1,18 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Agregar Usuarios</title>
-</head>
-<body>
+<title>Agrega Usuarios</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
 
+<h1>Añade usuarios a tu proyecto!</h1>
 
- <form method="POST" action="/agregarUsuarios/">{% csrf_token %}
-      {{ formUsuario.as_p }}
-     <input type="submit" value="Agregar mas usuarios">
+<style>
+#ocultar{display:none;}
+</style>
 
+{% block contect %}
+        <div>
+            <a class="btn btn-primary" href="/cancelado/" role="button">Cancelar</a>
+        </div>
+
+      <div class="jumbotron">
+
+ <form method="POST" action="">{% csrf_token %}
+{% block content %}
+<table class="table table-bordered">
+    <form method="POST" action="">{% csrf_token %}
+
+        {%for list in list %}
+          {%for i in form%}
+                {%if list == i.id%}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.id}}" id="{{i.id}}}">
+                    <label class="form-check-label" for="{{i.id}}}"><h5>{{ i.username }}</h5></label>
+                </div>
+            {%endif%}
+    {%endfor%}
+    {%endfor%}
+
+    </form>
+</table>
+{% endblock %}
+     <input type="submit"  value="Guardar">
  </form>
-        <button type="submit"    href=""  class="btn btn-primary">Listo</button>
-
-</body>
-</html>
+      </div>
+{% endblock %}
