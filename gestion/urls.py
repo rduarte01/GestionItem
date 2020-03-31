@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado
 from . import views
-from .views import VerSolicitudesEspera, ActualizarUser, CrearRol,estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,agregarUsuarios
+from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -29,7 +29,12 @@ urlpatterns = [
     path('verProyecto/<int:pk>', views.ver_proyecto, name='ver_proyecto'),
     path('ver/fase/<int:id_fase>/proyecto',views.get_fase_proyecto,name='get_fase_proyecto'),
     path('importar/tipo/item/fase/<int:id_fase>', views.importar_tipo_item, name='importar_tipo_item'),
-    path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto')
+    path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto'),
+
+    path('enEspera/', VerUsersEnEspera.as_view(), name="listaDeEspera"),
+    path('userEnEspera/<int:pk>', ActualizarUser.as_view(), name='userEsperando'),
+    path('crearRol/<str:proyecto>', CrearRol.as_view(), name='crearRol'),
+
 ]
 
 

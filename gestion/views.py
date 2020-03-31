@@ -1,5 +1,4 @@
 from django.core.mail import EmailMessage
-from django.shortcuts import render
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, permission_required
@@ -8,20 +7,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
-from .models import Proyecto, Auditoria, User_Proyecto,Fase
-from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus
+from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos
+from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm
 from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg,FormProyectoEstados
 from django.db.models import Count
-from django.contrib.auth.decorators import permission_required
-
+from django.utils.decorators import method_decorator
 
 #### GLOBALES
 PROYECTOS_USUARIO=[]
 CANTIDAD=1
 DELETE=0
 from .models import Proyecto,TipoItem,Atributo
-from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm,SettingsUserForm#, FormUsuario
+from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
@@ -330,24 +328,6 @@ def get_user(request,pk):
             'banGerente':banGerente
         }
         return render(request,"perfilUsuario.html",context)
-
-class ActualizarUser(UpdateView):
-    model = User
-    form_class = SettingsUserForm
-    template_name = 'perfilUsuario.html'
-    success_url = reverse_lazy('gestion:listaDeEspera')
-
-    def post(self, request, *args, **kwargs):
-        request.POST = request.POST.copy()
-        request.POST['username']  += 'GER'
-        return super(ActualizarUser,self).post(request,**kwargs)
-
-class CrearRol(CreateView):
-    model = Group
-    form_class = RolForm
-    template_name = "CrearRol.html"
-    success_url = reverse_lazy("gestion:menu")
-
 
 def tipo_item_views_create(request,id_fase):
     '''Sirve para crear un tipo de item,en una fase en especifica'''
@@ -686,3 +666,63 @@ def get_all_tipo_item(id_proyecto):
     print("esto imprimo aca")
     print(list_tipo_item_name)
     return  list_tipo_item_name
+
+#Parte de Ger
+class VerUsersEnEspera(ListView):
+    """Vista creada para listar los usuarios que se encuentran
+    en espera de ser aprobados dentro del sistema, vista que solo puede ser accedida
+    por el administrador del sistema,
+    Se especifica el atributos
+    -model:donde se asigna el Modelo utilizado
+    -template_name: donde se asigna que template estara asignado esta view
+    -queryset: Se filtra la lista de usuarios con estado aprobado falso, y es recibido por el template"""
+    model = User
+    template_name = "ListaUser.html"
+    queryset = User.objects.filter(esta_aprobado = False)
+
+    @method_decorator(permission_required('User.es_administrador',raise_exception=True))
+    def dispatch(self, request, *args, **kwargs):
+        return super(VerUsersEnEspera,self).dispatch(request)
+
+class ActualizarUser(UpdateView):
+    """Se muestra el perfil del usuario seleccionado, en donde se
+    especifican los siguientes atributos:
+    -model: especifa el modelo el cual esta siendo utilizado en la view
+    -form_class: especifica el form que sera utilidado dentro del template
+    -template_name: donde se asigna que template estara asignado esta view
+    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
+    model = User
+    form_class = PerfilUserEnEspera
+    template_name = 'UserEnEspera.html'
+    success_url = reverse_lazy('gestion:listaDeEspera')
+
+    @method_decorator(permission_required('User.es_administrador', raise_exception=True))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ActualizarUser, self).dispatch(request)
+
+
+class CrearRol(CreateView):
+    """Se muestra la ventana para la creacion de un nuevo rol dentro de un proyecto, en donde se
+    especifican los siguientes atributos:
+    -model: especifa el modelo el cual esta siendo utilizado en la view
+    -form_class: especifica el form que sera utilidado dentro del template
+    -template_name: donde se asigna que template estara asignado esta view
+    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo
+
+    La funcion redeclara es la de post, en donde se realiza una modificacion del nombre declarado
+    para la creacion, agregandole el id del proyecto perteneciente delate, esto para el reconocimiento
+    del proyecto pertenciente de este Rol a crear"""
+    model = Group
+    form_class = RolForm
+    template_name = "CrearRol.html"
+    success_url = reverse_lazy("gestion:menu")
+
+    def post(self, request, *args, **kwargs):
+        request.POST = request.POST.copy()
+        request.POST['name']  = self.kwargs['proyecto']+ request.POST['name']
+        return super(CrearRol,self).post(request,**kwargs)
+
+    @method_decorator(permission_required('User.es_gerente', raise_exception=True))
+    def dispatch(self, request, *args, **kwargs):
+        return super(CrearRol, self).dispatch(request)
+

@@ -145,3 +145,23 @@ class User_Proyecto(models.Model):
 class FASE_ROL(models.Model):
     id_fase=models.ForeignKey(Fase,on_delete=models.CASCADE)
     id_rol=models.ForeignKey(Group,on_delete=models.CASCADE)
+
+#Ger
+class Permisos(models.Model):
+    """Modelo creado especificamente para la creacion
+    de permisos dentro de un proyecto, para la asignacion
+    a usuarios quienes no son gerentes del proyecto"""
+    class Meta:
+        default_permissions = ()
+        permissions = (
+            ("crear_item", "Puede Crear Item"),
+            ("editar_item", "Puede Editar Item"),
+            ("desactivar_item", "Puede Desactivar Item"),
+            ("reversionar_item", "Puede Reversionar Item"),
+            ("aprobar_item", "Puede Aprobar Item"),
+            ("crear_lb", "Puede Crear LB"),
+            ("cerrar_lb", "Puede Cerrar LB"),
+            ("generar_solicitud", "Puede Generar Solicitud de Cambio"),
+
+
+        )

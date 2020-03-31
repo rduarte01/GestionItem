@@ -196,10 +196,17 @@ class SettingsUserFormJesus(forms.Form):
     )
     '''variable que se utilizara para settear el estado del usuario atravez de un select '''
 
-class SettingsUserForm(forms.ModelForm):
+#GER
+class PerfilUserEnEspera(forms.ModelForm):
+    """Muestra el perfil del Usuario a Que esta en
+    espera de ser aprobado dentro del sistema, se le pasan
+    los datos del username, email, estado, y la fecha de registro, el unico
+    dato que el administrador podra modificar obviamente sera el estado
+    en que se encuentra el usuario"""
+
     class Meta:
         model = User
-        fields = ['username','email','esta_aprobado']
+        fields = ['username','email','esta_aprobado','date_joined']
         labels = {
             'username': 'Nombre de Usuario',
             'email': 'Correo Electronico del Usuario',
@@ -214,35 +221,45 @@ class SettingsUserForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control',
                     'placeholder': 'Nombre de usuario',
-                    'id': 'username'
+                    'id': 'username',
+                    'readonly':True,
                 }
             ),
             'email': forms.EmailInput(
                 attrs={
                     'class': 'form-control',
                     'placeholder': 'Correo Electronico del Usuario',
-                    'id': 'email'
+                    'id': 'email',
+                    'readonly':True,
                 }
             ),
             'esta_aprobado': forms.RadioSelect(choices=[
                 (True, 'Activo'),
                 (False, 'En Espera')
             ]),
+            'date_joined':forms.DateTimeInput(
+                attrs={
+                    'class':'form-control',
+                    'readonly': True,
+                }
+            ),
+
         }
 
 
 class RolForm(forms.ModelForm):
+    """Form destinado para la creacion de un Rol especifico
+    dentro de un proyecto, se filtran los permisos  por el 'content_type=19',
+    que es el modelo donde se encuentran todos los permisos que se pueden asignar
+    a un proyecto"""
+    def __init__(self, *args,**kwargs):
+        super(RolForm,self).__init__(*args,**kwargs)
+        self.fields['permissions'].queryset = Permission.objects.filter(content_type=19)
     class Meta:
 
         model = Group
         fields = "__all__"
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-
-
-            for perm in self.permissions:
-                self.fields[perm].widget.attrs['class'] = 'form-control'
 
 
         widgets={
