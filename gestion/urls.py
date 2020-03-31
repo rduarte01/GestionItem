@@ -25,11 +25,10 @@ urlpatterns = [
     path('listar/usuarios/aprobados',views.ver_usuarios_aprobados,name='ver_usuarios_aprobados'),
     path('getUser/<int:pk>',views.get_user,name='get_user'),
     path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto'),
-    path('detallesProyecto/<int:pk>', views.detallesProyecto, name='detalles_Proyecto')
-
+    path('detallesProyecto/<int:pk>', views.detallesProyecto, name='detalles_Proyecto'),
     path('verProyecto/<int:pk>', views.ver_proyecto, name='ver_proyecto'),
     path('ver/fase/<int:id_fase>/proyecto',views.get_fase_proyecto,name='get_fase_proyecto'),
-    path('importar/tipo/item/fase/<int:id_fase>', views.importar_tipo_item, name='importar_tipo_item')
+    path('importar/tipo/item/fase/<int:id_fase>', views.importar_tipo_item, name='importar_tipo_item'),
     path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto')
 ]
 

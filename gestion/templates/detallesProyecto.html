@@ -1,4 +1,7 @@
 
+{% load guardian_tags %}
+{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+
     <title>Detalles de Proyecto</title>
 {% load bootstrap4 %}
 {% bootstrap_css %}
@@ -50,8 +53,10 @@
         <td>ESTADO</td>
         <td>ESTADO DE FASES</td>
         <td>TRABAJAR!</td>
-        <td>AGREGA TI</td>
-        <td>IMPORTA TI</td>
+        {% if "is_gerente" in proyecto_perms %}
+            <td>AGREGA TI</td>
+            <td>IMPORTA TI</td>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -62,10 +67,16 @@
             <td>{{fases.nombre}}</td>
             <td>{{fases.descripcion}}</td>
             <td>{{fases.estado}}</td>
+            {% if "is_gerente" in proyecto_perms %}
             <td><a href=""class="btn btn-primary">CAMBIAR ESTADO</a></td>
+            {%else%}
+            <td>No es gerente</td>
+            {%endif%}
             <td><a href="" class="btn btn-primary">DETALLES</a></td>
-            <td><a href=""class="btn btn-primary">✚ CREAR TI</a></td>
-            <td><a href=""class="btn btn-primary">✚ IMPORTAR TI</a></td>
+            {% if "is_gerente" in proyecto_perms %}
+                <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear Tipo Item</a> </td>
+                <td><a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-primary">Importar Tipo Item</a> </td>
+            {% endif %}
         </tr>
         {%endif%}
         {%endfor%}
@@ -80,11 +91,13 @@
       <thead>
 
     <tr>
+
             <td><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" class="btn btn-primary">USUARIOS DEL PROYECTO</a></td>
+        {% if "is_gerente" in proyecto_perms %}
             <td><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}"class="btn btn-primary">✚ USUARIOS</a></td>
                   <td><a href=""class="btn btn-primary">✚ FASES</a></td>
                   <td><a href=""class="btn btn-primary">✚ ROL</a></td>
-
+        {% endif %}
             <td><a href=""class="btn btn-primary">VER TI DEL PROYECTO</a></td>
     </tr>
     </thead>

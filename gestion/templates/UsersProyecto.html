@@ -22,7 +22,9 @@
         <tr>
             <td>NOMBRE</td>
             <td>EMAIL</td>
-            <td>DESVINCULACIÓN</td>
+            {% if "is_gerente" in proyecto_perms %}
+                <td>DESVINCULACIÓN</td>
+            {% endif %}
         </tr>
 
         {%for list in list %}
@@ -31,7 +33,9 @@
         <tr>
             <td>{{i.username}}</td>
             <td>{{i.email}}</td>
-            <td><a class="btn btn-primary" href="{% url 'gestion:desvinculacionProyecto' pk i.id%}" role="button">Desvincular del proyecto</a></td>
+            {% if "is_gerente" in proyecto_perms %}
+                <td><a class="btn btn-primary" href="{% url 'gestion:desvinculacionProyecto' pk i.id%}" role="button">Desvincular del proyecto</a></td>
+            {% endif %}
         </tr>
         {%endif%}
     {%endfor%}
