@@ -252,7 +252,14 @@ CON SUS RESPECTIVOS CAMPOS A COMPLETAR</p>
 <dl class="class">
 <dt id="gestion.forms.FormAyuda">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">FormAyuda</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">field_order=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.FormAyuda" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p>FORM PARA GUARDAR LA CONSULTA DEL USUARIO</p>
+<dl class="attribute">
+<dt id="gestion.forms.FormAyuda.Consulta">
+<code class="sig-name descname">Consulta</code><em class="property"> = None</em><a class="headerlink" href="#gestion.forms.FormAyuda.Consulta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARA CAPTURAR EL MENSAJE Y RECIBIR EN EL POST</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="gestion.forms.FormAyuda.base_fields">
 <code class="sig-name descname">base_fields</code><em class="property"> = {'Consulta': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormAyuda.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
@@ -280,7 +287,7 @@ DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN
 <dd><p>META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO</p>
 <dl class="attribute">
 <dt id="gestion.forms.FormProyecto.Meta.fields">
-<code class="sig-name descname">fields</code><em class="property"> = ['nombre', 'descripcion', 'users']</em><a class="headerlink" href="#gestion.forms.FormProyecto.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">fields</code><em class="property"> = ['nombre', 'descripcion']</em><a class="headerlink" href="#gestion.forms.FormProyecto.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>CAMPOS A MOSTRAR EN EL FORMULARIO</p>
 </dd></dl>
 
@@ -306,7 +313,7 @@ DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN
 
 <dl class="attribute">
 <dt id="gestion.forms.FormProyecto.base_fields">
-<code class="sig-name descname">base_fields</code><em class="property"> = {'descripcion': &lt;django.forms.fields.CharField object&gt;, 'fase': &lt;django.forms.fields.IntegerField object&gt;, 'nombre': &lt;django.forms.fields.CharField object&gt;, 'users': &lt;django.forms.models.ModelMultipleChoiceField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormProyecto.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">base_fields</code><em class="property"> = {'descripcion': &lt;django.forms.fields.CharField object&gt;, 'fase': &lt;django.forms.fields.IntegerField object&gt;, 'nombre': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormProyecto.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -324,10 +331,12 @@ DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN
 <dl class="class">
 <dt id="gestion.forms.FormProyectoEstados">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">FormProyectoEstados</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">field_order=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.FormProyectoEstados" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p>FORM PARA MOSTRAR LOS ESTADOS QUE PUEDE TENER UN PROYECTO</p>
+<dl class="attribute">
 <dt id="gestion.forms.FormProyectoEstados.State_CHOICES">
 <code class="sig-name descname">State_CHOICES</code><em class="property"> = [('INICIADO', 'INICIADO'), ('FINALIZADO', 'FINALIZADO'), ('CANCELADO', 'CANCELADO')]</em><a class="headerlink" href="#gestion.forms.FormProyectoEstados.State_CHOICES" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>MEDIANTE CHOICES MOSTRAMOS LAS OPCIONES EN EL HTML</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.forms.FormProyectoEstados.base_fields">
@@ -338,6 +347,12 @@ DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN
 <dt id="gestion.forms.FormProyectoEstados.declared_fields">
 <code class="sig-name descname">declared_fields</code><em class="property"> = {'estado': &lt;django.forms.fields.ChoiceField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormProyectoEstados.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormProyectoEstados.estado">
+<code class="sig-name descname">estado</code><em class="property"> = None</em><a class="headerlink" href="#gestion.forms.FormProyectoEstados.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>EL ESTADO CON EL CUAL GUARDAREMOS EL POST</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="gestion.forms.FormProyectoEstados.media">

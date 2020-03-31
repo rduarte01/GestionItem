@@ -16,17 +16,21 @@ class FormUserAgg(forms.ModelForm):
         )
 
 class FormProyectoEstados(forms.Form):
+    """FORM PARA MOSTRAR LOS ESTADOS QUE PUEDE TENER UN PROYECTO"""
     State_CHOICES = [
         ("INICIADO", "INICIADO"),
         ("FINALIZADO", "FINALIZADO"),
         ("CANCELADO", "CANCELADO")
     ]
+    """MEDIANTE CHOICES MOSTRAMOS LAS OPCIONES EN EL HTML"""
+
     estado = forms.ChoiceField(
         label="Estado del Proyecto",
         required="Creado",
         widget=forms.Select(attrs={"class":"form-control" }),
         choices=State_CHOICES,
     )
+    """EL ESTADO CON EL CUAL GUARDAREMOS EL POST"""
 
 class FormProyecto(forms.ModelForm):
     """
@@ -116,7 +120,9 @@ class FaseForm(forms.ModelForm):
         }
 
 class FormAyuda(forms.Form):
+    """FORM PARA GUARDAR LA CONSULTA DEL USUARIO"""
     Consulta = forms.CharField(widget=forms.Textarea)
+    """PARA CAPTURAR EL MENSAJE Y RECIBIR EN EL POST"""
 
 class AtributeForm(forms.ModelForm):
     class Meta:

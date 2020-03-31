@@ -190,8 +190,15 @@ POST variables and then check if it’s valid.</p>
 
 <dl class="function">
 <dt id="gestion.views.AggUser">
-<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">AggUser</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.AggUser" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Método para crear fases de un proyecto dado</p>
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">AggUser</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.AggUser" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MEDIANTE UN PROYECTO EXISTENTE, DA LA POSIBILIDAD DE AÑADIR MAS USUARIOS AL PROYECTO,
+FILTRANDO LOS USUARIOS QUE NO FORMAN PARTE DEL PROYECTO</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="gestion.views.CANTIDAD">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CANTIDAD</code><em class="property"> = 1</em><a class="headerlink" href="#gestion.views.CANTIDAD" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SE UTILIZA PARA GUARDAR LA CANTIDAD DE FASES DE UN PROYECTO</p>
 </dd></dl>
 
 <dl class="function">
@@ -241,6 +248,18 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 
 </dd></dl>
 
+<dl class="data">
+<dt id="gestion.views.PROYECTOS_USUARIO">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">PROYECTOS_USUARIO</code><em class="property"> = []</em><a class="headerlink" href="#gestion.views.PROYECTOS_USUARIO" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SE UTILIZA PARA GUARDAR LA LISTA DE ID DE LOS PROYECTOS DEL USUARIO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.UsersProyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">UsersProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.UsersProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS USUARIOS DE UN PROYECTO</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="gestion.views.VerSolicitudesEspera">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">VerSolicitudesEspera</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.VerSolicitudesEspera" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -278,6 +297,12 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.agregarUsuarios">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">agregarUsuarios</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.agregarUsuarios" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>RECIBE EL ID DEL PROYECTO Y MUESTRA LOS USUARIOS QUE PUEDEN SER AÑADIDOS A EL</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.creacionProyecto">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">creacionProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.creacionProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO</p>
@@ -289,9 +314,17 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.desvinculacionProyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">desvinculacionProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em>, <em class="sig-param">pk_user</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.desvinculacionProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>DESVINCULA UN USUARIO DE UN PROYECTO</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.detallesProyecto">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">detallesProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.detallesProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>MUESTRA LAS OPCIONES REALIZABLES SOBRE UN PROYECTO, TAMBIEN MUESTRA LAS FASES DEL MISMO CON SUS
+OPCIONES</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.estadoProyecto">
@@ -329,12 +362,6 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="gestion.views.listar_usuarios_registrar">
-<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_usuarios_registrar</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_usuarios_registrar" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>LISTA LOS USUARIOS PARA AGREGAR AL PROYECTO</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="gestion.views.logout">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.logout" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>PARA DESLOGUEARSE, CERRAR SESION DEL SSO VUELVE A MOSTRAR INICIO</p>
@@ -343,7 +370,9 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dl class="function">
 <dt id="gestion.views.menu">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">menu</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.menu" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>MENU PARA LOS USUARIOS DE ACUERDO A SUS ROLES, PARA ADMINISTRADOR DE SISTEMAS,
+GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PARTE</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.perfil">
@@ -356,7 +385,8 @@ solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario</p>
 <dl class="function">
 <dt id="gestion.views.proyectoCancelado">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">proyectoCancelado</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.proyectoCancelado" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>METODO PARA CANCELAR UN PROYECTO</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.recoge_datos_atributo">

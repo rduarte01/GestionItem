@@ -22,7 +22,9 @@ from django.forms import formset_factory
 
 #### GLOBALES
 PROYECTOS_USUARIO=[]
+"""SE UTILIZA PARA GUARDAR LA LISTA DE ID DE LOS PROYECTOS DEL USUARIO"""
 CANTIDAD=1
+"""SE UTILIZA PARA GUARDAR LA CANTIDAD DE FASES DE UN PROYECTO"""
 DELETE=0
 
 def estadoProyecto(request,pk):
@@ -101,6 +103,8 @@ def CantProyectos(request):
 
 @login_required
 def menu(request):
+    """MENU PARA LOS USUARIOS DE ACUERDO A SUS ROLES, PARA ADMINISTRADOR DE SISTEMAS,
+    GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PARTE"""
     user = request.user
 
     if( user.esta_aprobado):
@@ -129,7 +133,7 @@ def menu(request):
 
 def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
-    Método para crear fases de un proyecto dado
+    RECIBE EL ID DEL PROYECTO Y MUESTRA LOS USUARIOS QUE PUEDEN SER AÑADIDOS A EL
     """
 
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
@@ -409,26 +413,11 @@ def listar_auditoria(request):
     }
     return render(request, 'Auditoria.html', context)
 
-### SE PUEDE USAR DESPUES
-def listar_usuarios_registrar(request):
-    """ LISTA LOS USUARIOS PARA AGREGAR AL PROYECTO"""
-    form = User.objects.all()
-    if request.method=='POST':
-        print('imprimiio:')
-        print(request.POST)
-  #  form = FormUserAgg(request.POST)
- #   if form.is_valid():
-#        form.save()
 
-    context={
-        'form':form
-    }
-    return render(request, 'AggUser.html', context)
-
-########3 se debe usar para añadir usuarios luego a un proyecto
 def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
-    Método para crear fases de un proyecto dado
+    MEDIANTE UN PROYECTO EXISTENTE, DA LA POSIBILIDAD DE AÑADIR MAS USUARIOS AL PROYECTO,
+    FILTRANDO LOS USUARIOS QUE NO FORMAN PARTE DEL PROYECTO
     """
 
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
@@ -467,7 +456,7 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
 
 def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
-    Método para crear fases de un proyecto dado
+    LISTA LOS USUARIOS DE UN PROYECTO
     """
 
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
@@ -481,10 +470,6 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
         some_var=request.POST.getlist('checkbox')
         print(some_var)
 
-#        for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
- #           id_user =id
-  #          p = User_Proyecto(user_id= id_user ,proyecto_id= pk,activo= True)
-   #         p.save()
 
         #form.save()
         return redirect('gestion:menu')
@@ -504,7 +489,7 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
 
 
 def desvinculacionProyecto(request,pk,pk_user):
-
+    """DESVINCULA UN USUARIO DE UN PROYECTO"""
     instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
     instanceUser.delete()
 
@@ -529,6 +514,8 @@ def listar_proyectos(request):
     return render(request, 'verProyectos.html', context)
 
 def detallesProyecto(request,pk):
+    """MUESTRA LAS OPCIONES REALIZABLES SOBRE UN PROYECTO, TAMBIEN MUESTRA LAS FASES DEL MISMO CON SUS
+    OPCIONES"""
     proyectos = Proyecto.objects.get(id_proyecto=pk)
     #print(proyectos)
     #fases = Fase.objects.get(id_Proyecto=proyectos)
@@ -541,6 +528,7 @@ def detallesProyecto(request,pk):
     return render(request, 'detallesProyecto.html', context)
 
 def proyectoCancelado(request):
+    """METODO PARA CANCELAR UN PROYECTO"""
     x = Proyecto.objects.last()
     instanceFase = Fase.objects.filter(id_Proyecto = x.id_proyecto)
     for i in instanceFase:
@@ -549,7 +537,6 @@ def proyectoCancelado(request):
     instanceUser = User_Proyecto.objects.filter(proyecto_id = x.id_proyecto)
     for i in instanceUser:
         i.delete()
-
 
     instanceProyecto = Proyecto.objects.filter(id_proyecto=x.id_proyecto)
     for i in instanceProyecto:
