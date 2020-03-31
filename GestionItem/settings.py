@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'gestion.apps.GestionConfig',
     'social_django',
     'bootstrap4',
+    'guardian',
 ]
 
 # Auth0 settings
@@ -45,6 +46,8 @@ AUTHENTICATION_BACKENDS = {
     'social_core.backends.auth0.Auth0OAuth2',
     'django.contrib.auth.backends.ModelBackend',
     #'app1.authOlogin.auth0backend.Auth0',
+    'django.contrib.auth.backends.ModelBackend',  # this is default
+    'guardian.backends.ObjectPermissionBackend',
 }
 
 LOGIN_URL = '/login/auth0'
