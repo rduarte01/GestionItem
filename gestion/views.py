@@ -680,7 +680,7 @@ class VerUsersEnEspera(ListView):
     template_name = "ListaUser.html"
     queryset = User.objects.filter(esta_aprobado = False)
 
-    @method_decorator(permission_required('User.es_administrador',raise_exception=True))
+    @method_decorator(permission_required('auth.es_administrador',raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(VerUsersEnEspera,self).dispatch(request)
 
@@ -696,10 +696,9 @@ class ActualizarUser(UpdateView):
     template_name = 'UserEnEspera.html'
     success_url = reverse_lazy('gestion:listaDeEspera')
 
-    @method_decorator(permission_required('User.es_administrador', raise_exception=True))
+    @method_decorator(permission_required('auth.es_administrador', raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(ActualizarUser, self).dispatch(request)
-
 
 class CrearRol(CreateView):
     """Se muestra la ventana para la creacion de un nuevo rol dentro de un proyecto, en donde se
@@ -721,8 +720,8 @@ class CrearRol(CreateView):
         request.POST = request.POST.copy()
         request.POST['name']  = self.kwargs['proyecto']+ request.POST['name']
         return super(CrearRol,self).post(request,**kwargs)
-
+"""
     @method_decorator(permission_required('User.es_gerente', raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(CrearRol, self).dispatch(request)
-
+"""
