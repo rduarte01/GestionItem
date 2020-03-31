@@ -15,6 +15,18 @@ class FormUserAgg(forms.ModelForm):
             required= False,
         )
 
+class FormProyectoEstados(forms.Form):
+    State_CHOICES = [
+        ("INICIADO", "INICIADO"),
+        ("FINALIZADO", "FINALIZADO"),
+        ("CANCELADO", "CANCELADO")
+    ]
+    estado = forms.ChoiceField(
+        label="Estado del Proyecto",
+        required="Creado",
+        widget=forms.Select(attrs={"class":"form-control" }),
+        choices=State_CHOICES,
+    )
 
 class FormProyecto(forms.ModelForm):
     """

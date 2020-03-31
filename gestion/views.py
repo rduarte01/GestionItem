@@ -11,9 +11,11 @@ from django.urls import reverse_lazy
 from .models import Proyecto, Auditoria, User_Proyecto,Fase
 from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus
 from time import gmtime, strftime
-from .forms import FaseForm, FormUserAgg
+from .forms import FaseForm, FormUserAgg,FormProyectoEstados
 from django.db.models import Count
 from django.contrib.auth.decorators import permission_required
+
+
 #### GLOBALES
 PROYECTOS_USUARIO=[]
 CANTIDAD=1
@@ -25,6 +27,39 @@ from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
 from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required_or_403
+
+#### GLOBALES
+PROYECTOS_USUARIO=[]
+CANTIDAD=1
+DELETE=0
+
+def estadoProyecto(request,pk):
+    """ RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST"""
+    form=FormProyectoEstados(request.POST)
+    p = Proyecto.objects.get(id_proyecto=pk)  ##### BUSCA EL PROYECTO CON ID
+
+    if form.is_valid():
+        x=form.cleaned_data
+        z=x.get("estado")#### ESTADO SELECCIONADO
+        #print(z)
+        #print(pk)
+
+        if(z=="FINALIZADO"):
+            return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
+        elif(z=="INICIADO"):
+            p.estado=z####### SE ASIGNA ESTADO
+            p.save()##### SE GUARDA
+            return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
+        elif(z=="CANCELADO"):
+            p.estado=z####### SE ASIGNA ESTADO
+            p.save()##### SE GUARDA
+            return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
+
+    context={
+        "form":form,
+        "estado": p.estado,
+    }
+    return render(request, 'estadoProyecto.html',context)
 
 
 def registrarAuditoria(user,accion):
@@ -75,7 +110,6 @@ def CantProyectos(request):
             GuardaProyectos.append(NroProyectos[i].proyecto_id)###### GUARDA EL ID PROYECTO DEL USUARIO
             #print(NroProyectos[i])
     return GuardaProyectos
-
 
 def menu(request):
     user = request.user
@@ -153,7 +187,7 @@ def index(request):
     if user.is_authenticated:
         return redirect('gestion:menu')
     else:
-        return render(request, 'index.html')
+        return redirect('gestion:menu')
 
 
 @login_required
@@ -450,8 +484,8 @@ def listar_proyectos(request):
 
     ### PROYECTOS_USUARIO
     PROYECTOS_USUARIO= CantProyectos(request)
-    print(PROYECTOS_USUARIO)
-    print(proyectos)
+    #print(PROYECTOS_USUARIO)
+    #print(proyectos)
     cant = len(PROYECTOS_USUARIO)
 
     context={
