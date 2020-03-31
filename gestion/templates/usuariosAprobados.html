@@ -1,13 +1,17 @@
 {% extends 'MenuAdminSistema.html' %}
 {% block body %}
-    {% if users%}
-        <h3> Lista de Usuarios Aprobados</h3>
-        <div class="list-group">
-            {% for user in users %}
-                 <a href="{% url 'gestion:get_user' user.id %}" class="list-group-item list-group-item-action " > {{user.email}}</a>
-             {% endfor %}
-        </div>
-    {%else%}
-        <h2>No hay usuarios aprobados</h2>
+    {% if perms.auth.es_administrador %}
+        {% if users%}
+            <h3> Lista de Usuarios Aprobados</h3>
+            <div class="list-group">
+                {% for user in users %}
+                     <a href="{% url 'gestion:get_user' user.id %}" class="list-group-item list-group-item-action " > {{user.email}}</a>
+                 {% endfor %}
+            </div>
+        {%else%}
+            <h2>No hay usuarios aprobados</h2>
+        {% endif %}
+    {%else %}
+        <h1> No es Administrador de sistema por lo tanto no puedes ver la lista de usuarios aceptados</h1>
     {% endif %}
 {%endblock%}

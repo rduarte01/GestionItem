@@ -1,5 +1,8 @@
 {% extends 'Menu.html' %}
 {% block body %}
+{% load guardian_tags %}
+{% get_obj_perms request.user for proyecto as "proyecto_perms" %}
+
     <br>
     <a class="btn btn-primary" href="{% url 'gestion:ver_proyecto' fase.id_Proyecto_id  %}" role="button">Volver Atras</a>
     <br>
@@ -7,11 +10,12 @@
     <div class="container">
         <div class="row">
             <div class="col-3">
+                {% if "is_gerente" in proyecto_perms %}
                 <a href="{% url 'gestion:tipo_item_views_create' fase.id_Fase %}" class="btn btn-primary">Crear Tipo Item</a>
                 <hr>
                 <a href="{% url 'gestion:importar_tipo_item' fase.id_Fase %}" class="btn btn-primary">Importar Tipo Item</a>
                 <hr>
-                <a href="#" class="btn btn-primary">Agg Tipo Item Item</a>
+                {% endif %}
                 <hr>
                 <a href="#" class="btn btn-primary">Crear Linea Base</a>
                 <hr>

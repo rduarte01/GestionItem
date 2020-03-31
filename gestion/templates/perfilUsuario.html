@@ -4,16 +4,41 @@
 {% bootstrap_javascript jquery='full' %}
 
 {%block body %}
-<h3> HELLOW {{user.username }}</h3>
-<h2>TU correo es: {{user.email}}</h2>
-<div class="jumbotron">
-     <form method="POST">{% csrf_token%}
-         {{form.as_p}}
-         <input type='submit' value= 'Save' />
-     </form>
 
-</div>
+  {% if perms.auth.es_administrador %}
+    <br>
+    <h3> Nombre del usuario: {{user.username }}</h3>
+    <h2>Correo del usuario : {{user.email}}</h2>
+    <hr>
+    <h2> Asigne los roles y estado del usuario</h2>
 
+    <div class="container">
+         <form method="POST">{% csrf_token%}
+
+            <div class="form-group">
+                {{form.is_admin}}
+                <label class="form-check-label">
+                    {{form.is_admin.label}}
+                </label>
+            </div>
+            <div class="form-group">
+               {{form.is_manager}}
+                <label class="form-check-label">
+                    {{form.is_manager.label}}
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>{{form.estado.label}}</label>
+                {{form.estado}}
+            </div>
+          <input type='submit' value= 'Save' />
+    </form>
+
+    </div>
+  {%else%}
+    <h3> No es administrador por lo tanto no puedes acceder a esta pagina</h3>
+  {%endif%}
 
 
 {%endblock%}
