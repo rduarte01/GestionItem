@@ -221,7 +221,7 @@ def index(request):
     if user.is_authenticated:
         return redirect('gestion:menu')
     else:
-        return redirect('gestion:menu')
+        return render(request,'index.html')
 
 @login_required
 def perfil(request):
@@ -721,7 +721,7 @@ class CrearRol(CreateView):
         request.POST['name']  = self.kwargs['proyecto']+ request.POST['name']
         return super(CrearRol,self).post(request,**kwargs)
 """
-    @method_decorator(permission_required('User.es_gerente', raise_exception=True))
+    @method_decorator(permission_required('auth.es_gerente', raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(CrearRol, self).dispatch(request)
 """
