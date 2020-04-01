@@ -2,7 +2,7 @@ from django import forms
 from django.forms import Textarea
 from .models import Fase
 from django.contrib.auth.models import User, Permission,Group
-from .models import Proyecto,TipoItem,Atributo
+from .models import Proyecto,TipoItem,Atributo,Usuario
 ####### se escribe formulario
 from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
 
@@ -205,45 +205,17 @@ class PerfilUserEnEspera(forms.ModelForm):
     en que se encuentra el usuario"""
 
     class Meta:
-        model = User
-        fields = ['username','email','esta_aprobado','date_joined']
+        model = Usuario
+        fields = ['user','esta_aprobado']
         labels = {
-            'username': 'Nombre de Usuario',
-            'email': 'Correo Electronico del Usuario',
             'esta_aprobado': 'Estado del usuario',
         }
-        OPTIONS = (
-            ('True', "Aprobado"),
-            ('False', "En Espera"),
-        )
+
         widgets = {
-            'username': forms.TextInput(
-                attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Nombre de usuario',
-                    'id': 'username',
-                    'readonly':True,
-                }
-            ),
-            'email': forms.EmailInput(
-                attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Correo Electronico del Usuario',
-                    'id': 'email',
-                    'readonly':True,
-                }
-            ),
             'esta_aprobado': forms.RadioSelect(choices=[
                 (True, 'Activo'),
                 (False, 'En Espera')
             ]),
-            'date_joined':forms.DateTimeInput(
-                attrs={
-                    'class':'form-control',
-                    'readonly': True,
-                }
-            ),
-
         }
 
 
@@ -254,14 +226,10 @@ class RolForm(forms.ModelForm):
     a un proyecto"""
     def __init__(self, *args,**kwargs):
         super(RolForm,self).__init__(*args,**kwargs)
-        self.fields['permissions'].queryset = Permission.objects.filter(content_type=19)
+        self.fields['permissions'].queryset = Permission.objects.filter(content_type=21)
     class Meta:
-
         model = Group
         fields = "__all__"
-
-
-
         widgets={
             'name':forms.TextInput(
                 attrs={

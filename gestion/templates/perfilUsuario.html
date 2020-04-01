@@ -5,7 +5,7 @@
 
 {%block body %}
 
-  {% if perms.auth.es_administrador %}
+  {% if perms.gestion.es_administrador %}
     <br>
     <h3> Nombre del usuario: {{user.username }}</h3>
     <h2>Correo del usuario : {{user.email}}</h2>

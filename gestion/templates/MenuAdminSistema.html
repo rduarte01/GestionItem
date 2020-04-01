@@ -3,7 +3,7 @@
 {% block campos %}
   <li class="active"><a href="/menu/">Inicio</a></li>
   <li><a href="{% url 'gestion:perfil' %}">Perfil</a></li>
-    {% if perms.auth.es_administrador %}
+    {% if perms.gestion.es_administrador %}
         <li><a href="{% url 'gestion:ver_usuarios_aprobados' %}">Usuarios_Aceptados</a></li>
     {% endif %}
   <li><a href="{% url 'gestion:logout' %}">Cerrar_Sesion</a></li>

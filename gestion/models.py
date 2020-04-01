@@ -1,6 +1,8 @@
 from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User,Group
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Proyecto(models.Model):
     """
@@ -165,3 +167,26 @@ class Permisos(models.Model):
 
 
         )
+
+class Usuario(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    esta_aprobado = models.BooleanField(
+        default=False
+    )
+    class Meta:
+        permissions = (
+            ('es_administrador','Puede hacer tareas de Administrador'),
+        )
+
+
+'''
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+'''
