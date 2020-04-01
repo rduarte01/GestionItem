@@ -13,11 +13,6 @@ from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg,FormProyectoEstados
 from django.db.models import Count
 from django.utils.decorators import method_decorator
-
-#### GLOBALES
-PROYECTOS_USUARIO=[]
-CANTIDAD=1
-DELETE=0
 from .models import Proyecto,TipoItem,Atributo
 from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm
 from django.contrib.auth.models import Permission
@@ -28,10 +23,15 @@ from guardian.decorators import permission_required_or_403
 
 #### GLOBALES
 PROYECTOS_USUARIO=[]
+CANTIDAD=1
+
+
+#### GLOBALES
+PROYECTOS_USUARIO=[]
 """SE UTILIZA PARA GUARDAR LA LISTA DE ID DE LOS PROYECTOS DEL USUARIO"""
 CANTIDAD=1
 """SE UTILIZA PARA GUARDAR LA CANTIDAD DE FASES DE UN PROYECTO"""
-DELETE=0
+
 
 def estadoProyecto(request,pk):
     """ RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST"""
@@ -45,12 +45,15 @@ def estadoProyecto(request,pk):
         #print(pk)
 
         if(z=="FINALIZADO"):
+            registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Finalizado")
             return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
         elif(z=="INICIADO"):
+            registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Iniciado")
             p.estado=z####### SE ASIGNA ESTADO
             p.save()##### SE GUARDA
             return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
         elif(z=="CANCELADO"):
+            registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Cancelado")
             p.estado=z####### SE ASIGNA ESTADO
             p.save()##### SE GUARDA
             return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
@@ -143,7 +146,6 @@ def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo
     RECIBE EL ID DEL PROYECTO Y MUESTRA LOS USUARIOS QUE PUEDEN SER AÑADIDOS A EL
     """
 
-    registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
     user= request.user## USER ACTUAL
 
     form = User.objects.all()
@@ -180,34 +182,27 @@ def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
-    registrarAuditoria(request.user,'Selecciono creacion de proyecto')
-
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
 
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
-
         ### NADA QUE TOCAR
-
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
-
         global CANTIDAD
-
         cantidad = formProyecto.cleaned_data
-
         cantidad_fases=cantidad.get("fase")##### PARA WALTER
-
         CANTIDAD=cantidad_fases-1
+
+        registrarAuditoria(request.user, 'Creo el proyecto: '+ str(instanceProyecto.nombre))
 
         q = request.user
         z= Proyecto.objects.last()
         id_proyecto = z.id_proyecto ## ID DEL PROYECTO CREADO
-
         p = User_Proyecto(user_id= q.id ,proyecto_id= id_proyecto,activo= True)
         p.save()
 
-        return redirect('gestion:agregarUsuarios',id_proyecto)
 
+        return redirect('gestion:agregarUsuarios',id_proyecto)
 
     context ={
         "formProyecto": formProyecto,
@@ -239,7 +234,6 @@ def perfil(request):
         'estado': user.esta_aprobado,
         'picture': auth0user.extra_data['picture'],
     }
-    registrarAuditoria(request.user ,'Selecciono creacion de proyecto')
 
     return render(request, 'perfil.html', {
         'auth0User': auth0user,
@@ -265,10 +259,13 @@ def getUsers(request):
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
 class VerSolicitudesEspera(ListView):
+    """LISTA LOS USUARIOS LOS CUALES NO ESTAN APROBADOS EN EL SISTEMA"""
     model = User
+    """UTILIZA EL MODELO USER"""
     template_name = "ListaUser.html"
+    """TEMPLATE EN DONDE LISTAR LOS USERS"""
     queryset = User.objects.filter(esta_aprobado = False)
-
+    """FILTRA LOS USERS CON ESTADO_APROBADO FALSE LOS CUALES NO ESTAN APROBADOS EN EL SISTEMA"""
 
 #jesus
 def ver_usuarios_aprobados(request):
@@ -421,7 +418,7 @@ def add_permission_gerente(user,is_gerente):
         user.user_permissions.remove(permission)
 
 def crearFase(request):
-
+    """METODO PARA CREAR FASES"""
     fase = FaseForm(request.POST)
     global CANTIDAD
     cantidad = CANTIDAD
@@ -431,10 +428,10 @@ def crearFase(request):
         descFase = fase.cleaned_data.get("descripcion")
         z = Fase(nombre=nombreFase,descripcion=descFase,id_Proyecto=x)
         z.save()
+        registrarAuditoria(request.user, 'Creo la Fase: '+str(z.nombre)+' en el proyecto: '+ str(x.nombre))
         if cantidad != 0:
             cantidad = cantidad - 1
             CANTIDAD = cantidad
-
             return redirect('gestion:crearFase')
         else:
             assign_perm('is_gerente', request.user, x)
@@ -447,7 +444,6 @@ def crearFase(request):
 
 def listar_auditoria(request):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA """
-    registrarAuditoria(request.user, 'Ingreso al apartado Auditoria')
     auditoria = Auditoria.objects.all()
     context={
         'auditoria':auditoria
@@ -460,7 +456,6 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
     MEDIANTE UN PROYECTO EXISTENTE, DA LA POSIBILIDAD DE AÑADIR MAS USUARIOS AL PROYECTO,
     FILTRANDO LOS USUARIOS QUE NO FORMAN PARTE DEL PROYECTO
     """
-
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
     user= request.user## USER ACTUAL
 
@@ -499,10 +494,8 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
     """
     LISTA LOS USUARIOS DE UN PROYECTO
     """
-
-    registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
     user= request.user## USER ACTUAL
-
+    proyecto=Proyecto.objects.get(id_proyecto=pk)
     form = User.objects.all()
     registrados = User_Proyecto.objects.all()
 
@@ -526,14 +519,13 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
             if ok:
                list.append(form[i].id)
 
-        return render(request, 'UsersProyecto.html', {'form': form,'list':list,'pk':pk})
+        return render(request, 'UsersProyecto.html', {'form': form,'list':list,'pk':pk,'proyecto':proyecto})
 
 
 def desvinculacionProyecto(request,pk,pk_user):
     """DESVINCULA UN USUARIO DE UN PROYECTO"""
     instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
     instanceUser.delete()
-
     return redirect('gestion:UsersProyecto',pk)
 
 def listar_proyectos(request):
@@ -586,6 +578,7 @@ def proyectoCancelado(request):
     return  redirect("gestion:menu")
 
 def ver_proyecto(request,pk):
+    """MUESTRA LOS DETALLES DE UN PROYECTO"""
     proyecto=Proyecto.objects.get(id_proyecto=pk)
     fases = Fase.objects.filter(id_Proyecto_id=pk)
     contexto={
@@ -595,6 +588,7 @@ def ver_proyecto(request,pk):
     return render(request,'opcionesProyecto.html',contexto)
 
 def get_fase_proyecto(request,id_fase):
+    """TRAE LA FASE DE UN PROYECTO"""
     fase=Fase.objects.get(id_Fase=id_fase)
     proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
     contexto={
@@ -677,8 +671,11 @@ class VerUsersEnEspera(ListView):
     -template_name: donde se asigna que template estara asignado esta view
     -queryset: Se filtra la lista de usuarios con estado aprobado falso, y es recibido por el template"""
     model = User
+    """USA EL MODELO USER"""
     template_name = "ListaUser.html"
+    """MUESTRA LOS USER EN EL TEMPLATE MENCIONADO"""
     queryset = User.objects.filter(esta_aprobado = False)
+    """FILTRA LOS USUARIOS CON ESTADO FALSO"""
 
     @method_decorator(permission_required('auth.es_administrador',raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
@@ -687,15 +684,15 @@ class VerUsersEnEspera(ListView):
 class ActualizarUser(UpdateView):
     """Se muestra el perfil del usuario seleccionado, en donde se
     especifican los siguientes atributos:
-    -model: especifa el modelo el cual esta siendo utilizado en la view
-    -form_class: especifica el form que sera utilidado dentro del template
-    -template_name: donde se asigna que template estara asignado esta view
-    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
+    """
     model = User
+    """-model: especifa el modelo el cual esta siendo utilizado en la view"""
     form_class = PerfilUserEnEspera
+    """    -form_class: especifica el form que sera utilidado dentro del template"""
     template_name = 'UserEnEspera.html'
+    """-template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy('gestion:listaDeEspera')
-
+    """-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
     @method_decorator(permission_required('auth.es_administrador', raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(ActualizarUser, self).dispatch(request)

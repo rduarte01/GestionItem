@@ -1,6 +1,10 @@
 django
 python-jose
 social-auth-app-django
-psycopg2
 django-bootstrap4
+sphinx_rtd_theme
+sphinx
+bootstrap4
+psycopg2
+
 

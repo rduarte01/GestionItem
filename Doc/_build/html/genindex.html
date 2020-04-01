@@ -82,7 +82,6 @@
             
               <p class="caption"><span class="caption-text">Contenidos:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="module/README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module/views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module/forms.html">Forms</a></li>
@@ -233,9 +232,9 @@
 </li>
         <li><a href="module/forms.html#gestion.forms.FormUserAgg.base_fields">(atributo de gestion.forms.FormUserAgg)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.RolForm.base_fields">(atributo de gestion.forms.RolForm)</a>
+        <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.base_fields">(atributo de gestion.forms.PerfilUserEnEspera)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.SettingsUserForm.base_fields">(atributo de gestion.forms.SettingsUserForm)</a>
+        <li><a href="module/forms.html#gestion.forms.RolForm.base_fields">(atributo de gestion.forms.RolForm)</a>
 </li>
         <li><a href="module/forms.html#gestion.forms.SettingsUserFormJesus.base_fields">(atributo de gestion.forms.SettingsUserFormJesus)</a>
 </li>
@@ -248,6 +247,8 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module/forms.html#gestion.forms.TipoItemForm.cantidad">cantidad (atributo de gestion.forms.TipoItemForm)</a>
+</li>
       <li><a href="module/views.html#gestion.views.CANTIDAD">CANTIDAD (en el módulo gestion.views)</a>
 </li>
       <li><a href="module/views.html#gestion.views.CantProyectos">CantProyectos() (en el módulo gestion.views)</a>
@@ -293,9 +294,9 @@
 </li>
         <li><a href="module/forms.html#gestion.forms.FormUserAgg.declared_fields">(atributo de gestion.forms.FormUserAgg)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.RolForm.declared_fields">(atributo de gestion.forms.RolForm)</a>
+        <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.declared_fields">(atributo de gestion.forms.PerfilUserEnEspera)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.SettingsUserForm.declared_fields">(atributo de gestion.forms.SettingsUserForm)</a>
+        <li><a href="module/forms.html#gestion.forms.RolForm.declared_fields">(atributo de gestion.forms.RolForm)</a>
 </li>
         <li><a href="module/forms.html#gestion.forms.SettingsUserFormJesus.declared_fields">(atributo de gestion.forms.SettingsUserFormJesus)</a>
 </li>
@@ -314,6 +315,12 @@
 </li>
       <li><a href="module/views.html#gestion.views.detallesProyecto">detallesProyecto() (en el módulo gestion.views)</a>
 </li>
+      <li><a href="module/views.html#gestion.views.ActualizarUser.dispatch">dispatch() (método de gestion.views.ActualizarUser)</a>
+
+      <ul>
+        <li><a href="module/views.html#gestion.views.VerUsersEnEspera.dispatch">(método de gestion.views.VerUsersEnEspera)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -325,6 +332,8 @@
       <li><a href="module/forms.html#gestion.forms.FormProyectoEstados.estado">estado (atributo de gestion.forms.FormProyectoEstados)</a>
 
       <ul>
+        <li><a href="module/forms.html#gestion.forms.SettingsUserFormJesus.estado">(atributo de gestion.forms.SettingsUserFormJesus)</a>
+</li>
         <li><a href="module/models.html#gestion.models.Fase.estado">(atributo de gestion.models.Fase)</a>
 </li>
         <li><a href="module/models.html#gestion.models.Proyecto.estado">(atributo de gestion.models.Proyecto)</a>
@@ -375,9 +384,9 @@
 </li>
         <li><a href="module/forms.html#gestion.forms.FormUserAgg.Meta.fields">(atributo de gestion.forms.FormUserAgg.Meta)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.RolForm.Meta.fields">(atributo de gestion.forms.RolForm.Meta)</a>
+        <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.Meta.fields">(atributo de gestion.forms.PerfilUserEnEspera.Meta)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.SettingsUserForm.Meta.fields">(atributo de gestion.forms.SettingsUserForm.Meta)</a>
+        <li><a href="module/forms.html#gestion.forms.RolForm.Meta.fields">(atributo de gestion.forms.RolForm.Meta)</a>
 </li>
         <li><a href="module/forms.html#gestion.forms.TipoItemForm.Meta.fields">(atributo de gestion.forms.TipoItemForm.Meta)</a>
 </li>
@@ -416,6 +425,8 @@
 </li>
       <li><a href="module/views.html#module-gestion.views">gestion.views (módulo)</a>
 </li>
+      <li><a href="module/views.html#gestion.views.get_all_tipo_item">get_all_tipo_item() (en el módulo gestion.views)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/models.html#gestion.models.Fase.get_estado_display">get_estado_display() (método de gestion.models.Fase)</a>
@@ -424,6 +435,8 @@
         <li><a href="module/models.html#gestion.models.Proyecto.get_estado_display">(método de gestion.models.Proyecto)</a>
 </li>
       </ul></li>
+      <li><a href="module/views.html#gestion.views.get_fase_proyecto">get_fase_proyecto() (en el módulo gestion.views)</a>
+</li>
       <li><a href="module/models.html#gestion.models.Atributo.get_tipo_dato_display">get_tipo_dato_display() (método de gestion.models.Atributo)</a>
 </li>
       <li><a href="module/views.html#gestion.views.get_user">get_user() (en el módulo gestion.views)</a>
@@ -441,6 +454,8 @@
       <ul>
         <li><a href="module/models.html#gestion.models.FASE_ROL.id">(atributo de gestion.models.FASE_ROL)</a>
 </li>
+        <li><a href="module/models.html#gestion.models.Permisos.id">(atributo de gestion.models.Permisos)</a>
+</li>
         <li><a href="module/models.html#gestion.models.User_Proyecto.id">(atributo de gestion.models.User_Proyecto)</a>
 </li>
       </ul></li>
@@ -452,10 +467,10 @@
 </li>
       <li><a href="module/models.html#gestion.models.FASE_ROL.id_fase_id">id_fase_id (atributo de gestion.models.FASE_ROL)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/models.html#gestion.models.Fase.id_Proyecto">id_Proyecto (atributo de gestion.models.Fase)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/models.html#gestion.models.Proyecto.id_proyecto">id_proyecto (atributo de gestion.models.Proyecto)</a>
 </li>
       <li><a href="module/models.html#gestion.models.Fase.id_Proyecto_id">id_Proyecto_id (atributo de gestion.models.Fase)</a>
@@ -466,7 +481,13 @@
 </li>
       <li><a href="module/models.html#gestion.models.TipoItem.id_ti">id_ti (atributo de gestion.models.TipoItem)</a>
 </li>
+      <li><a href="module/views.html#gestion.views.importar_tipo_item">importar_tipo_item() (en el módulo gestion.views)</a>
+</li>
       <li><a href="module/views.html#gestion.views.index">index() (en el módulo gestion.views)</a>
+</li>
+      <li><a href="module/forms.html#gestion.forms.SettingsUserFormJesus.is_admin">is_admin (atributo de gestion.forms.SettingsUserFormJesus)</a>
+</li>
+      <li><a href="module/forms.html#gestion.forms.SettingsUserFormJesus.is_manager">is_manager (atributo de gestion.forms.SettingsUserFormJesus)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -481,7 +502,7 @@
 </li>
         <li><a href="module/forms.html#gestion.forms.FormProyecto.Meta.labels">(atributo de gestion.forms.FormProyecto.Meta)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.SettingsUserForm.Meta.labels">(atributo de gestion.forms.SettingsUserForm.Meta)</a>
+        <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.Meta.labels">(atributo de gestion.forms.PerfilUserEnEspera.Meta)</a>
 </li>
         <li><a href="module/forms.html#gestion.forms.TipoItemForm.Meta.labels">(atributo de gestion.forms.TipoItemForm.Meta)</a>
 </li>
@@ -513,19 +534,19 @@
 </li>
         <li><a href="module/forms.html#gestion.forms.FormUserAgg.media">(gestion.forms.FormUserAgg property)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.RolForm.media">(gestion.forms.RolForm property)</a>
+        <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.media">(gestion.forms.PerfilUserEnEspera property)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.SettingsUserForm.media">(gestion.forms.SettingsUserForm property)</a>
+        <li><a href="module/forms.html#gestion.forms.RolForm.media">(gestion.forms.RolForm property)</a>
 </li>
         <li><a href="module/forms.html#gestion.forms.SettingsUserFormJesus.media">(gestion.forms.SettingsUserFormJesus property)</a>
 </li>
         <li><a href="module/forms.html#gestion.forms.TipoItemForm.media">(gestion.forms.TipoItemForm property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/views.html#gestion.views.menu">menu() (en el módulo gestion.views)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/forms.html#gestion.forms.AtributeForm.Meta.model">model (atributo de gestion.forms.AtributeForm.Meta)</a>
 
       <ul>
@@ -535,9 +556,9 @@
 </li>
         <li><a href="module/forms.html#gestion.forms.FormUserAgg.Meta.model">(atributo de gestion.forms.FormUserAgg.Meta)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.RolForm.Meta.model">(atributo de gestion.forms.RolForm.Meta)</a>
+        <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.Meta.model">(atributo de gestion.forms.PerfilUserEnEspera.Meta)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.SettingsUserForm.Meta.model">(atributo de gestion.forms.SettingsUserForm.Meta)</a>
+        <li><a href="module/forms.html#gestion.forms.RolForm.Meta.model">(atributo de gestion.forms.RolForm.Meta)</a>
 </li>
         <li><a href="module/forms.html#gestion.forms.TipoItemForm.Meta.model">(atributo de gestion.forms.TipoItemForm.Meta)</a>
 </li>
@@ -546,6 +567,8 @@
         <li><a href="module/views.html#gestion.views.CrearRol.model">(atributo de gestion.views.CrearRol)</a>
 </li>
         <li><a href="module/views.html#gestion.views.VerSolicitudesEspera.model">(atributo de gestion.views.VerSolicitudesEspera)</a>
+</li>
+        <li><a href="module/views.html#gestion.views.VerUsersEnEspera.model">(atributo de gestion.views.VerUsersEnEspera)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -579,6 +602,8 @@
 </li>
         <li><a href="module/models.html#gestion.models.FASE_ROL.objects">(atributo de gestion.models.FASE_ROL)</a>
 </li>
+        <li><a href="module/models.html#gestion.models.Permisos.objects">(atributo de gestion.models.Permisos)</a>
+</li>
         <li><a href="module/models.html#gestion.models.Proyecto.objects">(atributo de gestion.models.Proyecto)</a>
 </li>
         <li><a href="module/models.html#gestion.models.TipoItem.objects">(atributo de gestion.models.TipoItem)</a>
@@ -588,7 +613,7 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module/forms.html#gestion.forms.SettingsUserForm.Meta.OPTIONS">OPTIONS (atributo de gestion.forms.SettingsUserForm.Meta)</a>
+      <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.Meta.OPTIONS">OPTIONS (atributo de gestion.forms.PerfilUserEnEspera.Meta)</a>
 </li>
       <li><a href="module/models.html#gestion.models.Fase.ordering">ordering (atributo de gestion.models.Fase)</a>
 </li>
@@ -600,18 +625,28 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/views.html#gestion.views.perfil">perfil() (en el módulo gestion.views)</a>
 </li>
+      <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera">PerfilUserEnEspera (clase en gestion.forms)</a>
+</li>
+      <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.Meta">PerfilUserEnEspera.Meta (clase en gestion.forms)</a>
+</li>
+      <li><a href="module/models.html#gestion.models.Permisos">Permisos (clase en gestion.models)</a>
+</li>
+      <li><a href="module/models.html#gestion.models.Permisos.DoesNotExist">Permisos.DoesNotExist</a>
+</li>
+      <li><a href="module/models.html#gestion.models.Permisos.MultipleObjectsReturned">Permisos.MultipleObjectsReturned</a>
+</li>
       <li><a href="module/forms.html#gestion.forms.FormUserAgg.Meta.permissions">permissions (atributo de gestion.forms.FormUserAgg.Meta)</a>
 
       <ul>
         <li><a href="module/models.html#gestion.models.Fase.permissions">(atributo de gestion.models.Fase)</a>
 </li>
       </ul></li>
-      <li><a href="module/views.html#gestion.views.ActualizarUser.post">post() (método de gestion.views.ActualizarUser)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module/views.html#gestion.views.CrearRol.post">post() (método de gestion.views.CrearRol)</a>
 </li>
       <li><a href="module/models.html#gestion.models.Proyecto">Proyecto (clase en gestion.models)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/models.html#gestion.models.Proyecto.DoesNotExist">Proyecto.DoesNotExist</a>
 </li>
       <li><a href="module/models.html#gestion.models.Proyecto.MultipleObjectsReturned">Proyecto.MultipleObjectsReturned</a>
@@ -629,7 +664,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/views.html#gestion.views.VerSolicitudesEspera.queryset">queryset (atributo de gestion.views.VerSolicitudesEspera)</a>
+
+      <ul>
+        <li><a href="module/views.html#gestion.views.VerUsersEnEspera.queryset">(atributo de gestion.views.VerUsersEnEspera)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -656,20 +695,16 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module/forms.html#gestion.forms.SettingsUserForm">SettingsUserForm (clase en gestion.forms)</a>
-</li>
-      <li><a href="module/forms.html#gestion.forms.SettingsUserForm.Meta">SettingsUserForm.Meta (clase en gestion.forms)</a>
-</li>
       <li><a href="module/forms.html#gestion.forms.SettingsUserFormJesus">SettingsUserFormJesus (clase en gestion.forms)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/forms.html#gestion.forms.FormProyectoEstados.State_CHOICES">State_CHOICES (atributo de gestion.forms.FormProyectoEstados)</a>
 
       <ul>
         <li><a href="module/forms.html#gestion.forms.SettingsUserFormJesus.State_CHOICES">(atributo de gestion.forms.SettingsUserFormJesus)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/views.html#gestion.views.ActualizarUser.success_url">success_url (atributo de gestion.views.ActualizarUser)</a>
 
       <ul>
@@ -688,6 +723,8 @@
         <li><a href="module/views.html#gestion.views.CrearRol.template_name">(atributo de gestion.views.CrearRol)</a>
 </li>
         <li><a href="module/views.html#gestion.views.VerSolicitudesEspera.template_name">(atributo de gestion.views.VerSolicitudesEspera)</a>
+</li>
+        <li><a href="module/views.html#gestion.views.VerUsersEnEspera.template_name">(atributo de gestion.views.VerUsersEnEspera)</a>
 </li>
       </ul></li>
       <li><a href="module/models.html#gestion.models.Atributo.ti">ti (atributo de gestion.models.Atributo)</a>
@@ -740,6 +777,8 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module/views.html#gestion.views.ver_proyecto">ver_proyecto() (en el módulo gestion.views)</a>
+</li>
       <li><a href="module/views.html#gestion.views.ver_usuarios_aprobados">ver_usuarios_aprobados() (en el módulo gestion.views)</a>
 </li>
       <li><a href="module/models.html#gestion.models.Fase.verbose_name">verbose_name (atributo de gestion.models.Fase)</a>
@@ -749,6 +788,8 @@
       <li><a href="module/models.html#gestion.models.Fase.verbose_name_plural">verbose_name_plural (atributo de gestion.models.Fase)</a>
 </li>
       <li><a href="module/views.html#gestion.views.VerSolicitudesEspera">VerSolicitudesEspera (clase en gestion.views)</a>
+</li>
+      <li><a href="module/views.html#gestion.views.VerUsersEnEspera">VerUsersEnEspera (clase en gestion.views)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -763,9 +804,9 @@
 </li>
         <li><a href="module/forms.html#gestion.forms.FormProyecto.Meta.widgets">(atributo de gestion.forms.FormProyecto.Meta)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.RolForm.Meta.widgets">(atributo de gestion.forms.RolForm.Meta)</a>
+        <li><a href="module/forms.html#gestion.forms.PerfilUserEnEspera.Meta.widgets">(atributo de gestion.forms.PerfilUserEnEspera.Meta)</a>
 </li>
-        <li><a href="module/forms.html#gestion.forms.SettingsUserForm.Meta.widgets">(atributo de gestion.forms.SettingsUserForm.Meta)</a>
+        <li><a href="module/forms.html#gestion.forms.RolForm.Meta.widgets">(atributo de gestion.forms.RolForm.Meta)</a>
 </li>
         <li><a href="module/forms.html#gestion.forms.TipoItemForm.Meta.widgets">(atributo de gestion.forms.TipoItemForm.Meta)</a>
 </li>

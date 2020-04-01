@@ -157,10 +157,21 @@
 <dl class="class">
 <dt id="gestion.views.ActualizarUser">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ActualizarUser</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p>Se muestra el perfil del usuario seleccionado, en donde se
+especifican los siguientes atributos:
+-model: especifa el modelo el cual esta siendo utilizado en la view
+-form_class: especifica el form que sera utilidado dentro del template
+-template_name: donde se asigna que template estara asignado esta view
+-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo</p>
+<dl class="method">
+<dt id="gestion.views.ActualizarUser.dispatch">
+<code class="sig-name descname">dispatch</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser.dispatch" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="gestion.views.ActualizarUser.form_class">
 <code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.ActualizarUser.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.SettingsUserForm" title="gestion.forms.SettingsUserForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.SettingsUserForm</span></code></a></p>
+<dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.PerfilUserEnEspera" title="gestion.forms.PerfilUserEnEspera"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.PerfilUserEnEspera</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -169,21 +180,14 @@
 <dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
 </dd></dl>
 
-<dl class="method">
-<dt id="gestion.views.ActualizarUser.post">
-<code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser.post" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Handle POST requests: instantiate a form instance with the passed
-POST variables and then check if it’s valid.</p>
-</dd></dl>
-
 <dl class="attribute">
 <dt id="gestion.views.ActualizarUser.success_url">
-<code class="sig-name descname">success_url</code><a class="headerlink" href="#gestion.views.ActualizarUser.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">success_url</code><em class="property"> = '/enEspera/'</em><a class="headerlink" href="#gestion.views.ActualizarUser.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.ActualizarUser.template_name">
-<code class="sig-name descname">template_name</code><em class="property"> = 'perfilUsuario.html'</em><a class="headerlink" href="#gestion.views.ActualizarUser.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">template_name</code><em class="property"> = 'UserEnEspera.html'</em><a class="headerlink" href="#gestion.views.ActualizarUser.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -224,7 +228,16 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dl class="class">
 <dt id="gestion.views.CrearRol">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CrearRol</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearRol" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p>Se muestra la ventana para la creacion de un nuevo rol dentro de un proyecto, en donde se
+especifican los siguientes atributos:
+-model: especifa el modelo el cual esta siendo utilizado en la view
+-form_class: especifica el form que sera utilidado dentro del template
+-template_name: donde se asigna que template estara asignado esta view
+-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo</p>
+<p>La funcion redeclara es la de post, en donde se realiza una modificacion del nombre declarado
+para la creacion, agregandole el id del proyecto perteneciente delate, esto para el reconocimiento
+del proyecto pertenciente de este Rol a crear</p>
+<dl class="attribute">
 <dt id="gestion.views.CrearRol.form_class">
 <code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.CrearRol.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.RolForm" title="gestion.forms.RolForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.RolForm</span></code></a></p>
@@ -234,6 +247,13 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dt id="gestion.views.CrearRol.model">
 <code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.CrearRol.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.Group</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.views.CrearRol.post">
+<code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearRol.post" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Handle POST requests: instantiate a form instance with the passed
+POST variables and then check if it’s valid.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -263,7 +283,8 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dl class="class">
 <dt id="gestion.views.VerSolicitudesEspera">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">VerSolicitudesEspera</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.VerSolicitudesEspera" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p>LISTA LOS USUARIOS LOS CUALES NO ESTAN APROBADOS EN EL SISTEMA</p>
+<dl class="attribute">
 <dt id="gestion.views.VerSolicitudesEspera.model">
 <code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
@@ -271,30 +292,70 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 
 <dl class="attribute">
 <dt id="gestion.views.VerSolicitudesEspera.queryset">
-<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet [&lt;User: ruben2&gt;, &lt;User: ruben4&gt;]&gt;</em><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet [&lt;User: AnonymousUser&gt;, &lt;User: ruben&gt;]&gt;</em><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FILTRA LOS USERS CON ESTADO_APROBADO FALSE LOS CUALES NO ESTAN APROBADOS EN EL SISTEMA</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.VerSolicitudesEspera.template_name">
 <code class="sig-name descname">template_name</code><em class="property"> = 'ListaUser.html'</em><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TEMPLATE EN DONDE LISTAR LOS USERS</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.views.VerUsersEnEspera">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">VerUsersEnEspera</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.VerUsersEnEspera" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Vista creada para listar los usuarios que se encuentran
+en espera de ser aprobados dentro del sistema, vista que solo puede ser accedida
+por el administrador del sistema,
+Se especifica el atributos
+-model:donde se asigna el Modelo utilizado
+-template_name: donde se asigna que template estara asignado esta view
+-queryset: Se filtra la lista de usuarios con estado aprobado falso, y es recibido por el template</p>
+<dl class="method">
+<dt id="gestion.views.VerUsersEnEspera.dispatch">
+<code class="sig-name descname">dispatch</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.VerUsersEnEspera.dispatch" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.VerUsersEnEspera.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.VerUsersEnEspera.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.VerUsersEnEspera.queryset">
+<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet [&lt;User: AnonymousUser&gt;, &lt;User: ruben&gt;]&gt;</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FILTRA LOS USUARIOS CON ESTADO FALSO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.VerUsersEnEspera.template_name">
+<code class="sig-name descname">template_name</code><em class="property"> = 'ListaUser.html'</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MUESTRA LOS USER EN EL TEMPLATE MENCIONADO</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.add_atribute">
-<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_atribute</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">nombre_ti</em>, <em class="sig-param">cantidad_atributos</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_atribute" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_atribute</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">nombre_ti</em>, <em class="sig-param">cantidad_atributos</em>, <em class="sig-param">fase_id</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_atribute" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Sirve para poder crear un nuevo atributo, asociando ese atributo a un tipo de item</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.add_permission_admin">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_permission_admin</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">is_admin</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_permission_admin" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Funcion que permite agregar o sacar el permiso es_administrador a un usario, no retorna nada</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.add_permission_gerente">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_permission_gerente</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">is_gerente</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_permission_gerente" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Funcion que permite agregar o sacar el permiso is_gerente a un usario, no retorna nada</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.agregarUsuarios">
@@ -311,7 +372,8 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dl class="function">
 <dt id="gestion.views.crearFase">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">crearFase</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.crearFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>METODO PARA CREAR FASES</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.desvinculacionProyecto">
@@ -339,9 +401,31 @@ OPCIONES</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.get_all_tipo_item">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">get_all_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">id_proyecto</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.get_all_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion permite obtener todos los tipos de item de un proyecto especifico</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.get_fase_proyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">get_fase_proyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.get_fase_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TRAE LA FASE DE UN PROYECTO</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.get_user">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">get_user</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.get_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sirve para poder asignar o sacar los permisos es_gerente , es_administrador
+y cambiar el estado de un usario en especifico</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.importar_tipo_item">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">importar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.importar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>esta funcion permite importar tipos de item en un proyecto , filtrando aquellos tipo
+items de los proyectos de los que esta asociado el usuario y que aun no se tenga en  las
+fases dell proyecto.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.index">
@@ -391,17 +475,23 @@ solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario</p>
 <dl class="function">
 <dt id="gestion.views.recoge_datos_atributo">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoge_datos_atributo</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoge_datos_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sirve para recoger los datos despues de un POST en un formulario de atributo, retorna el
+valor del nombre del atributo, si es obligatorio, y el tipo de dato</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.recoger_datos_tipo_item">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoger_datos_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">my_form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoger_datos_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sirve para recoger los datos despues de un POST en un formulario de tipo de item, retorna el
+valor del nombre del tipo de item y la cantidad de atributos del tipo de item</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.recoger_datos_usuario_settings">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoger_datos_usuario_settings</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoger_datos_usuario_settings" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores
+dos booleanos para determinar si es gerente y administrador y el estado del usuario</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.registrarAuditoria">
@@ -411,13 +501,21 @@ solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario</p>
 
 <dl class="function">
 <dt id="gestion.views.tipo_item_views_create">
-<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">tipo_item_views_create</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.tipo_item_views_create" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">tipo_item_views_create</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.tipo_item_views_create" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Sirve para crear un tipo de item,en una fase en especifica</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.ver_proyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ver_proyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ver_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MUESTRA LOS DETALLES DE UN PROYECTO</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.ver_usuarios_aprobados">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ver_usuarios_aprobados</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ver_usuarios_aprobados" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Lista todos los usarios aprobados en el sistema</p>
+</dd></dl>
 
 </div>
 

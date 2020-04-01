@@ -1,5 +1,4 @@
-#!/home/jesus/Escritorio/Gestion/GestionItem/myenv/bin/python3
-
+#!/home/ruben/Escritorio/ProyectoIS2/GestionItem/myenv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -1,4 +1,0 @@
-README
-======
-
-Configuraciones del sistema

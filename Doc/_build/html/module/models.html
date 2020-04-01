@@ -158,7 +158,8 @@
 <dt id="gestion.models.Atributo">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Atributo</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>»
-Este es el modelo Atributo, que se relaciona con Tipo de Item</p>
+Este es el modelo Atributo, que se relaciona con Tipo de Item, y sirve para representa todos los valores
+debe de tener un atributo al crearlo</p>
 <dl class="exception">
 <dt id="gestion.models.Atributo.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Atributo.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -172,13 +173,13 @@ Este es el modelo Atributo, que se relaciona con Tipo de Item</p>
 <dl class="attribute">
 <dt id="gestion.models.Atributo.choises_data_type">
 <code class="sig-name descname">choises_data_type</code><em class="property"> = (('Decimal', 'Decimal'), ('Date', 'Date'), ('File', 'File'), ('String', 'Cadena'), ('Boolean', 'Boolean'))</em><a class="headerlink" href="#gestion.models.Atributo.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>En esta variable especificamos, las opciones que se van a tener para especificar el tipo de dato del atributo</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Atributo.es_obligatorio">
 <code class="sig-name descname">es_obligatorio</code><a class="headerlink" href="#gestion.models.Atributo.es_obligatorio" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>variable que sirve para identificar si un atributo es obligatorio o no</p>
 </dd></dl>
 
 <dl class="method">
@@ -189,15 +190,13 @@ object the first time, the query is executed.</p>
 <dl class="attribute">
 <dt id="gestion.models.Atributo.id_atributo">
 <code class="sig-name descname">id_atributo</code><a class="headerlink" href="#gestion.models.Atributo.id_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>variable que sirve para identificar univocamente a cada atributi</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Atributo.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Atributo.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>varible que sirve para almacena el nombre del atributo</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -208,14 +207,7 @@ object the first time, the query is executed.</p>
 <dl class="attribute">
 <dt id="gestion.models.Atributo.ti">
 <code class="sig-name descname">ti</code><a class="headerlink" href="#gestion.models.Atributo.ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Accessor to the related object on the forward side of a many-to-one or
-one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+<dd><p>variable que sirve para hacer referencia a que tipo de item esta asociado el atributo</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -226,8 +218,7 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="attribute">
 <dt id="gestion.models.Atributo.tipo_dato">
 <code class="sig-name descname">tipo_dato</code><a class="headerlink" href="#gestion.models.Atributo.tipo_dato" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>variable que sirve para almacenar el tipo de dato del atributo</p>
 </dd></dl>
 
 </dd></dl>
@@ -280,8 +271,9 @@ object the first time, the query is executed.</p>
 
 <dl class="class">
 <dt id="gestion.models.FASE_ROL">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">FASE_ROL</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">id_fase</em>, <em class="sig-param">id_rol</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.FASE_ROL" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="exception">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">FASE_ROL</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.FASE_ROL" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TABLA QUE RELACIONARA LA FASE CON EL ROL</p>
+<dl class="exception">
 <dt id="gestion.models.FASE_ROL.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.FASE_ROL.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
@@ -301,14 +293,7 @@ object the first time, the query is executed.</p>
 <dl class="attribute">
 <dt id="gestion.models.FASE_ROL.id_fase">
 <code class="sig-name descname">id_fase</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Accessor to the related object on the forward side of a many-to-one or
-one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+<dd><p>ID FASE</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -319,14 +304,7 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="attribute">
 <dt id="gestion.models.FASE_ROL.id_rol">
 <code class="sig-name descname">id_rol</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_rol" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Accessor to the related object on the forward side of a many-to-one or
-one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+<dd><p>ID DEL ROL</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -365,15 +343,13 @@ Las fases tendrán dos estados: Abierta y Cerrada, por defecto adoptará el esta
 <dl class="attribute">
 <dt id="gestion.models.Fase.descripcion">
 <code class="sig-name descname">descripcion</code><a class="headerlink" href="#gestion.models.Fase.descripcion" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>GUARDA LA DESCRIPCION DE LA FASE</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Fase.estado">
 <code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.Fase.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>GUARDA EL ESTADO DE LA FASE</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -399,21 +375,13 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <dl class="attribute">
 <dt id="gestion.models.Fase.id_Fase">
 <code class="sig-name descname">id_Fase</code><a class="headerlink" href="#gestion.models.Fase.id_Fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>ID DE LA FASE</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Fase.id_Proyecto">
 <code class="sig-name descname">id_Proyecto</code><a class="headerlink" href="#gestion.models.Fase.id_Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Accessor to the related object on the forward side of a many-to-one or
-one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+<dd><p>SSE RELACIONA LA FASE CON EL PROYECTO</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -424,8 +392,7 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="attribute">
 <dt id="gestion.models.Fase.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Fase.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>GUARDA EL NOMBRE DE LA FASE</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -436,12 +403,14 @@ object the first time, the query is executed.</p>
 <dl class="attribute">
 <dt id="gestion.models.Fase.ordering">
 <code class="sig-name descname">ordering</code><em class="property"> = ['id_Fase']</em><a class="headerlink" href="#gestion.models.Fase.ordering" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>ORDENA POR ID DE FASE</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Fase.permissions">
 <code class="sig-name descname">permissions</code><em class="property"> = (('Poder Aprobar Fase', 'Aprobar Fase'), ('Poder Crear Fase', 'Crear Fase'))</em><a class="headerlink" href="#gestion.models.Fase.permissions" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>PERMISOS QUE REQUIERE FASE</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Fase.tipoitem_set">
@@ -466,6 +435,36 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <dl class="attribute">
 <dt id="gestion.models.Fase.verbose_name_plural">
 <code class="sig-name descname">verbose_name_plural</code><em class="property"> = 'Fases'</em><a class="headerlink" href="#gestion.models.Fase.verbose_name_plural" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.Permisos">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Permisos</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Permisos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Modelo creado especificamente para la creacion
+de permisos dentro de un proyecto, para la asignacion
+a usuarios quienes no son gerentes del proyecto</p>
+<dl class="exception">
+<dt id="gestion.models.Permisos.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Permisos.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Permisos.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Permisos.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Permisos.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Permisos.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Permisos.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Permisos.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -593,14 +592,7 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <dl class="attribute">
 <dt id="gestion.models.TipoItem.fase">
 <code class="sig-name descname">fase</code><a class="headerlink" href="#gestion.models.TipoItem.fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Accessor to the related object on the forward side of a many-to-one or
-one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+<dd><p>atributpp que sirve para hacer referencia de a que fase corresponde el tipo de  item</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -611,15 +603,13 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="attribute">
 <dt id="gestion.models.TipoItem.id_ti">
 <code class="sig-name descname">id_ti</code><a class="headerlink" href="#gestion.models.TipoItem.id_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>atributo que sive para identificar univocamente a cada tipo Item</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.TipoItem.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.TipoItem.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>atributo que sirve para para almacenar el nombre del tipo de item</p>
 </dd></dl>
 
 <dl class="attribute">

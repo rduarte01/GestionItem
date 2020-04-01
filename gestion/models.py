@@ -48,10 +48,15 @@ class Fase(models.Model):
     )
 
     id_Fase = models.AutoField(primary_key = True)
+    """ID DE LA FASE"""
     nombre = models.CharField('Nombre', max_length = 100, blank = False, null = False)
+    """GUARDA EL NOMBRE DE LA FASE"""
     descripcion = models.TextField('Descripción', blank = False, null = False)
+    """GUARDA LA DESCRIPCION DE LA FASE"""
     estado = models.CharField('Estado', max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'Abierta')
+    """GUARDA EL ESTADO DE LA FASE"""
     id_Proyecto = models.ForeignKey(Proyecto, on_delete = models.CASCADE)
+    """SSE RELACIONA LA FASE CON EL PROYECTO"""
     #TI = [*]
     #ti = models.ForeignKey(TipoItem, on_delete = models.CASCADE, blank = True, null = True)
     #id_Rol = models.ManyToMany(Rol)
@@ -67,9 +72,12 @@ class Fase(models.Model):
         ("Poder Aprobar Fase", "Aprobar Fase"),
         ("Poder Crear Fase", "Crear Fase")
     )
+    """PERMISOS QUE REQUIERE FASE"""
     verbose_name = 'Fase'
     verbose_name_plural = 'Fases'
     ordering = ['id_Fase']
+    """ORDENA POR ID DE FASE"""
+
 class TipoItem(models.Model):
     """"
         Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
@@ -143,8 +151,11 @@ class User_Proyecto(models.Model):
     """SI EL USUARIO ESTA ACTIVO EN EL PROYECTO, CASO CONTRARIO YA NO PERTENECE AL MISMO"""
 
 class FASE_ROL(models.Model):
+    """TABLA QUE RELACIONARA LA FASE CON EL ROL"""
     id_fase=models.ForeignKey(Fase,on_delete=models.CASCADE)
+    """ID FASE"""
     id_rol=models.ForeignKey(Group,on_delete=models.CASCADE)
+    """ID DEL ROL"""
 
 #Ger
 class Permisos(models.Model):
@@ -162,6 +173,4 @@ class Permisos(models.Model):
             ("crear_lb", "Puede Crear LB"),
             ("cerrar_lb", "Puede Cerrar LB"),
             ("generar_solicitud", "Puede Generar Solicitud de Cambio"),
-
-
         )

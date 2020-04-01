@@ -19,15 +19,23 @@
 <table class="table table-bordered">
     <form method="POST" action="">{% csrf_token %}
 
-
+        <tr>
+                    <td><h4>NOMBRE</h4></td>
+                    <td><h4>CORREO</h4></td>
+        </tr>
 
         {%for list in list %}
           {%for i in form%}
                 {%if list == i.id%}
+        <tr><td>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.id}}" id="{{i.id}}}">
                     <label class="form-check-label" for="{{i.id}}}"><h5>{{ i.username }}</h5></label>
                 </div>
+
+        </td>
+            <td>{{ i.email }}</td>
+        </tr>
             {%endif%}
     {%endfor%}
     {%endfor%}

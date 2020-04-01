@@ -6,7 +6,6 @@ Bienvenido a la Documentacion de Gestion de Items de Proyecto
    :maxdepth: 2
    :caption: Contenidos:
 
-   module/README.rst
 
    module/views.rst
    
