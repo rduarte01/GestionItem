@@ -94,7 +94,7 @@
         {% if "is_gerente" in proyecto_perms %}
             <td><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}"class="btn btn-primary">✚ USUARIOS</a></td>
                   <td><a href=""class="btn btn-primary">✚ FASES</a></td>
-                  <td><a href="{% url 'gestion:crearRol' proyectos.id_proyecto %}"class="btn btn-primary">✚ ROL</a></td>
+                  <td><a href="{% url 'gestion:misRoles' proyectos.id_proyecto %}"class="btn btn-primary">✚ ROL</a></td>
         {% endif %}
             <td><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}"class="btn btn-primary">VER TI DEL PROYECTO</a></td>
     </tr>

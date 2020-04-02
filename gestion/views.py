@@ -761,3 +761,29 @@ def listar_tipo_item(request,id_proyecto):
     }
     return render (request,'listarTipoItem.html',contexto)
 
+
+class VerRoles(ListView):
+    """Vista creada para listar los usuarios que se encuentran
+    en espera de ser aprobados dentro del sistema, vista que solo puede ser accedida
+    por el administrador del sistema,
+    Se especifica el atributos
+    -model:donde se asigna el Modelo utilizado
+    -template_name: donde se asigna que template estara asignado esta view
+    -queryset: Se filtra la lista de usuarios con estado aprobado falso, y es recibido por el template"""
+    model = Group
+    template_name = "misRoles.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        miid = self.kwargs['proyecto']
+
+        grupos = Group.objects.all()
+        grupList = []
+        for grupo in grupos:
+            numero, divisor, nombre = grupo.name.partition('_')
+            if (int(numero) == miid):
+                grupList += [{'grupo':grupo,'nombre':nombre}]
+
+        context['listGroup'] = grupList
+        context['idProyecto'] = miid
+        return context
