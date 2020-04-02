@@ -749,3 +749,15 @@ class ModificarRol(UpdateView):
     template_name = 'CrearRol.html'
     success_url = reverse_lazy('gestion:menu')
 
+def listar_tipo_item(request,id_proyecto):
+    fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
+    tipoItem=[]
+    for fase in fases:
+        tipoItem += TipoItem.objects.filter(fase_id=fase.id_Fase)
+
+    print(tipoItem)
+    contexto={
+        'TipoItem':tipoItem
+    }
+    return render (request,'listarTipoItem.html',contexto)
+

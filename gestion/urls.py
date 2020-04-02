@@ -35,6 +35,8 @@ urlpatterns = [
     path('userEnEspera/<int:pk>', ActualizarUser.as_view(), name='userEsperando'),
     path('crearRol/<str:proyecto>', CrearRol.as_view(), name='crearRol'),
     path('modRol/<int:pk>', ModificarRol.as_view(), name='modificarRol'),
+    path('lista/tipo/item/<int:id_proyecto>',views.listar_tipo_item, name='listar_tipo_item'),
+
 ]
 
 
