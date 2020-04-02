@@ -697,6 +697,18 @@ class ActualizarUser(UpdateView):
     form_class = PerfilUserEnEspera
     template_name = 'UserEnEspera.html'
     success_url = reverse_lazy('gestion:listaDeEspera')
+    '''
+    def get(self, request, *args, **kwargs):
+        context['user']=self.get_object()
+        return super(ActualizarUser, self).get(request)
+    '''
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['IDUser'] = self.object.id
+        context['fecha_registro']=self.object.user.date_joined
+        context['nombre']=self.object.user.username
+        context['email']=self.object.user.email
+        return context
 
     @method_decorator(permission_required('gestion.es_administrador', raise_exception=True))
     def dispatch(self, request, *args, **kwargs):

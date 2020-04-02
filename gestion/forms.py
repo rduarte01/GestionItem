@@ -206,18 +206,16 @@ class PerfilUserEnEspera(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['user','esta_aprobado']
+        fields = ['esta_aprobado']
         labels = {
             'esta_aprobado': 'Estado del usuario',
         }
-
         widgets = {
             'esta_aprobado': forms.RadioSelect(choices=[
                 (True, 'Activo'),
                 (False, 'En Espera')
             ]),
         }
-
 
 class RolForm(forms.ModelForm):
     """Form destinado para la creacion de un Rol especifico
