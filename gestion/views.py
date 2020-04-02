@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
-from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos
+from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario
 from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm
 from time import gmtime, strftime
 from .forms import FaseForm, FormUserAgg,FormProyectoEstados
@@ -117,8 +117,8 @@ def menu(request):
     GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PARTE"""
     user = request.user
     #return render(request, 'MenuAdminSistema.html')
-    if( user.esta_aprobado):
-        if user.has_perm('auth.es_administrador'):
+    if( user.usuario.esta_aprobado):
+        if user.has_perm('gestion.es_administrador'):
              return render(request,'MenuAdminSistema.html')
         else:
             return render(request, 'Menu.html')
@@ -148,14 +148,13 @@ def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo
 
     user= request.user## USER ACTUAL
 
-    form = User.objects.all()
+    form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
 
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
         #if form.is_valid():
         some_var=request.POST.getlist('checkbox')
         print(some_var)
-
         for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
             id_user =id
             p = User_Proyecto(user_id= id_user ,proyecto_id= pk,activo= True)
@@ -167,14 +166,14 @@ def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo
         list=[]
         for i in range(form.count()):
             ok = False
-            if form[i].esta_aprobado == True and form[i].id != user.id:
+            if form[i].esta_aprobado == True and form[i].user.id != user.id:
                 ok=True
                 for x in range(registrados.count()):
                     if registrados[x].proyecto_id == pk:
-                        if form[i].id == registrados[x].user_id:
+                        if form[i].user.id == registrados[x].user_id:
                             ok=False
             if ok:
-               list.append(form[i].id)
+               list.append(form[i].user.id)
 
         return render(request, 'agregarUsuarios.html', {'form': form,'list':list,'pk':pk})
 
@@ -214,6 +213,7 @@ def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
     user = request.user
     if user.is_authenticated:
+        validar_usuario(request.user)
         return redirect('gestion:menu')
     else:
         return render(request,'index.html')
@@ -270,7 +270,7 @@ class VerSolicitudesEspera(ListView):
 #jesus
 def ver_usuarios_aprobados(request):
     '''Lista todos los usarios aprobados en el sistema '''
-    users=User.objects.filter(esta_aprobado=True).exclude(id=request.user.id)
+    users=Usuario.objects.filter(esta_aprobado=True).exclude(user_id=request.user.id)
     context={'users':users}
     return render(request,'usuariosAprobados.html',context)
 
@@ -300,8 +300,9 @@ def get_user(request,pk):
                 print ('ban es true')
                 add_permission_admin(user, is_admin)
                 add_permission_gerente(user, is_gerente)
-                user.esta_aprobado = estado
-                user.save()
+                usuario=Usuario.objects.get(user_id=user.id)
+                usuario.esta_aprobado=estado
+                usuario.save()
             else:
                 contexto={
                     'mesanje_error':'El usuario esta activo en un proyecto por lo tanto no puedes desactivarlo, para hacerlo deben de darle de baja en el proyecto que en donde esta asociado   '
@@ -348,7 +349,8 @@ def tipo_item_views_create(request,id_fase):
 
 def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
     ''' Sirve para poder crear un nuevo atributo, asociando ese atributo a un tipo de item'''
-
+    fase=Fase.objects.get(id_Fase=fase_id)
+    #proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
     my_form = formset_factory(AtributeForm, extra=cantidad_atributos)
     if request.method == 'POST':
         my_form_set=my_form(request.POST)
@@ -358,7 +360,7 @@ def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
             for form in my_form_set:
                 n,o,t=recoge_datos_atributo(form)
                 atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
-            return redirect('gestion:get_fase_proyecto', id_fase=fase_id)
+            return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
     else:
         contexto={'formset':my_form,
                  'cant_atributos': list(range(1,cantidad_atributos+1))
@@ -397,7 +399,7 @@ def recoger_datos_usuario_settings(form):
 
 def add_permission_admin(user,is_admin):
     '''Funcion que permite agregar o sacar el permiso es_administrador a un usario, no retorna nada'''
-    content_type = ContentType.objects.get_for_model(User)
+    content_type = ContentType.objects.get_for_model(Usuario)
     if (is_admin):  # se agrega el es_administrador
         permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
         user.user_permissions.add(permission)
@@ -434,6 +436,7 @@ def crearFase(request):
             CANTIDAD = cantidad
             return redirect('gestion:crearFase')
         else:
+
             assign_perm('is_gerente', request.user, x)
             return redirect('gestion:menu')
 
@@ -459,7 +462,7 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
     user= request.user## USER ACTUAL
 
-    form = User.objects.all()
+    form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
 
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
@@ -478,14 +481,14 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
         list=[]
         for i in range(form.count()):
             ok = False
-            if form[i].esta_aprobado == True and form[i].id != user.id:
+            if form[i].esta_aprobado == True and form[i].user.id != user.id:
                 ok=True
                 for x in range(registrados.count()):
                     if registrados[x].proyecto_id == pk:
-                        if form[i].id == registrados[x].user_id:
+                        if form[i].user.id == registrados[x].user_id:
                             ok=False
             if ok:
-               list.append(form[i].id)
+               list.append(form[i].user.id)
 
         return render(request, 'AggUser.html', {'form': form,'list':list,'pk':pk})
 
@@ -494,11 +497,11 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
     """
     LISTA LOS USUARIOS DE UN PROYECTO
     """
-    user= request.user## USER ACTUAL
     proyecto=Proyecto.objects.get(id_proyecto=pk)
+    registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
+    user= request.user## USER ACTUAL
     form = User.objects.all()
     registrados = User_Proyecto.objects.all()
-
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
         #if form.is_valid():
         some_var=request.POST.getlist('checkbox')
@@ -602,7 +605,7 @@ def importar_tipo_item(request,id_fase):
         items de los proyectos de los que esta asociado el usuario y que aun no se tenga en  las
         fases dell proyecto.
     '''
-
+    fase = Fase.objects.get(id_Fase=id_fase)
     if(request.method=='POST'):
         print('es post')
         some_var = request.POST.getlist('checkbox')
@@ -617,7 +620,7 @@ def importar_tipo_item(request,id_fase):
                     atributo.id_atributo=None
                     atributo.ti_id=ti.id_ti
                     atributo.save()
-        return redirect('gestion:get_fase_proyecto',id_fase=id_fase)
+        return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
     else:
         print('es get')
         user=request.user #se optiene el usuario
@@ -628,13 +631,14 @@ def importar_tipo_item(request,id_fase):
         print('aca')
         print(list_tipo_item_proyecto_actual)
         for proyecto in proyectos:
-            fases=Fase.objects.filter(id_Proyecto_id=proyecto.proyecto_id) #obtengo toda las fases del proyecto
-            list_tipo_item=[]
-            for fase in fases :
-                list_tipo_item+=TipoItem.objects.filter(fase_id=fase.id_Fase)
-            for ti in list_tipo_item :
-                if not ti.nombre in list_tipo_item_proyecto_actual:
-                    list_tipo_item_a_importar += [ti]
+            if(proyecto.user_id==request.user.id):
+                fases=Fase.objects.filter(id_Proyecto_id=proyecto.proyecto_id) #obtengo toda las fases del proyecto
+                list_tipo_item=[]
+                for fase in fases :
+                    list_tipo_item+=TipoItem.objects.filter(fase_id=fase.id_Fase)
+                for ti in list_tipo_item :
+                    if not ti.nombre in list_tipo_item_proyecto_actual:
+                        list_tipo_item_a_importar += [ti]
 
         print(list_tipo_item_a_importar)
         fase=Fase.objects.get(id_Fase=id_fase)
@@ -670,30 +674,36 @@ class VerUsersEnEspera(ListView):
     -model:donde se asigna el Modelo utilizado
     -template_name: donde se asigna que template estara asignado esta view
     -queryset: Se filtra la lista de usuarios con estado aprobado falso, y es recibido por el template"""
-    model = User
-    """USA EL MODELO USER"""
+    model = Usuario
     template_name = "ListaUser.html"
-    """MUESTRA LOS USER EN EL TEMPLATE MENCIONADO"""
-    queryset = User.objects.filter(esta_aprobado = False)
-    """FILTRA LOS USUARIOS CON ESTADO FALSO"""
+    queryset = Usuario.objects.filter(esta_aprobado=False)
 
-    @method_decorator(permission_required('auth.es_administrador',raise_exception=True))
+    @method_decorator(permission_required('gestion.es_administrador',raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(VerUsersEnEspera,self).dispatch(request)
 
 class ActualizarUser(UpdateView):
     """Se muestra el perfil del usuario seleccionado, en donde se
     especifican los siguientes atributos:
-    """
-    model = User
-    """-model: especifa el modelo el cual esta siendo utilizado en la view"""
+    -model: especifa el modelo el cual esta siendo utilizado en la view
+    -form_class: especifica el form que sera utilidado dentro del template
+    -template_name: donde se asigna que template estara asignado esta view
+    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
+    model = Usuario
     form_class = PerfilUserEnEspera
     """    -form_class: especifica el form que sera utilidado dentro del template"""
     template_name = 'UserEnEspera.html'
     """-template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy('gestion:listaDeEspera')
-    """-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
-    @method_decorator(permission_required('auth.es_administrador', raise_exception=True))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['IDUser'] = self.object.id
+        context['fecha_registro']=self.object.user.date_joined
+        context['nombre']=self.object.user.username
+        context['email']=self.object.user.email
+        return context
+
+    @method_decorator(permission_required('gestion.es_administrador', raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(ActualizarUser, self).dispatch(request)
 
@@ -715,10 +725,32 @@ class CrearRol(CreateView):
 
     def post(self, request, *args, **kwargs):
         request.POST = request.POST.copy()
-        request.POST['name']  = self.kwargs['proyecto']+ request.POST['name']
+        request.POST['name']  = self.kwargs['proyecto']+'_'+request.POST['name']
         return super(CrearRol,self).post(request,**kwargs)
 """
     @method_decorator(permission_required('auth.es_gerente', raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(CrearRol, self).dispatch(request)
 """
+def validar_usuario(user):
+
+    if (User.objects.count() == 2):
+        add_permission_admin(user, True)
+        Usuario.objects.create(esta_aprobado=True,user_id=user.id)
+
+    usuario=Usuario.objects.filter(user_id=user.id).exists()
+    if not usuario:
+        Usuario.objects.create(esta_aprobado=False,user_id=user.id)
+
+class ModificarRol(UpdateView):
+    """Se muestra el perfil del usuario seleccionado, en donde se
+    especifican los siguientes atributos:
+    -model: especifa el modelo el cual esta siendo utilizado en la view
+    -form_class: especifica el form que sera utilidado dentro del template
+    -template_name: donde se asigna que template estara asignado esta view
+    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
+    model = Group
+    form_class = RolForm
+    template_name = 'CrearRol.html'
+    success_url = reverse_lazy('gestion:menu')
+

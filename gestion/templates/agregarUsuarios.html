@@ -26,14 +26,14 @@
         </tr>
         {%for list in list %}
           {%for i in form%}
-                {%if list == i.id%}
+                {%if list == i.user.id%}
         <tr><td>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.id}}" id="{{i.id}}}">
-                    <label class="form-check-label" for="{{i.id}}}"><h5>{{ i.username }}</h5></label>
+                    <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.user.id}}" id="{{i.user.id}}}">
+                    <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5></label>
                 </div>
         </td>
-            <td>{{ i.email }}</td>
+            <td>{{ i.user.email }}</td>
         </tr>
             {%endif%}
     {%endfor%}
