@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import Textarea
 from .models import Fase
-from django.contrib.auth.models import User, Permission,Group
+from django.contrib.auth.models import User, Permission,Group,ContentType
 from .models import Proyecto,TipoItem,Atributo,Usuario
 ####### se escribe formulario
 from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
@@ -224,7 +224,8 @@ class RolForm(forms.ModelForm):
     a un proyecto"""
     def __init__(self, *args,**kwargs):
         super(RolForm,self).__init__(*args,**kwargs)
-        self.fields['permissions'].queryset = Permission.objects.filter(content_type=21)
+        content_type=ContentType.objects.get(model='permisos')
+        self.fields['permissions'].queryset = Permission.objects.filter(content_type=content_type.id)
     class Meta:
         model = Group
         fields = "__all__"

@@ -61,6 +61,7 @@ def estadoProyecto(request,pk):
     context={
         "form":form,
         "estado": p.estado,
+        'proyecto':p
     }
     return render(request, 'estadoProyecto.html',context)
 
@@ -225,13 +226,13 @@ def perfil(request):
     solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario"""
 
     registrarAuditoria(request.user, 'Ingreso en el apartado perfil')
-
+    usuario=Usuario.objects.get(user_id=request.user.id)
     user = request.user
     auth0user = user.social_auth.filter(provider='auth0')[0]
     userdata = {
         'user_id': auth0user.uid,
         'name': user.first_name,
-        'estado': user.esta_aprobado,
+        'estado': usuario.esta_aprobado,
         'picture': auth0user.extra_data['picture'],
     }
 
@@ -258,14 +259,6 @@ def getUsers(request):
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
-class VerSolicitudesEspera(ListView):
-    """LISTA LOS USUARIOS LOS CUALES NO ESTAN APROBADOS EN EL SISTEMA"""
-    model = User
-    """UTILIZA EL MODELO USER"""
-    template_name = "ListaUser.html"
-    """TEMPLATE EN DONDE LISTAR LOS USERS"""
-    queryset = User.objects.filter(esta_aprobado = False)
-    """FILTRA LOS USERS CON ESTADO_APROBADO FALSE LOS CUALES NO ESTAN APROBADOS EN EL SISTEMA"""
 
 #jesus
 def ver_usuarios_aprobados(request):
@@ -289,10 +282,12 @@ def get_user(request,pk):
             if estado == 'False': #si el estado es falso
                 print('estado Falso')
                 if User_Proyecto.objects.filter(user_id=user.id).exists() :  #si el usuario no esta asociado a ningun proyecto
-                    proyectos_user= User_Proyecto.objects.filter(user_id=request.user.id)
+                    proyectos_user= User_Proyecto.objects.filter(user_id=user.id)
                     print('si esta asociada a un proyecto')
+                    print(proyectos_user)
                     for pu in proyectos_user:
                         if pu.activo:
+                            print('Esta activo')
                             print(pu.proyecto_id)
                             ban=False
                             break
@@ -678,7 +673,7 @@ class VerUsersEnEspera(ListView):
     template_name = "ListaUser.html"
     queryset = Usuario.objects.filter(esta_aprobado=False)
 
-    @method_decorator(permission_required('gestion.es_administrador',raise_exception=True))
+    #@method_decorator(permission_required('gestion.es_administrador',raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(VerUsersEnEspera,self).dispatch(request)
 
@@ -703,7 +698,7 @@ class ActualizarUser(UpdateView):
         context['email']=self.object.user.email
         return context
 
-    @method_decorator(permission_required('gestion.es_administrador', raise_exception=True))
+    #@method_decorator(permission_required('gestion.es_administrador', raise_exception=True))
     def dispatch(self, request, *args, **kwargs):
         return super(ActualizarUser, self).dispatch(request)
 

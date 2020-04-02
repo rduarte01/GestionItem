@@ -4,3 +4,5 @@ myenv/bin/
 myenv/share/python-wheels/
 
 gestion/__pycache__/
+
+myenv/
