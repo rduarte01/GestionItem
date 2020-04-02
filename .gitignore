@@ -6,3 +6,7 @@ myenv/share/python-wheels/
 gestion/__pycache__/
 
 myenv/
+
+GestionItem/__pycache__/
+
+gestion/migrations/
