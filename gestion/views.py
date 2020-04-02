@@ -146,7 +146,7 @@ def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
     user= request.user## USER ACTUAL
 
-    form = User.objects.all()
+    form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
 
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
@@ -164,14 +164,14 @@ def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo
         list=[]
         for i in range(form.count()):
             ok = False
-            if form[i].esta_aprobado == True and form[i].id != user.id:
+            if form[i].esta_aprobado == True and form[i].user.id != user.id:
                 ok=True
                 for x in range(registrados.count()):
                     if registrados[x].proyecto_id == pk:
-                        if form[i].id == registrados[x].user_id:
+                        if form[i].user.id == registrados[x].user_id:
                             ok=False
             if ok:
-               list.append(form[i].id)
+               list.append(form[i].user.id)
 
         return render(request, 'agregarUsuarios.html', {'form': form,'list':list,'pk':pk})
 
@@ -467,7 +467,7 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
     user= request.user## USER ACTUAL
 
-    form = User.objects.all()
+    form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
 
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
@@ -486,14 +486,14 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
         list=[]
         for i in range(form.count()):
             ok = False
-            if form[i].esta_aprobado == True and form[i].id != user.id:
+            if form[i].esta_aprobado == True and form[i].user.id != user.id:
                 ok=True
                 for x in range(registrados.count()):
                     if registrados[x].proyecto_id == pk:
-                        if form[i].id == registrados[x].user_id:
+                        if form[i].user.id == registrados[x].user_id:
                             ok=False
             if ok:
-               list.append(form[i].id)
+               list.append(form[i].user.id)
 
         return render(request, 'AggUser.html', {'form': form,'list':list,'pk':pk})
 
@@ -730,7 +730,7 @@ class CrearRol(CreateView):
 def validar_usuario(user):
 
     if (User.objects.count() == 2):
-        add_permission_admin(User, True)
+        add_permission_admin(user, True)
         Usuario.objects.create(esta_aprobado=True,user_id=user.id)
 
     usuario=Usuario.objects.filter(user_id=user.id).exists()
