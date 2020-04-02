@@ -732,7 +732,7 @@ class CrearRol(CreateView):
 
     def post(self, request, *args, **kwargs):
         request.POST = request.POST.copy()
-        request.POST['name']  = self.kwargs['proyecto']+ request.POST['name']
+        request.POST['name']  = self.kwargs['proyecto']+'_'+request.POST['name']
         return super(CrearRol,self).post(request,**kwargs)
 """
     @method_decorator(permission_required('auth.es_gerente', raise_exception=True))
@@ -748,4 +748,16 @@ def validar_usuario(user):
     usuario=Usuario.objects.filter(user_id=user.id).exists()
     if not usuario:
         Usuario.objects.create(esta_aprobado=False,user_id=user.id)
+
+class ModificarRol(UpdateView):
+    """Se muestra el perfil del usuario seleccionado, en donde se
+    especifican los siguientes atributos:
+    -model: especifa el modelo el cual esta siendo utilizado en la view
+    -form_class: especifica el form que sera utilidado dentro del template
+    -template_name: donde se asigna que template estara asignado esta view
+    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
+    model = Group
+    form_class = RolForm
+    template_name = 'CrearRol.html'
+    success_url = reverse_lazy('gestion:menu')
 
