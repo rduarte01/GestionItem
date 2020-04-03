@@ -7,8 +7,8 @@
         <li><a href="{% url 'gestion:ver_usuarios_aprobados' %}">Usuarios_Aceptados</a></li>
     {% endif %}
   <li><a href="{% url 'gestion:logout' %}">Cerrar_Sesion</a></li>
-  <li><a href="/auditoria/">Auditoria</a></li>
-  <li><a href="/Contactos/">Contacto</a></li>
+  <li><a href="{% url 'gestion:auditoria' %}">Auditoria</a></li>
+  <li><a href="{% url 'gestion:Contactos' %}">Contacto</a></li>
 {% endblock campos %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
@@ -18,7 +18,15 @@
       <div class="jumbotron">
         <h1>Es administrador del sistema</h1>
         <p class="lead">Debera de aceptar usuarios que se hayan registrado en el SSO para que pertenezcan al sistema, por favor labure</p>
-        <a class="btn btn-large btn-success" href="http://localhost:8000/enEspera/">Valide usuarios!</a>
+        <a class="btn btn-large btn-success" href="{% url 'gestion:listaDeEspera' %}"><h4>Valide usuarios!</h4></a>
+                  {% if perms.gestion.is_gerente %}
+
+        <a class="btn btn-large btn-success" href="{%url 'gestion:CrearProyecto' %}"><h5>Usted es un Gerente! Cree un Proyecto!</h5></a>
+        {% endif %}
+
+        <a class="btn btn-large btn-success" href="{%url 'gestion:listar_proyectos'%}"><h5>Trabaje sobre sus proyectos!</h5></a>
+      </div>
+
       </div>
   {% endblock body %}
 

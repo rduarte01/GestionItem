@@ -35,14 +35,16 @@
 
                 </tbody>
             </table>
-            <a href="{% url 'gestion:crearRol' idProyecto %}" class="btn btn-primary">Crear Rol</a>
+
 
         </div>
 
     </div>
+
     {% else %}
         <h1>No existe usuarios</h1>
     {% endif %}
+    <a href="{% url 'gestion:crearRol' idProyecto %}" class="btn btn-primary">Crear Rol</a>
 </body>
 {% endblock body%}
 

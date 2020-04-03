@@ -37,7 +37,7 @@
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
     <link rel="next" title="Models" href="models.html" />
-    <link rel="prev" title="README" href="README.html" /> 
+    <link rel="prev" title="Bienvenido a la Documentacion de Gestion de Items de Proyecto" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,7 +83,6 @@
             
               <p class="caption"><span class="caption-text">Contenidos:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
@@ -158,37 +157,52 @@
 <dt id="gestion.views.ActualizarUser">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ActualizarUser</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Se muestra el perfil del usuario seleccionado, en donde se
-especifican los siguientes atributos:
--model: especifa el modelo el cual esta siendo utilizado en la view
--form_class: especifica el form que sera utilidado dentro del template
--template_name: donde se asigna que template estara asignado esta view
--succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo</p>
-<dl class="method">
-<dt id="gestion.views.ActualizarUser.dispatch">
-<code class="sig-name descname">dispatch</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser.dispatch" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
-
+especifican los siguientes atributos:</p>
 <dl class="attribute">
 <dt id="gestion.views.ActualizarUser.form_class">
 <code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.ActualizarUser.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.PerfilUserEnEspera" title="gestion.forms.PerfilUserEnEspera"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.PerfilUserEnEspera</span></code></a></p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gestion.views.ActualizarUser.get_context_data">
+<code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser.get_context_data" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Se recibe id fecha de registro nombre y email de un usuario, se lo manda al template</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="gestion.views.ActualizarUser.model">
 <code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.ActualizarUser.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
+<dd><p>alias de <a class="reference internal" href="models.html#gestion.models.Usuario" title="gestion.models.Usuario"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.models.Usuario</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.views.ActualizarUser.post">
+<code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ActualizarUser.post" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Envia un correo al usuario al ser aprobado en el sistema</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.ActualizarUser.success_url">
 <code class="sig-name descname">success_url</code><em class="property"> = '/enEspera/'</em><a class="headerlink" href="#gestion.views.ActualizarUser.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>-succes_url</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.ActualizarUser.template_name">
 <code class="sig-name descname">template_name</code><em class="property"> = 'UserEnEspera.html'</em><a class="headerlink" href="#gestion.views.ActualizarUser.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>donde se asigna que template estara asignado esta view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>-template_name</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -229,14 +243,7 @@ ELECTRONICO DE ACUERDO A UNA ACCION</p>
 <dt id="gestion.views.CrearRol">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CrearRol</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearRol" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Se muestra la ventana para la creacion de un nuevo rol dentro de un proyecto, en donde se
-especifican los siguientes atributos:
--model: especifa el modelo el cual esta siendo utilizado en la view
--form_class: especifica el form que sera utilidado dentro del template
--template_name: donde se asigna que template estara asignado esta view
--succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo</p>
-<p>La funcion redeclara es la de post, en donde se realiza una modificacion del nombre declarado
-para la creacion, agregandole el id del proyecto perteneciente delate, esto para el reconocimiento
-del proyecto pertenciente de este Rol a crear</p>
+especifican los siguientes atributos:</p>
 <dl class="attribute">
 <dt id="gestion.views.CrearRol.form_class">
 <code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.CrearRol.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -252,19 +259,72 @@ del proyecto pertenciente de este Rol a crear</p>
 <dl class="method">
 <dt id="gestion.views.CrearRol.post">
 <code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearRol.post" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Handle POST requests: instantiate a form instance with the passed
-POST variables and then check if it’s valid.</p>
+<dd><p>La funcion redeclara es la de post, en donde se realiza una modificacion del nombre declarado
+para la creacion, agregandole el id del proyecto perteneciente delate, esto para el reconocimiento
+del proyecto pertenciente de este Rol a crear</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.CrearRol.success_url">
 <code class="sig-name descname">success_url</code><em class="property"> = '/menu/'</em><a class="headerlink" href="#gestion.views.CrearRol.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>-succes_url</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.CrearRol.template_name">
 <code class="sig-name descname">template_name</code><em class="property"> = 'CrearRol.html'</em><a class="headerlink" href="#gestion.views.CrearRol.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>donde se asigna que template estara asignado esta view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>-template_name</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.views.ModificarRol">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ModificarRol</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ModificarRol" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Se muestra el rol seleccionado dentro del proyecto</p>
+<dl class="attribute">
+<dt id="gestion.views.ModificarRol.form_class">
+<code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.ModificarRol.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.RolForm" title="gestion.forms.RolForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.RolForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.ModificarRol.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.ModificarRol.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.Group</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.ModificarRol.success_url">
+<code class="sig-name descname">success_url</code><em class="property"> = '/menu/'</em><a class="headerlink" href="#gestion.views.ModificarRol.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>-succes_url</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.ModificarRol.template_name">
+<code class="sig-name descname">template_name</code><em class="property"> = 'CrearRol.html'</em><a class="headerlink" href="#gestion.views.ModificarRol.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>donde se asigna que template estara asignado esta view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>-template_name</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -281,25 +341,30 @@ POST variables and then check if it’s valid.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="gestion.views.VerSolicitudesEspera">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">VerSolicitudesEspera</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.VerSolicitudesEspera" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>LISTA LOS USUARIOS LOS CUALES NO ESTAN APROBADOS EN EL SISTEMA</p>
-<dl class="attribute">
-<dt id="gestion.views.VerSolicitudesEspera.model">
-<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
+<dt id="gestion.views.VerRoles">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">VerRoles</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.VerRoles" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Vista creada para listar los roles que se encuentra dentro de un proyecto</p>
+<dl class="method">
+<dt id="gestion.views.VerRoles.get_context_data">
+<code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.VerRoles.get_context_data" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>recibe el id del proyecto y se listan los roles cone se id</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gestion.views.VerSolicitudesEspera.queryset">
-<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet [&lt;User: AnonymousUser&gt;, &lt;User: ruben&gt;]&gt;</em><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>FILTRA LOS USERS CON ESTADO_APROBADO FALSE LOS CUALES NO ESTAN APROBADOS EN EL SISTEMA</p>
+<dt id="gestion.views.VerRoles.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.VerRoles.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.Group</span></code></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gestion.views.VerSolicitudesEspera.template_name">
-<code class="sig-name descname">template_name</code><em class="property"> = 'ListaUser.html'</em><a class="headerlink" href="#gestion.views.VerSolicitudesEspera.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>TEMPLATE EN DONDE LISTAR LOS USERS</p>
+<dt id="gestion.views.VerRoles.template_name">
+<code class="sig-name descname">template_name</code><em class="property"> = 'misRoles.html'</em><a class="headerlink" href="#gestion.views.VerRoles.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>donde se asigna que template estara asignado esta view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>-template_name</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -322,20 +387,18 @@ Se especifica el atributos
 <dl class="attribute">
 <dt id="gestion.views.VerUsersEnEspera.model">
 <code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.VerUsersEnEspera.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>alias de <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.models.User</span></code></p>
+<dd><p>alias de <a class="reference internal" href="models.html#gestion.models.Usuario" title="gestion.models.Usuario"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.models.Usuario</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.VerUsersEnEspera.queryset">
-<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet [&lt;User: AnonymousUser&gt;, &lt;User: ruben&gt;]&gt;</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>FILTRA LOS USUARIOS CON ESTADO FALSO</p>
-</dd></dl>
+<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet []&gt;</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.VerUsersEnEspera.template_name">
 <code class="sig-name descname">template_name</code><em class="property"> = 'ListaUser.html'</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>MUESTRA LOS USER EN EL TEMPLATE MENCIONADO</p>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -446,6 +509,12 @@ fases dell proyecto.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.listar_tipo_item">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_proyecto</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Lista los tipos de item asociado a un proyecto</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.logout">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.logout" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>PARA DESLOGUEARSE, CERRAR SESION DEL SSO VUELVE A MOSTRAR INICIO</p>
@@ -506,6 +575,13 @@ dos booleanos para determinar si es gerente y administrador y el estado del usua
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.validar_usuario">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">validar_usuario</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.validar_usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Valida al usuario al inicio del sistema, el primer usuario se le asigna el rol de administrador del sistema
+se le agrega el estado aprobado</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.ver_proyecto">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ver_proyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ver_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MUESTRA LOS DETALLES DE UN PROYECTO</p>
@@ -530,7 +606,7 @@ dos booleanos para determinar si es gerente y administrador y el estado del usua
         <a href="models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="README.html" class="btn btn-neutral float-left" title="README" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="Bienvenido a la Documentacion de Gestion de Items de Proyecto" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

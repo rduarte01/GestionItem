@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario
 from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm
 from time import gmtime, strftime
-from .forms import FaseForm, FormUserAgg,FormProyectoEstados
+from .forms import FaseForm, FormProyectoEstados
 from django.db.models import Count
 from django.utils.decorators import method_decorator
 from .models import Proyecto,TipoItem,Atributo
@@ -20,10 +20,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
 from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required_or_403
-
-#### GLOBALES
-PROYECTOS_USUARIO=[]
-CANTIDAD=1
 
 
 #### GLOBALES
@@ -125,20 +121,6 @@ def menu(request):
             return render(request, 'Menu.html')
     else:
         registrarAuditoria(request.user ,'Inicio Menu en espera de aprobacion')
-        #si no tiene rol le tira el menu de espera
-        #envia correo al admin para que acepte
-        correo='rduarte0997@gmail.com'
-        #correo de administrador del sistema
-        asunto='Solicitud de ingreso al sistema'
-        mensaje='favor verificar si el usuario cumple los requisitos para ser aceptado'+ str(User)
-        CorreoMail(asunto,mensaje,correo)
-        #si no tiene rol le tira el menu de espera
-        user=request.user
-        #envia correo a usuario en espera para que espere
-        asunto='Se encuentra en verificacion favor aguarde'
-        correo = user.email   #correo de administrador del sistema
-        mensaje='Gracias por registrarte en nuestro sistema, favor aguardar a ser aceptado por el administrador del sistema usuario: '+ str(User)
-       # CorreoMail(asunto,mensaje,correo)
         return render(request, 'MenuEnEspera.html')
 
 
@@ -680,55 +662,54 @@ class VerUsersEnEspera(ListView):
 class ActualizarUser(UpdateView):
     """Se muestra el perfil del usuario seleccionado, en donde se
     especifican los siguientes atributos:
-    -model: especifa el modelo el cual esta siendo utilizado en la view
-    -form_class: especifica el form que sera utilidado dentro del template
-    -template_name: donde se asigna que template estara asignado esta view
-    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
+    """
     model = Usuario
+    """    -model: especifa el modelo el cual esta siendo utilizado en la view"""
     form_class = PerfilUserEnEspera
     """    -form_class: especifica el form que sera utilidado dentro del template"""
     template_name = 'UserEnEspera.html'
     """-template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy('gestion:listaDeEspera')
+    """    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
     def get_context_data(self, **kwargs):
+        """Se recibe id fecha de registro nombre y email de un usuario, se lo manda al template """
         context = super().get_context_data(**kwargs)
         context['IDUser'] = self.object.id
         context['fecha_registro']=self.object.user.date_joined
         context['nombre']=self.object.user.username
         context['email']=self.object.user.email
         return context
+    def post(self, request, *args, **kwargs):
+        """Envia un correo al usuario al ser aprobado en el sistema"""
+        usuario=Usuario.objects.get(id=self.kwargs['pk'])
+        if request.POST["esta_aprobado"] == 'True':
+            CorreoMail("Aprobado","Usted fue apobado en el sistema, bienvenido!!",usuario.user.email )
+        return super(ActualizarUser, self).post(request, **kwargs)
 
-    #@method_decorator(permission_required('gestion.es_administrador', raise_exception=True))
-    def dispatch(self, request, *args, **kwargs):
-        return super(ActualizarUser, self).dispatch(request)
 
 class CrearRol(CreateView):
     """Se muestra la ventana para la creacion de un nuevo rol dentro de un proyecto, en donde se
-    especifican los siguientes atributos:
-    -model: especifa el modelo el cual esta siendo utilizado en la view
-    -form_class: especifica el form que sera utilidado dentro del template
-    -template_name: donde se asigna que template estara asignado esta view
-    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo
-
-    La funcion redeclara es la de post, en donde se realiza una modificacion del nombre declarado
-    para la creacion, agregandole el id del proyecto perteneciente delate, esto para el reconocimiento
-    del proyecto pertenciente de este Rol a crear"""
+    especifican los siguientes atributos:"""
     model = Group
+    """    -model: especifa el modelo el cual esta siendo utilizado en la view"""
     form_class = RolForm
+    """    -form_class: especifica el form que sera utilidado dentro del template"""
     template_name = "CrearRol.html"
+    """    -template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy("gestion:menu")
-
+    """-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
     def post(self, request, *args, **kwargs):
+        """    La funcion redeclara es la de post, en donde se realiza una modificacion del nombre declarado
+            para la creacion, agregandole el id del proyecto perteneciente delate, esto para el reconocimiento
+            del proyecto pertenciente de este Rol a crear"""
+
         request.POST = request.POST.copy()
         request.POST['name']  = self.kwargs['proyecto']+'_'+request.POST['name']
         return super(CrearRol,self).post(request,**kwargs)
-"""
-    @method_decorator(permission_required('auth.es_gerente', raise_exception=True))
-    def dispatch(self, request, *args, **kwargs):
-        return super(CrearRol, self).dispatch(request)
-"""
-def validar_usuario(user):
 
+def validar_usuario(user):
+    """Valida al usuario al inicio del sistema, el primer usuario se le asigna el rol de administrador del sistema
+    se le agrega el estado aprobado"""
     if (User.objects.count() == 2):
         add_permission_admin(user, True)
         Usuario.objects.create(esta_aprobado=True,user_id=user.id)
@@ -738,18 +719,18 @@ def validar_usuario(user):
         Usuario.objects.create(esta_aprobado=False,user_id=user.id)
 
 class ModificarRol(UpdateView):
-    """Se muestra el perfil del usuario seleccionado, en donde se
-    especifican los siguientes atributos:
-    -model: especifa el modelo el cual esta siendo utilizado en la view
-    -form_class: especifica el form que sera utilidado dentro del template
-    -template_name: donde se asigna que template estara asignado esta view
-    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
+    """Se muestra el rol seleccionado dentro del proyecto
+    """
     model = Group
+    """ -model: especifa el modelo el cual esta siendo utilizado en la view"""
     form_class = RolForm
+    """-form_class: especifica el form que sera utilidado dentro del template"""
     template_name = 'CrearRol.html'
+    """-template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy('gestion:menu')
-
+    """-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
 def listar_tipo_item(request,id_proyecto):
+    """Lista los tipos de item asociado a un proyecto"""
     fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
     tipoItem=[]
     for fase in fases:
@@ -763,17 +744,14 @@ def listar_tipo_item(request,id_proyecto):
 
 
 class VerRoles(ListView):
-    """Vista creada para listar los usuarios que se encuentran
-    en espera de ser aprobados dentro del sistema, vista que solo puede ser accedida
-    por el administrador del sistema,
-    Se especifica el atributos
-    -model:donde se asigna el Modelo utilizado
-    -template_name: donde se asigna que template estara asignado esta view
-    -queryset: Se filtra la lista de usuarios con estado aprobado falso, y es recibido por el template"""
+    """Vista creada para listar los roles que se encuentra dentro de un proyecto
+    """
     model = Group
+    """    -model:donde se asigna el Modelo utilizado"""
     template_name = "misRoles.html"
-
+    """    -template_name: donde se asigna que template estara asignado esta view"""
     def get_context_data(self, **kwargs):
+        """recibe el id del proyecto y se listan los roles cone se id"""
         context = super().get_context_data(**kwargs)
         miid = self.kwargs['proyecto']
 

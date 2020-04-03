@@ -19,7 +19,7 @@ class Proyecto(models.Model):
         ("FINALIZADO", "FINALIZADO"),
         ("CANCELADO", "CANCELADO")
     )
-
+    """DEFINE LAS OPCIONES DE LOS ESTADOS DEL PROYECTOS"""
     id_proyecto= models.AutoField(primary_key = True) ###### clave de proyecto
     """SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD"""
     nombre= models.CharField(max_length=30)
@@ -29,6 +29,7 @@ class Proyecto(models.Model):
     estado= models.CharField('Estado', max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'CREADO')
     """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO, POR DEFAULT QUEDA EN CREADO"""
     users= models.ManyToManyField(User, blank=True)
+    """HACE REFERENCIA A LOS USERS DEL SISTEMA"""
     ###-Fases: Fases[*]
     ###-Rol: Rol[*]
 
@@ -37,7 +38,7 @@ class Proyecto(models.Model):
         permissions = (("is_gerente", "Permiso de gerente de proyectos"),
                        ("is_administradorSistema", "Permiso de Administrador del sistema"),
                        )
-
+        """DEFINE LOS PERMISOS DEL MODELO PROYECTO"""
 
 class Fase(models.Model):
     """Se tiene el modelo fase, el cual será utilizado en el proyecto para albergar a los items y poder
@@ -48,6 +49,7 @@ class Fase(models.Model):
         ("Abierta", "Abierta"),
         ("Cerrada", "Cerrada")
     )
+    """DEFINE LOS ESTADOS DEL MODELO FASE"""
 
     id_Fase = models.AutoField(primary_key = True)
     """ID DE LA FASE"""
@@ -76,7 +78,9 @@ class Fase(models.Model):
     )
     """PERMISOS QUE REQUIERE FASE"""
     verbose_name = 'Fase'
+    """NOMBRE DEL MODELO DENTRO DE ADMIN"""
     verbose_name_plural = 'Fases'
+    """NOMBRE DEL MODELO DENTRO DE ADMIN"""
     ordering = ['id_Fase']
     """ORDENA POR ID DE FASE"""
 
@@ -99,6 +103,7 @@ class TipoItem(models.Model):
         '''en estas variables especificamos los permisos que vamos  tener para este modelo TipoItem'''
         ordering=['nombre']
         '''en este especificamos  como vamos a ordenar '''
+
 class Atributo(models.Model):
     """"
        Este es el modelo Atributo, que se relaciona con Tipo de Item, y sirve para representa todos los valores
@@ -128,9 +133,6 @@ class Atributo(models.Model):
         '''Clase que provee meta datos de como para el modelo Atributo'''
         ordering=['nombre']
         '''para saber por que atibuto vamos a ordenar'''
-
-
-
 
 class Auditoria(models.Model):
     """TABLA EN DONDE SE GUARDAN LAS MODIFICACIONES QUE REALIZAN TODOS LOS USUARIOS EN EL SISTEMA"""
@@ -165,7 +167,9 @@ class Permisos(models.Model):
     de permisos dentro de un proyecto, para la asignacion
     a usuarios quienes no son gerentes del proyecto"""
     class Meta:
+        """DEFINE METADATOS PARA EL MODELO PERMISO"""
         default_permissions = ()
+        """PARA NO AÑADIR LOS PERMISOS POR DEFAULT DE DJANGO"""
         permissions = (
             ("crear_item", "Puede Crear Item"),
             ("editar_item", "Puede Editar Item"),
@@ -176,26 +180,20 @@ class Permisos(models.Model):
             ("cerrar_lb", "Puede Cerrar LB"),
             ("generar_solicitud", "Puede Generar Solicitud de Cambio"),
         )
+        """LISTA DE PERMISOS ASOCIADOS AL PROYECTO"""
 
 class Usuario(models.Model):
+    """MODELO QUE SE UTILIZA PARA ALMACENAR EL ESTADO DEL USUARIO Y SU PERMISO"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    """HACE REFERENCIA AL MODELO USER DE DJANGO"""
     esta_aprobado = models.BooleanField(
         default=False
     )
+    """VARIABLE QUE INDICA ESTADO DEL USUARIO EN EL SISTEMA"""
     class Meta:
+        """DEFINE METADATOS PARA EL MODELO USUARIO"""
         permissions = (
             ('es_administrador','Puede hacer tareas de Administrador'),
         )
+        """LISTA DE PERMISOS ASOCIADOS AL SISTEMA"""
 
-
-'''
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-'''

@@ -6,14 +6,6 @@ from .models import Proyecto,TipoItem,Atributo,Usuario
 ####### se escribe formulario
 from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
 
-class FormUserAgg(forms.ModelForm):
-    class Meta:
-        model = User
-        fields=['username']
-        permissions =forms.ModelMultipleChoiceField(
-            queryset = Permission.objects.all(),
-            required= False,
-        )
 
 class FormProyectoEstados(forms.Form):
     """FORM PARA MOSTRAR LOS ESTADOS QUE PUEDE TENER UN PROYECTO"""
@@ -103,7 +95,9 @@ class FaseForm(forms.ModelForm):
     CON SUS RESPECTIVOS CAMPOS A COMPLETAR
     """
     class Meta:
+        """METADATOS PARA FORM FASE"""
         model = Fase
+        """UTILIZA EL MODELO FASE"""
         fields = [#'id_Fase',
                   'nombre',
                   'descripcion'
