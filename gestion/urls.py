@@ -19,7 +19,7 @@ urlpatterns = [
     path('desvinculacionProyecto/<int:pk>/<int:pk_user>', views.desvinculacionProyecto, name='desvinculacionProyecto'),
     path('agregarUsuarios/<int:pk>', views.agregarUsuarios, name='agregarUsuarios'),
     path('proyectos/', listar_proyectos, name='listar_proyectos'),
-    path('cancelado/', proyectoCancelado),
+    path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
     path('crear/TipoItem/<int:id_fase>',views.tipo_item_views_create,name='tipo_item_views_create'),
     path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>/<int:fase_id>',views.add_atribute,name='add_atribute'),
     path('listar/usuarios/aprobados',views.ver_usuarios_aprobados,name='ver_usuarios_aprobados'),

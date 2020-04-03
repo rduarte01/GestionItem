@@ -3,9 +3,9 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
               {% block campos %}
-                  <li class="active"><a href="/menu/">Inicio</a></li>
-                  <li><a href="perfil/">Perfil</a></li>
-                  <li><a href="logout/">Cerrar_Sesion</a></li>
+                  <li class="active"><a href="{%url 'gestion:menu'%}">Inicio</a></li>
+                  <li><a href="{%url 'gestion:perfil'%}">Perfil</a></li>
+                  <li><a href="{%url 'gestion:logout'%}">Cerrar_Sesion</a></li>
                   <li><a href="#">Ayuda</a></li>
                 {% endblock campos %}
   <body>
@@ -20,7 +20,7 @@
         <p class="lead">Debera de aguardar a ser aceptado por el administrador del sistema, le estara llegando un correo
         electrónico cuando sea aceptado
         </p>
-                <a class="btn btn-large btn-success" href="/menu/"><h4>Le llego el correo de aprobado? presione aquí!</h4></a>
+                <a class="btn btn-large btn-success" href="{%url 'gestion:menu'%}"><h4>Le llego el correo de aprobado? presione aquí!</h4></a>
       </div>
 
     </div> <!-- /container -->

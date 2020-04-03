@@ -6,7 +6,7 @@
 {% if "is_gerente" in proyecto_perms %}
     <form  method='POST'>{% csrf_token%}
         {{tipo_item_form.as_p}}
-        <input type='submit' value= 'Siguiente' />
+        <input class="btn btn-primary" type='submit' value= 'Siguiente' />
     </form>
 {%else%}
     <h1> Usted no es gerente de Proyecto para este {{proyecto.nombre}}, No puede crear Tipo de Item</h1>

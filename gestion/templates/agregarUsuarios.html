@@ -11,7 +11,7 @@
 
 {% block contect %}
         <div>
-            <a class="btn btn-primary" href="/cancelado/" role="button">Cancelar</a>
+            <a class="btn btn-primary" href="{%url 'gestion:Proyectocancelado'%}" role="button">Cancelar</a>
         </div>
 
       <div class="jumbotron">
@@ -42,7 +42,7 @@
     </form>
 </table>
 {% endblock %}
-     <input type="submit"  value="Guardar">
+     <input class="btn btn-primary" type="submit"  value="Guardar">
  </form>
       </div>
 {% endblock %}

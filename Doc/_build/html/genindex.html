@@ -85,7 +85,8 @@
 <li class="toctree-l1"><a class="reference internal" href="module/views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module/forms.html">Forms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module/tests.html">Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module/tests.html">Tests URLS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module/tests.html#module-gestion.tests.test_views">Tests Views</a></li>
 </ul>
 
             
@@ -411,7 +412,9 @@
 </li>
       <li><a href="module/models.html#module-gestion.models">gestion.models (módulo)</a>
 </li>
-      <li><a href="module/tests.html#module-gestion.tests">gestion.tests (módulo)</a>
+      <li><a href="module/tests.html#module-gestion.tests.test_urls">gestion.tests.test_urls (módulo)</a>
+</li>
+      <li><a href="module/tests.html#module-gestion.tests.test_views">gestion.tests.test_views (módulo)</a>
 </li>
       <li><a href="module/views.html#module-gestion.views">gestion.views (módulo)</a>
 </li>
@@ -637,14 +640,14 @@
 </li>
       <li><a href="module/models.html#gestion.models.Fase.permissions">permissions (atributo de gestion.models.Fase)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/views.html#gestion.views.ActualizarUser.post">post() (método de gestion.views.ActualizarUser)</a>
 
       <ul>
         <li><a href="module/views.html#gestion.views.CrearRol.post">(método de gestion.views.CrearRol)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/models.html#gestion.models.Proyecto">Proyecto (clase en gestion.models)</a>
 </li>
       <li><a href="module/models.html#gestion.models.Proyecto.DoesNotExist">Proyecto.DoesNotExist</a>
@@ -656,6 +659,8 @@
       <li><a href="module/views.html#gestion.views.proyectoCancelado">proyectoCancelado() (en el módulo gestion.views)</a>
 </li>
       <li><a href="module/views.html#gestion.views.PROYECTOS_USUARIO">PROYECTOS_USUARIO (en el módulo gestion.views)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.pytestmark">pytestmark (atributo de gestion.tests.test_views.TestViews)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -727,12 +732,48 @@
         <li><a href="module/views.html#gestion.views.VerUsersEnEspera.template_name">(atributo de gestion.views.VerUsersEnEspera)</a>
 </li>
       </ul></li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_add_atributo">test_add_atributo() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_Agg_User">test_Agg_User() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_agregarUsuario">test_agregarUsuario() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_creacionFase">test_creacionFase() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_creacionProyecto">test_creacionProyecto() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_CrearRol">test_CrearRol() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_estado_proyecto">test_estado_proyecto() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_urls.TestUrls.test_getUser_url">test_getUser_url() (método de gestion.tests.test_urls.TestUrls)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_importar_tipo_de_item">test_importar_tipo_de_item() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_urls.TestUrls.test_logout_url">test_logout_url() (método de gestion.tests.test_urls.TestUrls)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_menu">test_menu() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_modificar_rol">test_modificar_rol() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_perfil_authenticated">test_perfil_authenticated() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_urls.TestUrls.test_perfil_url">test_perfil_url() (método de gestion.tests.test_urls.TestUrls)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_usuario_aprobado">test_usuario_aprobado() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews.test_usuario_no_aprobado">test_usuario_no_aprobado() (método de gestion.tests.test_views.TestViews)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_urls.TestUrls">TestUrls (clase en gestion.tests.test_urls)</a>
+</li>
+      <li><a href="module/tests.html#gestion.tests.test_views.TestViews">TestViews (clase en gestion.tests.test_views)</a>
+</li>
       <li><a href="module/models.html#gestion.models.Atributo.ti">ti (atributo de gestion.models.Atributo)</a>
 </li>
       <li><a href="module/models.html#gestion.models.Atributo.ti_id">ti_id (atributo de gestion.models.Atributo)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module/models.html#gestion.models.Atributo.tipo_dato">tipo_dato (atributo de gestion.models.Atributo)</a>
 </li>
       <li><a href="module/views.html#gestion.views.tipo_item_views_create">tipo_item_views_create() (en el módulo gestion.views)</a>

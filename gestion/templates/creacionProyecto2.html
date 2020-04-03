@@ -10,7 +10,7 @@
 
 {% block contect %}
 {% if perms.gestion.is_gerente %}
-    <a class="btn btn-primary" href="/menu/" role="button">Volver Atras</a>
+    <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
 
       <div class="jumbotron">
 
@@ -22,7 +22,7 @@
       </div>
 {% else %}
     <h1>Usted no es gerente de este proyecto, por tanto no puede crear proyectos</h1>
-    <a class="btn btn-primary" href="/menu/" role="button">Volver al menu principal</a>
+    <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
 {% endif %}
 
 {% endblock %}

@@ -8,7 +8,7 @@
 <title>Estado del Proyecto</title>
 
 {% block title %}
-    <h1><a class="btn btn-primary" href="/proyectos/" role="button">Volver Atras</a>Cambiar estado de proyecto</h1>
+    <h1><a class="btn btn-primary" href="{%url 'gestion:listar_proyectos'%}" role="button">Volver Atras</a>Cambiar estado de proyecto</h1>
           <h5>-------------------------------------------------------------------</h5>
           <h5>Estado del proyecto actual: ------> {{estado}} <------</h5>
           <h5>-------------------------------------------------------------------</h5>
@@ -36,12 +36,12 @@
     <form method="POST" action="">{% csrf_token %}
 
       {{ form.as_p }}
-         <input type="submit"  value="Guardar nuevo estado">
+         <input class="btn btn-primary" type="submit"  value="Guardar nuevo estado">
     </form>
       </div>
 {% else %}
     <h1>Usted no es gerente de este proyecto, por tanto no puede cambiar de estado</h1>
-    <a class="btn btn-primary" href="/menu/" role="button">Volver al menu principal</a>
+    <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
 {% endif %}
 
 {% endblock %}

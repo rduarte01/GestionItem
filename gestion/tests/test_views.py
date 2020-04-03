@@ -60,7 +60,7 @@ class TestViews(TestCase):
         )
 
         mixer.blend('gestion.Proyecto')
-        path = reverse('gestion:creacionProyecto')
+        path = reverse('gestion:CrearProyecto')
         request = RequestFactory().post(path)
 
         #proyecto1 = Proyecto.objects.last()

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tests &mdash; documentación de GestionItem - 0.1</title>
+  <title>Tests URLS &mdash; documentación de GestionItem - 0.1</title>
   
 
   
@@ -85,7 +85,8 @@
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tests</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tests URLS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-gestion.tests.test_views">Tests Views</a></li>
 </ul>
 
             
@@ -131,7 +132,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Tests</li>
+      <li>Tests URLS</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -150,8 +151,142 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-gestion.tests">
-<span id="tests"></span><h1>Tests<a class="headerlink" href="#module-gestion.tests" title="Enlazar permanentemente con este título">¶</a></h1>
+  <div class="section" id="module-gestion.tests.test_urls">
+<span id="tests-urls"></span><h1>Tests URLS<a class="headerlink" href="#module-gestion.tests.test_urls" title="Enlazar permanentemente con este título">¶</a></h1>
+<dl class="class">
+<dt id="gestion.tests.test_urls.TestUrls">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.tests.test_urls.</code><code class="sig-name descname">TestUrls</code><a class="headerlink" href="#gestion.tests.test_urls.TestUrls" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="method">
+<dt id="gestion.tests.test_urls.TestUrls.test_getUser_url">
+<code class="sig-name descname">test_getUser_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_urls.TestUrls.test_getUser_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Prueba la función obtener un usuario en concreto con las redirecciones entre templates
+:return: si la redireccion se llevó a cabo satisfactoriamente retorna OK, caso contrario retorna un mensaje de error</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_urls.TestUrls.test_logout_url">
+<code class="sig-name descname">test_logout_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_urls.TestUrls.test_logout_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Prueba la función cerrar sesión de un usuario en concreto con las redirecciones entre templates
+:return: si la redireccion se llevó a cabo satisfactoriamente retorna OK, caso contrario retorna un mensaje de error</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_urls.TestUrls.test_perfil_url">
+<code class="sig-name descname">test_perfil_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_urls.TestUrls.test_perfil_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Prueba la función ver perfil de un usuario en concreto con las redirecciones entre templates
+:return: si la redireccion se llevó a cabo satisfactoriamente retorna OK, caso contrario retorna un mensaje de error</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gestion.tests.test_views">
+<span id="tests-views"></span><h1>Tests Views<a class="headerlink" href="#module-gestion.tests.test_views" title="Enlazar permanentemente con este título">¶</a></h1>
+<dl class="class">
+<dt id="gestion.tests.test_views.TestViews">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.tests.test_views.</code><code class="sig-name descname">TestViews</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.tests.test_views.TestViews.pytestmark">
+<code class="sig-name descname">pytestmark</code><em class="property"> = [Mark(name='django_db', args=(), kwargs={})]</em><a class="headerlink" href="#gestion.tests.test_views.TestViews.pytestmark" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_Agg_User">
+<code class="sig-name descname">test_Agg_User</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_Agg_User" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se agrega correctamente un usuario a un proyecto</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_CrearRol">
+<code class="sig-name descname">test_CrearRol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_CrearRol" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se realiza correctamente la creacion de un Rol. Se compara si el resultado es distinto a None ya que el metodo super() de
+la funcion crearRol devuelve una direccion de memoria como respuesta.
+return: Si no se lleva a cabo correctamente la creacion de un rol devuelve un mensaje de error, de lo contrario no se visualiza nada.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_add_atributo">
+<code class="sig-name descname">test_add_atributo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_add_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba que se crea correctamente un atributo para un tipo de item determinados. La funcion recibe un request
+return: Si no se realiza correctamente la creacion de un atributo lanza un mensaje de error, caso contrario no se visualiza nada.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_agregarUsuario">
+<code class="sig-name descname">test_agregarUsuario</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_agregarUsuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba que se agregue correctamente un usuario a un proyecto. Recibe el ID de un usuario y muestra los usuarios que
+pueden ser añadidos a él.
+return: Si no se agrega un usuario a un proyecto se lanza un mensaje de error, caso contrario se omiten mensajes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_creacionFase">
+<code class="sig-name descname">test_creacionFase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_creacionFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Verifica que la creacion de fases se haga de manera correcta.
+return: Si no se ha llevado a cabo la correcta creacion de una fase emitirá un mensaje de error, caso contrario no emitirá ningún mensaje</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_creacionProyecto">
+<code class="sig-name descname">test_creacionProyecto</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_creacionProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Verifica que la creacion de proyecto se realice de manera correcta.
+return: Si la creacion no se ha realizado retorna un mensaje de error, caso contrario no devuelve ningun mensaje.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_estado_proyecto">
+<code class="sig-name descname">test_estado_proyecto</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_estado_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se realiza correctamente la modificacion de estado de un proyecto determinado
+return: Si no se obtiene una respuesta Http 200 se emite un mensaje de error, de lo contrario no se visualiza nada</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_importar_tipo_de_item">
+<code class="sig-name descname">test_importar_tipo_de_item</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_importar_tipo_de_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se ha llevado a cabo correctamente la importacion de un tipo de item en una fase determinada.
+El metodo importar_tipo_item recibe como parametros un request y un id de una fase
+return: Si no se ha llevado a cabo correctamente la importacion retorna un mensaje de error, caso contrario no se visualiza nada.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_menu">
+<code class="sig-name descname">test_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_menu" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se ha llevado a cabo correctamente el montado de la vista menu del sistema.
+El metodo menu recibe como parametro un request
+return: Retorna un mensaje de error si la operacion no se ha llevado a cabo correctamente, caso contrario no se visualiza nada.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_modificar_rol">
+<code class="sig-name descname">test_modificar_rol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_modificar_rol" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se realiza correctamente la modificacion de un rol. Se compara con None el resultado ya que las funciones
+internas devuelven direcciones de memoria.
+return: Si no se lleva a cabo la modificacion de un rol devuelve un mensaje de error, caso contrario no se visualiza nada.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_perfil_authenticated">
+<code class="sig-name descname">test_perfil_authenticated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_perfil_authenticated" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se muestra el perfil del usuario solicitante.
+return: Si no se realiza correctamente la visualizacion del perfil del usuario retorna un mensaje de error, caso contrario se omiten mensajes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_usuario_aprobado">
+<code class="sig-name descname">test_usuario_aprobado</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_usuario_aprobado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si la cantidad de usuarios aprobados es correcta. Cabe resaltar que por defecto un usuario recien creado no esta aprobado
+return: Devuelve un mensaje de error si la cantidad de usuarios aprobados no esta acorde a los usuarios creados inicialmente(deben ser distintos)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_views.TestViews.test_usuario_no_aprobado">
+<code class="sig-name descname">test_usuario_no_aprobado</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_usuario_no_aprobado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si la cantidad de usuarios no aprobados es correcta
+return: Devuelve un mensaje de error si la cantidad de usuarios no aprobados no coincide con la cantidad de usuarios creados inicialmente</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
