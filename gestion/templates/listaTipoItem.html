@@ -19,7 +19,7 @@
             </div>
         </div>
         {% for ti in tipoItems%}
-        <form method='POST'>
+        <form method='POST' onSubmit="return enviado()">
             {% csrf_token%}
             <div class="container">
                 <div class="row">

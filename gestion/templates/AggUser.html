@@ -1,3 +1,4 @@
+{% extends 'creacionProyecto2.html'%}
 <title>Agrega Usuarios</title>
 {% load bootstrap4 %}
 {% bootstrap_css %}
@@ -14,10 +15,10 @@
 
       <div class="jumbotron">
 
- <form method="POST" action="">{% csrf_token %}
+ <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
 {% block content %}
 <table class="table table-bordered">
-    <form method="POST" action="">{% csrf_token %}
+    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
 
         <tr>
                     <td><h4>NOMBRE</h4></td>

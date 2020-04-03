@@ -3,9 +3,27 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
+
+    <script LANGUAGE="JavaScript">
+        var cuenta=0;
+        function enviado() {
+                if (cuenta == 0)
+            {
+                cuenta++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+</script>
+
+
+
 {%block body %}
 
-    <form action="#" method="POST">
+    <form action="#" method="POST" onSubmit="return enviado()">
   {% csrf_token %}
   {% if error %}
     <h2>{{ error }}</h2>
@@ -15,7 +33,7 @@
               <strong>Edicion de Usuario</strong>
           </div>
           <div class="card-body card-block">
-              <form method="post" enctype="multipart/form-data" class="form-horizontal">
+              <form method="post" enctype="multipart/form-data" class="form-horizontal" onSubmit="return enviado()">
                   <div class="row form-group">
                       <div class="col col-md-3">Fecha de Registro:</div>
                       <div class="col-12 col-md-9">{{ fecha_registro }}</div>

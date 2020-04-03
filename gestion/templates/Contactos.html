@@ -1,3 +1,5 @@
+{% extends 'creacionProyecto2.html'%}
+
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
@@ -96,7 +98,7 @@
       <div class="jumbotron">
         <h1>Gracias por usar nuestro sistema</h1>
         <p class="lead">Si tiene algun inconveniente o consulta sobre el sistema favor escriba su inconveniente</p>
-      <form method="POST" action="">{% csrf_token %}
+      <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
             {{form.as_p}}
        <input class="btn btn-primary" type="submit"  value="Enviar duda o consulta">
       </form>

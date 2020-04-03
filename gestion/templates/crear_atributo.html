@@ -1,8 +1,7 @@
 {% extends 'Menu.html' %}
 
-
 {% block body %}
-<form  method='POST'>{% csrf_token%}
+<form  method='POST' onSubmit="return enviado()">{% csrf_token%}
     {{ formset.management_form }}
     {% for form in formset %}
         <h2> Atributo {{ forloop.counter }}  </h2>
