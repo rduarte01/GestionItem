@@ -124,7 +124,7 @@ def menu(request):
         return render(request, 'MenuEnEspera.html')
 
 
-def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
+def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     RECIBE EL ID DEL PROYECTO Y MUESTRA LOS USUARIOS QUE PUEDEN SER AÑADIDOS A EL
     """
@@ -144,7 +144,7 @@ def agregarUsuarios(request,pk):#esta enlazado con la clase FaseForm del archivo
             p.save()
 
         #form.save()
-        return redirect('gestion:crearFase')
+        return redirect('gestion:crearFase',nroFase)
     else:
         list=[]
         for i in range(form.count()):
@@ -170,6 +170,7 @@ def creacionProyecto(request):
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
         ### NADA QUE TOCAR
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
+
         global CANTIDAD
         cantidad = formProyecto.cleaned_data
         cantidad_fases=cantidad.get("fase")##### PARA WALTER
@@ -183,8 +184,10 @@ def creacionProyecto(request):
         p = User_Proyecto(user_id= q.id ,proyecto_id= id_proyecto,activo= True)
         p.save()
 
-
-        return redirect('gestion:agregarUsuarios',id_proyecto)
+        print(cantidad_fases)
+        cantidad_fases=cantidad_fases-1
+        print(cantidad_fases)
+        return redirect('gestion:agregarUsuarios',id_proyecto,cantidad_fases)
 
     context ={
         "formProyecto": formProyecto,
@@ -396,7 +399,7 @@ def add_permission_gerente(user,is_gerente):
         permission = Permission.objects.get(content_type=content_type, codename=name_permission)
         user.user_permissions.remove(permission)
 
-def crearFase(request):
+def crearFase(request,nroFase):
     """METODO PARA CREAR FASES"""
     fase = FaseForm(request.POST)
     global CANTIDAD
@@ -408,10 +411,12 @@ def crearFase(request):
         z = Fase(nombre=nombreFase,descripcion=descFase,id_Proyecto=x)
         z.save()
         registrarAuditoria(request.user, 'Creo la Fase: '+str(z.nombre)+' en el proyecto: '+ str(x.nombre))
-        if cantidad != 0:
+        if nroFase != 0:
             cantidad = cantidad - 1
             CANTIDAD = cantidad
-            return redirect('gestion:crearFase')
+
+            nroFase=nroFase-1
+            return redirect('gestion:crearFase',nroFase)
         else:
 
             assign_perm('is_gerente', request.user, x)
