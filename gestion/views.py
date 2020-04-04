@@ -44,10 +44,32 @@ def estadoProyecto(request,pk):
             registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Finalizado")
             return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
         elif(z=="INICIADO"):
-            registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Iniciado")
-            p.estado=z####### SE ASIGNA ESTADO
-            p.save()##### SE GUARDA
-            return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
+            ok=False
+            fase= Fase.objects.all()
+            IdFase=0
+            for i in range(fase.count()):
+                if(fase[i].id_Proyecto.id_proyecto==p.id_proyecto):
+                    ti = TipoItem.objects.all()
+                    IdFase = fase[i].id_Fase
+                    for x in range(ti.count()):
+                        if(ti[x].fase.id_Fase==fase[i].id_Fase):
+                            ok=True
+            print(IdFase)
+            if(ok==True):
+                registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Iniciado")
+                p.estado=z####### SE ASIGNA ESTADO
+                p.save()##### SE GUARDA
+                return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
+
+            context = {
+                "mensaje":"NO POSEE TIPOS DE ITEM CREE AL MENOS UNO PAARA INICIAR EL PROYECTO",
+                "titulo":"FALTA TI",
+                "titulo_b1": "Crear TI",
+                "boton1":"/crear/TipoItem/"+str(IdFase),
+                "titulo_b2":"Volver a proyectos",
+                "boton2":"/proyectos/"
+            }
+            return render(request, 'Error.html', context)
         elif(z=="CANCELADO"):
             registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Cancelado")
             p.estado=z####### SE ASIGNA ESTADO
@@ -418,7 +440,6 @@ def crearFase(request,nroFase):
             nroFase=nroFase-1
             return redirect('gestion:crearFase',nroFase)
         else:
-
             assign_perm('is_gerente', request.user, x)
             return redirect('gestion:menu')
 
