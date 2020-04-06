@@ -437,6 +437,7 @@ def crearFase(request,nroFase):
             cantidad = cantidad - 1
             CANTIDAD = cantidad
 
+
             nroFase=nroFase-1
             return redirect('gestion:crearFase',nroFase)
         else:
@@ -793,7 +794,10 @@ class VerRoles(ListView):
         return context
 
 def crearItem(request,Faseid):
-
+    """SE CREA UN ITEM CON EL FORM QUE CONTIENE EL NOMBRE, DESCRIPCION, COSTO, LO UNICO QUE NECESITA ES EL IDFASE AL CUAL VA A PERTENECER EL ITEM
+    LUEGO DE CREAR, SE GUARDA LO COMPLETADO CON TODOS LOS CAMPOS OBLIGATORIOS, LUEGO REDIRIGE EN UNA VENTANA EN LA CUAL
+    MUESTRA TODOS LOS TIPOS DE ITEMS DE DICHA FASE EN LA CUAL PERTENECE EL ITEM Y SE LE PASA EL ID DE LA FASE EN LA QUE SE ENCUENTRA
+    EL ITEM"""
     form= FormItem(request.POST)
     if form.is_valid():
         form.save(commit=False)
@@ -809,19 +813,17 @@ def crearItem(request,Faseid):
     }
     return render (request,'Item.html',contexto)
 
-def agg_listar_tipo_item(request,Fase):
-    """Lista los tipos de item asociado a un proyecto"""
 
+def agg_listar_tipo_item(request,Fase):
+    """LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
+    CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO"""
     if request.method == 'POST':
         x=request.POST.get('ti')
-
         item=Item.objects.last()
         tipoItem2 = TipoItem.objects.filter(nombre=x,fase_id=Fase)
         item.ti =tipoItem2[0]
         item.save()
-
         return redirect('gestion:aggAtributos',tipoItem2[0].id_ti)
-
     tipoItem = TipoItem.objects.filter(fase_id=Fase)
     contexto={
         'TipoItem':tipoItem
@@ -830,21 +832,27 @@ def agg_listar_tipo_item(request,Fase):
 
 
 def aggAtributos(request,idTI):
+    """SE LISTAN LOS ATRIBUTOS DEL TI SELECCIONADO, SE AGREGA UN CAMPO VALOR EN DONDE SE DEBERA DE INGRESAR EL TIPO DE VALOR
+    DE DICHO ATRIBUTO, SE VALIDA SI ES OBLIGATORIO Y MUESTRA MENSAJE DE ERROR SI ESTA VACIO EL CAMPO Y ES OBLIGATORIO,
+    SI CUMPLIO CON LA RESTRICCION DE OBLIGATORIEDAD REDIRIGE A LA VENTANA DE RELACIONES PARA DICHO ITEM"""
     atributos= Atributo.objects.filter(ti_id=idTI)
-
     if request.method == 'POST':
-
-        x = request.POST.getlist('valor')
-        print(x)
-
-        item=Item.objects.last()
-
-        for i in x:
-#            print(i)
+        x = request.POST.getlist('valor')#SE SACA LA LISTA DE VALORES INGRESADOS
+        item=Item.objects.last()#SE OBTIENE EL ITEM CREADO RECIENTEMENTE
+        for  i in range(len(x)):#SE RECORRE POR VALOR INGRESADO CONSULTANDO SI ES OBLIGARORIO Y ESTA VACIO-->MUESTRA ERROR
+            if(x[i]=='' and atributos[i].es_obligatorio==True):
+                context = {
+                    "mensaje": "EL ATRIBUTO ES OBLIGATRIO FAVOR INGRESE UN VALOR PARA EL ATRIBUTO: "+str(atributos[i].nombre),
+                    "titulo": "NO INGRESO VALOR Y EL ATRIBUTO ES OBLIGATORIO",
+                    "titulo_b1": "AÑADE VALOR",
+                    "boton1": "/aggAtributos/" + str(idTI),
+                    "titulo_b2": "NO HAY OPCION, AÑADE EL VALOR",
+                    "boton2": "/aggAtributos/" + str(idTI),
+                }
+                return render(request, 'Error.html', context)
+        for i in x:#SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
             p = Atributo_Item(idAtributoTI=idTI,id_item=item,valor=i)
             p.save()
-
-
         itemID=Item.objects.last()
         ti=TipoItem.objects.get(id_ti=idTI)
         return redirect('gestion:relacionarItem',ti.fase.id_Proyecto.id_proyecto,itemID.id_item)
@@ -858,26 +866,33 @@ def aggAtributos(request,idTI):
 
 def relacionarItem(request,id_proyecto,id_item):
     """
-    RECIBE EL ID DEL PROYECTO Y MUESTRA LOS USUARIOS QUE PUEDEN SER AÑADIDOS A EL
+    SE MUESTRAN TODOS LOS ITEMS DE UN PROYECTO QUE SE ENCUENTRAN ACTIVOS EN EL MISMO, SE TENDRA LA POSIBILIDAD
+    DE SELECCIONAR LOS MISMOS Y GUARDAR LAS RELACIONES CON EL ITEM ACTUAL, TAMBIEN SE CARGA LA TABLA VERSIONES CON
+    EL ITEM ACTUAL Y LA VERSION 1 EN LA CREACION SE EVALUA:
+    -QUE NO SE GENEREN CICLOS
+    -QUE LA FASE 1 SEA OPCIONAL LAS RELACIONES
+    -QUE SI NO ES LA PRIMERA FASE QUE TENGA RELACIONES DIRECTA O INDIRECTAMENTE CON LA FASE 1
     """
     items = Item.objects.filter(actual=True)
-
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
         some_var=request.POST.getlist('checkbox')
-        print(some_var)
-        for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
+
+        #VERIFICAR SI ES DE LA PRIMERA FASE SIN RELACIONES, SINO MOSTRAR ERROR
+
+        #VERIFICAR SI SE GENERAN CICLOS
+
+        #VERIFICAR SI TIENE RELACION CON LA F1
+
+
+        for id in some_var:###### SE GUARDAN LAS RELACIONES
             p = Relacion(inicio_item=id_item,fin_item=id)
             p.save()
-
-        version=Versiones(id_Version=1,id_item=id_item)
+        version=Versiones(id_Version=1,id_item=id_item)#SE GUARDA LA VERSION
         version.save()
-
         return redirect('gestion:menu')
     else:
         list=[]
         for i in range(items.count()):###todos los items del proyecto
             if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item !=items[i].id_item:
                list.append(items[i].id_item)
-
-        print(list)
         return render(request, 'relacionarItem.html', {'form': items,'list':list})

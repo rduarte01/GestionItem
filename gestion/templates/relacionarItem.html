@@ -27,7 +27,11 @@
 <table class="table table-bordered">
     <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
         <tr>
-                    <td><h4>NOMBRE DEL ITEM</h4></td>
+            <td><h4>NOMBRE DEL ITEM</h4></td>
+            <td>DESCRIPCION</td>
+            <td>COSTO</td>
+            <td>FASE</td>
+            <td>TI</td>
         </tr>
         {%for list in list %}
           {%for i in form%}
@@ -38,6 +42,10 @@
                     <label class="form-check-label" for="{{i.id_item}}}"><h5>{{ i.nombre }}</h5></label>
                 </div>
             </td>
+            <td>{{ i.descripcion }}</td>
+            <td>{{ i.costo }}</td>
+            <td>{{ i.fase.nombre }}</td>
+            <td>{{ i.ti }}</td>
         </tr>
             {%endif%}
     {%endfor%}

@@ -203,27 +203,48 @@ class Usuario(models.Model):
 
 
 class Item(models.Model):
+    """MODELO DE ITEM"""
     id_item= models.AutoField(primary_key = True) ###### clave de proyecto
+    """GUARDA EL ID DEL ITEM"""
     nombre= models.CharField(max_length=30)
+    """NOMBRE DEL ITEM"""
     descripcion= models.CharField(max_length=100)
+    """DESCRIPCION DEL ITEM"""
     costo=models.IntegerField()
+    """COSTO DEL ITEM"""
     ti=models.ForeignKey(TipoItem, null=True ,on_delete = models.CASCADE)
+    """TIPO DE ITEM QUE SE ASIGNARA AL ITEM"""
     fase=models.ForeignKey(Fase, on_delete = models.CASCADE)
+    """FASE  A LA CUAL PERTENECE EL ITEM"""
     actual=models.BooleanField(default=True)
+    """SI ESTA EN TRUE SERA QUE EL ITEM ESTA ACTIVO Y NO UNA VERSION ANTERIOR"""
 
 class Relacion(models.Model):
+    """MODELO DE RELACION DE ITEMS"""
     id_relacion= models.AutoField(primary_key = True) ###### clave de proyecto
+    """ID DE RELACION"""
     inicio_item=models.IntegerField()
+    """ITEM DE INICIO DE RELACION"""
     fin_item= models.IntegerField()
+    """ITEM FIN DE RELACION"""
 
 class Atributo_Item(models.Model):
+    """MODELO DE ATRIBUTO DE TI, EN EL CUAL SE GUARDARA EL VALOR DEPENDIENDO DEL TI"""
     id_atributo= models.AutoField(primary_key = True) ###### clave de proyecto
+    """ID DEL ATRIBUTO"""
     idAtributoTI= models.IntegerField()
+    """ID DEL TI CON EL CUAL SE IDENTIFICARA"""
     id_item= models.ForeignKey(Item, on_delete = models.CASCADE)
+    """EL ITEM AL CUAL ESTA ASIGNADO"""
     valor=models.CharField(max_length=1000)
+    """VALOR QUE SERA STRING PERO DEPENDIENDO DEL ATRIBUTO SE PODRA OBTENER EL VALOR REQUERIDO"""
 
 class Versiones(models.Model):
+    """TABLA DE VERSIONES EL CUAL RELACIONA LA VERSION DEL ITEM"""
     id= models.AutoField(primary_key = True) ###### clave de proyecto
+    """ID AUTOMATICO"""
     id_Version= models.IntegerField()
+    """VERSION DEL ITEM"""
     id_item= models.IntegerField()
+    """ITEM ASIGNADO"""
 

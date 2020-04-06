@@ -32,19 +32,15 @@ urlpatterns = [
     path('ver/fase/<int:id_fase>/proyecto',views.get_fase_proyecto,name='get_fase_proyecto'),
     path('importar/tipo/item/fase/<int:id_fase>', views.importar_tipo_item, name='importar_tipo_item'),
     path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto'),
-
     path('enEspera/', VerUsersEnEspera.as_view(), name="listaDeEspera"),
     path('userEnEspera/<int:pk>', ActualizarUser.as_view(), name='userEsperando'),
     path('crearRol/<str:proyecto>', CrearRol.as_view(), name='crearRol'),
     path('modRol/<int:pk>', ModificarRol.as_view(), name='modificarRol'),
     path('lista/tipo/item/<int:id_proyecto>',views.listar_tipo_item, name='listar_tipo_item'),
-
     path('aggTI/<int:Fase>', views.agg_listar_tipo_item, name='agg_listar_tipo_item'),
-
     path('misRoles/<int:proyecto>', VerRoles.as_view(), name="misRoles"),
     path('crearItem/<int:Faseid>', views.crearItem, name="crearItem"),
     path('aggAtributos/<int:idTI>', views.aggAtributos, name="aggAtributos"),
-
     path('relacionarItem/<int:id_proyecto><int:id_item>', views.relacionarItem, name="relacionarItem"),
 
 ]
