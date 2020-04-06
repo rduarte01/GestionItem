@@ -10,10 +10,10 @@ from django.urls import reverse_lazy
 from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario
 from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm
 from time import gmtime, strftime
-from .forms import FaseForm, FormProyectoEstados
+from .forms import FaseForm, FormProyectoEstados,FormItem
 from django.db.models import Count
 from django.utils.decorators import method_decorator
-from .models import Proyecto,TipoItem,Atributo
+from .models import Proyecto,TipoItem,Atributo,Item,Fase,Atributo_Item,Relacion,Versiones
 from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -791,3 +791,93 @@ class VerRoles(ListView):
         context['listGroup'] = grupList
         context['idProyecto'] = miid
         return context
+
+def crearItem(request,Faseid):
+
+    form= FormItem(request.POST)
+    if form.is_valid():
+        form.save(commit=False)
+
+        datosFormulario= form.cleaned_data
+        fase= Fase.objects.filter(id_Fase=Faseid)
+
+        item=Item(nombre=datosFormulario.get('nombre'),descripcion=datosFormulario.get('descripcion'),costo=datosFormulario.get('costo'),fase=fase[0])
+        item.save()
+        return redirect('gestion:agg_listar_tipo_item',Faseid)
+    contexto={
+        "form":form
+    }
+    return render (request,'Item.html',contexto)
+
+def agg_listar_tipo_item(request,Fase):
+    """Lista los tipos de item asociado a un proyecto"""
+
+    if request.method == 'POST':
+        x=request.POST.get('ti')
+
+        item=Item.objects.last()
+        tipoItem2 = TipoItem.objects.filter(nombre=x,fase_id=Fase)
+        item.ti =tipoItem2[0]
+        item.save()
+
+        return redirect('gestion:aggAtributos',tipoItem2[0].id_ti)
+
+    tipoItem = TipoItem.objects.filter(fase_id=Fase)
+    contexto={
+        'TipoItem':tipoItem
+    }
+    return render (request,'aggTI.html',contexto)
+
+
+def aggAtributos(request,idTI):
+    atributos= Atributo.objects.filter(ti_id=idTI)
+
+    if request.method == 'POST':
+
+        x = request.POST.getlist('valor')
+        print(x)
+
+        item=Item.objects.last()
+
+        for i in x:
+#            print(i)
+            p = Atributo_Item(idAtributoTI=idTI,id_item=item,valor=i)
+            p.save()
+
+
+        itemID=Item.objects.last()
+        ti=TipoItem.objects.get(id_ti=idTI)
+        return redirect('gestion:relacionarItem',ti.fase.id_Proyecto.id_proyecto,itemID.id_item)
+
+    contexto={
+        'atributos':atributos
+    }
+    return render (request,'aggAtributos.html',contexto)
+
+
+
+def relacionarItem(request,id_proyecto,id_item):
+    """
+    RECIBE EL ID DEL PROYECTO Y MUESTRA LOS USUARIOS QUE PUEDEN SER AÑADIDOS A EL
+    """
+    items = Item.objects.filter(actual=True)
+
+    if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+        some_var=request.POST.getlist('checkbox')
+        print(some_var)
+        for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
+            p = Relacion(inicio_item=id_item,fin_item=id)
+            p.save()
+
+        version=Versiones(id_Version=1,id_item=id_item)
+        version.save()
+
+        return redirect('gestion:menu')
+    else:
+        list=[]
+        for i in range(items.count()):###todos los items del proyecto
+            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item !=items[i].id_item:
+               list.append(items[i].id_item)
+
+        print(list)
+        return render(request, 'relacionarItem.html', {'form': items,'list':list})

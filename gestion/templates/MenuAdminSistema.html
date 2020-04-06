@@ -17,8 +17,10 @@
   {% block body%}
       <div class="jumbotron">
         <h1>Es administrador del sistema</h1>
+
         <p class="lead">Debera de aceptar usuarios que se hayan registrado en el SSO para que pertenezcan al sistema, por favor labure</p>
-        <a class="btn btn-large btn-success" href="{% url 'gestion:listaDeEspera' %}"><h4>Valide usuarios!</h4></a>
+          <a class="btn btn-large btn-success" href="{% url 'gestion:listaDeEspera' %}" ><h4>Valide usuarios!</h4></a>
+
                   {% if perms.gestion.is_gerente %}
 
         <a class="btn btn-large btn-success" href="{%url 'gestion:CrearProyecto' %}"><h5>Usted es un Gerente! Cree un Proyecto!</h5></a>
@@ -28,6 +30,7 @@
       </div>
 
       </div>
+
   {% endblock body %}
 
   <div class="footer">
@@ -36,3 +39,4 @@
 
 
 </html>
+

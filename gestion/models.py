@@ -104,6 +104,10 @@ class TipoItem(models.Model):
         ordering=['nombre']
         '''en este especificamos  como vamos a ordenar '''
 
+    def __str__(self):
+        return '{}'.format(self.nombre)
+
+
 class Atributo(models.Model):
     """"
        Este es el modelo Atributo, que se relaciona con Tipo de Item, y sirve para representa todos los valores
@@ -196,4 +200,30 @@ class Usuario(models.Model):
             ('es_administrador','Puede hacer tareas de Administrador'),
         )
         """LISTA DE PERMISOS ASOCIADOS AL SISTEMA"""
+
+
+class Item(models.Model):
+    id_item= models.AutoField(primary_key = True) ###### clave de proyecto
+    nombre= models.CharField(max_length=30)
+    descripcion= models.CharField(max_length=100)
+    costo=models.IntegerField()
+    ti=models.ForeignKey(TipoItem, null=True ,on_delete = models.CASCADE)
+    fase=models.ForeignKey(Fase, on_delete = models.CASCADE)
+    actual=models.BooleanField(default=True)
+
+class Relacion(models.Model):
+    id_relacion= models.AutoField(primary_key = True) ###### clave de proyecto
+    inicio_item=models.IntegerField()
+    fin_item= models.IntegerField()
+
+class Atributo_Item(models.Model):
+    id_atributo= models.AutoField(primary_key = True) ###### clave de proyecto
+    idAtributoTI= models.IntegerField()
+    id_item= models.ForeignKey(Item, on_delete = models.CASCADE)
+    valor=models.CharField(max_length=1000)
+
+class Versiones(models.Model):
+    id= models.AutoField(primary_key = True) ###### clave de proyecto
+    id_Version= models.IntegerField()
+    id_item= models.IntegerField()
 

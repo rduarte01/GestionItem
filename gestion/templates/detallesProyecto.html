@@ -73,7 +73,7 @@
             {%else%}
             <td>No es gerente</td>
             {%endif%}
-            <td><a href="" class="btn btn-primary">DETALLES</a></td>
+            <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">DETALLES</a></td>
             {% if "is_gerente" in proyecto_perms %}
                 {% if proyectos.estado != 'CANCELADO' %}
                 <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear Tipo Item</a> </td>

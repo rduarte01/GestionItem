@@ -1,7 +1,9 @@
 from django.urls import path
 from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado
 from . import views
-from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol
+from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem
+
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -36,7 +38,15 @@ urlpatterns = [
     path('crearRol/<str:proyecto>', CrearRol.as_view(), name='crearRol'),
     path('modRol/<int:pk>', ModificarRol.as_view(), name='modificarRol'),
     path('lista/tipo/item/<int:id_proyecto>',views.listar_tipo_item, name='listar_tipo_item'),
+
+    path('aggTI/<int:Fase>', views.agg_listar_tipo_item, name='agg_listar_tipo_item'),
+
     path('misRoles/<int:proyecto>', VerRoles.as_view(), name="misRoles"),
+    path('crearItem/<int:Faseid>', views.crearItem, name="crearItem"),
+    path('aggAtributos/<int:idTI>', views.aggAtributos, name="aggAtributos"),
+
+    path('relacionarItem/<int:id_proyecto><int:id_item>', views.relacionarItem, name="relacionarItem"),
+
 ]
 
 

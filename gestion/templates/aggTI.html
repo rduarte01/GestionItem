@@ -1,0 +1,47 @@
+
+{% extends 'creacionProyecto2.html'%}
+<title>Tipo de Items</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+{% block title %}
+<h1>Selecciona un TI para tu Item!</h1>
+{% endblock title%}
+
+
+<style>
+#ocultar{display:none;}
+</style>
+
+{% block contect %}
+<a class="btn btn-primary" href="" role="button">Volver Atras</a>
+
+      <div class="jumbotron">
+
+ <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+{% block content %}
+<table class="table table-bordered">
+
+
+    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+
+    <tr>
+        <td>SELECCIONA EL NOMBRE DE TI</td>
+    </tr>
+
+        {% for ti in TipoItem %}
+
+            <tr>
+                <td><input class="btn btn-primary" type='submit' name="ti" value={{ti}}></td>
+            </tr>
+        {% endfor %}
+
+
+    </form>
+</table>
+{% endblock %}
+ </form>
+      </div>
+{% endblock %}

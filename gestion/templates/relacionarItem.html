@@ -1,0 +1,52 @@
+{% extends 'creacionProyecto2.html'%}
+<title>Relacionar Items</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+
+{% block title %}
+<h1>Relaciona Items!</h1>
+{% endblock title%}
+
+
+<style>
+#ocultar{display:none;}
+</style>
+
+{% block contect %}
+        <div>
+            <a class="btn btn-primary" href="" role="button">Cancelar</a>
+        </div>
+
+      <div class="jumbotron">
+
+ <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+{% block content %}
+<table class="table table-bordered">
+    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+        <tr>
+                    <td><h4>NOMBRE DEL ITEM</h4></td>
+        </tr>
+        {%for list in list %}
+          {%for i in form%}
+                {%if list == i.id_item%}
+        <tr><td>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.id_item}}" id="{{i.id_item}}}">
+                    <label class="form-check-label" for="{{i.id_item}}}"><h5>{{ i.nombre }}</h5></label>
+                </div>
+            </td>
+        </tr>
+            {%endif%}
+    {%endfor%}
+    {%endfor%}
+
+    </form>
+</table>
+{% endblock %}
+     <input class="btn btn-primary" type="submit"  value="Guardar">
+ </form>
+      </div>
+{% endblock %}
