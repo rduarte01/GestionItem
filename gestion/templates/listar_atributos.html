@@ -1,0 +1,48 @@
+{% extends 'creacionProyecto2.html'%}
+<title>Atributos</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+{% block title %}
+<h1>Atributos del TI!</h1>
+{% endblock title%}
+
+
+<style>
+#ocultar{display:none;}
+</style>
+
+{% block contect %}
+<a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
+
+      <div class="jumbotron">
+
+ <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+{% block content %}
+<table class="table table-bordered">
+
+    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+
+    <tr>
+        <td><h5>VALOR</h5></td>
+        <td><h5>PUEDE CAMBIARLO SI LO DESEA</h5></td>
+    </tr>
+
+        {% for atributos in atributos%}
+
+    <tr>
+        <td>{{atributos.valor}}</td>
+        <td><input placeholder="INGRESE VALOR    " type="text" name="valor"></td>
+    </tr>
+
+{%endfor%}
+
+    </form>
+</table>
+{% endblock %}
+     <input type="submit" class="btn btn-primary" value="Siguiente">
+ </form>
+      </div>
+{% endblock %}

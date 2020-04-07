@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado
 from . import views
-from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem
+from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos
 
 
 
@@ -42,6 +42,9 @@ urlpatterns = [
     path('crearItem/<int:Faseid>', views.crearItem, name="crearItem"),
     path('aggAtributos/<int:idTI>', views.aggAtributos, name="aggAtributos"),
     path('relacionarItem/<int:id_proyecto><int:id_item>', views.relacionarItem, name="relacionarItem"),
+    path('detallesFase/<int:idFase>', views.detallesFase, name="detallesFase"),
+    path('listar_relaciones/<int:idItem>', views.listar_relaciones, name="listar_relaciones"),
+    path('listar_atributos/<int:idAtributoTI>/<int:id_item>', views.listar_atributos, name="listar_atributos"),
 
 ]
 

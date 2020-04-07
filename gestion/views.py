@@ -28,7 +28,7 @@ PROYECTOS_USUARIO=[]
 CANTIDAD=1
 """SE UTILIZA PARA GUARDAR LA CANTIDAD DE FASES DE UN PROYECTO"""
 
-
+#RUBEN
 def estadoProyecto(request,pk):
     """ RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST"""
     form=FormProyectoEstados(request.POST)
@@ -82,19 +82,19 @@ def estadoProyecto(request,pk):
         'proyecto':p
     }
     return render(request, 'estadoProyecto.html',context)
-
+#RUBEN
 def registrarAuditoria(user,accion):
     """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
     showtime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     p = Auditoria(usuario= user,fecha=showtime, accion=accion)###### FALTA ARREGLAR USER
     p.save()
-
+#RUBEN
 def CorreoMail(asunto,mensaje,correo):
     """ FUNCION QUE RECIBE UN ASUNTO, MENSAJE Y UN CORRREO ELECTRONICO AL CUAL SE LE ENVIA UN CORREO
     ELECTRONICO DE ACUERDO A UNA ACCION"""
     mail=EmailMessage(asunto,mensaje,to={correo})
     mail.send()
-
+#RUBEN
 def Contactos(request):
     """DESPLIEGA UN APARTADO EN DONDE EL USUARIO INGRESA SU DUDA O INCONVENIENTE Y SE ENVIA A LOS DESARROLLADORES
     DEL SISTEMA DE MODO A ACLARAR O SOLUCIONAR INQUIETUDES
@@ -117,8 +117,7 @@ def Contactos(request):
     registrarAuditoria(request.user,'Ingreso en el apartado contactos')
     return render(request,'Contactos.html', context)
 
-
-
+#RUBEN
 def CantProyectos(request):
     """ RETORNA LA LISTA DE ID DE LOS PROYECTOS ASOCIADOS AL USUARIO ACTUAL """
     user = request.user#### SE UTILIZA PARA QUITAR EL ID DEL USUARIO ACTUAL
@@ -145,7 +144,7 @@ def menu(request):
         registrarAuditoria(request.user ,'Inicio Menu en espera de aprobacion')
         return render(request, 'MenuEnEspera.html')
 
-
+#RUBEN
 def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     RECIBE EL ID DEL PROYECTO Y MUESTRA LOS USUARIOS QUE PUEDEN SER AÑADIDOS A EL
@@ -182,7 +181,7 @@ def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del
 
         return render(request, 'agregarUsuarios.html', {'form': form,'list':list,'pk':pk})
 
-
+#RUBEN
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
 
@@ -266,7 +265,6 @@ def getUsers(request):
     users = User.objects.all()
     return render(request,'perfil_usuarios.html',{'usuarios':users})
 
-
 #jesus
 def ver_usuarios_aprobados(request):
     '''Lista todos los usarios aprobados en el sistema '''
@@ -347,8 +345,6 @@ def tipo_item_views_create(request,id_fase):
         return render(request, 'crear_tipo_item.html', context)
 #Vistas agregadas por jesus
 
-
-
 def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
     ''' Sirve para poder crear un nuevo atributo, asociando ese atributo a un tipo de item'''
     fase=Fase.objects.get(id_Fase=fase_id)
@@ -369,7 +365,6 @@ def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
                 }
         return render(request,'crear_atributo.html',contexto)
 
-
 #jesus
 def recoger_datos_tipo_item(my_form):
     '''Sirve para recoger los datos despues de un POST en un formulario de tipo de item, retorna el
@@ -388,7 +383,6 @@ def recoge_datos_atributo(form):
     obligatoriedad = form.cleaned_data.get('es_obligatorio')
     tipo_dato_atibuto = form.cleaned_data.get('tipo_dato')
     return nombre_atributo,obligatoriedad,tipo_dato_atibuto
-
 
 def recoger_datos_usuario_settings(form):
     '''Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores
@@ -448,7 +442,7 @@ def crearFase(request,nroFase):
     'form': fase
     }
     return render(request, 'crear_fase.html', context)
-
+#RUBEN
 def listar_auditoria(request):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA """
     auditoria = Auditoria.objects.all()
@@ -456,8 +450,7 @@ def listar_auditoria(request):
         'auditoria':auditoria
     }
     return render(request, 'Auditoria.html', context)
-
-
+#RUBEN
 def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     MEDIANTE UN PROYECTO EXISTENTE, DA LA POSIBILIDAD DE AÑADIR MAS USUARIOS AL PROYECTO,
@@ -495,8 +488,7 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
                list.append(form[i].user.id)
 
         return render(request, 'AggUser.html', {'form': form,'list':list,'pk':pk})
-
-
+#RUBEN
 def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     LISTA LOS USUARIOS DE UN PROYECTO
@@ -527,14 +519,13 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
                list.append(form[i].id)
 
         return render(request, 'UsersProyecto.html', {'form': form,'list':list,'pk':pk,'proyecto':proyecto})
-
-
+#RUBEN
 def desvinculacionProyecto(request,pk,pk_user):
     """DESVINCULA UN USUARIO DE UN PROYECTO"""
     instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
     instanceUser.delete()
     return redirect('gestion:UsersProyecto',pk)
-
+#RUBEN
 def listar_proyectos(request):
     """ LISTA LOS PROYECTOS DEL USUARIO"""
     registrarAuditoria(request.user, 'Lista sus proyectos existentes')
@@ -552,7 +543,7 @@ def listar_proyectos(request):
         'cant': cant####CANTIDAD DE PROYECTOS QUE POSEE
     }
     return render(request, 'verProyectos.html', context)
-
+#RUBEN
 def detallesProyecto(request,pk):
     """MUESTRA LAS OPCIONES REALIZABLES SOBRE UN PROYECTO, TAMBIEN MUESTRA LAS FASES DEL MISMO CON SUS
     OPCIONES"""
@@ -566,7 +557,49 @@ def detallesProyecto(request,pk):
         "fases":fases,
     }
     return render(request, 'detallesProyecto.html', context)
+#RUBEN
+def detallesFase(request,idFase):
+    fases = Fase.objects.get(id_Fase=idFase)
+    proyectos= Proyecto.objects.get(id_proyecto=fases.id_Proyecto.id_proyecto)
+    items=Item.objects.filter(fase=fases)
+    relaciones=Relacion.objects.all()
+    atributoTI=Atributo_Item.objects.all()
+    context={
+        "proyectos":proyectos,
+        "fases":fases,
+        "items":items,
+    }
+    return render(request, 'detallesFase.html', context)
 
+def listar_relaciones(request,idItem):
+
+    relaciones= Relacion.objects.filter(inicio_item=idItem)
+    print(relaciones)
+    item=Item.objects.all()
+
+    ### falta desvincular relacion o agregar nueva y cambiar version
+
+    context={
+        "relaciones":relaciones,
+        "item":item,
+    }
+    return render(request, 'listar_relaciones.html', context)
+
+def listar_atributos(request,idAtributoTI,id_item):
+    atributos = Atributo_Item.objects.filter(idAtributoTI=idAtributoTI,id_item=id_item)
+    TI=TipoItem.objects.get(id_ti=idAtributoTI)
+    atributo= Atributo.objects.get(ti=TI)
+    print(atributo)
+    ### falta desvincular relacion o agregar nueva y cambiar version
+
+    context = {
+        "atributos":atributos,
+        "atributo":atributo,
+    }
+    return render(request, 'listar_atributos.html', context)
+
+
+#RUBEN
 def proyectoCancelado(request):
     """METODO PARA CANCELAR UN PROYECTO"""
     x = Proyecto.objects.last()
@@ -713,7 +746,6 @@ class ActualizarUser(UpdateView):
             CorreoMail("Aprobado","Usted fue apobado en el sistema, bienvenido!!",usuario.user.email )
         return super(ActualizarUser, self).post(request, **kwargs)
 
-
 class CrearRol(CreateView):
     """Se muestra la ventana para la creacion de un nuevo rol dentro de un proyecto, en donde se
     especifican los siguientes atributos:"""
@@ -769,7 +801,6 @@ def listar_tipo_item(request,id_proyecto):
     }
     return render (request,'listarTipoItem.html',contexto)
 
-
 class VerRoles(ListView):
     """Vista creada para listar los roles que se encuentra dentro de un proyecto
     """
@@ -792,7 +823,7 @@ class VerRoles(ListView):
         context['listGroup'] = grupList
         context['idProyecto'] = miid
         return context
-
+#RUBEN
 def crearItem(request,Faseid):
     """SE CREA UN ITEM CON EL FORM QUE CONTIENE EL NOMBRE, DESCRIPCION, COSTO, LO UNICO QUE NECESITA ES EL IDFASE AL CUAL VA A PERTENECER EL ITEM
     LUEGO DE CREAR, SE GUARDA LO COMPLETADO CON TODOS LOS CAMPOS OBLIGATORIOS, LUEGO REDIRIGE EN UNA VENTANA EN LA CUAL
@@ -804,16 +835,30 @@ def crearItem(request,Faseid):
 
         datosFormulario= form.cleaned_data
         fase= Fase.objects.filter(id_Fase=Faseid)
-
         item=Item(nombre=datosFormulario.get('nombre'),descripcion=datosFormulario.get('descripcion'),costo=datosFormulario.get('costo'),fase=fase[0])
+
+        try:
+            ti = TipoItem.objects.get(fase=fase[0])
+        except:
+            ti = None
+
+        if (ti==None):# muestra mensaje de error si no hay TI no se puede crear item
+            context = {
+                "mensaje": "LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE"": ",
+                "titulo": "NO HAY TIPOS DE ITEM",
+                "titulo_b1": "AÑADE TI A LA FASE",
+                "boton1": "/crearItem/"+str(Faseid) ,
+                "titulo_b2": "VOLVER A DETALLES DE LA FASE",
+                "boton2": "/detallesFase/"+str(Faseid),
+            }
+            return render(request, 'Error.html', context)
         item.save()
         return redirect('gestion:agg_listar_tipo_item',Faseid)
     contexto={
         "form":form
     }
     return render (request,'Item.html',contexto)
-
-
+#RUBEN
 def agg_listar_tipo_item(request,Fase):
     """LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
     CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO"""
@@ -823,14 +868,14 @@ def agg_listar_tipo_item(request,Fase):
         tipoItem2 = TipoItem.objects.filter(nombre=x,fase_id=Fase)
         item.ti =tipoItem2[0]
         item.save()
+
         return redirect('gestion:aggAtributos',tipoItem2[0].id_ti)
     tipoItem = TipoItem.objects.filter(fase_id=Fase)
     contexto={
         'TipoItem':tipoItem
     }
     return render (request,'aggTI.html',contexto)
-
-
+#RUBEN
 def aggAtributos(request,idTI):
     """SE LISTAN LOS ATRIBUTOS DEL TI SELECCIONADO, SE AGREGA UN CAMPO VALOR EN DONDE SE DEBERA DE INGRESAR EL TIPO DE VALOR
     DE DICHO ATRIBUTO, SE VALIDA SI ES OBLIGATORIO Y MUESTRA MENSAJE DE ERROR SI ESTA VACIO EL CAMPO Y ES OBLIGATORIO,
@@ -850,8 +895,8 @@ def aggAtributos(request,idTI):
                     "boton2": "/aggAtributos/" + str(idTI),
                 }
                 return render(request, 'Error.html', context)
-        for i in x:#SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
-            p = Atributo_Item(idAtributoTI=idTI,id_item=item,valor=i)
+        for i in range(len(x)):#SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
+            p = Atributo_Item(idAtributoTI=idTI,id_item=item,valor=x[i])
             p.save()
         itemID=Item.objects.last()
         ti=TipoItem.objects.get(id_ti=idTI)
@@ -861,9 +906,7 @@ def aggAtributos(request,idTI):
         'atributos':atributos
     }
     return render (request,'aggAtributos.html',contexto)
-
-
-
+#RUBEN
 def relacionarItem(request,id_proyecto,id_item):
     """
     SE MUESTRAN TODOS LOS ITEMS DE UN PROYECTO QUE SE ENCUENTRAN ACTIVOS EN EL MISMO, SE TENDRA LA POSIBILIDAD
@@ -874,6 +917,10 @@ def relacionarItem(request,id_proyecto,id_item):
     -QUE SI NO ES LA PRIMERA FASE QUE TENGA RELACIONES DIRECTA O INDIRECTAMENTE CON LA FASE 1
     """
     items = Item.objects.filter(actual=True)
+    list = []#se guardaran todos los items del proyecto
+    for i in range(items.count()):  ###todos los items del proyecto
+        if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
+            list.append(items[i].id_item)
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
         some_var=request.POST.getlist('checkbox')
 
@@ -887,12 +934,13 @@ def relacionarItem(request,id_proyecto,id_item):
         for id in some_var:###### SE GUARDAN LAS RELACIONES
             p = Relacion(inicio_item=id_item,fin_item=id)
             p.save()
+
+        #----------------------------------------------------------#
+        ## se puede volver generico si se restringe preguntando si el item es igual al ultimo
         version=Versiones(id_Version=1,id_item=id_item)#SE GUARDA LA VERSION
         version.save()
+        #----------------------------------------------------------#
+
         return redirect('gestion:menu')
     else:
-        list=[]
-        for i in range(items.count()):###todos los items del proyecto
-            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item !=items[i].id_item:
-               list.append(items[i].id_item)
         return render(request, 'relacionarItem.html', {'form': items,'list':list})

@@ -236,6 +236,7 @@ class Atributo_Item(models.Model):
     """ID DEL TI CON EL CUAL SE IDENTIFICARA"""
     id_item= models.ForeignKey(Item, on_delete = models.CASCADE)
     """EL ITEM AL CUAL ESTA ASIGNADO"""
+    #tipo=models.CharField(max_length=20)
     valor=models.CharField(max_length=1000)
     """VALOR QUE SERA STRING PERO DEPENDIENDO DEL ATRIBUTO SE PODRA OBTENER EL VALOR REQUERIDO"""
 

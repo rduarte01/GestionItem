@@ -1,0 +1,49 @@
+{% extends 'creacionProyecto2.html'%}
+<title>Relaciones</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+{% block title %}
+<h1>Relaciones!</h1>
+{% endblock title%}
+
+
+<style>
+#ocultar{display:none;}
+</style>
+
+{% block contect %}
+<a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
+
+      <div class="jumbotron">
+
+ <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+{% block content %}
+<table class="table table-bordered">
+
+
+    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+
+    <tr>
+        <td>NOMBRE DE ITEM</td>
+
+    </tr>
+{% for relaciones in relaciones%}
+{% for item in item%}
+        {%if item.id_item == relaciones.fin_item %}
+    <tr>
+        <td>{{item.nombre}}</td>
+    </tr>
+        {%endif%}
+        {%endfor%}
+{%endfor%}
+
+    </form>
+</table>
+{% endblock %}
+     <input type="submit" class="btn btn-primary" value="Siguiente">
+ </form>
+      </div>
+{% endblock %}
