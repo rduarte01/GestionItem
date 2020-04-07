@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado
 from . import views
-from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos
+from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos,itemCancelado
 
 
 
@@ -22,6 +22,8 @@ urlpatterns = [
     path('agregarUsuarios/<int:pk><int:nroFase>', views.agregarUsuarios, name='agregarUsuarios'),
     path('proyectos/', listar_proyectos, name='listar_proyectos'),
     path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
+    path('/itemCancelado/', itemCancelado, name='itemCancelado'),
+
     path('crear/TipoItem/<int:id_fase>',views.tipo_item_views_create,name='tipo_item_views_create'),
     path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>/<int:fase_id>',views.add_atribute,name='add_atribute'),
     path('listar/usuarios/aprobados',views.ver_usuarios_aprobados,name='ver_usuarios_aprobados'),
@@ -41,7 +43,7 @@ urlpatterns = [
     path('misRoles/<int:proyecto>', VerRoles.as_view(), name="misRoles"),
     path('crearItem/<int:Faseid>', views.crearItem, name="crearItem"),
     path('aggAtributos/<int:idTI>', views.aggAtributos, name="aggAtributos"),
-    path('relacionarItem/<int:id_proyecto><int:id_item>', views.relacionarItem, name="relacionarItem"),
+    path('relacionarItem/<int:id_proyecto>/<int:id_item>', views.relacionarItem, name="relacionarItem"),
     path('detallesFase/<int:idFase>', views.detallesFase, name="detallesFase"),
     path('listar_relaciones/<int:idItem>', views.listar_relaciones, name="listar_relaciones"),
     path('listar_atributos/<int:idAtributoTI>/<int:id_item>', views.listar_atributos, name="listar_atributos"),

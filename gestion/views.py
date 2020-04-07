@@ -835,6 +835,7 @@ def crearItem(request,Faseid):
 
         datosFormulario= form.cleaned_data
         fase= Fase.objects.filter(id_Fase=Faseid)
+        print("fase :",fase[0].id_Fase)
         item=Item(nombre=datosFormulario.get('nombre'),descripcion=datosFormulario.get('descripcion'),costo=datosFormulario.get('costo'),fase=fase[0])
 
         try:
@@ -847,7 +848,7 @@ def crearItem(request,Faseid):
                 "mensaje": "LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE"": ",
                 "titulo": "NO HAY TIPOS DE ITEM",
                 "titulo_b1": "AÑADE TI A LA FASE",
-                "boton1": "/crearItem/"+str(Faseid) ,
+                "boton1": "/crear/TipoItem/"+str(Faseid) ,
                 "titulo_b2": "VOLVER A DETALLES DE LA FASE",
                 "boton2": "/detallesFase/"+str(Faseid),
             }
@@ -923,16 +924,43 @@ def relacionarItem(request,id_proyecto,id_item):
             list.append(items[i].id_item)
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
         some_var=request.POST.getlist('checkbox')
+        #print(some_var)
+        lis=[]
+        proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
+        fases = Fase.objects.filter(id_Proyecto=proyecto)
+        item = Item.objects.filter(id_item=id_item)
 
         #VERIFICAR SI ES DE LA PRIMERA FASE SIN RELACIONES, SINO MOSTRAR ERROR
+        if(lis==some_var):
+            if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
+                context = {
+                    "mensaje": "EL ITEM NO ES DE LA PRIMERA FASE, POR ENDE DEBE DE CONTAR CON RELACION Y TENER DE FORMA DIRECTA O INDIRECTA RELACION CON LA PRIMERA FASE DEL PROYECTO ",
+                    "titulo": "ITEM SIN RELACION",
+                    "titulo_b1": "AÑADE RELACION",
+                    "boton1": "/relacionarItem/" + str(id_proyecto)+"/"+str(id_item),
+                    "titulo_b2": "CANCELAR ITEM",
+                    "boton2": "/itemCancelado/",
+                }
+                return render(request, 'Error.html', context)
+
+        if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
+            #VERIFICAR SI TIENE RELACION CON LA F1
+            if(primeraFase(id_proyecto, id_item, some_var)==True):
+                context = {
+                    "mensaje": "EL ITEM NO TIENE RELACION CON LA PRIMERA FASE POR ENDE NO ES VALIDO, FAVOR VOLVER A REALIZAR RELACIONES Y VOLVER CONSISTENTE EL ITEM ",
+                    "titulo": "ITEM SIN RELACION CON LA FASE 1",
+                    "titulo_b1": "VOLVER A AÑADIR RELACION",
+                    "boton1": "/relacionarItem/" + str(id_proyecto)+"/" + str(id_item),
+                    "titulo_b2": "CANCELAR ITEM",
+                    "boton2": "/itemCancelado/",
+                }
+                return render(request, 'Error.html', context)
 
         #VERIFICAR SI SE GENERAN CICLOS
 
-        #VERIFICAR SI TIENE RELACION CON LA F1
-
 
         for id in some_var:###### SE GUARDAN LAS RELACIONES
-            p = Relacion(inicio_item=id_item,fin_item=id)
+            p = Relacion(fin_item=id_item,inicio_item=id)
             p.save()
 
         #----------------------------------------------------------#
@@ -941,6 +969,49 @@ def relacionarItem(request,id_proyecto,id_item):
         version.save()
         #----------------------------------------------------------#
 
-        return redirect('gestion:menu')
+        return redirect('gestion:detallesFase',item[0].fase.id_Fase)
     else:
         return render(request, 'relacionarItem.html', {'form': items,'list':list})
+
+def itemCancelado(request):
+    """METODO PARA CANCELAR UN ITEM"""
+    x = Item.objects.last()
+    x.delete()
+
+    instanceItem = Atributo_Item.objects.filter(id_item = x)
+    for i in instanceItem:
+        i.delete()
+
+    return  redirect("gestion:menu")
+
+def primeraFase(id_proyecto,id_item,some_var):
+    proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
+    fases = Fase.objects.filter(id_Proyecto=proyecto)
+    todosItems = Item.objects.filter(fase=fases[fases.count() - 1],actual=True)  # todos los items de la primera fase
+
+    for item in todosItems:
+        if(busqueda(item,id_item,some_var)==True):#id_item al cual llegar y some var sus nuevas relaciones
+            return False
+    return True
+
+
+def busqueda(item,id_item,some_var):
+    print(item.nombre)
+    try:
+        relaciones = Relacion.objects.filter(inicio_item=item.id_item)
+    except:
+        relaciones = None
+
+    if(relaciones != None):### si no tiene relaciones, compara
+        for relaciones in relaciones:
+            instanceItem= Item.objects.get(id_item=relaciones.fin_item)
+            if(busqueda(instanceItem,id_item,some_var)==True):
+                return True
+        else:
+            for id in some_var:
+                if(str(id)==str(item.id_item)):######preguntar si es de otra fase si no se puede desde la misma porque --->apunta al contrario
+                    print("encontro")
+                    return True
+    print("no encontro busca en otro")
+    return False
+
