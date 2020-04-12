@@ -2,7 +2,7 @@ from django import forms
 from django.forms import Textarea
 from .models import Fase
 from django.contrib.auth.models import User, Permission,Group,ContentType
-from .models import Proyecto,TipoItem,Atributo,Usuario
+from .models import Proyecto,TipoItem,Atributo,Usuario,Book
 ####### se escribe formulario
 from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
 
@@ -79,7 +79,7 @@ class TipoItemForm(forms.ModelForm):
         }
         '''widget para especificar las clase de bootstap utilizada en nuestro html para nuestro form'''
     cantidad=forms.IntegerField(label="Cantidad de Atributos del Tipo de Item",
-                                max_value=10,required=True,
+                                max_value=10,required=False,
                                 widget=forms.TextInput(
                                         attrs={
                                             "placeholder": "Cantidad Tipo Item",
@@ -233,4 +233,8 @@ class RolForm(forms.ModelForm):
             'permissions':forms.CheckboxSelectMultiple(),
         }
 
+class BookForm(forms.ModelForm):
+    class Meta:
+        model=Book
+        fields=('title','autor','pdf')
 
