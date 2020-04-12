@@ -228,6 +228,9 @@ class Relacion(models.Model):
     fin_item= models.IntegerField()
     """ITEM FIN DE RELACION"""
 
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage(location='/media/photos')
+
 class Atributo_Item(models.Model):
     """MODELO DE ATRIBUTO DE TI, EN EL CUAL SE GUARDARA EL VALOR DEPENDIENDO DEL TI"""
     id_atributo= models.AutoField(primary_key = True) ###### clave de proyecto
@@ -237,8 +240,9 @@ class Atributo_Item(models.Model):
     id_item= models.ForeignKey(Item, on_delete = models.CASCADE)
     """EL ITEM AL CUAL ESTA ASIGNADO"""
     #tipo=models.CharField(max_length=20)
-    valor=models.CharField(max_length=1000)
+    valor=models.CharField(max_length=1000,null=True)
     """VALOR QUE SERA STRING PERO DEPENDIENDO DEL ATRIBUTO SE PODRA OBTENER EL VALOR REQUERIDO"""
+    archivo = models.FileField(storage=fs,null=True)
 
 class Versiones(models.Model):
     """TABLA DE VERSIONES EL CUAL RELACIONA LA VERSION DEL ITEM"""
@@ -249,3 +253,8 @@ class Versiones(models.Model):
     id_item= models.IntegerField()
     """ITEM ASIGNADO"""
 
+class Comite(models.Model):
+    id = models.AutoField(primary_key=True)  ###### clave de proyecto
+    """ID AUTOMATICO"""
+    id_proyecto=models.IntegerField()
+    id_user=models.IntegerField()

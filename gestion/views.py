@@ -13,8 +13,8 @@ from time import gmtime, strftime
 from .forms import FaseForm, FormProyectoEstados,FormItem
 from django.db.models import Count
 from django.utils.decorators import method_decorator
-from .models import Proyecto,TipoItem,Atributo,Item,Fase,Atributo_Item,Relacion,Versiones
-from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm
+from .models import Proyecto,TipoItem,Atributo,Item,Fase,Atributo_Item,Relacion,Versiones,Comite
+from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm,UploadDocumentForm
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
@@ -137,7 +137,8 @@ def menu(request):
     #return render(request, 'MenuAdminSistema.html')
     if( user.usuario.esta_aprobado):
         if user.has_perm('gestion.es_administrador'):
-             return render(request,'MenuAdminSistema.html')
+            #subirArchivo("/home/ruben/prueba/tweet.txt",False,"/prueba/tweet.txt")
+            return render(request,'MenuAdminSistema.html')
         else:
             return render(request, 'Menu.html')
     else:
@@ -863,6 +864,7 @@ def crearItem(request,Faseid):
 def agg_listar_tipo_item(request,Fase):
     """LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
     CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO"""
+
     if request.method == 'POST':
         x=request.POST.get('ti')
         item=Item.objects.last()
@@ -874,16 +876,30 @@ def agg_listar_tipo_item(request,Fase):
     tipoItem = TipoItem.objects.filter(fase_id=Fase)
     contexto={
         'TipoItem':tipoItem
+
     }
     return render (request,'aggTI.html',contexto)
 #RUBEN
+import os
 def aggAtributos(request,idTI):
     """SE LISTAN LOS ATRIBUTOS DEL TI SELECCIONADO, SE AGREGA UN CAMPO VALOR EN DONDE SE DEBERA DE INGRESAR EL TIPO DE VALOR
     DE DICHO ATRIBUTO, SE VALIDA SI ES OBLIGATORIO Y MUESTRA MENSAJE DE ERROR SI ESTA VACIO EL CAMPO Y ES OBLIGATORIO,
     SI CUMPLIO CON LA RESTRICCION DE OBLIGATORIEDAD REDIRIGE A LA VENTANA DE RELACIONES PARA DICHO ITEM"""
     atributos= Atributo.objects.filter(ti_id=idTI)
+    Archivos = UploadDocumentForm()
     if request.method == 'POST':
         x = request.POST.getlist('valor')#SE SACA LA LISTA DE VALORES INGRESADOS
+        Archivo = UploadDocumentForm(request.POST, request.FILES)
+
+        i=request.POST.get('archivo')
+        print(i)
+
+        if(i != None):
+            DiraccionArchivo=os.path.abspath(i)
+            print(DiraccionArchivo)#quito el directorio del archivo
+            #subirArchivo(DiraccionArchivo,True,i)
+
+
         item=Item.objects.last()#SE OBTIENE EL ITEM CREADO RECIENTEMENTE
         for  i in range(len(x)):#SE RECORRE POR VALOR INGRESADO CONSULTANDO SI ES OBLIGARORIO Y ESTA VACIO-->MUESTRA ERROR
             if(x[i]=='' and atributos[i].es_obligatorio==True):
@@ -897,14 +913,15 @@ def aggAtributos(request,idTI):
                 }
                 return render(request, 'Error.html', context)
         for i in range(len(x)):#SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
-            p = Atributo_Item(idAtributoTI=idTI,id_item=item,valor=x[i])
+            p = Atributo_Item(idAtributoTI=idTI,id_item=item,valor=x[i],archivo=Archivo)
             p.save()
         itemID=Item.objects.last()
         ti=TipoItem.objects.get(id_ti=idTI)
         return redirect('gestion:relacionarItem',ti.fase.id_Proyecto.id_proyecto,itemID.id_item)
 
     contexto={
-        'atributos':atributos
+        'atributos':atributos,
+        'Archivos': Archivos,
     }
     return render (request,'aggAtributos.html',contexto)
 #RUBEN
@@ -956,7 +973,7 @@ def relacionarItem(request,id_proyecto,id_item):
                 }
                 return render(request, 'Error.html', context)
 
-        #VERIFICAR SI SE GENERAN CICLOS
+        #VERIFICAR SI SE GENERAN CICLOS--------- INCONSISTENCIAS
 
 
         for id in some_var:###### SE GUARDAN LAS RELACIONES
@@ -969,7 +986,7 @@ def relacionarItem(request,id_proyecto,id_item):
         version.save()
         #----------------------------------------------------------#
 
-        return redirect('gestion:detallesFase',item[0].fase.id_Fase)
+ #       return redirect('gestion:detallesFase',item[0].fase.id_Fase)
     else:
         return render(request, 'relacionarItem.html', {'form': items,'list':list})
 
@@ -1015,3 +1032,132 @@ def busqueda(item,id_item,some_var):
     print("no encontro busca en otro")
     return False
 
+
+### se usara mas tarde en la parte de relaciones
+def ciclos(item,i,some_var):
+
+    try:
+        relaciones = Relacion.objects.filter(inicio_item=i.id_item)
+    except:
+        relaciones = None
+
+    if(relaciones != None):### si no tiene relaciones, compara
+        for relaciones in relaciones:
+            instanceItem= Item.objects.get(id_item=relaciones.fin_item)
+            if(ciclos(item,instanceItem,some_var)==True):
+                return True
+
+    if(item.id_item==i.id_item):
+        return True
+    else:
+        for x in some_var:
+            if(str(x)==str(i.id_item)):
+               return True
+
+    return False
+
+
+import dropbox
+import tempfile
+
+
+"""
+dropbox
+gestionitems.fpuna@gmail.com    
+GestionItem20202
+https://josevc93.github.io/python/Dropbox-y-python/
+"""
+def subirArchivo(ruta,opcion,nombre):
+    """
+    opcion= true subir, sino descarga
+    ruta direccion del archivo a subir o en donde descargar
+
+    """
+
+    # Autenticación
+    token = "4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
+    dbx = dropbox.Dropbox(token)
+
+    # Obtiene y muestra la información del usuario
+    user = dbx.users_get_current_account()
+    #print(user)
+    if(opcion==True):
+        with open(ruta, "rb") as f:
+            dbx.files_upload(f.read(), nombre, mute=True)
+    else:
+        # Descarga archivo
+        dbx.files_download_to_file(ruta, nombre)
+
+def comite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
+    """
+    LISTA LOS USUARIOS DE UN PROYECTO
+    """
+
+    comite = Comite.objects.all()
+
+
+    form = Usuario.objects.all()
+    proyectos=Proyecto.objects.get(id_proyecto=pk)
+
+    if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+
+        #form.save()
+        return redirect('gestion:comite',pk)
+    else:
+        list=[]
+        if(comite != None):
+            for i in range(form.count()):
+                ok = False
+                if form[i].esta_aprobado == True:
+                    for x in comite:
+                        if x.id_user == form[i].user.id and x.id_proyecto == pk:
+                            ok=True
+                if ok:
+                   list.append(form[i].user.id)
+        print(list)
+        return render(request, 'comite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos})
+
+#RUBEN
+def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
+    """
+    """
+
+    proyectos=Proyecto.objects.get(id_proyecto=pk)
+
+    comite= Comite.objects.all()
+
+    form = Usuario.objects.all()
+    registrados = User_Proyecto.objects.all()
+
+    if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
+        #if form.is_valid():
+        some_var=request.POST.getlist('checkbox')
+        print(some_var)
+
+        for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
+            id_user =id
+            p=Comite(id_proyecto=pk,id_user=id_user)
+            p.save()
+        return redirect('gestion:comite',pk)
+    else:
+        list=[]
+        for i in range(form.count()):
+            ok = False
+            if form[i].esta_aprobado == True:
+                for x in range(registrados.count()):
+                    if registrados[x].proyecto_id == pk:# esta en el proyecto?
+                        ok=True
+                        for z in range(comite.count()):#si ya esta en el comite no
+                            if form[i].user.id == comite[z].id_user and pk==comite[z].id_proyecto:
+                                ok=False
+            if ok:
+               list.append(form[i].user.id)
+
+        return render(request, 'AggComite.html', {'form': form,'list':list,'proyectos':proyectos})
+
+#RUBEN
+def desvinculacionComite(request,pk,pk_user):
+    """DESVINCULA UN USUARIO DE UN PROYECTO"""
+    instanceUser = Comite.objects.filter(id_proyecto = pk, id_user = pk_user)
+    instanceUser.delete()
+    return redirect('gestion:comite',pk)

@@ -1,8 +1,7 @@
 from django.urls import path
 from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado
 from . import views
-from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos,itemCancelado
-
+from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos,itemCancelado,comite,AggComite,desvinculacionComite
 
 
 urlpatterns = [
@@ -47,6 +46,9 @@ urlpatterns = [
     path('detallesFase/<int:idFase>', views.detallesFase, name="detallesFase"),
     path('listar_relaciones/<int:idItem>', views.listar_relaciones, name="listar_relaciones"),
     path('listar_atributos/<int:idAtributoTI>/<int:id_item>', views.listar_atributos, name="listar_atributos"),
+    path('comite/<int:pk>', views.comite, name='comite'),
+    path('AggComite/<int:pk>', views.AggComite, name='AggComite'),
+    path('desvinculacionComite/<int:pk>/<int:pk_user>', views.desvinculacionComite, name='desvinculacionComite'),
 
 ]
 

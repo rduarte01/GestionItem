@@ -103,6 +103,8 @@
                 {% endif %}
         {% endif %}
             <td><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}"class="btn btn-primary">VER TI DEL PROYECTO</a></td>
+            <td><a href="{% url 'gestion:comite' proyectos.id_proyecto %}"class="btn btn-primary">COMITE DE CAMBIO</a></td>
+
     </tr>
     </thead>
 </table>

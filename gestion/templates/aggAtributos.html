@@ -37,7 +37,11 @@
         <td>{{atributos.nombre}}</td>
         <td>{{atributos.tipo_dato}}</td>
         <td>{{atributos.es_obligatorio}}</td>
-        <td><input placeholder="Ingrese el valor" type="text" name="valor"></td>
+        {%if atributos.tipo_dato == 'File'%}
+            <td>{{Archivos.as_p}}</td>
+        {%else%}
+            <td><input placeholder="Ingrese el valor" type="text" name="valor"></td>
+        {%endif%}
     </tr>
 {%endfor%}
 
