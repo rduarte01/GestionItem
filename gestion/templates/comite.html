@@ -20,7 +20,7 @@
 
 <div class="cities">
 <table class="table table-bordered">
-<a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
+<a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" role="button">Volver Atras</a>
       <thead>
 
     <tr>
@@ -40,7 +40,9 @@
 <div class="cities">
 <table class="table table-bordered">
     <form method="POST" action="">{% csrf_token %}
+
             {%if list%}
+                <h1>El comite de cambio esta conformado por:</h1>
                 <tr>
                     <td>NOMBRE</td>
                     <td>EMAIL</td>

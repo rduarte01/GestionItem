@@ -1145,7 +1145,7 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
             ok = False
             if form[i].esta_aprobado == True:
                 for x in range(registrados.count()):
-                    if registrados[x].proyecto_id == pk:# esta en el proyecto?
+                    if registrados[x].proyecto_id == pk and  registrados[x].user_id == form[i].user.id:# esta en el proyecto?
                         ok=True
                         for z in range(comite.count()):#si ya esta en el comite no
                             if form[i].user.id == comite[z].id_user and pk==comite[z].id_proyecto:

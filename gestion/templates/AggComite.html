@@ -20,7 +20,7 @@
 
 <div class="cities">
 <table class="table table-bordered">
-<a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
+<a class="btn btn-primary" href="{% url 'gestion:comite' proyectos.id_proyecto%}" role="button">Volver Atras</a>
       <thead>
 
     <tr>
@@ -38,7 +38,8 @@
 <div class="cities">
 <table class="table table-bordered">
     <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-
+        {%if list%}
+                <h1>Seleccione usuarios para el comite de cambio</h1>
         <tr>
                     <td><h4>NOMBRE</h4></td>
                     <td><h4>CORREO</h4></td>
@@ -59,8 +60,10 @@
             {%endif%}
     {%endfor%}
     {%endfor%}
-     <input type="submit" class="btn btn-primary" value="Guardar">
-
+     <input type="submit" class="btn btn-primary" value="Añadir">
+        {%else%}
+        <h1>Sin usuarios para añadir al comite</h1>
+        {%endif%}
     </form>
 
 </table>
