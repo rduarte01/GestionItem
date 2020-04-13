@@ -219,6 +219,7 @@ class Item(models.Model):
     actual=models.BooleanField(default=True)
     """SI ESTA EN TRUE SERA QUE EL ITEM ESTA ACTIVO Y NO UNA VERSION ANTERIOR"""
 
+
 class Relacion(models.Model):
     """MODELO DE RELACION DE ITEMS"""
     id_relacion= models.AutoField(primary_key = True) ###### clave de proyecto
@@ -234,7 +235,7 @@ fs = FileSystemStorage(location='/media/photos')
 class Atributo_Item(models.Model):
     """MODELO DE ATRIBUTO DE TI, EN EL CUAL SE GUARDARA EL VALOR DEPENDIENDO DEL TI"""
     id_atributo= models.AutoField(primary_key = True) ###### clave de proyecto
-    """ID DEL ATRIBUTO"""
+    """ID DEL ATRIBUTO_Item"""
     idAtributoTI= models.IntegerField()
     """ID DEL TI CON EL CUAL SE IDENTIFICARA"""
     id_item= models.ForeignKey(Item, on_delete = models.CASCADE)

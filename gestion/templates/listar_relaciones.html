@@ -6,9 +6,13 @@
 
 
 {% block title %}
-<h1>Relaciones!</h1>
-{% endblock title%}
 
+<table class="table table-bordered" >
+
+<td><h2>Relaciones del item de nombre {{itemActual.nombre}}</h2></td>
+
+</table>
+    {% endblock title%}
 
 <style>
 #ocultar{display:none;}
@@ -28,22 +32,55 @@
 
     <tr>
         <td>NOMBRE DE ITEM</td>
-
+        <td>NOMBRE DE FASE A LA QUE PERTENECE</td>
+        <td>TIPO DE RELACION</td>
     </tr>
 {% for relaciones in relaciones%}
-{% for item in item%}
-        {%if item.id_item == relaciones.fin_item %}
+    {% for item in item%}
     <tr>
+        {%if item.id_item == relaciones.inicio_item and itemActual.id_item == relaciones.fin_item%}
         <td>{{item.nombre}}</td>
-    </tr>
+        <td>{{item.fase.nombre}}</td>
+        {%if itemActual.fase.id_Fase == item.fase.id_Fase%}
+            <td>Es padre del item {{itemActual.nombre}}</td>
         {%endif%}
+        {%if itemActual.fase.id_Fase > item.fase.id_Fase%}
+            <td>Es antecesor del item {{itemActual.nombre}}</td>
+        {%endif%}
+        {%if itemActual.fase.id_Fase < item.fase.id_Fase%}
+            <td>Es sucesor del item {{itemActual.nombre}}</td>
+        {%endif%}
+
+        {%endif%}
+        {%if item.id_item == relaciones.fin_item and itemActual.id_item == relaciones.inicio_item%}
+        <td>{{item.nombre}}</td>
+        <td>{{item.fase.nombre}}</td>
+        {%if itemActual.fase.id_Fase == item.fase.id_Fase%}
+            <td>Es hijo del item {{itemActual.nombre}}</td>
+        {%endif%}
+        {%if itemActual.fase.id_Fase > item.fase.id_Fase%}
+            <td>Es antecesor del item {{itemActual.nombre}}</td>
+        {%endif%}
+        {%if itemActual.fase.id_Fase < item.fase.id_Fase%}
+            <td>Es sucesor del item {{itemActual.nombre}}</td>
+        {%endif%}
+        {%endif%}
+
+    </tr>
+
         {%endfor%}
 {%endfor%}
 
     </form>
 </table>
 {% endblock %}
-     <input type="submit" class="btn btn-primary" value="Siguiente">
+
  </form>
       </div>
 {% endblock %}
+
+
+
+
+
+

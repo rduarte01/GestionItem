@@ -39,7 +39,7 @@
 <table class="table table-bordered">
     <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
         {%if list%}
-                <h2>Seleccione usuarios para el comite de cambio</h2>
+                <h2>Seleccione usuarios para quitar del comite</h2>
                 <h3>- Recuerde que el numero de usuarios para un comite debe de ser impar y mayor a un usuario</h3>
                 <h3>- El gerente del proyecto siempre forma parte del comite</h3>
 
@@ -52,7 +52,6 @@
           {%for i in form%}
                 {%if list == i.user.id%}
                     {%if idGerente != i.user.id%}
-
                         <tr>
                             <td>
                                 <div class="form-check">
@@ -74,14 +73,12 @@
 
     {%endfor%}
     {%endfor%}
-     <input type="submit" class="btn btn-primary" value="Crear">
+     <input type="submit" class="btn btn-primary" value="Quitar del comite">
         {%else%}
-        <h1>Sin usuarios para añadir al comite</h1>
+        <h1>Sin usuarios para quitar del comite</h1>
         {%endif%}
     </form>
-
 </table>
-
  </div>
 </body>
 </html>

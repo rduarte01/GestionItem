@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado
 from . import views
-from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos,itemCancelado,comite,AggComite,desvinculacionComite
+from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos,itemCancelado,comite,AggComite,desvinculacionComite,DeleteComite
 
 
 urlpatterns = [
@@ -49,6 +49,7 @@ urlpatterns = [
     path('comite/<int:pk>', views.comite, name='comite'),
     path('AggComite/<int:pk>', views.AggComite, name='AggComite'),
     path('desvinculacionComite/<int:pk>/<int:pk_user>', views.desvinculacionComite, name='desvinculacionComite'),
+    path('DeleteComite/<int:pk>', views.DeleteComite, name='DeleteComite'),
 
 ]
 

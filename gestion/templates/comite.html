@@ -27,8 +27,8 @@
         <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
         <td><h5>ESTADO</h5></td>
         <td><h6>{{proyectos.estado}}</h6></td>
-        <td><a href="{% url 'gestion:AggComite' proyectos.id_proyecto%}" class="btn btn-primary">✚ AÑADIR USUARIO PARA EL COMITE</a></td>
-
+        <td><a href="{% url 'gestion:AggComite' proyectos.id_proyecto%}" class="btn btn-primary">✚ CREAR COMITE</a></td>
+        <td><a href="{% url 'gestion:DeleteComite' proyectos.id_proyecto%}" class="btn btn-primary">- QUITAR USUARIOS DEL COMITE</a></td>
     </tr>
 
     </thead>
@@ -46,9 +46,6 @@
                 <tr>
                     <td>NOMBRE</td>
                     <td>EMAIL</td>
-                    {% if "is_gerente" in proyecto_perms %}
-                        <td>DESVINCULACIÓN</td>
-                    {% endif %}
 
                 </tr>
                 {%for list in list %}
@@ -57,9 +54,7 @@
                 <tr>
                     <td>{{i.user.username}}</td>
                     <td>{{i.user.email}}</td>
-                    {% if "is_gerente" in proyecto_perms %}
-                        <td><a class="btn btn-primary" href="{% url 'gestion:desvinculacionComite' pk  i.user.id%}" role="button">Quitar del comite</a></td>
-                    {% endif %}
+
                 </tr>
 
                 {%endif%}
