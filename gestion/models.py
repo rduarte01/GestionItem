@@ -146,6 +146,12 @@ class Auditoria(models.Model):
     """GUARDA LA FECHA DE LA ACCION"""
     accion= models.CharField(max_length=100)
     """GUARDA LA ACCION REALIZADA"""
+    proyecto=models.CharField(max_length=100,null=True)
+    """PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO"""
+    id_proyecto=models.IntegerField(null=True)
+    """PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO"""
+    fase=models.CharField(max_length=100,null=True)
+    """PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO"""
 
 class User_Proyecto(models.Model):
     """MODELO PROYECTO CON USER EN DONDE SE SOLUCIONA LA RELACION MUCHOS A MUCHOS, GUARDA

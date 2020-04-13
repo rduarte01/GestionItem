@@ -1,8 +1,8 @@
 from django.urls import path
 from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado
 from . import views
-from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos,itemCancelado,comite,AggComite,desvinculacionComite,DeleteComite
-
+#from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos,itemCancelado,comite,AggComite,desvinculacionComite,DeleteComite,auditoriaProyecto
+from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -16,7 +16,9 @@ urlpatterns = [
     #path('enEspera/',views.verSolicitudesenEspera),
     path('crear_fase/<int:nroFase>', views.crearFase, name='crearFase'),
     path('auditoria/', listar_auditoria, name='auditoria'),
-#    path('AggUser/', listar_usuarios_registrar),
+    path('auditoriaProyecto/<int:pk>', auditoriaProyecto, name='auditoriaProyecto'),
+
+    #    path('AggUser/', listar_usuarios_registrar),
     path('AggUser/<int:pk>', views.AggUser, name='AggUser'),
     path('listUser/<int:pk>', views.UsersProyecto, name='UsersProyecto'),
     path('desvinculacionProyecto/<int:pk>/<int:pk_user>', views.desvinculacionProyecto, name='desvinculacionProyecto'),

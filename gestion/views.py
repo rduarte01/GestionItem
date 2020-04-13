@@ -117,6 +117,13 @@ def registrarAuditoria(user,accion):
     showtime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     p = Auditoria(usuario= user,fecha=showtime, accion=accion)###### FALTA ARREGLAR USER
     p.save()
+
+def registrarAuditoriaProyecto(user,accion,id_proyecto,proyecto,fase):
+    """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
+    showtime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    p = Auditoria(usuario= user,fecha=showtime, accion=accion,id_proyecto=id_proyecto,proyecto=proyecto,fase=fase)###### FALTA ARREGLAR USER
+    p.save()
+
 #RUBEN
 def CorreoMail(asunto,mensaje,correo):
     """ FUNCION QUE RECIBE UN ASUNTO, MENSAJE Y UN CORRREO ELECTRONICO AL CUAL SE LE ENVIA UN CORREO
@@ -227,13 +234,14 @@ def creacionProyecto(request):
         cantidad_fases=cantidad.get("fase")##### PARA WALTER
         CANTIDAD=cantidad_fases-1
 
-        registrarAuditoria(request.user, 'Creo el proyecto: '+ str(instanceProyecto.nombre))
 
         q = request.user
         z= Proyecto.objects.last()
         id_proyecto = z.id_proyecto ## ID DEL PROYECTO CREADO
         p = User_Proyecto(user_id= q.id ,proyecto_id= id_proyecto,activo= True)
         p.save()
+
+        registrarAuditoriaProyecto(request.user, 'Creo el proyecto',z.id_proyecto,instanceProyecto.nombre,'')
 
         print(cantidad_fases)
         cantidad_fases=cantidad_fases-1
@@ -480,6 +488,15 @@ def listar_auditoria(request):
         'auditoria':auditoria
     }
     return render(request, 'Auditoria.html', context)
+
+def auditoriaProyecto(request,pk):
+    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA """
+    auditoria = Auditoria.objects.filter(id_proyecto=pk)
+    context={
+        'auditoria':auditoria
+    }
+    return render(request, 'Auditoria.html', context)
+
 #RUBEN
 def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
@@ -1041,6 +1058,8 @@ def relacionarItem(request,id_proyecto,id_item):
 
         #VERIFICAR SI SE GENERAN CICLOS--------- INCONSISTENCIAS
 
+
+        registrarAuditoriaProyecto(request.user,'creo el item: '+str(item[0].nombre),id_proyecto,proyecto.nombre,item[0].fase.nombre)
 
         for id in some_var:###### SE GUARDAN LAS RELACIONES
             p = Relacion(fin_item=id_item,inicio_item=id)
