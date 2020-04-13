@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
-from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario
-from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm
+from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario,Book
+from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm,BookForm
 from time import gmtime, strftime
 from .forms import FaseForm, FormProyectoEstados
 from django.db.models import Count
@@ -18,8 +18,11 @@ from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
+from django.forms.models import modelformset_factory
 from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required_or_403
+from django.shortcuts import get_object_or_404
+from django.core.files.storage import FileSystemStorage
 
 
 #### GLOBALES
@@ -612,8 +615,10 @@ def importar_tipo_item(request,id_fase):
     if(request.method=='POST'):
         print('es post')
         some_var = request.POST.getlist('checkbox')
+        print(some_var)
         for id in some_var:
             print (id_fase)
+            print (id)
             ti=TipoItem.objects.get(id_ti=id)#capturamos el tipo de item
             atributos=Atributo.objects.filter(ti_id=id) #optenemos todos los atributos de ese tipo de item
             ti.id_ti=None #clonamos el tipo de item
@@ -628,6 +633,7 @@ def importar_tipo_item(request,id_fase):
         print('es get')
         user=request.user #se optiene el usuario
         list_tipo_item_a_importar=[]
+        list_poyecto_tipo_item=[]
         list_tipo_item=[]
         list_tipo_item_proyecto_actual=get_all_tipo_item(Fase.objects.get(id_Fase=id_fase).id_Proyecto_id)
         proyectos=User_Proyecto.objects.exclude(proyecto_id=Fase.objects.get(id_Fase=id_fase).id_Proyecto_id)#obtengo el proyectos que el usuario tiene acceso
@@ -641,7 +647,10 @@ def importar_tipo_item(request,id_fase):
                     list_tipo_item+=TipoItem.objects.filter(fase_id=fase.id_Fase)
                 for ti in list_tipo_item :
                     if not ti.nombre in list_tipo_item_proyecto_actual:
-                        list_tipo_item_a_importar += [ti]
+                        list_tipo_item_a_importar += [{
+                                                    'ti':ti,
+                                                    'proyecto':Proyecto.objects.get(id_proyecto=proyecto.proyecto_id)
+                                                     }]
 
         print(list_tipo_item_a_importar)
         fase=Fase.objects.get(id_Fase=id_fase)
@@ -654,7 +663,6 @@ def importar_tipo_item(request,id_fase):
 
 def get_all_tipo_item(id_proyecto):
     '''Esta funcion permite obtener todos los tipos de item de un proyecto especifico'''
-
     fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
     list_tipo_item=[]
     list_tipo_item_name=[]
@@ -759,8 +767,11 @@ def listar_tipo_item(request,id_proyecto):
     """Lista los tipos de item asociado a un proyecto"""
     fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
     tipoItem=[]
+
     for fase in fases:
-        tipoItem += TipoItem.objects.filter(fase_id=fase.id_Fase)
+        tipoItem += [{ 'fase':fase,
+                    'ti':TipoItem.objects.filter(fase_id=fase.id_Fase)
+        }]
 
     print(tipoItem)
     contexto={
@@ -791,3 +802,93 @@ class VerRoles(ListView):
         context['listGroup'] = grupList
         context['idProyecto'] = miid
         return context
+
+def editar_ti(request,id_ti):
+    tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
+    query_atributos = Atributo.objects.filter(ti_id=tipo_item.id_ti)
+    AtributeFormSet = modelformset_factory(Atributo, form=AtributeForm,exclude=('id_atributo',), extra=0)
+    if request.method=='POST':
+        formset = AtributeFormSet(request.POST,request.FILES,queryset=query_atributos)
+        formset_ti=TipoItemForm(request.POST,instance=tipo_item)
+        print(formset_ti)
+        if formset.is_valid() and formset_ti.is_valid() :
+            print('es_valido')
+            formset.save()
+            instancia_ti=formset_ti.save(commit=False)
+            instancia_ti.save()
+        else:
+            print('no es valido')
+            print(formset.errors)
+            print(formset_ti.errors)
+        return redirect('gestion:menu')
+    else:
+        formset_ti = TipoItemForm(instance=tipo_item)
+        formset = AtributeFormSet(queryset=query_atributos)
+        print('se imprime esto')
+
+        context={
+            'formset':formset,
+            'formset_ti':formset_ti,
+            'tipo_item':tipo_item
+        }
+        return render(request,'editar_tipo_item.html',context)
+
+def agregar_atributo_ti(request, id_ti):
+    form = formset_factory(AtributeForm, extra=1)
+    if(request.method=='POST'):
+        my_form=form(request.POST)
+        if my_form.is_valid():
+            for form in my_form:
+                n,o,t=recoge_datos_atributo(form)
+                atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=id_ti)
+        return  redirect('gestion:editar_ti',id_ti=id_ti)
+    else:
+        contexto={
+            'formset':form
+        }
+        return render(request,'crear_atributo.html',contexto)
+
+def eliminar_atributo_ti(request,id_ti):
+    tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
+    if request.method=='POST':
+        some_var = request.POST.getlist('checkbox')
+        for id in some_var:
+            instancia=Atributo.objects.get(id_atributo=id)
+            instancia.delete()
+        return redirect('gestion:editar_ti',id_ti=id_ti)
+
+    atributos=Atributo.objects.filter(ti_id=id_ti)
+    contexto={
+        'atributos':atributos,
+        'tipo_item':tipo_item,
+    }
+    return  render(request,'eliminar_atributo_ti.html',contexto)
+
+def eliminar_tipo_item(request,id_ti):
+    Atributo.objects.filter(ti_id=id_ti).delete()
+    get_object_or_404(TipoItem, id_ti=id_ti).delete()
+    return redirect('gestion:menu')
+
+def upload_book(request):
+
+    form=BookForm()
+    if request.method=='POST':
+        form=BookForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            # Helpful attribute to get dropbox file metadata
+            # like path on the server, size, thumbnail etc
+            return  redirect('gestion:listar_book')
+
+    contexto={
+        'form':form
+    }
+    return render(request, 'upload_book.html',contexto)
+
+
+def list_book(request):
+    books=Book.objects.all()
+    contexto={
+        'books':books
+    }
+    return render(request,'listar_book.html',contexto)

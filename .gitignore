@@ -8,3 +8,6 @@ gestion/__pycache__/
 myenv/
 
 GestionItem/__pycache__/
+books/
+
+media/

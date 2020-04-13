@@ -197,3 +197,7 @@ class Usuario(models.Model):
         )
         """LISTA DE PERMISOS ASOCIADOS AL SISTEMA"""
 
+class Book(models.Model):
+    title=models.CharField(max_length=100)
+    autor=models.CharField(max_length=100)
+    pdf=models.FileField(upload_to='Books')

@@ -3,6 +3,9 @@ from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancela
 from . import views
 from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('menu/logout/', views.logout,name='logout'),
@@ -30,13 +33,22 @@ urlpatterns = [
     path('ver/fase/<int:id_fase>/proyecto',views.get_fase_proyecto,name='get_fase_proyecto'),
     path('importar/tipo/item/fase/<int:id_fase>', views.importar_tipo_item, name='importar_tipo_item'),
     path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto'),
-
     path('enEspera/', VerUsersEnEspera.as_view(), name="listaDeEspera"),
     path('userEnEspera/<int:pk>', ActualizarUser.as_view(), name='userEsperando'),
     path('crearRol/<str:proyecto>', CrearRol.as_view(), name='crearRol'),
     path('modRol/<int:pk>', ModificarRol.as_view(), name='modificarRol'),
     path('lista/tipo/item/<int:id_proyecto>',views.listar_tipo_item, name='listar_tipo_item'),
     path('misRoles/<int:proyecto>', VerRoles.as_view(), name="misRoles"),
+    path('editar/tipo/item/<int:id_ti>',views.editar_ti,name='editar_ti'),
+    path('editar/tipo/item/<int:id_ti>/agregar/atributo',views.agregar_atributo_ti,name='agregar_atributo_ti'),
+    path('eliminar/atributo/tipo/item/<int:id_ti>',views.eliminar_atributo_ti,name='eliminar_atributo_ti'),
+    path('eliminar/tipo/item/<int:id_ti>',views.eliminar_tipo_item,name='eliminar_tipo_item'),
+
+    #practicas
+    path('subir/book',views.upload_book,name='upload_book'),
+    path('listar/book', views.list_book, name='listar_book')
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

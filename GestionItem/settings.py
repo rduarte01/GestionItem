@@ -49,6 +49,7 @@ AUTHENTICATION_BACKENDS = {
     #'app1.authOlogin.auth0backend.Auth0',
     'django.contrib.auth.backends.ModelBackend',  # this is default
     'guardian.backends.ObjectPermissionBackend',
+   # 'django_dropbox_upload_handler.apps.DjangoDropboxUploadHandlerConfig',
 }
 
 LOGIN_URL = '/login/auth0'
@@ -153,3 +154,25 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'GestionItems.FPUNA@gmail.com'
 EMAIL_HOST_PASSWORD = 'GestionItems2020'
 EMAIL_PORT = 587
+
+
+####para manejar archivos
+#MEDIA_URL = '/books/' #se utiliza para manejar los archivos subidos
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'books') #manejar donde subir los archivos
+
+DROPBOX_ROOT ="/Dropbox/"
+# Media path inside Dropbox folder
+MEDIA_ROOT = os.path.join(DROPBOX_ROOT, "media")
+MEDIA_URL = '/media/'
+
+
+##dropbox
+#DROPBOX_CONSUMER_KEY= "657yh6439e6zn8b"
+#DROPBOX_CONSUMER_SECRET= "jnnh5qwh7p1nmid"
+DROPBOX_OAUTH2_TOKEN = "GpsA66XtmLAAAAAAAAAATGBQLCDXPSILfau_PQgJ2Drmbsfj0E-Zn_EBdyQt2F3n"
+'''
+FILE_UPLOAD_HANDLERS = (
+    "gestion.dropbox_upload_handler.DropboxFileUploadHandler",
+)
+'''
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'

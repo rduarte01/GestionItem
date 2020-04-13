@@ -5,49 +5,34 @@
 {% if "is_gerente" in proyecto_perms %}
     <center><h2> Lista de Tipos de Item a importar </h2></center>
     {%if tipoItems %}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    Nombre del Tipo de Item
-                </div>
-                <div class="col">
-                    ID de la Fase
-                </div>
-                <div class="col">
-                    Seleccione para importar
-                </div>
-            </div>
-        </div>
-        {% for ti in tipoItems%}
-        <form method='POST' onSubmit="return enviado()">
-            {% csrf_token%}
-            <div class="container">
-                <div class="row">
-                    <div class="col ">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action ">{{ti.nombre}}</a>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="col ">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action ">{{ti.fase_id }}</a>
-                        </div>
-                        <br>
-                    </div>
-                    <div class='col'>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="checkbox" value="{{ti.id_ti}}"
-                                   id="{{ti.id_ti}}}">
-                            <label class="form-check-label" for="{{ti.id_ti}}}">
-                                Selecciona para importar
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-            <input class="btn btn-primary" type='submit' value='Guardar'/>
+     <form method='POST' onSubmit="return enviado()">
+            <table class="table table-bordered">
+                <thead>
+                     <th>Nombre del Tipo Item</th>
+                     <th>Proyecto Asociado</th>
+                     <th>Marque para importar</th>
+                </thead>
+                <tbody>
+                    {% for ti in tipoItems%}
+                            {% csrf_token%}
+                            <tr>
+                                <td>{{ti.ti.nombre}} </td>
+                                <td> {{ ti.proyecto.nombre }}</td>
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{ti.ti.id_ti}}"
+                                               id="{{ti.ti.id_ti}}">
+                                        <label class="form-check-label" for="{{ti.ti.id_ti}}">
+                                            Selecciona para importar
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+             <input class="btn btn-primary" type='submit' value='Guardar'/>
         </form>
     {%else %}
         <h1>No hay tipos de items disponibles para importar</h1>
