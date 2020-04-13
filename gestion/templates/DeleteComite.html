@@ -1,0 +1,85 @@
+{% load guardian_tags %}
+{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+    <title>Comite de proyecto</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<html>
+<head>
+<style>
+.cities {
+  background-color: silver;
+  color: black;
+  margin: 20px;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="cities">
+<table class="table table-bordered">
+<a class="btn btn-primary" href="{% url 'gestion:comite' proyectos.id_proyecto%}" role="button">Volver Atras</a>
+      <thead>
+
+    <tr>
+        <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
+        <td><h5>ESTADO</h5></td>
+        <td><h6>{{proyectos.estado}}</h6></td>
+    </tr>
+
+    </thead>
+</table>
+</div>
+
+
+
+<div class="cities">
+<table class="table table-bordered">
+    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+        {%if list%}
+                <h2>Seleccione usuarios para quitar del comite</h2>
+                <h3>- Recuerde que el numero de usuarios para un comite debe de ser impar y mayor a un usuario</h3>
+                <h3>- El gerente del proyecto siempre forma parte del comite</h3>
+
+        <tr>
+                    <td><h4>NOMBRE</h4></td>
+                    <td><h4>CORREO</h4></td>
+        </tr>
+
+        {%for list in list %}
+          {%for i in form%}
+                {%if list == i.user.id%}
+                    {%if idGerente != i.user.id%}
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.user.id}}" id="{{i.user.id}}}">
+                                    <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5></label>
+                                </div>
+
+                        </td>
+                            <td>{{ i.user.email }}</td>
+                        </tr>
+                    {%else%}
+                        <tr>
+
+                            <td><strong>Gerente ya incluido: {{ i.user.username }}</strong></td>
+                            <td>{{ i.user.email }}</td>
+                        </tr>
+                    {%endif%}
+                {%endif%}
+
+    {%endfor%}
+    {%endfor%}
+     <input type="submit" class="btn btn-primary" value="Quitar del comite">
+        {%else%}
+        <h1>Sin usuarios para quitar del comite</h1>
+        {%endif%}
+    </form>
+</table>
+ </div>
+</body>
+</html>
+

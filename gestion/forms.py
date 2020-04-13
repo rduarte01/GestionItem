@@ -2,9 +2,52 @@ from django import forms
 from django.forms import Textarea
 from .models import Fase
 from django.contrib.auth.models import User, Permission,Group,ContentType
-from .models import Proyecto,TipoItem,Atributo,Usuario,Book
+from .models import Proyecto,TipoItem,Atributo,Usuario,Item,Atributo_Item,Book
 ####### se escribe formulario
 from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
+
+
+class UploadDocumentForm(forms.ModelForm):
+    class Meta:
+        """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
+        model = Atributo_Item
+        """SE REALIZA FORMULARIO DEL MODELO PROYECTO"""
+        fields = [
+                "archivo",
+                  ]
+        """CAMPOS A MOSTRAR EN EL FORMULARIO"""
+        labels= {
+            "archivo":"Seleccione",
+        }
+
+
+class FormItem(forms.ModelForm):
+    """
+    """
+
+    class Meta:
+        """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
+        model = Item
+        """SE REALIZA FORMULARIO DEL MODELO PROYECTO"""
+        fields = [
+                "nombre",
+                "descripcion",
+                "costo",
+                  ]
+        """CAMPOS A MOSTRAR EN EL FORMULARIO"""
+        labels= {
+            "nombre":"Ingrese un Nombre para el Item",
+            "descripcion":"Ingrese una descripcion si lo desea",
+            "costo":"Costo",
+        }
+        """LA ETIQUETA DE CADA CAMPO"""
+        widgets={
+            "nombre": forms.TextInput(attrs={'class': 'form-control'}),
+            "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
+            "costo": forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
+
 
 
 class FormProyectoEstados(forms.Form):

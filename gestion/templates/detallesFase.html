@@ -1,0 +1,92 @@
+{% load guardian_tags %}
+{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+    <title>Detalle de Fase</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<html>
+<head>
+<style>
+.cities {
+  background-color: silver;
+  color: white;
+  margin: 20px;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="cities">
+<table class="table table-bordered">
+<a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a>
+      <thead>
+
+    <tr>
+        <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
+        <td><h5>ESTADO</h5></td>
+        <td><h6>{{proyectos.estado}}</h6></td>
+    </tr>
+
+    </thead>
+</table>
+</div>
+
+
+<div class="cities">
+<table class="table table-bordered">
+      <thead>
+    <tr>
+        <td><h5>NOMBRE DE FASE : {{fases.nombre}}</h5></td>
+        <td><h5>DESCRIPCION : {{fases.descripcion}}</h5></td>
+        <td><h5>ESTADO : {{fases.estado}}</h5></td>
+    </tr>
+
+    </thead>
+
+</table>
+</div>
+
+
+<div class="cities">
+<table class="table table-bordered">
+
+    <thead>
+    <tr>
+        <td><h5>ITEMS</h5></td>
+        <td><h5>DESCRIPCION</h5></td>
+        <td><h5>COSTO</h5></td>
+        <td><h5>VER RELACIONES</h5></td>
+        <td><h5>VER ATRIBUTOS</h5></td>
+
+    </tr>
+    </thead>
+    <tbody>
+        {%for items in items %}
+        <tr>
+            <td>{{items.nombre}}</td>
+            <td>{{items.descripcion}}</td>
+            <td>{{items.costo}}</td>
+           <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Relaciones</a></td>
+           <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
+        </tr>
+        {%endfor%}
+<tbody>
+  </table>
+ </div>
+</body>
+</html>
+
+    <div class="cities">
+<table class="table table-bordered">
+      <thead>
+    <tr>
+            <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></td>
+
+            <td><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}"class="btn btn-primary">VER TI DEL PROYECTO</a></td>
+    </tr>
+    </thead>
+</table>
+</div>
+

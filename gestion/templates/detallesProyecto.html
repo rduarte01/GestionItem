@@ -41,7 +41,7 @@
 </div>
 
 
- <div class="cities">
+<div class="cities">
 <table class="table table-bordered">
 
     <thead>
@@ -50,13 +50,13 @@
         <td>DESCRIPCION</td>
         <td>ESTADO</td>
         <td>ESTADO DE FASES</td>
-        <td>TRABAJAR!</td>
         {% if "is_gerente" in proyecto_perms %}
             {% if proyectos.estado != 'CANCELADO' %}
             <td>AGREGA TI</td>
             <td>IMPORTA TI</td>
             {% endif %}
         {% endif %}
+        <td>TRABAJAR!</td>
 
     </tr>
     </thead>
@@ -73,13 +73,14 @@
             {%else%}
             <td>No es gerente</td>
             {%endif%}
-            <td><a href="" class="btn btn-primary">DETALLES</a></td>
+
             {% if "is_gerente" in proyecto_perms %}
                 {% if proyectos.estado != 'CANCELADO' %}
                 <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear Tipo Item</a> </td>
                 <td><a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-primary">Importar Tipo Item</a> </td>
                 {% endif %}
             {% endif %}
+            <td><a href="{% url 'gestion:detallesFase' fases.id_Fase %}" class="btn btn-primary">DETALLES</a></td>
         </tr>
         {%endif%}
         {%endfor%}
@@ -92,9 +93,7 @@
     <div class="cities">
 <table class="table table-bordered">
       <thead>
-
     <tr>
-
             <td><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" class="btn btn-primary">USUARIOS DEL PROYECTO</a></td>
         {% if "is_gerente" in proyecto_perms %}
                 {% if proyectos.estado != 'CANCELADO' %}
@@ -104,6 +103,8 @@
                 {% endif %}
         {% endif %}
             <td><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}"class="btn btn-primary">VER TI DEL PROYECTO</a></td>
+            <td><a href="{% url 'gestion:comite' proyectos.id_proyecto %}"class="btn btn-primary">COMITE DE CAMBIO</a></td>
+
     </tr>
     </thead>
 </table>
