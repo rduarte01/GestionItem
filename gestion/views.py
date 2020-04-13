@@ -938,8 +938,9 @@ def aggAtributos(request,idTI):
             if(atributos.tipo_dato == 'Boolean'):
                 x = request.POST.getlist(atributos.tipo_dato)
                 tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=atributos.tipo_dato)
+                print(x)
                 for ini in range(len(x)):
-                    if(x[ini] == 'Ninguno' and tiposAtributo[ini].es_obligatorio == True):
+                    if(x[ini] == '' and tiposAtributo[ini].es_obligatorio == True):
                         ok=True
                         nombre=tiposAtributo[ini].nombre
                 if(ok==True):

@@ -21,9 +21,12 @@
         <p>{{mensaje}}</p>
       </div>
       <div class="modal-footer">
-        <a class="btn btn-secondary" href="{{boton1}}" role="button">{{titulo_b1}}</a>
-
+        {% if titulo_b1%}
+          <a class="btn btn-secondary" href="{{boton1}}" role="button">{{titulo_b1}}</a>
+        {% endif%}
+         {% if titulo_b2%}
         <a class="btn btn-primary" href="{{boton2}}" role="button">{{titulo_b2}}</a>
+      {% endif%}
       </div>
     </div>
   </div>
