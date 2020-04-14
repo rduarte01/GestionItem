@@ -189,6 +189,8 @@ class Permisos(models.Model):
             ("crear_lb", "Puede Crear LB"),
             ("cerrar_lb", "Puede Cerrar LB"),
             ("generar_solicitud", "Puede Generar Solicitud de Cambio"),
+            ##ruben
+            ('crear_item','Puede crear un item')
         )
         """LISTA DE PERMISOS ASOCIADOS AL PROYECTO"""
 
@@ -261,10 +263,13 @@ class Versiones(models.Model):
     """ITEM ASIGNADO"""
 
 class Comite(models.Model):
+    """TABLA QUE TENDRA LA RELACION USUARIO-PROYECTO PERO PARA UN COMITE DE UN PROYECTO EN ESPECIFICO"""
     id = models.AutoField(primary_key=True)  ###### clave de proyecto
     """ID AUTOMATICO"""
     id_proyecto=models.IntegerField()
+    """ID DEL PROYECTO"""
     id_user=models.IntegerField()
+    """ID DEL USUARIO"""
 class Book(models.Model):
     title=models.CharField(max_length=100)
     autor=models.CharField(max_length=100)

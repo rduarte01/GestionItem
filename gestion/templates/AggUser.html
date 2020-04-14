@@ -11,40 +11,41 @@
 </style>
 
 {% block contect %}
+{% if perms.gestion.is_gerente %}
+
 <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' pk%}" role="button">Volver Atras</a>
-
-      <div class="jumbotron">
-
- <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-{% block content %}
-<table class="table table-bordered">
-    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-
-        <tr>
-                    <td><h4>NOMBRE</h4></td>
-                    <td><h4>CORREO</h4></td>
-        </tr>
-
-        {%for list in list %}
-          {%for i in form%}
-                {%if list == i.user.id%}
-        <tr><td>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.user.id}}" id="{{i.user.id}}}">
-                    <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5></label>
-                </div>
-
-        </td>
-            <td>{{ i.user.email }}</td>
-        </tr>
-            {%endif%}
-    {%endfor%}
-    {%endfor%}
-
-    </form>
-</table>
-{% endblock %}
-     <input type="submit" class="btn btn-primary" value="Guardar">
- </form>
-      </div>
+    <div class="jumbotron">
+        <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+            {% block content %}
+                <table class="table table-bordered">
+                    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                        <tr>
+                            <td><h4>NOMBRE</h4></td>
+                            <td><h4>CORREO</h4></td>
+                        </tr>
+                        {%for list in list %}
+                            {%for i in form%}
+                                {%if list == i.user.id%}
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.user.id}}" id="{{i.user.id}}}">
+                                                <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5></label>
+                                            </div>
+                                        </td>
+                                        <td>{{ i.user.email }}</td>
+                                    </tr>
+                                {%endif%}
+                            {%endfor%}
+                        {%endfor%}
+                    </form>
+                </table>
+            {% endblock %}
+            <input type="submit" class="btn btn-primary" value="Guardar">
+        </form>
+    </div>
+    {% else %}
+        <h1>Usted no es tiene el permiso</h1>
+        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
+    {% endif %}
 {% endblock %}

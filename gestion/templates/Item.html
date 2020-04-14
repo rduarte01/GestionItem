@@ -1,4 +1,3 @@
-
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
@@ -6,6 +5,22 @@
 {% block title %}
     <h1>Creacion de Item</h1>
 {% endblock title%}
+
+
+{% block contect %}
+    <!--{% if perms.gestion.crear_item %}-->
+            <a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
+            <div class="jumbotron">
+            <form method="POST"  action="" onSubmit="return enviado()">{% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" class="btn btn-primary" value="Siguiente">
+            </form>
+            </div>
+    <!--{% else %}
+        <h1>Usted no es tiene el permiso de crear item</h1>
+        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
+    {% endif %}-->
+{% endblock %}
 
 {% block click %}
 <script LANGUAGE="JavaScript">
@@ -23,22 +38,3 @@
         }
 </script>
 {% endblock click %}
-
-{% block contect %}
-{% if perms.gestion.is_gerente %}
-    <a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
-
-      <div class="jumbotron">
-
-    <form method="POST"  action="" onSubmit="return enviado()">{% csrf_token %}
-      {{ form.as_p }}
-         <input type="submit" class="btn btn-primary" value="Siguiente">
-    </form>
-      </div>
-{% else %}
-    <h1>Usted no es tiene el permiso</h1>
-    <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
-{% endif %}
-
-{% endblock %}
-

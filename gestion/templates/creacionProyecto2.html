@@ -1,4 +1,3 @@
-
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
@@ -6,6 +5,21 @@
 {% block title %}
     <h1>Creacion de Proyecto</h1>
 {% endblock title%}
+
+{% block contect %}
+    {% if perms.gestion.is_gerente %}
+        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
+        <div class="jumbotron">
+            <form method="POST"  action="" onSubmit="return enviado()">{% csrf_token %}
+                {{ formProyecto.as_p }}
+                <input type="submit" class="btn btn-primary" value="Guardar">
+            </form>
+          </div>
+    {% else %}
+        <h1>Usted no es gerente de este proyecto, por tanto no puede crear proyectos</h1>
+        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
+    {% endif %}
+{% endblock %}
 
 {% block click %}
 <script LANGUAGE="JavaScript">
@@ -23,22 +37,3 @@
         }
 </script>
 {% endblock click %}
-
-{% block contect %}
-{% if perms.gestion.is_gerente %}
-    <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
-
-      <div class="jumbotron">
-
-    <form method="POST"  action="" onSubmit="return enviado()">{% csrf_token %}
-      {{ formProyecto.as_p }}
-         <input type="submit" class="btn btn-primary" value="Guardar">
-    </form>
-      </div>
-{% else %}
-    <h1>Usted no es gerente de este proyecto, por tanto no puede crear proyectos</h1>
-    <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
-{% endif %}
-
-{% endblock %}
-

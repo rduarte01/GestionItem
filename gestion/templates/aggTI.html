@@ -1,4 +1,3 @@
-
 {% extends 'creacionProyecto2.html'%}
 <title>Tipo de Items</title>
 {% load bootstrap4 %}
@@ -15,33 +14,31 @@
 #ocultar{display:none;}
 </style>
 
-{% block contect %}
-<a class="btn btn-primary" href="{% url 'gestion:itemCancelado'%}" role="button">Cancelar</a>
+<!--{% if perms.gestion.crear_item %}-->
 
-      <div class="jumbotron">
+    {% block contect %}
+        <a class="btn btn-primary" href="{% url 'gestion:itemCancelado'%}" role="button">Cancelar</a>
+        <div class="jumbotron">
+         <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+        {% block content %}
+        <table class="table table-bordered">
+            <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                <tr>
+                    <td>SELECCIONA EL NOMBRE DE TI</td>
+                </tr>
+                {% for ti in TipoItem %}
+                    <tr>
+                        <td><input class="btn btn-primary" type='submit' name="ti" value={{ti}}></td>
+                    </tr>
+                {% endfor %}
+            </form>
+        </table>
+        {% endblock %}
+         </form>
+        </div>
+    {% endblock %}
 
- <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-{% block content %}
-<table class="table table-bordered">
-
-
-    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-
-    <tr>
-        <td>SELECCIONA EL NOMBRE DE TI</td>
-    </tr>
-
-        {% for ti in TipoItem %}
-
-            <tr>
-                <td><input class="btn btn-primary" type='submit' name="ti" value={{ti}}></td>
-            </tr>
-        {% endfor %}
-
-
-    </form>
-</table>
-{% endblock %}
- </form>
-      </div>
-{% endblock %}
+<!--{% else %}
+        <h1>Usted no es tiene el permiso de crear item</h1>
+        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
+    {% endif %}-->

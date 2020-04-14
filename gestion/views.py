@@ -34,10 +34,19 @@ CANTIDAD=1
 
 #RUBEN
 def estadoProyecto(request,pk):
-    """ RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST"""
+    """ RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST,
+    VALIDA CADA UNO DE LOS ESTADOS:
+    INICIADO: VALIDA EL COMITE DE CAMBIO SI ES MAYOR O IGUAL A 3 USUARIOS, TAMBIEN VALIDA
+    QUE EL PROYECTO POSEA AL MENOS UN TIPO DE ITEM.
+    FINALIZADO: VALIDA QUE TODAS LAS RESTRICCIONES DEL PROYECTO SEAN CUMPLIDAS.
+    CANCELADO: CANCELA EL PROYECTO SIN NINGUNA VALIDACION YA QUE EL PROYECTO SE PUEDE CANCELAR EN CUALQUIER ESTADO
+    MENOS CUANDO ESTE FINALIZADO.
+    """
+
+    #if(request.user.has_perm('id_gerente')):----------------------------------------------
+
     form=FormProyectoEstados(request.POST)
     p = Proyecto.objects.get(id_proyecto=pk)  ##### BUSCA EL PROYECTO CON ID
-
     if form.is_valid():
         x=form.cleaned_data
         z=x.get("estado")#### ESTADO SELECCIONADO
@@ -100,10 +109,21 @@ def estadoProyecto(request,pk):
 
 
         elif(z=="CANCELADO"):
-            registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Cancelado")
-            p.estado=z####### SE ASIGNA ESTADO
-            p.save()##### SE GUARDA
-            return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
+            if(p.estado != 'FINALIZADO'):
+                registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Cancelado")
+                p.estado=z####### SE ASIGNA ESTADO
+                p.save()##### SE GUARDA
+                return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
+            else:
+                context = {
+                    "mensaje": "EL PROYECTO SE ENCUENTRA FINALIZADO POR ENDE NO SE PUEDE CANCELAR",
+                    "titulo": "PROYECTO YA SE FINALIZO",
+                    "titulo_b1": "SALIR",
+                    "boton1": "/proyectos/" ,
+                    "titulo_b2": "",
+                    "boton2": ""
+                }
+                return render(request, 'Error.html', context)
 
     context={
         "form":form,
@@ -111,6 +131,22 @@ def estadoProyecto(request,pk):
         'proyecto':p
     }
     return render(request, 'estadoProyecto.html',context)
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'Editar estado')
+
+def errorPermiso(permiso):
+    """MENSAJE DE ERROR CUANDO NO SE POSEE EL PERMISO"""
+    context = {
+        "mensaje": "NO TIENE EL PERMISO CORRESPONDIENTE NO PUEDE REALIZAR LA ACCION",
+        "titulo": "SIN EL PERMISO DE : "+ str(permiso),
+        "titulo_b1": "SALIR",
+        "boton1": "/menu/",
+        "titulo_b2": "",
+        "boton2": "",
+    }
+    return render(request, 'Error.html', context)
+
+
 #RUBEN
 def registrarAuditoria(user,accion):
     """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
@@ -119,7 +155,7 @@ def registrarAuditoria(user,accion):
     p.save()
 
 def registrarAuditoriaProyecto(user,accion,id_proyecto,proyecto,fase):
-    """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA"""
+    """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN UN PROYECTO EN ESPECIFICO"""
     showtime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     p = Auditoria(usuario= user,fecha=showtime, accion=accion,id_proyecto=id_proyecto,proyecto=proyecto,fase=fase)###### FALTA ARREGLAR USER
     p.save()
@@ -165,15 +201,15 @@ def CantProyectos(request):
             GuardaProyectos.append(NroProyectos[i].proyecto_id)###### GUARDA EL ID PROYECTO DEL USUARIO
             #print(NroProyectos[i])
     return GuardaProyectos
+import time
+from datetime import datetime
 
 def menu(request):
     """MENU PARA LOS USUARIOS DE ACUERDO A SUS ROLES, PARA ADMINISTRADOR DE SISTEMAS,
     GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PARTE"""
     user = request.user
-    #return render(request, 'MenuAdminSistema.html')
     if( user.usuario.esta_aprobado):
         if user.has_perm('gestion.es_administrador'):
-            #subirArchivo("/home/ruben/tweet.txt",False,"/prueba/tweet.txt")
             return render(request,'MenuAdminSistema.html')
         else:
             return render(request, 'Menu.html')
@@ -188,7 +224,6 @@ def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del
     """
 
     user= request.user## USER ACTUAL
-
     form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
 
@@ -220,10 +255,14 @@ def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del
 
 #RUBEN
 def creacionProyecto(request):
-    """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
+    """
+    MUESTRA FORMULARIO PARA CREAR UN PROYECTO EN DONDE SE VALIDA, NOMBRE, DESCRIPCION Y CANTIDAD DE FASES
+    UNA VEZ COMPLETADO LOS MISMOS, SE AÑADE EN LA TABLA USER_PROYECTOS AL GERENTE EL CUAL CREO EL MISMO Y SE
+    GUARDA EN LA BASE DE DATOS EL PROYECTO Y REEDIRIGE A  CREACION DE FASES MOSTRANDO LAS FASES A CREARSE
+    """
+    #if(request.user.has_perm('id_gerente')):----------------------------------------------
 
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
-
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
         ### NADA QUE TOCAR
@@ -243,9 +282,7 @@ def creacionProyecto(request):
 
         registrarAuditoriaProyecto(request.user, 'Creo el proyecto',z.id_proyecto,instanceProyecto.nombre,'')
 
-        print(cantidad_fases)
         cantidad_fases=cantidad_fases-1
-        print(cantidad_fases)
         return redirect('gestion:agregarUsuarios',id_proyecto,cantidad_fases)
 
     context ={
@@ -253,6 +290,8 @@ def creacionProyecto(request):
     }
 
     return render(request,'creacionProyecto2.html', context)
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'No es gerente')
 
 def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
@@ -455,6 +494,7 @@ def add_permission_gerente(user,is_gerente):
 
 def crearFase(request,nroFase):
     """METODO PARA CREAR FASES"""
+    #if(request.user.has_perm('id_gerente')):---------------------------------------------
     fase = FaseForm(request.POST)
     global CANTIDAD
     cantidad = CANTIDAD
@@ -468,8 +508,6 @@ def crearFase(request,nroFase):
         if nroFase != 0:
             cantidad = cantidad - 1
             CANTIDAD = cantidad
-
-
             nroFase=nroFase-1
             return redirect('gestion:crearFase',nroFase)
         else:
@@ -480,9 +518,12 @@ def crearFase(request,nroFase):
     'form': fase
     }
     return render(request, 'crear_fase.html', context)
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'No es gerente')
+
 #RUBEN
 def listar_auditoria(request):
-    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA """
+    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA EL SISTEMA"""
     auditoria = Auditoria.objects.all()
     context={
         'auditoria':auditoria
@@ -490,7 +531,7 @@ def listar_auditoria(request):
     return render(request, 'Auditoria.html', context)
 
 def auditoriaProyecto(request,pk):
-    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA """
+    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA UN PROYECTO EN ESPECIFICO"""
     auditoria = Auditoria.objects.filter(id_proyecto=pk)
     context={
         'auditoria':auditoria
@@ -503,9 +544,8 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
     MEDIANTE UN PROYECTO EXISTENTE, DA LA POSIBILIDAD DE AÑADIR MAS USUARIOS AL PROYECTO,
     FILTRANDO LOS USUARIOS QUE NO FORMAN PARTE DEL PROYECTO
     """
-    registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
+    #if(request.user.has_perm('is_gerente')):--------------------------------------------------------
     user= request.user## USER ACTUAL
-
     form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
 
@@ -535,6 +575,9 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
                list.append(form[i].user.id)
 
         return render(request, 'AggUser.html', {'form': form,'list':list,'pk':pk})
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'Agregar usuarios al proyecto')
+
 #RUBEN
 def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
@@ -549,8 +592,6 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
         #if form.is_valid():
         some_var=request.POST.getlist('checkbox')
         print(some_var)
-
-
         #form.save()
         return redirect('gestion:menu')
     else:
@@ -566,51 +607,48 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
                list.append(form[i].id)
 
         return render(request, 'UsersProyecto.html', {'form': form,'list':list,'pk':pk,'proyecto':proyecto})
+
 #RUBEN
 def desvinculacionProyecto(request,pk,pk_user):
     """DESVINCULA UN USUARIO DE UN PROYECTO"""
+    #if(request.user.has_perm('is_gerente')):--------------------------------------
     instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
     instanceUser.delete()
     return redirect('gestion:UsersProyecto',pk)
+
 #RUBEN
 def listar_proyectos(request):
     """ LISTA LOS PROYECTOS DEL USUARIO"""
     registrarAuditoria(request.user, 'Lista sus proyectos existentes')
     proyectos = Proyecto.objects.all()
-
-    ### PROYECTOS_USUARIO
     PROYECTOS_USUARIO= CantProyectos(request)
-    #print(PROYECTOS_USUARIO)
-    #print(proyectos)
     cant = len(PROYECTOS_USUARIO)
-
     context={
         'proyectos':proyectos,###### TODOS LOS PROYECTOS
         'list': PROYECTOS_USUARIO,##PROYECTOS DEL USUARIO LOS CUAL SE DEBE MOSTRAR, SOLO ID
         'cant': cant####CANTIDAD DE PROYECTOS QUE POSEE
     }
     return render(request, 'verProyectos.html', context)
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'Desvincular usuario del proyecto')
+
 #RUBEN
 def detallesProyecto(request,pk):
     """MUESTRA LAS OPCIONES REALIZABLES SOBRE UN PROYECTO, TAMBIEN MUESTRA LAS FASES DEL MISMO CON SUS
     OPCIONES"""
     proyectos = Proyecto.objects.get(id_proyecto=pk)
-    #print(proyectos)
-    #fases = Fase.objects.get(id_Proyecto=proyectos)
     fases= Fase.objects.all()
-    #print(fases[0].id_Proyecto)
     context={
         "proyectos":proyectos,
         "fases":fases,
     }
     return render(request, 'detallesProyecto.html', context)
+
 #RUBEN
 def detallesFase(request,idFase):
     fases = Fase.objects.get(id_Fase=idFase)
     proyectos= Proyecto.objects.get(id_proyecto=fases.id_Proyecto.id_proyecto)
     items=Item.objects.filter(fase=fases)
-    relaciones=Relacion.objects.all()
-    atributoTI=Atributo_Item.objects.all()
     context={
         "proyectos":proyectos,
         "fases":fases,
@@ -619,7 +657,9 @@ def detallesFase(request,idFase):
     return render(request, 'detallesFase.html', context)
 
 def listar_relaciones(request,idItem):
-
+    """
+    LISTA LAS RELACIONES DE UN ITEM EN ESPECIFICO MEDIANTE EL ID DEL ITEM
+    """
     relaciones= Relacion.objects.filter()
     print(relaciones)
     item=Item.objects.all()
@@ -634,6 +674,10 @@ def listar_relaciones(request,idItem):
     return render(request, 'listar_relaciones.html', context)
 
 def listar_atributos(request,idAtributoTI,id_item):
+    """
+    MEDIANTE EL ID DEL PROYECTO Y EL ID DEL TI DEL ITEM SE LISTAN LOS ATRIBUTOS DEL TI CON LOS
+    VALORES QUE SE GUARDARON EN EL ITEM
+    """
     atributos = Atributo_Item.objects.filter(id_item=id_item)
     TI=TipoItem.objects.get(id_ti=idAtributoTI)
     atributo= Atributo.objects.filter(ti=TI)
@@ -641,8 +685,7 @@ def listar_atributos(request,idAtributoTI,id_item):
     print(atributos)
     if(request.method=='POST'):
         ###### FALTA ARREGLAR PARA QUE FUNCIONE CON VERSIONES
-        print("nada")
-
+        print("falta desvincular relacion o agregar nueva y cambiar version")
 
     ### falta desvincular relacion o agregar nueva y cambiar version
 
@@ -656,6 +699,7 @@ def listar_atributos(request,idAtributoTI,id_item):
 #RUBEN
 def proyectoCancelado(request):
     """METODO PARA CANCELAR UN PROYECTO"""
+    #if(request.user.has_perm('is_gerente')):------------------------------------------------
     x = Proyecto.objects.last()
     instanceFase = Fase.objects.filter(id_Proyecto = x.id_proyecto)
     for i in instanceFase:
@@ -670,6 +714,8 @@ def proyectoCancelado(request):
         i.delete()
 
     return  redirect("gestion:menu")
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'No es gerente')
 
 def ver_proyecto(request,pk):
     """MUESTRA LOS DETALLES DE UN PROYECTO"""
@@ -680,6 +726,7 @@ def ver_proyecto(request,pk):
         'fases':fases
     }
     return render(request,'opcionesProyecto.html',contexto)
+
 
 def get_fase_proyecto(request,id_fase):
     """TRAE LA FASE DE UN PROYECTO"""
@@ -891,6 +938,7 @@ def crearItem(request,Faseid):
     LUEGO DE CREAR, SE GUARDA LO COMPLETADO CON TODOS LOS CAMPOS OBLIGATORIOS, LUEGO REDIRIGE EN UNA VENTANA EN LA CUAL
     MUESTRA TODOS LOS TIPOS DE ITEMS DE DICHA FASE EN LA CUAL PERTENECE EL ITEM Y SE LE PASA EL ID DE LA FASE EN LA QUE SE ENCUENTRA
     EL ITEM"""
+    #if(request.user.has_perm('crear_item'):----------------------------------------------------
     form= FormItem(request.POST)
     if form.is_valid():
         form.save(commit=False)
@@ -921,10 +969,14 @@ def crearItem(request,Faseid):
         "form":form
     }
     return render (request,'Item.html',contexto)
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'Crear Item')
+
 #RUBEN
 def agg_listar_tipo_item(request,Fase):
     """LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
     CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO"""
+    #if(request.user.has_perm('crear_item')):----------------------------------------------------
 
     if request.method == 'POST':
         x=request.POST.get('ti')
@@ -940,14 +992,19 @@ def agg_listar_tipo_item(request,Fase):
 
     }
     return render (request,'aggTI.html',contexto)
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'Crear Item')
+
 #RUBEN
 import os
 def aggAtributos(request,idTI):
     """SE LISTAN LOS ATRIBUTOS DEL TI SELECCIONADO, SE AGREGA UN CAMPO VALOR EN DONDE SE DEBERA DE INGRESAR EL TIPO DE VALOR
     DE DICHO ATRIBUTO, SE VALIDA SI ES OBLIGATORIO Y MUESTRA MENSAJE DE ERROR SI ESTA VACIO EL CAMPO Y ES OBLIGATORIO,
     SI CUMPLIO CON LA RESTRICCION DE OBLIGATORIEDAD REDIRIGE A LA VENTANA DE RELACIONES PARA DICHO ITEM"""
-    atributos= Atributo.objects.filter(ti_id=idTI)
 
+    #if(request.user.has_perm('crear_item')):----------------------------------------------------
+
+    atributos= Atributo.objects.filter(ti_id=idTI)
     Archivos = UploadDocumentForm()
     if request.method == 'POST':
 
@@ -1007,6 +1064,9 @@ def aggAtributos(request,idTI):
         'false':False
     }
     return render (request,'aggAtributos.html',contexto)
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'Crear Item')
+
 #RUBEN
 def relacionarItem(request,id_proyecto,id_item):
     """
@@ -1017,6 +1077,8 @@ def relacionarItem(request,id_proyecto,id_item):
     -QUE LA FASE 1 SEA OPCIONAL LAS RELACIONES
     -QUE SI NO ES LA PRIMERA FASE QUE TENGA RELACIONES DIRECTA O INDIRECTAMENTE CON LA FASE 1
     """
+    #if(request.user.has_perm('crear_item')):----------------------------------------------------
+
     items = Item.objects.filter(actual=True)
     list = []#se guardaran todos los items del proyecto
     for i in range(items.count()):  ###todos los items del proyecto
@@ -1074,9 +1136,13 @@ def relacionarItem(request,id_proyecto,id_item):
         return redirect('gestion:detallesFase',item[0].fase.id_Fase)
     else:
         return render(request, 'relacionarItem.html', {'form': items,'list':list})
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'Crear Item')
 
 def itemCancelado(request):
     """METODO PARA CANCELAR UN ITEM"""
+    #if(request.user.has_perm('crear_item')):----------------------------------------------------
+
     x = Item.objects.last()
     x.delete()
 
@@ -1085,8 +1151,15 @@ def itemCancelado(request):
         i.delete()
 
     return  redirect("gestion:menu")
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'Crear Item')
 
 def primeraFase(id_proyecto,id_item,some_var):
+    """
+    FUNCION QUE RECIBE UN IDPROYECTO, IDITEM Y LA LISTA DE ITEMS SELECCIONADOS EN LA SELECCION DE RELACIONES
+    MEDIANTE TODOS LOS ITEMS DE LA PRIMERA FASE SE RECORREN DE A UNO Y SE MANDA  A LA FUNCION BUSQUEDA LA CUAL
+    BUSCA EL IDITEM
+    """
     proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
     fases = Fase.objects.filter(id_Proyecto=proyecto)
     todosItems = Item.objects.filter(fase=fases[fases.count() - 1],actual=True)  # todos los items de la primera fase
@@ -1098,6 +1171,11 @@ def primeraFase(id_proyecto,id_item,some_var):
 
 
 def busqueda(item,id_item,some_var):
+    """
+    SE BUSCA EL IDITEM MEDIANTE TODAS LAS RELACIONES DEL ITEM DE FORMA RECURSIVA,
+    DEL ITEM SE OBTIENE SUS RELACIONES Y SE ITERA POR CADA UNO DE SUS RELACIONES Y A CADA UNO SE MANDA
+    EN LA MISMA FUNCION, CUANDO SE ENCUENTRA EL ITEM RETORNA TRUE, CASO CONTRARIO FALSE
+    """
     try:
         relaciones = Relacion.objects.filter(inicio_item=item.id_item)
     except:
@@ -1117,7 +1195,7 @@ def busqueda(item,id_item,some_var):
 
 ### se usara mas tarde en la parte de relaciones
 def ciclos(item,i,some_var):
-
+    """FUNCION PARA ENCONTRAR CICLOS DE FORMA RECURSIVA"""
     try:
         relaciones = Relacion.objects.filter(inicio_item=i.id_item)
     except:
@@ -1172,8 +1250,10 @@ def subirArchivo(ruta,opcion,nombre):
 
 def comite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
-    LISTA LOS USUARIOS DE UN PROYECTO
+    LISTA LOS USUARIOS DEL COMITE DE UN PROYECTO EN ESPECIFICO
     """
+    #if(request.user.has_perm('is_gerente')):----------------------------------------------------
+
     proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
     gerente = User.objects.get(id=proyecto[0].user_id)
     print(gerente.username)
@@ -1197,11 +1277,16 @@ def comite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/f
                    list.append(form[i].user.id)
         print(list)
         return render(request, 'comite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos,'idGerente':gerente.id})
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'No es gerente')
 
 #RUBEN
 def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
+    LISTA LOS USUARIOS DISPONIBLES PARA AGREGAR AL COMITE DE UN PROYECTO EN ESPECIFICO
     """
+    #if(request.user.has_perm('is_gerente')):----------------------------------------------------
+
     proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
     gerente = User.objects.get(id=proyecto[0].user_id)
     print(gerente.username)
@@ -1247,21 +1332,23 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
                list.append(form[i].user.id)
 
         return render(request, 'AggComite.html', {'form': form,'list':list,'proyectos':proyectos,'idGerente':gerente.id})
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'No es gerente')
 
 #RUBEN
 def desvinculacionComite(request,pk,pk_user):
     """DESVINCULA UN USUARIO DE UN PROYECTO"""
-
     instanceUser = Comite.objects.filter(id_proyecto = pk, id_user = pk_user)
     instanceUser.delete()
 
-
-
-
-
 def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
+    LISTA LOS USUARIOS DEL COMITE Y DEJA SELECCIONAR USUARIOS PARA QUITAR DEL COMITE
+    CUMPLIENDO LAS RESTRICCIONES DE QUE LA CANTIDAD DE USUARIOS SIGA SIENDO IMPAR Y MAYOR A UNO
+    CASO CONTRARIO MUESTRA MENSAJE DE ERROR
     """
+    #if(request.user.has_perm('is_gerente')):----------------------------------------------------
+
     proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
     gerente = User.objects.get(id=proyecto[0].user_id)
     print(gerente.username)
@@ -1303,6 +1390,8 @@ def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo ge
                    list.append(form[i].user.id)
         print(list)
         return render(request, 'DeleteComite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos,'idGerente':gerente.id})
+    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
+    #errorPermiso(request,'No es gerente')
 
 def editar_ti(request,id_ti):
     tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)

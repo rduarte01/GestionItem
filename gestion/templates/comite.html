@@ -6,6 +6,51 @@
 {% bootstrap_javascript jquery='full' %}
 
 
+<div class="cities">
+<table class="table table-bordered">
+<a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" role="button">Volver Atras</a>
+      <thead>
+    <tr>
+        <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
+        <td><h5>ESTADO</h5></td>
+        <td><h6>{{proyectos.estado}}</h6></td>
+        {% if "is_gerente" in proyecto_perms %}
+            <td><a href="{% url 'gestion:AggComite' proyectos.id_proyecto%}" class="btn btn-primary">✚ CREAR COMITE</a></td>
+            <td><a href="{% url 'gestion:DeleteComite' proyectos.id_proyecto%}" class="btn btn-primary">- QUITAR USUARIOS DEL COMITE</a></td>
+        {%endif%}
+    </tr>
+    </thead>
+</table>
+</div>
+
+<div class="cities">
+<table class="table table-bordered">
+    <form method="POST" action="">{% csrf_token %}
+        {%if list%}
+            <h1>El comite de cambio esta conformado por:</h1>
+            <tr>
+                <td>NOMBRE</td>
+                <td>EMAIL</td>
+            </tr>
+            {%for list in list %}
+                {%for i in form%}
+                    {%if list == i.user.id%}
+                        <tr>
+                            <td>{{i.user.username}}</td>
+                            <td>{{i.user.email}}</td>
+                        </tr>
+                    {%endif%}
+                {%endfor%}
+            {%endfor%}
+        {%else%}
+            <h1>NO HAY COMITE AUN</h1>
+        {%endif%}
+    </form>
+  </table>
+ </div>
+</body>
+</html>
+
 <html>
 <head>
 <style>
@@ -18,56 +63,3 @@
 </style>
 </head>
 <body>
-
-<div class="cities">
-<table class="table table-bordered">
-<a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" role="button">Volver Atras</a>
-      <thead>
-
-    <tr>
-        <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
-        <td><h5>ESTADO</h5></td>
-        <td><h6>{{proyectos.estado}}</h6></td>
-        <td><a href="{% url 'gestion:AggComite' proyectos.id_proyecto%}" class="btn btn-primary">✚ CREAR COMITE</a></td>
-        <td><a href="{% url 'gestion:DeleteComite' proyectos.id_proyecto%}" class="btn btn-primary">- QUITAR USUARIOS DEL COMITE</a></td>
-    </tr>
-
-    </thead>
-</table>
-</div>
-
-
-
-<div class="cities">
-<table class="table table-bordered">
-    <form method="POST" action="">{% csrf_token %}
-
-            {%if list%}
-                <h1>El comite de cambio esta conformado por:</h1>
-                <tr>
-                    <td>NOMBRE</td>
-                    <td>EMAIL</td>
-
-                </tr>
-                {%for list in list %}
-                  {%for i in form%}
-                        {%if list == i.user.id%}
-                <tr>
-                    <td>{{i.user.username}}</td>
-                    <td>{{i.user.email}}</td>
-
-                </tr>
-
-                {%endif%}
-            {%endfor%}
-            {%endfor%}
-        {%else%}
-        <h1>NO HAY COMITE AUN</h1>
-        {%endif%}
-
-    </form>
-  </table>
- </div>
-</body>
-</html>
-
