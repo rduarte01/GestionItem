@@ -35,25 +35,29 @@
 
 <div class="cities">
 <table class="table table-bordered">
-    <thead>
-    <tr>
-        <td><h5>ITEMS</h5></td>
-        <td><h5>DESCRIPCION</h5></td>
-        <td><h5>COSTO</h5></td>
-        <td><h5>VER RELACIONES</h5></td>
-        <td><h5>VER ATRIBUTOS</h5></td>
-    </tr>
-    </thead>
-    <tbody>
-        {%for items in items %}
+    {% if items%}
+        <thead>
         <tr>
-            <td>{{items.nombre}}</td>
-            <td>{{items.descripcion}}</td>
-            <td>{{items.costo}}</td>
-           <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Relaciones</a></td>
-           <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
+            <td><h5>ITEMS</h5></td>
+            <td><h5>DESCRIPCION</h5></td>
+            <td><h5>COSTO</h5></td>
+            <td><h5>VER RELACIONES</h5></td>
+            <td><h5>VER ATRIBUTOS</h5></td>
         </tr>
-        {%endfor%}
+        </thead>
+        <tbody>
+            {%for items in items %}
+            <tr>
+                <td>{{items.nombre}}</td>
+                <td>{{items.descripcion}}</td>
+                <td>{{items.costo}}</td>
+               <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Relaciones</a></td>
+               <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
+            </tr>
+            {%endfor%}
+        {%else%}
+        <td><h2>No hay items en la fase, crealos!</h2></td>
+    {%endif%}
 <tbody>
   </table>
  </div>

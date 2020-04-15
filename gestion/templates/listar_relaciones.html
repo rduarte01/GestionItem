@@ -29,48 +29,50 @@
 
 
     <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+        {%if relaciones%}
+                <tr>
+                    <td>NOMBRE DE ITEM</td>
+                    <td>NOMBRE DE FASE A LA QUE PERTENECE</td>
+                    <td>TIPO DE RELACION</td>
+                </tr>
+            {% for relaciones in relaciones%}
+                {% for item in item%}
+                <tr>
+                    {%if item.id_item == relaciones.inicio_item and itemActual.id_item == relaciones.fin_item%}
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.fase.nombre}}</td>
+                    {%if itemActual.fase.id_Fase == item.fase.id_Fase%}
+                        <td>Es padre del item {{itemActual.nombre}}</td>
+                    {%endif%}
+                    {%if itemActual.fase.id_Fase > item.fase.id_Fase%}
+                        <td>Es antecesor del item {{itemActual.nombre}}</td>
+                    {%endif%}
+                    {%if itemActual.fase.id_Fase < item.fase.id_Fase%}
+                        <td>Es sucesor del item {{itemActual.nombre}}</td>
+                    {%endif%}
 
-    <tr>
-        <td>NOMBRE DE ITEM</td>
-        <td>NOMBRE DE FASE A LA QUE PERTENECE</td>
-        <td>TIPO DE RELACION</td>
-    </tr>
-{% for relaciones in relaciones%}
-    {% for item in item%}
-    <tr>
-        {%if item.id_item == relaciones.inicio_item and itemActual.id_item == relaciones.fin_item%}
-        <td>{{item.nombre}}</td>
-        <td>{{item.fase.nombre}}</td>
-        {%if itemActual.fase.id_Fase == item.fase.id_Fase%}
-            <td>Es padre del item {{itemActual.nombre}}</td>
-        {%endif%}
-        {%if itemActual.fase.id_Fase > item.fase.id_Fase%}
-            <td>Es antecesor del item {{itemActual.nombre}}</td>
-        {%endif%}
-        {%if itemActual.fase.id_Fase < item.fase.id_Fase%}
-            <td>Es sucesor del item {{itemActual.nombre}}</td>
-        {%endif%}
+                    {%endif%}
+                    {%if item.id_item == relaciones.fin_item and itemActual.id_item == relaciones.inicio_item%}
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.fase.nombre}}</td>
+                    {%if itemActual.fase.id_Fase == item.fase.id_Fase%}
+                        <td>Es hijo del item {{itemActual.nombre}}</td>
+                    {%endif%}
+                    {%if itemActual.fase.id_Fase > item.fase.id_Fase%}
+                        <td>Es antecesor del item {{itemActual.nombre}}</td>
+                    {%endif%}
+                    {%if itemActual.fase.id_Fase < item.fase.id_Fase%}
+                        <td>Es sucesor del item {{itemActual.nombre}}</td>
+                    {%endif%}
+                    {%endif%}
 
-        {%endif%}
-        {%if item.id_item == relaciones.fin_item and itemActual.id_item == relaciones.inicio_item%}
-        <td>{{item.nombre}}</td>
-        <td>{{item.fase.nombre}}</td>
-        {%if itemActual.fase.id_Fase == item.fase.id_Fase%}
-            <td>Es hijo del item {{itemActual.nombre}}</td>
-        {%endif%}
-        {%if itemActual.fase.id_Fase > item.fase.id_Fase%}
-            <td>Es antecesor del item {{itemActual.nombre}}</td>
-        {%endif%}
-        {%if itemActual.fase.id_Fase < item.fase.id_Fase%}
-            <td>Es sucesor del item {{itemActual.nombre}}</td>
-        {%endif%}
-        {%endif%}
+                </tr>
 
-    </tr>
-
-        {%endfor%}
-{%endfor%}
-
+                    {%endfor%}
+            {%endfor%}
+        {%else%}
+            <td><h1>NO HAY RELACIONES</h1></td>
+        {%endif%}
     </form>
 </table>
 {% endblock %}

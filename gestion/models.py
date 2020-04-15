@@ -189,8 +189,6 @@ class Permisos(models.Model):
             ("crear_lb", "Puede Crear LB"),
             ("cerrar_lb", "Puede Cerrar LB"),
             ("generar_solicitud", "Puede Generar Solicitud de Cambio"),
-            ##ruben
-            ('crear_item','Puede crear un item')
         )
         """LISTA DE PERMISOS ASOCIADOS AL PROYECTO"""
 
@@ -237,8 +235,6 @@ class Relacion(models.Model):
     fin_item= models.IntegerField()
     """ITEM FIN DE RELACION"""
 
-from django.core.files.storage import FileSystemStorage
-fs = FileSystemStorage(location='/media/photos')
 
 class Atributo_Item(models.Model):
     """MODELO DE ATRIBUTO DE TI, EN EL CUAL SE GUARDARA EL VALOR DEPENDIENDO DEL TI"""
@@ -251,7 +247,6 @@ class Atributo_Item(models.Model):
     #tipo=models.CharField(max_length=20)
     valor=models.CharField(max_length=1000,null=True)
     """VALOR QUE SERA STRING PERO DEPENDIENDO DEL ATRIBUTO SE PODRA OBTENER EL VALOR REQUERIDO"""
-    archivo = models.FileField(storage=fs,null=True)
 
 class Versiones(models.Model):
     """TABLA DE VERSIONES EL CUAL RELACIONA LA VERSION DEL ITEM"""

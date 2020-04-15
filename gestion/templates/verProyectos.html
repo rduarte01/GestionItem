@@ -6,9 +6,11 @@
 
 {% block content %}
 <div class="cities">
-        <h1>Mis Proyectos</h1>
-<a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
+        <h1>-------------------------------------- Mis Proyectos --------------------------------------</h1>
+
+    <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
 <table class="table table-bordered">
+    {% if proyectos%}
     <thead>
         <tr>
             <td>Nombre de proyecto</td>
@@ -20,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-    {% if proyectos%}
+
         {%for proyectos in proyectos%}
             {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
                 {%for list in list %}
@@ -56,7 +58,7 @@
 <style>
 .cities {
   background-color: silver;
-  color: white;
+  color: black;
   margin: 20px;
   padding: 20px;
 }

@@ -5,7 +5,15 @@
 {% bootstrap_javascript jquery='full' %}
 
 {% block title %}
-<h1>Relaciona Items!</h1>
+<h1>Selecciona items a relacionar con el item: {{itemActual.nombre}}</h1>
+<h5>------------------------ A tener en cuenta: --------------------------</h5>
+<h6>--> Se muestran los items de las fases actual y anterior (SE AÑADE FASE SIG-- EVALUAR SI MOSTRAR TB O QUITAR) si hubiese</h6>
+<h6>--> Los items seleccionados apuntarian al item -->{{itemActual.nombre}}</h6>
+<h6>--> Solo los items de la primera fase pueden no tener relaciones</h6>
+<h6>--> Los items que no pertenezcan a la primera fase deben contar con una relacion, directa o indirecta con la primera fase</h6>
+<h5>------------------------ Informacion sobre el item que se esta creando: --------------------------</h5>
+<h6>--> El item de nombre: {{itemActual.nombre}} pertenece a la fase de nombre: {{itemActual.fase.nombre}}</h6>
+
 {% endblock title%}
 
 
@@ -23,31 +31,37 @@
                     </div>
                     <table class="table table-bordered">
                         <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-                            <tr>
-                                <td><h4>NOMBRE DEL ITEM</h4></td>
-                                <td>DESCRIPCION</td>
-                                <td>COSTO</td>
-                                <td>FASE</td>
-                                <td>TI</td>
-                            </tr>
-                        {%for list in list %}
-                            {%for i in form%}
-                                {%if list == i.id_item%}
+                            {%if list%}
                                     <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.id_item}}" id="{{i.id_item}}}">
-                                                <label class="form-check-label" for="{{i.id_item}}}"><h5>{{ i.nombre }}</h5></label>
-                                            </div>
-                                        </td>
-                                        <td>{{ i.descripcion }}</td>
-                                        <td>{{ i.costo }}</td>
-                                        <td>{{ i.fase.nombre }}</td>
-                                        <td>{{ i.ti }}</td>
+                                        <td><h4>NOMBRE DEL ITEM</h4></td>
+                                        <td>DESCRIPCION</td>
+                                        <td>COSTO</td>
+                                        <td>FASE</td>
+                                        <td>TI</td>
+                                        <td>SERIA ASI:</td>
                                     </tr>
-                                {%endif%}
-                            {%endfor%}
-                        {%endfor%}
+                                {%for list in list %}
+                                    {%for i in form%}
+                                        {%if list == i.id_item%}
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.id_item}}" id="{{i.id_item}}}">
+                                                        <label class="form-check-label" for="{{i.id_item}}}"><h5>{{ i.nombre }}</h5></label>
+                                                    </div>
+                                                </td>
+                                                <td>{{ i.descripcion }}</td>
+                                                <td>{{ i.costo }}</td>
+                                                <td>{{ i.fase.nombre }}</td>
+                                                <td>{{ i.ti }}</td>
+                                                <td>{{i.nombre}} (inicio) --> (fin) {{itemActual.nombre}}</td>
+                                            </tr>
+                                        {%endif%}
+                                    {%endfor%}
+                                {%endfor%}
+                            {%else%}
+                                <td><h1>No hay items para seleccionar</h1></td>
+                            {%endif%}
                     </form>
                 </table>
         {% endblock %}
