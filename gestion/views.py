@@ -210,9 +210,9 @@ def menu(request):
     user = request.user
     if( user.usuario.esta_aprobado):
         if user.has_perm('gestion.es_administrador'):
-            return render(request,'menu2.html')
+            return render(request,'menuAdmin.html')
         else:
-            return render(request, 'Menu.html')
+            return render(request, 'menu2.html')
     else:
         registrarAuditoria(request.user ,'Inicio Menu en espera de aprobacion')
         return render(request, 'MenuEnEspera.html')
@@ -525,10 +525,14 @@ def crearFase(request,nroFase):
 def listar_auditoria(request):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA EL SISTEMA"""
     auditoria = Auditoria.objects.all()
+    proyectos=Proyecto.objects.get(id_proyecto=1)
+
     context={
-        'auditoria':auditoria
+        'auditoria':auditoria,
+        'proyectos': proyectos
+
     }
-    return render(request, 'Auditoria.html', context)
+    return render(request, 'auditoriaSistema.html', context)
 
 def auditoriaProyecto(request,pk):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA UN PROYECTO EN ESPECIFICO"""

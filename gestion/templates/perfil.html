@@ -1,47 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mi perfil</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<body>
-    <br><br>
-    <li class="list-group-item">
-       <a href="javascript:history.back()" class="btn btn-primary"> Volver atras</a>
-
-    </li>
-    <div class="container">
-
-        <div class="col-lg-4 offset-lg-4">
-
-            <div class="media">
-
-                <img class="img-thumbnail rounded float-left mr-3 rounded-circle" src="{{ userdata.picture }}" alt="{{ nombre }}">
-                <div class="media-body">
-                    <h3 class="mt-0">Bienvenido {{ nombre }}</h3>
-                </div>
-            </div>
-
-
-        <li class="list-group-item">
-            <h6 class="display-6">Mi correo: {{ userdata.name }} </h6>
-        </li>
-        <li class="list-group-item">
-            <h6 class="display-6">Mi token: {{ auth0User.access_token }} </h6>
-        </li>
+{%extends 'menu2.html'%}
+    {% block interno%}
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Mi perfil</title>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        </head>
+        <body>
+            <br><br>
             <li class="list-group-item">
-            <h6 class="display-6">Mi estado:</h6>
-                {% if userdata.estado == False %}
-                    <h6 class="display-6">En espera de ser aprobadado</h6>
-                {% else %}
-                    <h6 class="display-6">Activo</h6>
-                {% endif %}
+               <a href="javascript:history.back()" class="btn btn-primary"> Volver atras</a>
+
+            </li>
+            <div class="container">
+
+                <div class="col-lg-4 offset-lg-4">
+
+                    <div class="media">
+
+                        <img class="img-thumbnail rounded float-left mr-3 rounded-circle" src="{{ userdata.picture }}" alt="{{ nombre }}">
+                        <div class="media-body">
+                            <h3 class="mt-0">Bienvenido {{ nombre }}</h3>
+                        </div>
+                    </div>
+
+
+                <li class="list-group-item">
+                    <h6 class="display-6">Mi correo: {{ userdata.name }} </h6>
+                </li>
+                <li class="list-group-item">
+                    <h6 class="display-6">Mi token: {{ auth0User.access_token }} </h6>
+                </li>
+                    <li class="list-group-item">
+                    <h6 class="display-6">Mi estado:</h6>
+                        {% if userdata.estado == False %}
+                            <h6 class="display-6">En espera de ser aprobadado</h6>
+                        {% else %}
+                            <h6 class="display-6">Activo</h6>
+                        {% endif %}
 
 
 
-        </li>
-    </div>
-</body>
-</html>
+                </li>
+            </div>
+        </body>
+        </html>
+    {% endblock interno%}
