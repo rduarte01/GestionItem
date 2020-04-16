@@ -1,14 +1,3 @@
-{% load guardian_tags %}
-{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
-    <title>Detalles de Proyecto</title>
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-
-
-
-
-
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
@@ -23,18 +12,13 @@
        <div class="sidebar-brand">
          <a href="{% url 'gestion:menu' %}"> Gestion Items</a></div></div>
          <li><a href="{% url 'gestion:perfil' %}">Perfil</a></li>
-         <li><a href="{%url 'gestion:listar_proyectos'%}">Trabaje sobre sus proyectos!</a></li>
 
-         <li><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" >Usuarios del proyecto</a></li>
-            {% if "is_gerente" in proyecto_perms %}
-                {% if proyectos.estado != 'CANCELADO' %}
-                     <li><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}">✚ Usuarios</a></li>
-                     <li><a href="{% url 'gestion:misRoles' proyectos.id_proyecto %}">✚ Rol</a></li>
-                {% endif %}
-            {% endif %}
-         <li><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}">Ver TI del proyecto</a></li>
-         <li><a href="{% url 'gestion:comite' proyectos.id_proyecto %}">Comite de cambio</a></li>
-         <li><a href="{% url 'gestion:auditoriaProyecto' proyectos.id_proyecto%}">Auditoria proyecto</a></li>
+
+      <li><a href="{%url 'gestion:listar_proyectos'%}">Trabaje sobre sus proyectos!</a></li>
+
+        {% if perms.gestion.is_gerente %}
+         <li><a href="{%url 'gestion:CrearProyecto' %}" >Usted es un Gerente! Cree un Proyecto!</a></li>
+         {% endif %}
 
       <li><a href="{% url 'gestion:Contactos' %}">Contáctanos</a></li>
        <li><a href="{% url 'gestion:logout' %}">Cerrar Sesion</a></li>
@@ -51,85 +35,34 @@
             </button>
             <div class="container">
                     {%block interno %}
+                        <!-- Jumbotron -->
+                        <div class="jumbotron text-center blue-grey lighten-5">
 
-                            <html>
-                            <head>
-                            <style>
-                            .cities {
-                              background-color: silver;
-                              color: white;
-                              margin: 20px;
-                              padding: 20px;
-                            }
-                            </style>
-                            </head>
-                            <body>
+                          <!-- Title -->
+                          <h2 class="card-title h2">Gestion de Items</h2>
 
-                            <div class="cities">
-                            <table class="table table-bordered">
-                            <a class="btn btn-primary" href="{%url 'gestion:listar_proyectos' %}" role="button">Volver Atras</a>
-                                  <thead>
-                                <tr>
-                                    <td>NOMBRE DE PROYECTO</td>
-                                    <td>DESCRIPCION</td>
-                                    <td>ESTADO</td>
-                                </tr>
-                                </thead>
-                            <thead>
-                                <tr>
-                                    <td><h2>{{proyectos.nombre}}</h2></td>
-                                    <td><h4>{{proyectos.descripcion}}</h4></td>
-                                    <td><h2>{{proyectos.estado}}</h2></td>
-                                </tr>
-                            </thead>
-                            </table>
+                          <!-- Subtitle -->
+                          <h3 class="indigo-text my-4 font-weight-bold">Bienvenido!</h3>
+
+                          <!-- Grid row -->
+                          <div class="row d-flex justify-content-center">
+
+                            <!-- Grid column -->
+                            <div class="col-xl-7 pb-2">
+                                <h3>Una herramienta de gestión de items de proyectos diseñada para el trabajo en equipo</h3>
                             </div>
+                            <!-- Grid column -->
 
+                      </div>
+                    <!-- Jumbotron -->                   <!-- Jumbotron -->
+                          <div class="jumbotron">
+                            {% if perms.gestion.is_gerente %}
+                                <a class="btn btn-large btn-success" href="{%url 'gestion:CrearProyecto' %}"><h4>Usted es un Gerente! Cree un Proyecto!</h4></a>
+                            {% endif %}
+                            <a class="btn btn-large btn-success" href="{%url 'gestion:listar_proyectos'%}"><h4>Trabaje sobre sus proyectos!</h4></a>
+                          </div>
 
-                            <div class="cities">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <td>FASES</td>
-                                    <td>DESCRIPCION</td>
-                                    <td>ESTADO</td>
-                                    <td>ESTADO DE FASES</td>
-                                    {% if "is_gerente" in proyecto_perms %}
-                                        {% if proyectos.estado != 'CANCELADO' %}
-                                            <td>AGREGA TI</td>
-                                            <td>IMPORTA TI</td>
-                                        {% endif %}
-                                    {% endif %}
-                                    <td>TRABAJAR!</td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {%for fases in fases %}
-                                        {% if fases.id_Proyecto == proyectos  %}
-                                            <tr>
-                                                <td>{{fases.nombre}}</td>
-                                                <td>{{fases.descripcion}}</td>
-                                                <td>{{fases.estado}}</td>
-                                                {% if "is_gerente" in proyecto_perms %}
-                                                    <td><a href=""class="btn btn-primary">CAMBIAR ESTADO</a></td>
-                                                {%else%}
-                                                    <td>No es gerente</td>
-                                                {%endif%}
-                                                {% if "is_gerente" in proyecto_perms %}
-                                                    {% if proyectos.estado != 'CANCELADO' %}
-                                                        <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear Tipo Item</a> </td>
-                                                        <td><a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-primary">Importar Tipo Item</a> </td>
-                                                    {% endif %}
-                                                {% endif %}
-                                                <td><a href="{% url 'gestion:detallesFase' fases.id_Fase %}" class="btn btn-primary">DETALLES</a></td>
-                                            </tr>
-                                            {%endif%}
-                                    {%endfor%}
-                            <tbody>
-                              </table>
-                             </div>
-                            </body>
-                            </html>
+                    </div>
                   {% endblock interno %}
 
 
@@ -525,7 +458,4 @@ a[href*="#followme"]::before {
   });
 });
 </script>
-
-
-
 

@@ -225,7 +225,6 @@ class Item(models.Model):
     actual=models.BooleanField(default=True)
     """SI ESTA EN TRUE SERA QUE EL ITEM ESTA ACTIVO Y NO UNA VERSION ANTERIOR"""
 
-
 class Relacion(models.Model):
     """MODELO DE RELACION DE ITEMS"""
     id_relacion= models.AutoField(primary_key = True) ###### clave de proyecto

@@ -1,12 +1,12 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
+{%extends 'menu2.html'%}
+
+
+                    {%block interno %}
 {% load guardian_tags %}
 <title>Mis proyectos</title>
 
-{% block content %}
 <div class="cities">
-        <h1>-------------------------------------- Mis Proyectos --------------------------------------</h1>
+        <h2>-------------------------------------- Mis Proyectos --------------------------------------</h2>
 
     <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
 <table class="table table-bordered">
@@ -52,7 +52,7 @@
     </tbody>
 </table>
     </div>
-{% endblock %}
+
 
     <head>
 <style>
@@ -64,3 +64,5 @@
 }
 </style>
 </head>
+
+{%endblock interno%}

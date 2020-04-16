@@ -210,7 +210,7 @@ def menu(request):
     user = request.user
     if( user.usuario.esta_aprobado):
         if user.has_perm('gestion.es_administrador'):
-            return render(request,'MenuAdminSistema.html')
+            return render(request,'menu2.html')
         else:
             return render(request, 'Menu.html')
     else:
@@ -533,8 +533,10 @@ def listar_auditoria(request):
 def auditoriaProyecto(request,pk):
     """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA UN PROYECTO EN ESPECIFICO"""
     auditoria = Auditoria.objects.filter(id_proyecto=pk)
+    proyectos=Proyecto.objects.get(id_proyecto=pk)
     context={
-        'auditoria':auditoria
+        'auditoria':auditoria,
+        'proyectos':proyectos
     }
     return render(request, 'Auditoria.html', context)
 
@@ -573,8 +575,8 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
                             ok=False
             if ok:
                list.append(form[i].user.id)
-
-        return render(request, 'AggUser.html', {'form': form,'list':list,'pk':pk})
+            proyectos=Proyecto.objects.get(id_proyecto=pk)
+        return render(request, 'AggUser.html', {'form': form,'list':list,'pk':pk,"proyectos":proyectos})
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Agregar usuarios al proyecto')
 
@@ -606,7 +608,7 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
             if ok:
                list.append(form[i].id)
 
-        return render(request, 'UsersProyecto.html', {'form': form,'list':list,'pk':pk,'proyecto':proyecto})
+        return render(request, 'UsersProyecto.html', {'form': form,'list':list,'pk':pk,'proyectos':proyecto})
 
 #RUBEN
 def desvinculacionProyecto(request,pk,pk_user):
@@ -619,7 +621,6 @@ def desvinculacionProyecto(request,pk,pk_user):
 #RUBEN
 def listar_proyectos(request):
     """ LISTA LOS PROYECTOS DEL USUARIO"""
-    registrarAuditoria(request.user, 'Lista sus proyectos existentes')
     proyectos = Proyecto.objects.all()
     PROYECTOS_USUARIO= CantProyectos(request)
     cant = len(PROYECTOS_USUARIO)
@@ -670,6 +671,7 @@ def listar_relaciones(request,idItem):
         "relaciones":relaciones,
         "item":item,
         "itemActual":itemActual,
+        'proyectos':itemActual.fase.id_Proyecto
     }
     return render(request, 'listar_relaciones.html', context)
 
@@ -681,6 +683,7 @@ def listar_atributos(request,idAtributoTI,id_item):
     atributos = Atributo_Item.objects.filter(id_item=id_item)
     TI=TipoItem.objects.get(id_ti=idAtributoTI)
     atributo= Atributo.objects.filter(ti=TI)
+    itemActual=Item.objects.get(id_item=id_item)
     print(atributo)
     print(atributos)
     if(request.method=='POST'):
@@ -692,6 +695,7 @@ def listar_atributos(request,idAtributoTI,id_item):
     context = {
         "atributos":atributos,
         "atributo":atributo,
+        'proyectos': itemActual.fase.id_Proyecto
     }
     return render(request, 'listar_atributos.html', context)
 
@@ -897,6 +901,7 @@ class ModificarRol(UpdateView):
 def listar_tipo_item(request,id_proyecto):
     """Lista los tipos de item asociado a un proyecto"""
     fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
+    proyectos=Proyecto.objects.get(id_proyecto=id_proyecto)
     tipoItem=[]
 
     for fase in fases:
@@ -906,7 +911,8 @@ def listar_tipo_item(request,id_proyecto):
 
     print(tipoItem)
     contexto={
-        'TipoItem':tipoItem
+        'TipoItem':tipoItem,
+        "proyectos":proyectos
     }
     return render (request,'listarTipoItem.html',contexto)
 
@@ -1068,8 +1074,6 @@ def aggAtributos(request,idTI):
                         "boton2": "/aggAtributos/" + str(idTI),
                     }
                     return render(request, 'Error.html', context)
-
-
         list=["Decimal","Boolean","File","String","Date"]
         for ini in range(len(list)): #SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
             try:
@@ -1195,8 +1199,16 @@ def relacionarItem(request,id_proyecto,id_item):
         registrarAuditoriaProyecto(request.user,'creo el item: '+str(item[0].nombre),id_proyecto,proyecto.nombre,item[0].fase.nombre)
 
         for id in some_var:###### SE GUARDAN LAS RELACIONES
-            p = Relacion(fin_item=id_item,inicio_item=id)
-            p.save()
+            itemSeleccionado=Item.objects.get(id_item=id)
+            if(itemSeleccionado.fase.id_Fase > itemActual.fase.id_Fase):#si el item es sucesor, sera apuntado por el item creado
+                p = Relacion(fin_item=id,inicio_item=id_item)
+                p.save()
+                print(itemActual.nombre," --> ",itemSeleccionado.nombre)
+            else:# sino es el sucesor, seguira siendo apuntado por los seleccionados
+                p = Relacion(fin_item=id_item,inicio_item=id)
+                p.save()
+                print(itemActual.nombre," <-- ",itemSeleccionado.nombre)
+
 
         #----------------------------------------------------------#
         ## se puede volver generico si se restringe preguntando si el item es igual al ultimo
@@ -1466,6 +1478,8 @@ def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo ge
 
 def editar_ti(request,id_ti):
     tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
+    Ti=TipoItem.objects.get(id_ti=id_ti)
+
     query_atributos = Atributo.objects.filter(ti_id=tipo_item.id_ti)
     AtributeFormSet = modelformset_factory(Atributo, form=AtributeForm,exclude=('id_atributo',), extra=0)
     if request.method=='POST':
@@ -1490,7 +1504,8 @@ def editar_ti(request,id_ti):
         context={
             'formset':formset,
             'formset_ti':formset_ti,
-            'tipo_item':tipo_item
+            'tipo_item':tipo_item,
+            "proyectos":Ti.fase.id_Proyecto
         }
         return render(request,'editar_tipo_item.html',context)
 

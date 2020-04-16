@@ -7,8 +7,8 @@
 {% block title %}
 <h1>Selecciona items a relacionar con el item: {{itemActual.nombre}}</h1>
 <h5>------------------------ A tener en cuenta: --------------------------</h5>
-<h6>--> Se muestran los items de las fases actual y anterior (SE AÑADE FASE SIG-- EVALUAR SI MOSTRAR TB O QUITAR) si hubiese</h6>
-<h6>--> Los items seleccionados apuntarian al item -->{{itemActual.nombre}}</h6>
+<h6>--> Se muestran los items de las fases actual, anterior y siguiente si hubiese</h6>
+<h6>--> Los items seleccionados apuntarian al item (selecion-->{{itemActual.nombre}}), exepto si el item seleccionado es de una fase siguiente en dicho caso la relacion es inversa ({{itemActual.nombre}}-->seleccion)</h6>
 <h6>--> Solo los items de la primera fase pueden no tener relaciones</h6>
 <h6>--> Los items que no pertenezcan a la primera fase deben contar con una relacion, directa o indirecta con la primera fase</h6>
 <h5>------------------------ Informacion sobre el item que se esta creando: --------------------------</h5>
@@ -38,7 +38,7 @@
                                         <td>COSTO</td>
                                         <td>FASE</td>
                                         <td>TI</td>
-                                        <td>SERIA ASI:</td>
+                                        <td>LA RELACION SERIA ASI:</td>
                                     </tr>
                                 {%for list in list %}
                                     {%for i in form%}
@@ -54,7 +54,11 @@
                                                 <td>{{ i.costo }}</td>
                                                 <td>{{ i.fase.nombre }}</td>
                                                 <td>{{ i.ti }}</td>
-                                                <td>{{i.nombre}} (inicio) --> (fin) {{itemActual.nombre}}</td>
+                                                {%if i.fase.id_Fase > itemActual.fase.id_Fase%}
+                                                    <td>{{i.nombre}} (fin) <-- (inicio) {{itemActual.nombre}}</td>
+                                                {%else%}
+                                                    <td>{{i.nombre}} (inicio) --> (fin) {{itemActual.nombre}}</td>
+                                                {%endif%}
                                             </tr>
                                         {%endif%}
                                     {%endfor%}

@@ -1,3 +1,4 @@
+
 {% extends 'Menu.html' %}
 {% block title %} Administrador del Sistema {% endblock %}
 {% block campos %}
@@ -9,10 +10,13 @@
   <li><a href="{% url 'gestion:logout' %}">Cerrar_Sesion</a></li>
   <li><a href="{% url 'gestion:auditoria' %}">Auditoria</a></li>
   <li><a href="{% url 'gestion:Contactos' %}">Contacto</a></li>
+
 {% endblock campos %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
+
+
 
   {% block body%}
       <div class="jumbotron">
