@@ -1,25 +1,40 @@
-{%extends 'Menu.html'%}
-{%block body%}
-<h2> Listar Archivos</h2>
-    <table class="table">
-       <thead>
-            <tr>
-                <th>Titulo</th>
-                <th>Autor </th>
-                <th>Descarga</th>
-            </tr>
-        </thead>
-        <tbody>
-     {% for book in books%}
-            <tr>
-                <td>{{book.title}}</td>
-                <td>{{book.autor}}</td>
-                <td>{{book.pdf}}</td>
-                <td> <a href=" url('{{book.pdf.url}}')" class="btn btn-primary btn-sm" target="_blank">Descargar </a>  </td>
-            </tr>
-     {%endfor%}
-        </tbody>
+{%extends 'detallesProyecto.html'%}
+{%block interno%}
+{%if archivos%}
+<h2> Lista de Archivos del item: </h2>
 
-    </table>
 
+            <a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase%}" role="button">Volver Atras</a>
+
+            <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+
+        <table class="table">
+
+                   <thead>
+                   <th>INGRESE RUTA PARA LA DESCARGA: <input placeholder="Ingrese ruta de descarga: " type="text" name="String" value="/home/ruben/prueba/" required></th>
+                        <tr>
+                            <th> Selecciona los archivos si deseas descargarlos! </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                 {% for archivos in archivos%}
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="checkbox" value="{{archivos.valor}}" id="{{archivos.valor}}">
+                                    <label class="form-check-label" for="{{archivos.valor}}"><h5>{{archivos.valor}}</h5></label>
+                                </div>
+                            </td>
+                        </tr>
+                 {%endfor%}
+
+                    </tbody>
+                    </table>
+                    <input type="submit" class="btn btn-primary" value="Descargar">
+                </form>
+{%else%}
+<h1>El item no posee archivos adjuntos</h1>
+<td><a type="button" class="btn btn-primary"  href="{% url 'gestion:detallesFase' item.fase.id_Fase  %}" >Volver atras</a></td>
+
+{%endif%}
 {% endblock %}

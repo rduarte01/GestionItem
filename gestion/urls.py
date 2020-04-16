@@ -61,8 +61,8 @@ urlpatterns = [
     path('eliminar/tipo/item/<int:id_ti>',views.eliminar_tipo_item,name='eliminar_tipo_item'),
 
     #practicas
-    path('subir/book',views.upload_book,name='upload_book'),
-    path('listar/book', views.list_book, name='listar_book')
+    path('subir/book/<int:id_proyecto>/<int:id_item>',views.upload_book,name='upload_book'),
+    path('listar/book/<int:id_item>', views.list_book, name='listar_book')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

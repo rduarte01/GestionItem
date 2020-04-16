@@ -239,7 +239,7 @@ class Atributo_Item(models.Model):
     """MODELO DE ATRIBUTO DE TI, EN EL CUAL SE GUARDARA EL VALOR DEPENDIENDO DEL TI"""
     id_atributo= models.AutoField(primary_key = True) ###### clave de proyecto
     """ID DEL ATRIBUTO_Item"""
-    idAtributoTI= models.IntegerField()
+    idAtributoTI= models.IntegerField(null=True)
     """ID DEL TI CON EL CUAL SE IDENTIFICARA"""
     id_item= models.ForeignKey(Item, on_delete = models.CASCADE)
     """EL ITEM AL CUAL ESTA ASIGNADO"""

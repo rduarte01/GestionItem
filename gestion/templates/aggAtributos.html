@@ -17,10 +17,10 @@
     {% block contect %}
         <a class="btn btn-primary" href="{% url 'gestion:itemCancelado'%}" role="button">Cancelar</a>
         <div class="jumbotron">
-            <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+            <form method="POST" action="" onSubmit="return enviado()" enctype="multipart/form-data">{% csrf_token %}
                 {% block content %}
                     <table class="table table-bordered">
-                        <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                        <form method="POST" action="" onSubmit="return enviado()" enctype="multipart/form-data">{% csrf_token %}
                             <tr>
                                 <td>NOMBRE DE ATRIBUTO</td>
                                 <td>TIPO DE DATO</td>

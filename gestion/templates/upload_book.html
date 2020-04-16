@@ -1,10 +1,10 @@
-{%extends 'Menu.html'%}
-{%block body %}
-    <h2> Subir Archivo</h2>
+{%extends 'detallesProyecto.html'%}
+
+{%block interno %}
+    <h2> Subir Archivo al item: {{item.nombre}}</h2>
     <form method="POST" enctype="multipart/form-data">
         {%csrf_token%}
-        {{form}}
+        {{form.as_p}}
         <button type="submit">Subir</button>
     </form>
-
 {% endblock %}
