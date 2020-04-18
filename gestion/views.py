@@ -1110,13 +1110,15 @@ def aggAtributos(request,idTI):
                 x=DOC
 
             if (tiposAtributo!=None):
+                con=0
                 for valor in range(tiposAtributo.count()):
-
                     if(list[ini]=="File" and tiposAtributo[valor].es_obligatorio == True):
                         ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
-                        PATH = f'/{ruta}/{DOC[valor]}'
-                        SubirArchivo(DOC[valor], PATH)
-                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(x[valor]))
+                        PATH = f'/{ruta}/{DOC[con]}'
+                        SubirArchivo(DOC[con], PATH)
+                        print(DOC[con])
+                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(DOC[con]))
+                        con += 1
                     elif(list[ini]!="File"):
                         p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(x[valor]))
                     else:
