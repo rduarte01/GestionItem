@@ -23,13 +23,23 @@ from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required_or_403
 from django.shortcuts import get_object_or_404
 from django.core.files.storage import FileSystemStorage
-
+import webbrowser
+import dropbox
 
 #### GLOBALES
 PROYECTOS_USUARIO=[]
 """SE UTILIZA PARA GUARDAR LA LISTA DE ID DE LOS PROYECTOS DEL USUARIO"""
 CANTIDAD=1
 """SE UTILIZA PARA GUARDAR LA CANTIDAD DE FASES DE UN PROYECTO"""
+
+"""
+dropbox
+gestionitems.fpuna@gmail.com    
+GestionItem20202
+https://josevc93.github.io/python/Dropbox-y-python/
+"""
+TOKEN="4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
+"""TOKEN DE DROPBOX PARA REALIZAR LA CONEXION"""
 
 
 #RUBEN
@@ -688,8 +698,6 @@ def listar_atributos(request,idAtributoTI,id_item):
     TI=TipoItem.objects.get(id_ti=idAtributoTI)
     atributo= Atributo.objects.filter(ti=TI)
     itemActual=Item.objects.get(id_item=id_item)
-    print(atributo)
-    print(atributos)
     if(request.method=='POST'):
         ###### FALTA ARREGLAR PARA QUE FUNCIONE CON VERSIONES
         print("falta desvincular relacion o agregar nueva y cambiar version")
@@ -699,7 +707,8 @@ def listar_atributos(request,idAtributoTI,id_item):
     context = {
         "atributos":atributos,
         "atributo":atributo,
-        'proyectos': itemActual.fase.id_Proyecto
+        'proyectos': itemActual.fase.id_Proyecto,
+        'item':itemActual
     }
     return render(request, 'listar_atributos.html', context)
 
@@ -1097,24 +1106,23 @@ def aggAtributos(request,idTI):
             print(tiposAtributo)
             print(x)
             if (list[ini] == "File"):
-                print("entro 1")
                 DOC = request.FILES.getlist('File')
                 x=DOC
 
             if (tiposAtributo!=None):
-                print("entro if")
                 for valor in range(tiposAtributo.count()):
-                    if(list[ini]=="File"):
-                        print("entro 2")
+
+                    if(list[ini]=="File" and tiposAtributo[valor].es_obligatorio == True):
                         ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
                         PATH = f'/{ruta}/{DOC[valor]}'
-                        print("-----------",DOC[valor])
-                        upload_handler(DOC[valor], PATH)
-                        p = Atributo_Item(idAtributoTI=None,id_item=item,valor=str(x[valor]))
-                        p.save()
+                        SubirArchivo(DOC[valor], PATH)
+                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(x[valor]))
+                    elif(list[ini]!="File"):
+                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(x[valor]))
                     else:
-                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor].id_atributo,id_item=item,valor=str(x[valor]))
-                        p.save()
+                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor="sin archivos adjuntos")
+                    p.save()
+
 
         itemID=Item.objects.last()
         ti=TipoItem.objects.get(id_ti=idTI)
@@ -1545,40 +1553,36 @@ def eliminar_tipo_item(request,id_ti):
     get_object_or_404(TipoItem, id_ti=id_ti).delete()
     return redirect('gestion:menu')
 
-def upload_book(request,id_proyecto,id_item):
-    form=BookForm()
-    proyectos=Proyecto.objects.get(id_proyecto=id_proyecto)
-    item = Item.objects.get(id_item=id_item)
-    if request.method=='POST':
-        form=BookForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save(commit=False)
-            #---------------------------------------------------------------------
-            DOC = request.FILES['pdf']
-            ruta = str(id_proyecto) +"/"+ str(id_item)
-            PATH = f'/{ruta}/{DOC}'
-            #print(PATH)
-            #print(DOC)
-            upload_handler(DOC, PATH)
-            #cuando idatributoTI es null es un file
-            p = Atributo_Item(id_item=item, valor=DOC)
-            p.save()
-            return  redirect('gestion:detallesFase',item.fase.id_Fase)
-    contexto={
-        'form':form,
-        'proyectos':proyectos,
-        'item':item
-    }
-    return render(request, 'upload_book.html',contexto)
 
+def DescargarArchivo(request,id_item,archivo):
+    item=Item.objects.get(id_item=id_item)
+    dbx = dropbox.Dropbox(TOKEN)
+    try:
+        url = dbx.files_get_temporary_link('/'+str(item.fase.id_Proyecto.id_proyecto)+'/'+str(item.id_item)+'/'+archivo)
+    except:
+        url=None
 
-def upload_handler(DOC, PATH):#-------------------------------------------------------------
- #   dbx = dropbox.Dropbox(settings.DROPBOX_APP_ACCESS_TOKEN)
-    token = "4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
-    dbx = dropbox.Dropbox(token)
+    if(url==None):
+        context = {
+            "mensaje": "EL ATRIBUTO NO TIENE NINGUN ARCHIVO ADJUNTO",
+            "titulo": "SIN ARCHIVO QUE DESCARGAR",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "LISTO",
+            "boton2": "/detallesFase/" + str(item.fase.id_Fase),
+        }
+        return render(request, 'Error.html', context)
+
+    webbrowser.open_new(url.link)
+    return redirect('gestion:listar_atributos',item.ti.id_ti,item.id_item)
+
+def SubirArchivo(DOC, PATH):#-------------------------------------------------------------
+    dbx = dropbox.Dropbox(TOKEN)
     dbx.files_upload(DOC.file.read(), PATH)
 
 
+
+#NO SE USA
 def list_book(request,id_item):
 
     item=Item.objects.get(id_item=id_item)
@@ -1590,17 +1594,19 @@ def list_book(request,id_item):
         some_var=request.POST.getlist('checkbox')
         print(some_var)
 
+        x = request.POST
+
         for archivo in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
-            x = request.POST.getlist('String')
-            ruta= str(x[0])+archivo
+            #x = request.POST.getlist('String')
+            ruta= ""
             subirArchivo(ruta,False,'/'+str(item.fase.id_Proyecto.id_proyecto)+'/'+str(item.id_item)+'/'+archivo)
         if(len(some_var) !=0):
-            print(x[0])
+            #print(x[0])
             context = {
                 "mensaje": "SE FINALIZO LA DESCARGA, PUEDE VISUALIZAR SUS ARCHIVOS SI DESEA",
                 "titulo": "DESCARGA COMPLETADA!!",
                 "titulo_b1": "",
-                "boton1": x[0],
+                "boton1": "",
                 "titulo_b2": "LISTO",
                 "boton2": "/detallesFase/" + str(item.fase.id_Fase),
             }
@@ -1614,16 +1620,9 @@ def list_book(request,id_item):
     return render(request,'listar_book.html',contexto)
 
 
-import dropbox
+############### NO SE USA ###############################################################
 import tempfile
-
-
-"""
-dropbox
-gestionitems.fpuna@gmail.com    
-GestionItem20202
-https://josevc93.github.io/python/Dropbox-y-python/
-"""
+#NO SE USA
 def subirArchivo(ruta,opcion,nombre):
     """
     opcion= true subir, sino descarga
@@ -1632,12 +1631,36 @@ def subirArchivo(ruta,opcion,nombre):
     # Autenticación
     token = "4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
     dbx = dropbox.Dropbox(token)
-    # Obtiene y muestra la información del usuario
-    user = dbx.users_get_current_account()
     #print(user)
     if(opcion==True):
         with open(ruta, "rb") as f:
             dbx.files_upload(f.read(), nombre, mute=True)
     else:
         # Descarga archivo
-        dbx.files_download_to_file(ruta, nombre)
+        url=dbx.files_get_temporary_link(nombre)
+        webbrowser.open(url.link, new=0, autoraise=True)
+#no se usa
+def upload_book(request,id_proyecto,id_item):
+    form=BookForm()
+    proyectos=Proyecto.objects.get(id_proyecto=id_proyecto)
+    item = Item.objects.get(id_item=id_item)
+    if request.method=='POST':
+        form=BookForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save(commit=False)
+            #---------------------------------------------------------------------
+            DOC = request.FILES['pdf']
+            ruta = str(id_proyecto) +"/"+ str(id_item)
+            PATH = f'/{ruta}/{DOC}'
+            upload_handler(DOC, PATH)
+            #cuando idatributoTI es null es un file
+            p = Atributo_Item(id_item=item, valor=DOC)
+            p.save()
+            return  redirect('gestion:detallesFase',item.fase.id_Fase)
+    contexto={
+        'form':form,
+        'proyectos':proyectos,
+        'item':item
+    }
+    return render(request, 'upload_book.html',contexto)
+########################################################################################################

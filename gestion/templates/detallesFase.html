@@ -46,7 +46,6 @@
                 <td><h5>VER RELACIONES</h5></td>
                 <td><h5>VER ATRIBUTOS</h5></td>
 
-                <td><h5>VER ARCHIVOS</h5></td>
             </tr>
             </thead>
             <tbody>
@@ -57,9 +56,7 @@
                     <td>{{items.costo}}</td>
                    <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Relaciones</a></td>
                    <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
-
-                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_book' items.id_item  %}" >Ver Archivos adjuntos</a></td>
-                </tr>
+                 </tr>
                 {%endfor%}
             {%else%}
             <td><h2>No hay items en la fase, crealos!</h2></td>

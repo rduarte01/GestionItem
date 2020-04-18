@@ -17,56 +17,51 @@
     </style>
 
     {% block contect %}
-    <a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
+    <a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase %}" role="button">Volver Atras</a>
 
           <div class="jumbotron">
 
-     <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
     {% block content %}
     <table class="table table-bordered">
 
         <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
 
         <tr>
-            <td><h5>VALOR ACTUAL</h5></td>
+            <td><h5>VALORES</h5></td>
             <td>NOMBRE DE ATRIBUTO</td>
             <td>TIPO DE DATO</td>
             <td>ES OBLIGATORIO?</td>
-            <td><h5>PUEDE CAMBIARLO SI LO DESEA</h5></td>
+            <td><h5>ACCIONES SOBRE ATRIBUTOS</h5></td>
         </tr>
 
             {% for atributos in atributos%}
                 {% for atributo in atributo%}
-                    {% if atributos.idAtributoTI == atributo.id_atributo%}
+                    {% if atributos.idAtributoTI.id_atributo == atributo.id_atributo%}
                         <tr>
-                                <td>{{atributos.valor}}</td>
-
+                            <td><strong>{{atributos.valor}}</strong></td>
                                 <td>{{atributo.nombre}}</td>
                                 <td>{{atributo.tipo_dato}}</td>
                                 <td>{{atributo.es_obligatorio}}</td>
 
                                     {%if atributo.tipo_dato == 'File'%}
-                                        <td><input placeholder="Añada archivo" type="File" name="File"></td>
+                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a>
+                                        <a class="btn btn-secondary" href="{% url 'gestion:DescargarArchivo' atributos.id_item.id_item atributos.valor%}" role="button" >DESCARGAR</a></td>
                                     {%endif%}
 
                                     {%if atributo.tipo_dato == 'Decimal'%}
-                                        <td><input placeholder="Ingrese el valor" type="number" name="Decimal"></td>
+                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
                                     {%endif%}
 
                                     {%if atributo.tipo_dato == 'Date'%}
-                                        <td><input placeholder="Ingrese el valor" type="date" name="Date"></td>
+                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
                                     {%endif%}
 
                                     {%if atributo.tipo_dato == 'String'%}
-                                        <td><input placeholder="Ingrese el valor" type="text" name="String"></td>
+                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
                                     {%endif%}
 
                                     {%if atributo.tipo_dato == 'Boolean'%}
-                                            <td>
-                                                <STRONG>SELECCIONE</STRONG>
-                                                <INPUT TYPE="radio" NAME="Boolean" VALUE="True">True
-                                                <INPUT TYPE="radio" NAME="Boolean" VALUE="False">False
-                                            </td>
+                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
                                     {%endif%}
                         </tr>
                     {%endif%}
@@ -77,7 +72,6 @@
     </table>
     {% endblock %}
          <input type="submit" class="btn btn-primary" value="Siguiente">
-     </form>
           </div>
     {% endblock %}
 {% endblock interno %}
