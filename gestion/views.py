@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission,Group
 from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
-from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario,Book
-from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm,BookForm
+from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario
+from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm
 from time import gmtime, strftime
 from .forms import FaseForm, FormProyectoEstados,FormItem
 from django.db.models import Count
@@ -1057,9 +1057,8 @@ def aggAtributos(request,idTI):
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
 
     atributos= Atributo.objects.filter(ti_id=idTI)
-    form=BookForm()
+
     if request.method == 'POST':
-        form=BookForm(request.POST,request.FILES)
         itemID = Item.objects.last()
         ti = TipoItem.objects.get(id_ti=idTI)
 
@@ -1107,15 +1106,11 @@ def aggAtributos(request,idTI):
             print(list[ini])
             print(tiposAtributo)
 
-            if (list[ini] == "File"):
-                DOC = request.FILES.getlist('File')
-                print(DOC)
-                print(request.POST.getlist('File'))
-
             if (tiposAtributo!=None):
-                con=0
+                con=0#para recorrer lista de files
                 for valor in range(tiposAtributo.count()):
                     if(list[ini]=="File"):
+                        DOC = request.FILES.getlist('File')
                         print("recorre por true oblig")
                         for inicio in range(tiposAtributo.count()):
                             if(tiposAtributo[inicio].es_obligatorio == True ):
@@ -1147,7 +1142,6 @@ def aggAtributos(request,idTI):
                                     SubirArchivo(DOC[con], PATH)
                                     p = Atributo_Item(idAtributoTI=tiposAtributo[valor], id_item=item,valor=str(DOC[con]))
                                     p.save()
-
                                 con += 1
                         break
                     else:
@@ -1163,7 +1157,6 @@ def aggAtributos(request,idTI):
         'atributos':atributos,
         'true':True,
         'false':False,
-        'file':form
     }
     return render (request,'aggAtributos.html',contexto)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
@@ -1613,85 +1606,3 @@ def SubirArchivo(DOC, PATH):#---------------------------------------------------
 
 
 
-#NO SE USA
-def list_book(request,id_item):
-
-    item=Item.objects.get(id_item=id_item)
-    archivos=Atributo_Item.objects.filter(idAtributoTI=None,id_item=id_item)
-    proyectos=Proyecto.objects.get(id_proyecto=item.fase.id_Proyecto.id_proyecto)
-
-    if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
-        #if form.is_valid():
-        some_var=request.POST.getlist('checkbox')
-        print(some_var)
-
-        x = request.POST
-
-        for archivo in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
-            #x = request.POST.getlist('String')
-            ruta= ""
-            subirArchivo(ruta,False,'/'+str(item.fase.id_Proyecto.id_proyecto)+'/'+str(item.id_item)+'/'+archivo)
-        if(len(some_var) !=0):
-            #print(x[0])
-            context = {
-                "mensaje": "SE FINALIZO LA DESCARGA, PUEDE VISUALIZAR SUS ARCHIVOS SI DESEA",
-                "titulo": "DESCARGA COMPLETADA!!",
-                "titulo_b1": "",
-                "boton1": "",
-                "titulo_b2": "LISTO",
-                "boton2": "/detallesFase/" + str(item.fase.id_Fase),
-            }
-            return render(request, 'Error.html', context)
-
-    contexto={
-        'item':item,
-        'archivos':archivos,
-        'proyectos':proyectos
-    }
-    return render(request,'listar_book.html',contexto)
-
-
-############### NO SE USA ###############################################################
-import tempfile
-#NO SE USA
-def subirArchivo(ruta,opcion,nombre):
-    """
-    opcion= true subir, sino descarga
-    ruta direccion del archivo a subir o en donde descargar
-    """
-    # Autenticación
-    token = "4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
-    dbx = dropbox.Dropbox(token)
-    #print(user)
-    if(opcion==True):
-        with open(ruta, "rb") as f:
-            dbx.files_upload(f.read(), nombre, mute=True)
-    else:
-        # Descarga archivo
-        url=dbx.files_get_temporary_link(nombre)
-        webbrowser.open(url.link, new=0, autoraise=True)
-#no se usa
-def upload_book(request,id_proyecto,id_item):
-    form=BookForm()
-    proyectos=Proyecto.objects.get(id_proyecto=id_proyecto)
-    item = Item.objects.get(id_item=id_item)
-    if request.method=='POST':
-        form=BookForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save(commit=False)
-            #---------------------------------------------------------------------
-            DOC = request.FILES['pdf']
-            ruta = str(id_proyecto) +"/"+ str(id_item)
-            PATH = f'/{ruta}/{DOC}'
-            upload_handler(DOC, PATH)
-            #cuando idatributoTI es null es un file
-            p = Atributo_Item(id_item=item, valor=DOC)
-            p.save()
-            return  redirect('gestion:detallesFase',item.fase.id_Fase)
-    contexto={
-        'form':form,
-        'proyectos':proyectos,
-        'item':item
-    }
-    return render(request, 'upload_book.html',contexto)
-########################################################################################################

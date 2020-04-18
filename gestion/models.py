@@ -264,7 +264,3 @@ class Comite(models.Model):
     """ID DEL PROYECTO"""
     id_user=models.IntegerField()
     """ID DEL USUARIO"""
-class Book(models.Model):
-    title=models.CharField(max_length=100)
-    autor=models.CharField(max_length=100)
-    pdf=models.FileField(upload_to='Books')
