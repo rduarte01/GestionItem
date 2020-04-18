@@ -446,6 +446,8 @@ def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
                 n,o,t=recoge_datos_atributo(form)
                 atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
             return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
+        else:
+            print("no valido")
     else:
         contexto={'formset':my_form,
                  'cant_atributos': list(range(1,cantidad_atributos+1))
@@ -1104,26 +1106,53 @@ def aggAtributos(request,idTI):
                 tiposAtributo=None
             print(list[ini])
             print(tiposAtributo)
-            print(x)
+
             if (list[ini] == "File"):
                 DOC = request.FILES.getlist('File')
-                x=DOC
+                print(DOC)
+                print(request.POST.getlist('File'))
 
             if (tiposAtributo!=None):
                 con=0
                 for valor in range(tiposAtributo.count()):
-                    if(list[ini]=="File" and tiposAtributo[valor].es_obligatorio == True):
-                        ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
-                        PATH = f'/{ruta}/{DOC[con]}'
-                        SubirArchivo(DOC[con], PATH)
-                        print(DOC[con])
-                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(DOC[con]))
-                        con += 1
-                    elif(list[ini]!="File"):
-                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(x[valor]))
+                    if(list[ini]=="File"):
+                        print("recorre por true oblig")
+                        for inicio in range(tiposAtributo.count()):
+                            if(tiposAtributo[inicio].es_obligatorio == True ):
+                                print("es oblig, guarda arch nro ",con)
+                                ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
+                                PATH = f'/{ruta}/{DOC[con]}'
+                                SubirArchivo(DOC[con], PATH)
+                                p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(DOC[con]))
+                                p.save()
+                                con += 1
+                        print("recorre por no obligatorio")
+                        for inicio in range(tiposAtributo.count()):
+                            if (tiposAtributo[inicio].es_obligatorio == False):
+                                print("hay aun valor en el los FILES?")
+                                try:
+                                    val=DOC[con]
+                                except:
+                                    val=None
+
+                                if(val==None):
+                                    print("no")
+                                    p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor="sin archivos adjuntos")
+                                    p.save()
+                                else:
+                                    print("si")
+                                    print("guarda archivo nro ",con)
+                                    ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
+                                    PATH = f'/{ruta}/{DOC[con]}'
+                                    SubirArchivo(DOC[con], PATH)
+                                    p = Atributo_Item(idAtributoTI=tiposAtributo[valor], id_item=item,valor=str(DOC[con]))
+                                    p.save()
+
+                                con += 1
+                        break
                     else:
-                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor="sin archivos adjuntos")
-                    p.save()
+                        p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(x[valor]))
+                        p.save()
 
 
         itemID=Item.objects.last()

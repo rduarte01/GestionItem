@@ -38,7 +38,7 @@
                                             <td><input placeholder="Ingrese el valor" type="File" name="File"  required></td>
                                         {%endif%}
                                         {%if atributos.tipo_dato == 'File' and atributos.es_obligatorio == false %}
-                                            <td><input placeholder="Ingrese el valor" type="File" name="File"></td>
+                                            <td><input placeholder="Ingrese el valor" type="File" name="File" value="-" ></td>
                                         {%endif%}
                                         {%if atributos.tipo_dato == 'Decimal' and atributos.es_obligatorio == true %}
                                             <td><input placeholder="Ingrese el valor" type="number" name="Decimal" step="any" required></td>
