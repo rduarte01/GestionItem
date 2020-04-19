@@ -1045,6 +1045,18 @@ def crearItem(request,Faseid):
     proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto.id_proyecto)
     fases=Fase.objects.filter(id_Proyecto=proyecto)
     cont = 0
+
+    if(proyecto.estado != "INICIADO"):
+        context = {
+            "mensaje": "EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado),
+            "titulo": "PROYECTO NO INICIADO",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "VOLVER A DETALLES DE LA FASE",
+            "boton2": "/detallesFase/" + str(Faseid),
+        }
+        return render(request, 'Error.html', context)
+
     if( fases.count() != 1):#si no es de la primera fase
         for faseSIG in reversed(fases):
             cont += 1
