@@ -1055,15 +1055,10 @@ def aggAtributos(request,idTI):
     SI CUMPLIO CON LA RESTRICCION DE OBLIGATORIEDAD REDIRIGE A LA VENTANA DE RELACIONES PARA DICHO ITEM"""
 
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
-
     atributos= Atributo.objects.filter(ti_id=idTI)
-
     if request.method == 'POST':
         itemID = Item.objects.last()
         ti = TipoItem.objects.get(id_ti=idTI)
-
-        for c in request.FILES.getlist("File"):
-            print(c)
 
         contador=0
 
@@ -1073,8 +1068,6 @@ def aggAtributos(request,idTI):
         ###alzar a dropbox-------validar file
 
         item=Item.objects.last()#SE OBTIENE EL ITEM CREADO RECIENTEMENTE
-
-
         list=[]
         for atributos in atributos:#SE RECORRE POR VALOR INGRESADO CONSULTANDO SI ES OBLIGARORIO Y ESTA VACIO-->MUESTRA ERROR
             ok = False
@@ -1103,51 +1096,28 @@ def aggAtributos(request,idTI):
                 x=request.POST.getlist(list[ini])
             except:
                 tiposAtributo=None
-            print(list[ini])
-            print(tiposAtributo)
 
             if (tiposAtributo!=None):
-                con=0#para recorrer lista de files
                 for valor in range(tiposAtributo.count()):
                     if(list[ini]=="File"):
-                        DOC = request.FILES.getlist('File')
-                        print("recorre por true oblig")
-                        for inicio in range(tiposAtributo.count()):
-                            if(tiposAtributo[inicio].es_obligatorio == True ):
-                                print("es oblig, guarda arch nro ",con)
+                        list = []
+                        for atr in tiposAtributo:
+                            DOC = request.FILES.getlist(str(atr.id_atributo))
+                            if (DOC != list):
+                                print("no vacio",DOC[0])
                                 ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
-                                PATH = f'/{ruta}/{DOC[con]}'
-                                SubirArchivo(DOC[con], PATH)
-                                p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(DOC[con]))
+                                PATH = f'/{ruta}/{DOC[0]}'
+                                SubirArchivo(DOC[0], PATH)
+                                p = Atributo_Item(idAtributoTI=atr, id_item=item, valor=str(DOC[0]))
                                 p.save()
-                                con += 1
-                        print("recorre por no obligatorio")
-                        for inicio in range(tiposAtributo.count()):
-                            if (tiposAtributo[inicio].es_obligatorio == False):
-                                print("hay aun valor en el los FILES?")
-                                try:
-                                    val=DOC[con]
-                                except:
-                                    val=None
-
-                                if(val==None):
-                                    print("no")
-                                    p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor="sin archivos adjuntos")
-                                    p.save()
-                                else:
-                                    print("si")
-                                    print("guarda archivo nro ",con)
-                                    ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
-                                    PATH = f'/{ruta}/{DOC[con]}'
-                                    SubirArchivo(DOC[con], PATH)
-                                    p = Atributo_Item(idAtributoTI=tiposAtributo[valor], id_item=item,valor=str(DOC[con]))
-                                    p.save()
-                                con += 1
+                            else:
+                                print("vacio",DOC)
+                                p = Atributo_Item(idAtributoTI=atr, id_item=item, valor="Sin archivos adjuntos")
+                                p.save()
                         break
                     else:
                         p = Atributo_Item(idAtributoTI=tiposAtributo[valor],id_item=item,valor=str(x[valor]))
                         p.save()
-
 
         itemID=Item.objects.last()
         ti=TipoItem.objects.get(id_ti=idTI)
