@@ -86,7 +86,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests URLS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-gestion.tests.test_views">Tests Views</a></li>
 </ul>
 
             
@@ -207,10 +208,29 @@ especifican los siguientes atributos:</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.AggComite">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">AggComite</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.AggComite" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS USUARIOS DISPONIBLES PARA AGREGAR AL COMITE DE UN PROYECTO EN ESPECIFICO.
+:param pk: ID DEL PROYECTO AL CUAL SE AGREGARA EL COMITE
+:return: REDIRIGUE AL TEMPLATE AGGCOMITE</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.AggUser">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">AggUser</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.AggUser" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MEDIANTE UN PROYECTO EXISTENTE, DA LA POSIBILIDAD DE AÑADIR MAS USUARIOS AL PROYECTO,
 FILTRANDO LOS USUARIOS QUE NO FORMAN PARTE DEL PROYECTO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>pk</strong> – ID DEL PROYECTO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>AGGUSER.HTML</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="data">
@@ -236,7 +256,10 @@ DEL SISTEMA DE MODO A ACLARAR O SOLUCIONAR INQUIETUDES</p>
 <dt id="gestion.views.CorreoMail">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CorreoMail</code><span class="sig-paren">(</span><em class="sig-param">asunto</em>, <em class="sig-param">mensaje</em>, <em class="sig-param">correo</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CorreoMail" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>FUNCION QUE RECIBE UN ASUNTO, MENSAJE Y UN CORRREO ELECTRONICO AL CUAL SE LE ENVIA UN CORREO
-ELECTRONICO DE ACUERDO A UNA ACCION</p>
+ELECTRONICO DE ACUERDO A UNA ACCION
+:param asunto: ASUNTO DEL MENSAJE
+:param mensaje: MENSAJE A ENVIAR
+:param correo: EMAIL</p>
 </dd></dl>
 
 <dl class="class">
@@ -288,6 +311,27 @@ del proyecto pertenciente de este Rol a crear</p>
 
 </dd></dl>
 
+<dl class="function">
+<dt id="gestion.views.DeleteComite">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">DeleteComite</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.DeleteComite" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS USUARIOS DEL COMITE Y DEJA SELECCIONAR USUARIOS PARA QUITAR DEL COMITE
+CUMPLIENDO LAS RESTRICCIONES DE QUE LA CANTIDAD DE USUARIOS SIGA SIENDO IMPAR Y MAYOR A UNO
+CASO CONTRARIO MUESTRA MENSAJE DE ERROR.
+:param pk: ID DEL PROYECTO DEL CUAL SE QUIERE DESHACER EL COMITE
+:return: RETORNA EN EL TEMPLATE COMITE</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.DescargarArchivo">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">DescargarArchivo</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_item</em>, <em class="sig-param">archivo</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.DescargarArchivo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FUNCION QUE DESCARGA UN ARCHIVO ADJUNTO DE UN ITEM SELECCIONADO, MEDIANTE EL TOKEN DE API DE DESARROLLADOR DE DROPBOX, VERIFICA SI EL ARCHIVO SELECCIONADO
+EXISTE, CASO CONTRARIO MUESTRA VENTANA DE ERROR, MEDIANTE EL NOMBRE DEL ARCHIVO SE GENERA LA DIRECCION DEL ARCHIVO EN DROPBOX QUE ES /ID_PROYECTO/ID_ITEM/NOMBRE-ARCHIVO
+MEDIANTE ELLO SE OBTIENE EL LINK DE DESCARGA DEL ARCHIVO Y SE ABRE LA URL MEDIANTE OPEN(URL) MOSTRANDO LA OPCION DE DESCARGA EN EL NAVEGADOR.
+:param id_item: ID DEL ITEM SELECCIONADO
+:param archivo: NOMBRE DEL ARCHIVO A DESCARGAR DEL ITEM
+:return: REDIRIGE A LA LISTA DE ATRIBUTOS DEL ITEM</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="gestion.views.ModificarRol">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ModificarRol</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ModificarRol" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -335,9 +379,34 @@ del proyecto pertenciente de este Rol a crear</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.SubirArchivo">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">SubirArchivo</code><span class="sig-paren">(</span><em class="sig-param">DOC</em>, <em class="sig-param">PATH</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.SubirArchivo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MEDIANTE EL TOKEN DE DESARROLLADOR DE DROPBOX SE REALIZA LA SUBIDA DEL ARCHIVO EN DROPBOX EN LA DIRECCION INDICADA ID_PROYECTO/ID_ITEM/NOMBRE-ARCHIVO.
+:param DOC: ARCHIVO SELECCIONADO POR EL USUARIO
+:param PATH: DIRECCION QUE TENDRA LA CARPETA EN DROPBOX</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="gestion.views.TOKEN">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">TOKEN</code><em class="property"> = '4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf'</em><a class="headerlink" href="#gestion.views.TOKEN" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TOKEN DE DROPBOX PARA REALIZAR LA CONEXION</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.UsersProyecto">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">UsersProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.UsersProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>LISTA LOS USUARIOS DE UN PROYECTO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>pk</strong> – ID DEL PROYECTO DEL CUAL SE LISTARAN LOS USUARIOS DEL MISMO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>USERSPROYECTO.HTML</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
@@ -392,7 +461,7 @@ Se especifica el atributos
 
 <dl class="attribute">
 <dt id="gestion.views.VerUsersEnEspera.queryset">
-<code class="sig-name descname">queryset</code><a class="headerlink" href="#gestion.views.VerUsersEnEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet []&gt;</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -421,40 +490,188 @@ Se especifica el atributos
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.aggAtributos">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">aggAtributos</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">idTI</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.aggAtributos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SE LISTAN LOS ATRIBUTOS DEL TI SELECCIONADO, SE AGREGA UN CAMPO VALOR EN DONDE SE DEBERA DE INGRESAR EL TIPO DE VALOR
+DE DICHO ATRIBUTO, SE VALIDA SI ES OBLIGATORIO Y MUESTRA MENSAJE DE ERROR SI ESTA VACIO EL CAMPO Y ES OBLIGATORIO,
+SI CUMPLIO CON LA RESTRICCION DE OBLIGATORIEDAD REDIRIGE A LA VENTANA DE RELACIONES PARA DICHO ITEM
+:param request:
+:param idTI: ID DEL TI SELECCIONADO POR EL USUARIO
+:return: REDIRIGE AL TEMPLATE AGGATRIBUTOS</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.agg_listar_tipo_item">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">agg_listar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">Fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.agg_listar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
+CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO
+:param request:
+:param Fase: ID DE LA FASE DEL CUAL DEBE LISTAR LOS TI
+:return: AGGTI.HTML</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.agregarUsuarios">
-<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">agregarUsuarios</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.agregarUsuarios" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">agregarUsuarios</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em>, <em class="sig-param">nroFase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.agregarUsuarios" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>RECIBE EL ID DEL PROYECTO Y MUESTRA LOS USUARIOS QUE PUEDEN SER AÑADIDOS A EL</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.agregar_atributo_ti">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">agregar_atributo_ti</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.agregar_atributo_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.auditoriaProyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">auditoriaProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.auditoriaProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA UN PROYECTO EN ESPECIFICO
+:param request:
+:param pk: ID DEL PROYECTO DEL CUAL SE LISTARA LA AUDIRORIA
+:return: AUDITORIA.HTML</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.busqueda">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">busqueda</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">id_item</em>, <em class="sig-param">some_var</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.busqueda" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SE BUSCA EL IDITEM MEDIANTE TODAS LAS RELACIONES DEL ITEM DE FORMA RECURSIVA,
+DEL ITEM SE OBTIENE SUS RELACIONES Y SE ITERA POR CADA UNO DE SUS RELACIONES Y A CADA UNO SE MANDA
+EN LA MISMA FUNCION, CUANDO SE ENCUENTRA EL ITEM RETORNA TRUE, CASO CONTRARIO FALSE
+:param item: ITEM EL CUAL SE RECORRERA SUS RELACIONES
+:param id_item: ID DEL ITEM EL CUAL SE BUSCA
+:param some_var: LISTA DE RELACIONES SELECCIONADAS POR EL USUARIO
+:return: TRUE SI ENCUENTRA, FALSE SI NO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.ciclos">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ciclos</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">i</em>, <em class="sig-param">some_var</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ciclos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FUNCION PARA ENCONTRAR CICLOS DE FORMA RECURSIVA</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.comite">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">comite</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.comite" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS USUARIOS DEL COMITE DE UN PROYECTO EN ESPECIFICO
+:param request:
+:param pk: ID DEL PROYECTO DEL CUAL SE LISTARA LOS USUARIOS QUE SE ENCUENTRAN EN EL COMITE
+:return: REDIRIGE AL TEMPLATE COMITE</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.creacionProyecto">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">creacionProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.creacionProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO</p>
+<dd><p>MUESTRA FORMULARIO PARA CREAR UN PROYECTO EN DONDE SE VALIDA, NOMBRE, DESCRIPCION Y CANTIDAD DE FASES
+UNA VEZ COMPLETADO LOS MISMOS, SE AÑADE EN LA TABLA USER_PROYECTOS AL GERENTE EL CUAL CREO EL MISMO Y SE
+GUARDA EN LA BASE DE DATOS EL PROYECTO Y REEDIRIGE A  CREACION DE FASES MOSTRANDO LAS FASES A CREARSE</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><p><strong>request</strong> – </p>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>CREACIONPROYECTO2.HTML</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.crearFase">
-<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">crearFase</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.crearFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">crearFase</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">nroFase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.crearFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>METODO PARA CREAR FASES</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.crearItem">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">crearItem</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">Faseid</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.crearItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SE CREA UN ITEM CON EL FORM QUE CONTIENE EL NOMBRE, DESCRIPCION, COSTO, LO UNICO QUE NECESITA ES EL IDFASE AL CUAL VA A PERTENECER EL ITEM
+LUEGO DE CREAR, SE GUARDA LO COMPLETADO CON TODOS LOS CAMPOS OBLIGATORIOS, LUEGO REDIRIGE EN UNA VENTANA EN LA CUAL
+MUESTRA TODOS LOS TIPOS DE ITEMS DE DICHA FASE EN LA CUAL PERTENECE EL ITEM Y SE LE PASA EL ID DE LA FASE EN LA QUE SE ENCUENTRA
+EL ITEM
+:param request:
+:param Faseid: ID DE LA FASE EN LA QUE SE CREARA EL ITEM
+:return: ITEM.HTML</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.desvinculacionComite">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">desvinculacionComite</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em>, <em class="sig-param">pk_user</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.desvinculacionComite" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>DESVINCULA UN USUARIO DE UN PROYECTO
+:param pk: ID DEL USUARIO
+:param pk_user: ID DEL USUARIO A DESVINCULAR</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.desvinculacionProyecto">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">desvinculacionProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em>, <em class="sig-param">pk_user</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.desvinculacionProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>DESVINCULA UN USUARIO DE UN PROYECTO</p>
+<dd><p>DESVINCULA UN USUARIO DE UN PROYECTO
+:param request:
+:param pk: ID DEL PROYECTO DEL CUAL DESVINCULAR
+:param pk_user: ID DEL USUARIO AL CUAL DESVINCULAR
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.detallesFase">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">detallesFase</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">idFase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.detallesFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LOS ITEMS QUE PERTENECEN A LA FASE Y LAS OPCIONES DE LOS ITEM
+:param request:
+:param idFase: ID DE LA FASE LA CUAL DE DETALLARA
+:return: DETALLESFASE.HTML</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.detallesProyecto">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">detallesProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.detallesProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MUESTRA LAS OPCIONES REALIZABLES SOBRE UN PROYECTO, TAMBIEN MUESTRA LAS FASES DEL MISMO CON SUS
-OPCIONES</p>
+OPCIONES
+:param request:
+:param pk: ID DEL PROYECTO DEL CUAL DE LISTARA SUS DETALLES
+:return: DETALLESPROYECTO.HTML</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.editar_ti">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">editar_ti</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.editar_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.eliminar_atributo_ti">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">eliminar_atributo_ti</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.eliminar_atributo_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.eliminar_tipo_item">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">eliminar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.eliminar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.errorPermiso">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">errorPermiso</code><span class="sig-paren">(</span><em class="sig-param">permiso</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.errorPermiso" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MENSAJE DE ERROR CUANDO NO SE POSEE EL PERMISO
+:param permiso: PERMISO QUE LE HACE FALTA AL USUARIO
+:return: ERROR.HTML</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.estadoProyecto">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">estadoProyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.estadoProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST</p>
+<dd><p>RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST,
+VALIDA CADA UNO DE LOS ESTADOS:
+INICIADO: VALIDA EL COMITE DE CAMBIO SI ES MAYOR O IGUAL A 3 USUARIOS, TAMBIEN VALIDA
+QUE EL PROYECTO POSEA AL MENOS UN TIPO DE ITEM.
+FINALIZADO: VALIDA QUE TODAS LAS RESTRICCIONES DEL PROYECTO SEAN CUMPLIDAS.
+CANCELADO: CANCELA EL PROYECTO SIN NINGUNA VALIDACION YA QUE EL PROYECTO SE PUEDE CANCELAR EN CUALQUIER ESTADO
+MENOS CUANDO ESTE FINALIZADO.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>pk</strong> – ID DEL PROYECTO EN EL CUAL SE CAMBIARA EL ESTADO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>ESTADOPROYECTO.HTML</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -497,15 +714,60 @@ fases dell proyecto.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.itemCancelado">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">itemCancelado</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.itemCancelado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>METODO PARA CANCELAR UN ITEM
+:return: REDIRIGE AL MENU PRINCIPAL</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.listar_atributos">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_atributos</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">idAtributoTI</em>, <em class="sig-param">id_item</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_atributos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MEDIANTE EL ID DEL PROYECTO Y EL ID DEL TI DEL ITEM SE LISTAN LOS ATRIBUTOS DEL TI CON LOS
+VALORES QUE SE GUARDARON EN EL ITEM</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>idAtributoTI</strong> – ID DEL ATRIBUTO DEL ITEM</p></li>
+<li><p><strong>id_item</strong> – ID DEL ITEM DEL CUAL SE LISTARA SUS ATRIBUTOS</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>LISTAR_ATRIBUTOS.HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.listar_auditoria">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_auditoria</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_auditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>LISTA LOS REGISTROS DE LA TABLA AUDITORIA</p>
+<dd><p>LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA EL SISTEMA</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.listar_proyectos">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_proyectos</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_proyectos" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>LISTA LOS PROYECTOS DEL USUARIO</p>
+<dd><p>LISTA LOS PROYECTOS DEL USUARIO
+:param request:
+:return: VERPROYECTOS.HTML</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.listar_relaciones">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">listar_relaciones</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">idItem</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.listar_relaciones" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LISTA LAS RELACIONES DE UN ITEM EN ESPECIFICO MEDIANTE EL ID DEL ITEM</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>idItem</strong> – ID DEL ITEM DEL CUAL SE LISTARAN SUS RELACIONES</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>LISTAR_RELACIONES.HTML</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -533,6 +795,18 @@ GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PART
 <dd><p>SOLICITUD DE AUTENTICACION PARA MOSTRAR EL PERFIL DEL USUARIO||
 Realiza consultas de los datos del usuario que esta realizando la
 solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.primeraFase">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">primeraFase</code><span class="sig-paren">(</span><em class="sig-param">id_proyecto</em>, <em class="sig-param">id_item</em>, <em class="sig-param">some_var</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.primeraFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FUNCION QUE RECIBE UN IDPROYECTO, IDITEM Y LA LISTA DE ITEMS SELECCIONADOS EN LA SELECCION DE RELACIONES
+MEDIANTE TODOS LOS ITEMS DE LA PRIMERA FASE SE RECORREN DE A UNO Y SE MANDA  A LA FUNCION BUSQUEDA LA CUAL
+BUSCA EL IDITEM
+:param id_proyecto: ID DEL PROYECTO DEL CUAL SE DESEAN LOS ITEMS DE LA PRIMERA FASE
+:param id_item: ID DEL ITEM A BUSCAR
+:param some_var: LISTA DE RELACIONES SELECCIONADAS POR EL USUARIO
+:return: FALSO SI ENCUENTRA, TRUE SI NO</p>
 </dd></dl>
 
 <dl class="function">
@@ -566,6 +840,32 @@ dos booleanos para determinar si es gerente y administrador y el estado del usua
 <dt id="gestion.views.registrarAuditoria">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">registrarAuditoria</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">accion</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.registrarAuditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN EL SISTEMA</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.registrarAuditoriaProyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">registrarAuditoriaProyecto</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">accion</em>, <em class="sig-param">id_proyecto</em>, <em class="sig-param">proyecto</em>, <em class="sig-param">fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.registrarAuditoriaProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN UN PROYECTO EN ESPECIFICO
+:param user: USUARIO ACTUAL
+:param accion: ACCION REALIZADA
+:param id_proyecto: ID DEL PROYECTO EN EL CUAL REALIZO LA ACCION
+:param proyecto: PROYECTO
+:param fase: FASE DEL PROYECTO</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.relacionarItem">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">relacionarItem</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_proyecto</em>, <em class="sig-param">id_item</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.relacionarItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SE MUESTRAN TODOS LOS ITEMS DE UN PROYECTO QUE SE ENCUENTRAN ACTIVOS EN EL MISMO, SE TENDRA LA POSIBILIDAD
+DE SELECCIONAR LOS MISMOS Y GUARDAR LAS RELACIONES CON EL ITEM ACTUAL, TAMBIEN SE CARGA LA TABLA VERSIONES CON
+EL ITEM ACTUAL Y LA VERSION 1 EN LA CREACION SE EVALUA:
+-QUE NO SE GENEREN CICLOS
+-QUE LA FASE 1 SEA OPCIONAL LAS RELACIONES
+-QUE SI NO ES LA PRIMERA FASE QUE TENGA RELACIONES DIRECTA O INDIRECTAMENTE CON LA FASE 1
+:param request:
+:param id_proyecto: ID DEL PROYECTO DEL CUAL QUITARA LOS ITEMS DE LAS FASES
+:param id_item: ID DEL ITEM CREANDO
+:return: REDIRIGE AL TEMPLATE RELACIONAR_ITEM</p>
 </dd></dl>
 
 <dl class="function">

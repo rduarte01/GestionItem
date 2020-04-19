@@ -33,7 +33,7 @@ CANTIDAD=1
 """SE UTILIZA PARA GUARDAR LA CANTIDAD DE FASES DE UN PROYECTO"""
 
 """
-dropbox
+datos de dropbox
 gestionitems.fpuna@gmail.com    
 GestionItem20202
 https://josevc93.github.io/python/Dropbox-y-python/
@@ -44,14 +44,20 @@ TOKEN="4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
 
 #RUBEN
 def estadoProyecto(request,pk):
-    """ RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST,
+    """
+    RECIBE EL ID DEL PROYECTO A CAMBIAR SU ESTADO Y EL ESTADO NUEVO MEDIANTE EL POST,
     VALIDA CADA UNO DE LOS ESTADOS:
     INICIADO: VALIDA EL COMITE DE CAMBIO SI ES MAYOR O IGUAL A 3 USUARIOS, TAMBIEN VALIDA
     QUE EL PROYECTO POSEA AL MENOS UN TIPO DE ITEM.
     FINALIZADO: VALIDA QUE TODAS LAS RESTRICCIONES DEL PROYECTO SEAN CUMPLIDAS.
     CANCELADO: CANCELA EL PROYECTO SIN NINGUNA VALIDACION YA QUE EL PROYECTO SE PUEDE CANCELAR EN CUALQUIER ESTADO
     MENOS CUANDO ESTE FINALIZADO.
+
+    :param request:
+    :param pk: ID DEL PROYECTO EN EL CUAL SE CAMBIARA EL ESTADO
+    :return: ESTADOPROYECTO.HTML
     """
+
 
     #if(request.user.has_perm('id_gerente')):----------------------------------------------
 
@@ -145,7 +151,12 @@ def estadoProyecto(request,pk):
     #errorPermiso(request,'Editar estado')
 
 def errorPermiso(permiso):
-    """MENSAJE DE ERROR CUANDO NO SE POSEE EL PERMISO"""
+    """
+    MENSAJE DE ERROR CUANDO NO SE POSEE EL PERMISO
+    :param permiso: PERMISO QUE LE HACE FALTA AL USUARIO
+    :return: ERROR.HTML
+    """
+
     context = {
         "mensaje": "NO TIENE EL PERMISO CORRESPONDIENTE NO PUEDE REALIZAR LA ACCION",
         "titulo": "SIN EL PERMISO DE : "+ str(permiso),
@@ -165,15 +176,30 @@ def registrarAuditoria(user,accion):
     p.save()
 
 def registrarAuditoriaProyecto(user,accion,id_proyecto,proyecto,fase):
-    """FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN UN PROYECTO EN ESPECIFICO"""
+    """
+    FUNCION QUE REGISTRA EN LA  TABLA AUDITORIA LO QUE SE REALIZA EN UN PROYECTO EN ESPECIFICO
+    :param user: USUARIO ACTUAL
+    :param accion: ACCION REALIZADA
+    :param id_proyecto: ID DEL PROYECTO EN EL CUAL REALIZO LA ACCION
+    :param proyecto: PROYECTO
+    :param fase: FASE DEL PROYECTO
+
+    """
+
     showtime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     p = Auditoria(usuario= user,fecha=showtime, accion=accion,id_proyecto=id_proyecto,proyecto=proyecto,fase=fase)###### FALTA ARREGLAR USER
     p.save()
 
 #RUBEN
 def CorreoMail(asunto,mensaje,correo):
-    """ FUNCION QUE RECIBE UN ASUNTO, MENSAJE Y UN CORRREO ELECTRONICO AL CUAL SE LE ENVIA UN CORREO
-    ELECTRONICO DE ACUERDO A UNA ACCION"""
+    """
+    FUNCION QUE RECIBE UN ASUNTO, MENSAJE Y UN CORRREO ELECTRONICO AL CUAL SE LE ENVIA UN CORREO
+    ELECTRONICO DE ACUERDO A UNA ACCION
+    :param asunto: ASUNTO DEL MENSAJE
+    :param mensaje: MENSAJE A ENVIAR
+    :param correo: EMAIL
+    """
+
     mail=EmailMessage(asunto,mensaje,to={correo})
     mail.send()
 #RUBEN
@@ -269,6 +295,9 @@ def creacionProyecto(request):
     MUESTRA FORMULARIO PARA CREAR UN PROYECTO EN DONDE SE VALIDA, NOMBRE, DESCRIPCION Y CANTIDAD DE FASES
     UNA VEZ COMPLETADO LOS MISMOS, SE AÑADE EN LA TABLA USER_PROYECTOS AL GERENTE EL CUAL CREO EL MISMO Y SE
     GUARDA EN LA BASE DE DATOS EL PROYECTO Y REEDIRIGE A  CREACION DE FASES MOSTRANDO LAS FASES A CREARSE
+
+    :param request:
+    :return: CREACIONPROYECTO2.HTML
     """
     #if(request.user.has_perm('id_gerente')):----------------------------------------------
 
@@ -547,7 +576,13 @@ def listar_auditoria(request):
     return render(request, 'auditoriaSistema.html', context)
 
 def auditoriaProyecto(request,pk):
-    """ LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA UN PROYECTO EN ESPECIFICO"""
+    """
+    LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA UN PROYECTO EN ESPECIFICO
+    :param request:
+    :param pk: ID DEL PROYECTO DEL CUAL SE LISTARA LA AUDIRORIA
+    :return: AUDITORIA.HTML
+    """
+
     auditoria = Auditoria.objects.filter(id_proyecto=pk)
     proyectos=Proyecto.objects.get(id_proyecto=pk)
     context={
@@ -561,6 +596,10 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
     """
     MEDIANTE UN PROYECTO EXISTENTE, DA LA POSIBILIDAD DE AÑADIR MAS USUARIOS AL PROYECTO,
     FILTRANDO LOS USUARIOS QUE NO FORMAN PARTE DEL PROYECTO
+
+    :param request:
+    :param pk: ID DEL PROYECTO
+    :return: AGGUSER.HTML
     """
     #if(request.user.has_perm('is_gerente')):--------------------------------------------------------
     user= request.user## USER ACTUAL
@@ -600,6 +639,10 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
 def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     LISTA LOS USUARIOS DE UN PROYECTO
+
+    :param request:
+    :param pk: ID DEL PROYECTO DEL CUAL SE LISTARAN LOS USUARIOS DEL MISMO
+    :return: USERSPROYECTO.HTML
     """
     proyecto=Proyecto.objects.get(id_proyecto=pk)
     registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
@@ -628,7 +671,13 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
 
 #RUBEN
 def desvinculacionProyecto(request,pk,pk_user):
-    """DESVINCULA UN USUARIO DE UN PROYECTO"""
+    """
+    DESVINCULA UN USUARIO DE UN PROYECTO
+    :param request:
+    :param pk: ID DEL PROYECTO DEL CUAL DESVINCULAR
+    :param pk_user: ID DEL USUARIO AL CUAL DESVINCULAR
+    :return:
+    """
     #if(request.user.has_perm('is_gerente')):--------------------------------------
     instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
     instanceUser.delete()
@@ -636,7 +685,11 @@ def desvinculacionProyecto(request,pk,pk_user):
 
 #RUBEN
 def listar_proyectos(request):
-    """ LISTA LOS PROYECTOS DEL USUARIO"""
+    """
+    LISTA LOS PROYECTOS DEL USUARIO
+    :param request:
+    :return: VERPROYECTOS.HTML
+    """
     proyectos = Proyecto.objects.all()
     PROYECTOS_USUARIO= CantProyectos(request)
     cant = len(PROYECTOS_USUARIO)
@@ -651,8 +704,14 @@ def listar_proyectos(request):
 
 #RUBEN
 def detallesProyecto(request,pk):
-    """MUESTRA LAS OPCIONES REALIZABLES SOBRE UN PROYECTO, TAMBIEN MUESTRA LAS FASES DEL MISMO CON SUS
-    OPCIONES"""
+    """
+    MUESTRA LAS OPCIONES REALIZABLES SOBRE UN PROYECTO, TAMBIEN MUESTRA LAS FASES DEL MISMO CON SUS
+    OPCIONES
+    :param request:
+    :param pk: ID DEL PROYECTO DEL CUAL DE LISTARA SUS DETALLES
+    :return: DETALLESPROYECTO.HTML
+    """
+
     proyectos = Proyecto.objects.get(id_proyecto=pk)
     fases= Fase.objects.all()
     context={
@@ -663,6 +722,12 @@ def detallesProyecto(request,pk):
 
 #RUBEN
 def detallesFase(request,idFase):
+    """
+    LISTA LOS ITEMS QUE PERTENECEN A LA FASE Y LAS OPCIONES DE LOS ITEM
+    :param request:
+    :param idFase: ID DE LA FASE LA CUAL DE DETALLARA
+    :return: DETALLESFASE.HTML
+    """
     fases = Fase.objects.get(id_Fase=idFase)
     proyectos= Proyecto.objects.get(id_proyecto=fases.id_Proyecto.id_proyecto)
     items=Item.objects.filter(fase=fases)
@@ -676,6 +741,10 @@ def detallesFase(request,idFase):
 def listar_relaciones(request,idItem):
     """
     LISTA LAS RELACIONES DE UN ITEM EN ESPECIFICO MEDIANTE EL ID DEL ITEM
+
+    :param request:
+    :param idItem: ID DEL ITEM DEL CUAL SE LISTARAN SUS RELACIONES
+    :return: LISTAR_RELACIONES.HTML
     """
     relaciones= Relacion.objects.filter()
     print(relaciones)
@@ -695,6 +764,11 @@ def listar_atributos(request,idAtributoTI,id_item):
     """
     MEDIANTE EL ID DEL PROYECTO Y EL ID DEL TI DEL ITEM SE LISTAN LOS ATRIBUTOS DEL TI CON LOS
     VALORES QUE SE GUARDARON EN EL ITEM
+
+    :param request:
+    :param idAtributoTI: ID DEL ATRIBUTO DEL ITEM
+    :param id_item: ID DEL ITEM DEL CUAL SE LISTARA SUS ATRIBUTOS
+    :return: LISTAR_ATRIBUTOS.HTML
     """
     atributos = Atributo_Item.objects.filter(id_item=id_item)
     TI=TipoItem.objects.get(id_ti=idAtributoTI)
@@ -955,10 +1029,16 @@ class VerRoles(ListView):
         return context
 #RUBEN
 def crearItem(request,Faseid):
-    """SE CREA UN ITEM CON EL FORM QUE CONTIENE EL NOMBRE, DESCRIPCION, COSTO, LO UNICO QUE NECESITA ES EL IDFASE AL CUAL VA A PERTENECER EL ITEM
+    """
+    SE CREA UN ITEM CON EL FORM QUE CONTIENE EL NOMBRE, DESCRIPCION, COSTO, LO UNICO QUE NECESITA ES EL IDFASE AL CUAL VA A PERTENECER EL ITEM
     LUEGO DE CREAR, SE GUARDA LO COMPLETADO CON TODOS LOS CAMPOS OBLIGATORIOS, LUEGO REDIRIGE EN UNA VENTANA EN LA CUAL
     MUESTRA TODOS LOS TIPOS DE ITEMS DE DICHA FASE EN LA CUAL PERTENECE EL ITEM Y SE LE PASA EL ID DE LA FASE EN LA QUE SE ENCUENTRA
-    EL ITEM"""
+    EL ITEM
+    :param request:
+    :param Faseid: ID DE LA FASE EN LA QUE SE CREARA EL ITEM
+    :return: ITEM.HTML
+    """
+
     #if(request.user.has_perm('crear_item'):----------------------------------------------------
 
     fase=Fase.objects.get(id_Fase=Faseid)
@@ -1026,8 +1106,14 @@ def crearItem(request,Faseid):
 
 #RUBEN
 def agg_listar_tipo_item(request,Fase):
-    """LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
-    CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO"""
+    """
+    LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
+    CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO
+    :param request:
+    :param Fase: ID DE LA FASE DEL CUAL DEBE LISTAR LOS TI
+    :return: AGGTI.HTML
+    """
+
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
 
     if request.method == 'POST':
@@ -1050,9 +1136,14 @@ def agg_listar_tipo_item(request,Fase):
 #RUBEN
 import os
 def aggAtributos(request,idTI):
-    """SE LISTAN LOS ATRIBUTOS DEL TI SELECCIONADO, SE AGREGA UN CAMPO VALOR EN DONDE SE DEBERA DE INGRESAR EL TIPO DE VALOR
+    """
+    SE LISTAN LOS ATRIBUTOS DEL TI SELECCIONADO, SE AGREGA UN CAMPO VALOR EN DONDE SE DEBERA DE INGRESAR EL TIPO DE VALOR
     DE DICHO ATRIBUTO, SE VALIDA SI ES OBLIGATORIO Y MUESTRA MENSAJE DE ERROR SI ESTA VACIO EL CAMPO Y ES OBLIGATORIO,
-    SI CUMPLIO CON LA RESTRICCION DE OBLIGATORIEDAD REDIRIGE A LA VENTANA DE RELACIONES PARA DICHO ITEM"""
+    SI CUMPLIO CON LA RESTRICCION DE OBLIGATORIEDAD REDIRIGE A LA VENTANA DE RELACIONES PARA DICHO ITEM
+    :param request:
+    :param idTI: ID DEL TI SELECCIONADO POR EL USUARIO
+    :return: REDIRIGE AL TEMPLATE AGGATRIBUTOS
+    """
 
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
     atributos= Atributo.objects.filter(ti_id=idTI)
@@ -1141,6 +1232,10 @@ def relacionarItem(request,id_proyecto,id_item):
     -QUE NO SE GENEREN CICLOS
     -QUE LA FASE 1 SEA OPCIONAL LAS RELACIONES
     -QUE SI NO ES LA PRIMERA FASE QUE TENGA RELACIONES DIRECTA O INDIRECTAMENTE CON LA FASE 1
+    :param request:
+    :param id_proyecto: ID DEL PROYECTO DEL CUAL QUITARA LOS ITEMS DE LAS FASES
+    :param id_item: ID DEL ITEM CREANDO
+    :return: REDIRIGE AL TEMPLATE RELACIONAR_ITEM
     """
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
 
@@ -1227,7 +1322,6 @@ def relacionarItem(request,id_proyecto,id_item):
 
         #VERIFICAR SI SE GENERAN CICLOS--------- INCONSISTENCIAS
 
-
         registrarAuditoriaProyecto(request.user,'creo el item: '+str(item[0].nombre),id_proyecto,proyecto.nombre,item[0].fase.nombre)
 
         for id in some_var:###### SE GUARDAN LAS RELACIONES
@@ -1240,8 +1334,6 @@ def relacionarItem(request,id_proyecto,id_item):
                 p = Relacion(fin_item=id_item,inicio_item=id)
                 p.save()
                 print(itemActual.nombre," <-- ",itemSeleccionado.nombre)
-
-
         #----------------------------------------------------------#
         ## se puede volver generico si se restringe preguntando si el item es igual al ultimo
         version=Versiones(id_Version=1,id_item=id_item)#SE GUARDA LA VERSION
@@ -1255,7 +1347,11 @@ def relacionarItem(request,id_proyecto,id_item):
     #errorPermiso(request,'Crear Item')
 
 def itemCancelado(request):
-    """METODO PARA CANCELAR UN ITEM"""
+    """
+    METODO PARA CANCELAR UN ITEM
+    :return: REDIRIGE AL MENU PRINCIPAL
+    """
+
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
 
     x = Item.objects.last()
@@ -1274,6 +1370,10 @@ def primeraFase(id_proyecto,id_item,some_var):
     FUNCION QUE RECIBE UN IDPROYECTO, IDITEM Y LA LISTA DE ITEMS SELECCIONADOS EN LA SELECCION DE RELACIONES
     MEDIANTE TODOS LOS ITEMS DE LA PRIMERA FASE SE RECORREN DE A UNO Y SE MANDA  A LA FUNCION BUSQUEDA LA CUAL
     BUSCA EL IDITEM
+    :param id_proyecto: ID DEL PROYECTO DEL CUAL SE DESEAN LOS ITEMS DE LA PRIMERA FASE
+    :param id_item: ID DEL ITEM A BUSCAR
+    :param some_var: LISTA DE RELACIONES SELECCIONADAS POR EL USUARIO
+    :return: FALSO SI ENCUENTRA, TRUE SI NO
     """
     proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
     fases = Fase.objects.filter(id_Proyecto=proyecto)
@@ -1290,6 +1390,10 @@ def busqueda(item,id_item,some_var):
     SE BUSCA EL IDITEM MEDIANTE TODAS LAS RELACIONES DEL ITEM DE FORMA RECURSIVA,
     DEL ITEM SE OBTIENE SUS RELACIONES Y SE ITERA POR CADA UNO DE SUS RELACIONES Y A CADA UNO SE MANDA
     EN LA MISMA FUNCION, CUANDO SE ENCUENTRA EL ITEM RETORNA TRUE, CASO CONTRARIO FALSE
+    :param item: ITEM EL CUAL SE RECORRERA SUS RELACIONES
+    :param id_item: ID DEL ITEM EL CUAL SE BUSCA
+    :param some_var: LISTA DE RELACIONES SELECCIONADAS POR EL USUARIO
+    :return: TRUE SI ENCUENTRA, FALSE SI NO
     """
     try:
         relaciones = Relacion.objects.filter(inicio_item=item.id_item)
@@ -1336,6 +1440,9 @@ def ciclos(item,i,some_var):
 def comite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
     LISTA LOS USUARIOS DEL COMITE DE UN PROYECTO EN ESPECIFICO
+    :param request:
+    :param pk: ID DEL PROYECTO DEL CUAL SE LISTARA LOS USUARIOS QUE SE ENCUENTRAN EN EL COMITE
+    :return: REDIRIGE AL TEMPLATE COMITE
     """
     #if(request.user.has_perm('is_gerente')):----------------------------------------------------
 
@@ -1368,7 +1475,9 @@ def comite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/f
 #RUBEN
 def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
     """
-    LISTA LOS USUARIOS DISPONIBLES PARA AGREGAR AL COMITE DE UN PROYECTO EN ESPECIFICO
+    LISTA LOS USUARIOS DISPONIBLES PARA AGREGAR AL COMITE DE UN PROYECTO EN ESPECIFICO.
+    :param pk: ID DEL PROYECTO AL CUAL SE AGREGARA EL COMITE
+    :return: REDIRIGUE AL TEMPLATE AGGCOMITE
     """
     #if(request.user.has_perm('is_gerente')):----------------------------------------------------
 
@@ -1422,7 +1531,11 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
 
 #RUBEN
 def desvinculacionComite(request,pk,pk_user):
-    """DESVINCULA UN USUARIO DE UN PROYECTO"""
+    """
+    DESVINCULA UN USUARIO DE UN PROYECTO
+    :param pk: ID DEL USUARIO
+    :param pk_user: ID DEL USUARIO A DESVINCULAR
+    """
     instanceUser = Comite.objects.filter(id_proyecto = pk, id_user = pk_user)
     instanceUser.delete()
 
@@ -1430,7 +1543,9 @@ def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo ge
     """
     LISTA LOS USUARIOS DEL COMITE Y DEJA SELECCIONAR USUARIOS PARA QUITAR DEL COMITE
     CUMPLIENDO LAS RESTRICCIONES DE QUE LA CANTIDAD DE USUARIOS SIGA SIENDO IMPAR Y MAYOR A UNO
-    CASO CONTRARIO MUESTRA MENSAJE DE ERROR
+    CASO CONTRARIO MUESTRA MENSAJE DE ERROR.
+    :param pk: ID DEL PROYECTO DEL CUAL SE QUIERE DESHACER EL COMITE
+    :return: RETORNA EN EL TEMPLATE COMITE
     """
     #if(request.user.has_perm('is_gerente')):----------------------------------------------------
 
@@ -1549,6 +1664,14 @@ def eliminar_tipo_item(request,id_ti):
 
 
 def DescargarArchivo(request,id_item,archivo):
+    """
+    FUNCION QUE DESCARGA UN ARCHIVO ADJUNTO DE UN ITEM SELECCIONADO, MEDIANTE EL TOKEN DE API DE DESARROLLADOR DE DROPBOX, VERIFICA SI EL ARCHIVO SELECCIONADO
+    EXISTE, CASO CONTRARIO MUESTRA VENTANA DE ERROR, MEDIANTE EL NOMBRE DEL ARCHIVO SE GENERA LA DIRECCION DEL ARCHIVO EN DROPBOX QUE ES /ID_PROYECTO/ID_ITEM/NOMBRE-ARCHIVO
+    MEDIANTE ELLO SE OBTIENE EL LINK DE DESCARGA DEL ARCHIVO Y SE ABRE LA URL MEDIANTE OPEN(URL) MOSTRANDO LA OPCION DE DESCARGA EN EL NAVEGADOR.
+    :param id_item: ID DEL ITEM SELECCIONADO
+    :param archivo: NOMBRE DEL ARCHIVO A DESCARGAR DEL ITEM
+    :return: REDIRIGE A LA LISTA DE ATRIBUTOS DEL ITEM
+    """
     item=Item.objects.get(id_item=id_item)
     dbx = dropbox.Dropbox(TOKEN)
     try:
@@ -1570,7 +1693,12 @@ def DescargarArchivo(request,id_item,archivo):
     webbrowser.open_new(url.link)
     return redirect('gestion:listar_atributos',item.ti.id_ti,item.id_item)
 
-def SubirArchivo(DOC, PATH):#-------------------------------------------------------------
+def SubirArchivo(DOC, PATH):
+    """
+    MEDIANTE EL TOKEN DE DESARROLLADOR DE DROPBOX SE REALIZA LA SUBIDA DEL ARCHIVO EN DROPBOX EN LA DIRECCION INDICADA ID_PROYECTO/ID_ITEM/NOMBRE-ARCHIVO.
+    :param DOC: ARCHIVO SELECCIONADO POR EL USUARIO
+    :param PATH: DIRECCION QUE TENDRA LA CARPETA EN DROPBOX
+    """
     dbx = dropbox.Dropbox(TOKEN)
     dbx.files_upload(DOC.file.read(), PATH)
 

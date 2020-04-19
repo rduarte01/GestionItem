@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
-    <link rel="next" title="Tests" href="tests.html" />
+    <link rel="next" title="Tests URLS" href="tests.html" />
     <link rel="prev" title="Models" href="models.html" /> 
 </head>
 
@@ -86,7 +86,8 @@
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Forms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests URLS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-gestion.tests.test_views">Tests Views</a></li>
 </ul>
 
             
@@ -277,6 +278,56 @@ CON SUS RESPECTIVOS CAMPOS A COMPLETAR</p>
 <dl class="method">
 <dt id="gestion.forms.FormAyuda.media">
 <em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.FormAyuda.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.forms.FormItem">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.forms.</code><code class="sig-name descname">FormItem</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">files=None</em>, <em class="sig-param">auto_id='id_%s'</em>, <em class="sig-param">prefix=None</em>, <em class="sig-param">initial=None</em>, <em class="sig-param">error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em class="sig-param">label_suffix=None</em>, <em class="sig-param">empty_permitted=False</em>, <em class="sig-param">instance=None</em>, <em class="sig-param">use_required_attribute=None</em>, <em class="sig-param">renderer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.forms.FormItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="class">
+<dt id="gestion.forms.FormItem.Meta">
+<em class="property">class </em><code class="sig-name descname">Meta</code><a class="headerlink" href="#gestion.forms.FormItem.Meta" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO</p>
+<dl class="attribute">
+<dt id="gestion.forms.FormItem.Meta.fields">
+<code class="sig-name descname">fields</code><em class="property"> = ['nombre', 'descripcion', 'costo']</em><a class="headerlink" href="#gestion.forms.FormItem.Meta.fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>CAMPOS A MOSTRAR EN EL FORMULARIO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormItem.Meta.labels">
+<code class="sig-name descname">labels</code><em class="property"> = {'costo': 'Costo', 'descripcion': 'Ingrese una descripcion si lo desea', 'nombre': 'Ingrese un Nombre para el Item'}</em><a class="headerlink" href="#gestion.forms.FormItem.Meta.labels" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LA ETIQUETA DE CADA CAMPO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormItem.Meta.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.forms.FormItem.Meta.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="models.html#gestion.models.Item" title="gestion.models.Item"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.models.Item</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormItem.Meta.widgets">
+<code class="sig-name descname">widgets</code><em class="property"> = {'costo': &lt;django.forms.widgets.TextInput object&gt;, 'descripcion': &lt;django.forms.widgets.TextInput object&gt;, 'nombre': &lt;django.forms.widgets.TextInput object&gt;}</em><a class="headerlink" href="#gestion.forms.FormItem.Meta.widgets" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormItem.base_fields">
+<code class="sig-name descname">base_fields</code><em class="property"> = {'costo': &lt;django.forms.fields.IntegerField object&gt;, 'descripcion': &lt;django.forms.fields.CharField object&gt;, 'nombre': &lt;django.forms.fields.CharField object&gt;}</em><a class="headerlink" href="#gestion.forms.FormItem.base_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.forms.FormItem.declared_fields">
+<code class="sig-name descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#gestion.forms.FormItem.declared_fields" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.forms.FormItem.media">
+<em class="property">property </em><code class="sig-name descname">media</code><a class="headerlink" href="#gestion.forms.FormItem.media" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -574,7 +625,7 @@ a un proyecto</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tests.html" class="btn btn-neutral float-right" title="Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="tests.html" class="btn btn-neutral float-right" title="Tests URLS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="models.html" class="btn btn-neutral float-left" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
