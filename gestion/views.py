@@ -58,7 +58,6 @@ def estadoProyecto(request,pk):
     :return: ESTADOPROYECTO.HTML
     """
 
-
     #if(request.user.has_perm('id_gerente')):----------------------------------------------
 
     form=FormProyectoEstados(request.POST)
@@ -649,6 +648,7 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
     user= request.user## USER ACTUAL
     form = User.objects.all()
     registrados = User_Proyecto.objects.all()
+
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
         #if form.is_valid():
         some_var=request.POST.getlist('checkbox')
@@ -678,6 +678,25 @@ def desvinculacionProyecto(request,pk,pk_user):
     :param pk_user: ID DEL USUARIO AL CUAL DESVINCULAR
     :return:
     """
+    try:
+        usersComite = Comite.objects.filter(id_proyecto=pk)
+    except:
+        usersComite = None
+
+    if usersComite!=None:
+        for id in usersComite:
+            usuario=User.objects.get(id=id.id_user)
+            if(usuario.id == pk_user ):
+                context = {
+                    "mensaje": "EL USUARIO PERTENECE AL COMITE DE CAMBIO POR ENDE NO PODRA DESVINCULARLO DEL PROYECTO, YA QUE LA CANTIDAD DE USUARIOS DEL COMITE QUEDARIA PAR, FAVOR DESVINCULAR DEL COMITE Y LUEGO DEL PROYECTO",
+                    "titulo": "EL USUARIO ES DEL COMITE DE CAMBIO",
+                    "titulo_b1": "",
+                    "boton1": "",
+                    "titulo_b2": "SALIR",
+                    "boton2": "/detallesProyecto/" + str(pk),
+                }
+                return render(request, 'Error.html', context)
+
     #if(request.user.has_perm('is_gerente')):--------------------------------------
     instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
     instanceUser.delete()
@@ -702,6 +721,8 @@ def listar_proyectos(request):
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Desvincular usuario del proyecto')
 
+from django.core import serializers
+
 #RUBEN
 def detallesProyecto(request,pk):
     """
@@ -714,6 +735,7 @@ def detallesProyecto(request,pk):
 
     proyectos = Proyecto.objects.get(id_proyecto=pk)
     fases= Fase.objects.all()
+
     context={
         "proyectos":proyectos,
         "fases":fases,
@@ -731,6 +753,7 @@ def detallesFase(request,idFase):
     fases = Fase.objects.get(id_Fase=idFase)
     proyectos= Proyecto.objects.get(id_proyecto=fases.id_Proyecto.id_proyecto)
     items=Item.objects.filter(fase=fases)
+
     context={
         "proyectos":proyectos,
         "fases":fases,
@@ -1132,11 +1155,14 @@ def agg_listar_tipo_item(request,Fase):
         x=request.POST.get('ti')
         item=Item.objects.last()
         tipoItem2 = TipoItem.objects.filter(nombre=x,fase_id=Fase)
+        print(tipoItem2)
         item.ti =tipoItem2[0]
         item.save()
 
         return redirect('gestion:aggAtributos',tipoItem2[0].id_ti)
     tipoItem = TipoItem.objects.filter(fase_id=Fase)
+    for i in tipoItem:
+        print(i.nombre)
     contexto={
         'TipoItem':tipoItem
 

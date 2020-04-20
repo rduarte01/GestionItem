@@ -14,8 +14,8 @@
           <thead>
             <tr>
                 <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
-                <td><h5>ESTADO</h5></td>
-                <td><h6>{{proyectos.estado}}</h6></td>
+                <td><h5>ESTADO: {{proyectos.estado}}</h5></td>
+
             </tr>
         </thead>
     </table>
@@ -29,6 +29,9 @@
                 <td><h5>NOMBRE DE FASE : {{fases.nombre}}</h5></td>
                 <td><h5>DESCRIPCION : {{fases.descripcion}}</h5></td>
                 <td><h5>ESTADO : {{fases.estado}}</h5></td>
+            <!--{% if "is_gerente" in proyecto_perms %}-->
+                <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></td>
+            <!--{% endif%}-->
             </tr>
         </thead>
     </table>
@@ -56,29 +59,20 @@
                     <td>{{items.costo}}</td>
                    <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Relaciones</a></td>
                    <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
-                 </tr>
+
+                </tr>
+
                 {%endfor%}
             {%else%}
             <td><h2>No hay items en la fase, crealos!</h2></td>
+
         {%endif%}
+
     <tbody>
       </table>
      </div>
     </body>
     </html>
-
-        <div class="cities">
-    <table class="table table-bordered">
-          <thead>
-        <tr>
-            <!--{% if "is_gerente" in proyecto_perms %}-->
-                <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></td>
-            <!--{% endif%}-->
-                <td><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}"class="btn btn-primary">VER TI DEL PROYECTO</a></td>
-        </tr>
-        </thead>
-    </table>
-    </div>
 
     <html>
     <head>
@@ -92,4 +86,9 @@
     </style>
     </head>
     <body>
-{% endblock interno %}
+
+
+    {% endblock interno %}
+
+
+
