@@ -1,5 +1,6 @@
-{% extends 'MenuAdminSistema.html' %}
-{% block body %}
+{%extends 'Menu/base.html'%}
+{% block interno %}
+<div class="cities">
     {% if perms.gestion.es_administrador %}
         {% if users%}
             <h3> Lista de Usuarios Aprobados</h3>
@@ -14,4 +15,5 @@
     {%else %}
         <h1> No es Administrador de sistema por lo tanto no puedes ver la lista de usuarios aceptados</h1>
     {% endif %}
+</div>
 {%endblock%}

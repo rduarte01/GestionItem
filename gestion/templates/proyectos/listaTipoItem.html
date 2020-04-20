@@ -1,10 +1,14 @@
-{% extends 'Menu.html' %}
-{% block body %}
+{%extends 'proyectos/base.html'%}
+
+
+{% block interno %}
+
 {% load guardian_tags %}
-{% get_obj_perms request.user for proyecto as "proyecto_perms" %}
+{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
 {% if "is_gerente" in proyecto_perms %}
     <center><h2> Lista de Tipos de Item a importar </h2></center>
     {%if tipoItems %}
+<div class="cities">
      <form method='POST' onSubmit="return enviado()">
             <table class="table table-bordered">
                 <thead>
@@ -37,6 +41,7 @@
     {%else %}
         <h1>No hay tipos de items disponibles para importar</h1>
     {% endif %}
+</div>
     <br>
     <br>
 {%else%}

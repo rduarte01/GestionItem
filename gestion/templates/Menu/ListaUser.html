@@ -1,9 +1,10 @@
-{% extends 'MenuAdminSistema.html' %}
+{%extends 'Menu/base.html'%}
 
 
-{% block body %}
+{% block interno %}
 <body>
     {% if object_list %}
+
     <br><br>
     <li class="list-group-item">
        <a href="javascript:history.back()" class="btn btn-primary"> Volver atras</a>
@@ -14,6 +15,7 @@
             <strong class="card-title">Lista de Usuarios</strong>
         </div>
         <div class="table-stats order-table ov-h">
+
             <table class="table">
                 <thead>
                     <tr>
@@ -44,6 +46,7 @@
     {% else %}
         <h1>No existe usuarios</h1>
     {% endif %}
+
 </body>
-{% endblock body%}
+{% endblock %}
 

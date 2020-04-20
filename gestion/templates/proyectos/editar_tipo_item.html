@@ -1,8 +1,7 @@
-{% extends 'detallesProyecto.html' %}
+{%extends 'proyectos/base.html'%}
 
 {% block interno%}
-
-    {% block body%}
+<div class="cities">
     <hr>
     <form  method='POST' onSubmit="return enviado()">
             {% csrf_token%}
@@ -49,5 +48,5 @@
             <a href="{% url 'gestion:eliminar_atributo_ti'  tipo_item.id_ti %}" class="btn btn-primary">Eliminar Atributo</a>
         </form>
 
-    {%endblock%}
+</div>
 {% endblock interno%}

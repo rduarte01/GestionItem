@@ -1,7 +1,7 @@
-{% extends 'MenuAdminSistema.html' %}
+{%extends 'proyectos/base.html'%}
 
 
-{% block body %}
+{% block interno %}
 <body>
     {% if object_list %}
     <br><br>
@@ -42,9 +42,9 @@
     </div>
 
     {% else %}
-        <h1>No existe usuarios</h1>
+        <h1>No existe roles</h1>
     {% endif %}
     <a href="{% url 'gestion:crearRol' idProyecto %}" class="btn btn-primary">Crear Rol</a>
 </body>
-{% endblock body%}
+{% endblock%}
 

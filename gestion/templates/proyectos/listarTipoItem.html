@@ -1,9 +1,12 @@
-{%extends 'detallesProyecto.html' %}
+{%extends 'proyectos/base.html'%}
+
 {% block interno %}
 
     {% block body %}
         <h2>Lista de Tipo de Items del Proyecto</h2>
         {% if TipoItem %}
+<div class="cities">
+
         <table class="table table-bordered">
             <thead>
                 <th>Nombre Tipo Item</th>
@@ -24,6 +27,7 @@
                 {% endfor %}
             </tbody>
         </table>
+</div>
             {% else %}
             <h2>El Proyecto aun no tiene TIpo de items</h2>
         {%endif%}

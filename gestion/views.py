@@ -286,7 +286,7 @@ def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del
             if ok:
                list.append(form[i].user.id)
 
-        return render(request, 'agregarUsuarios.html', {'form': form,'list':list,'pk':pk})
+        return render(request, 'proyectos/agregarUsuarios.html', {'form': form,'list':list,'pk':pk})
 
 #RUBEN
 def creacionProyecto(request):
@@ -327,7 +327,7 @@ def creacionProyecto(request):
         "formProyecto": formProyecto,
     }
 
-    return render(request,'creacionProyecto2.html', context)
+    return render(request,'proyectos/crear_proyecto.html', context)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'No es gerente')
 
@@ -385,7 +385,7 @@ def ver_usuarios_aprobados(request):
     '''Lista todos los usarios aprobados en el sistema '''
     users=Usuario.objects.filter(esta_aprobado=True).exclude(user_id=request.user.id)
     context={'users':users}
-    return render(request,'usuariosAprobados.html',context)
+    return render(request,'Menu/usuariosAprobados.html',context)
 
 def get_user(request,pk):
     ''' Sirve para poder asignar o sacar los permisos es_gerente , es_administrador
@@ -440,7 +440,7 @@ def get_user(request,pk):
             'banManager':banManager,
             'banGerente':banGerente
         }
-        return render(request,"perfilUsuario.html",context)
+        return render(request,"Menu/perfilUsuario.html",context)
 
 def tipo_item_views_create(request,id_fase):
     '''Sirve para crear un tipo de item,en una fase en especifica'''
@@ -558,7 +558,7 @@ def crearFase(request,nroFase):
     context = {
     'form': fase
     }
-    return render(request, 'crear_fase.html', context)
+    return render(request, 'proyectos/crear_fase.html', context)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'No es gerente')
 
@@ -573,7 +573,7 @@ def listar_auditoria(request):
         'proyectos': proyectos
 
     }
-    return render(request, 'auditoriaSistema.html', context)
+    return render(request, 'Menu/auditoriaSistema.html', context)
 
 def auditoriaProyecto(request,pk):
     """
@@ -905,9 +905,9 @@ def importar_tipo_item(request,id_fase):
         proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
         contexto={
             'tipoItems':list_tipo_item_a_importar,
-            'proyecto':proyecto
+            'proyectos':proyecto
         }
-        return render(request,'listaTipoItem.html',contexto)
+        return render(request,'proyectos/listaTipoItem.html',contexto)
 
 def get_all_tipo_item(id_proyecto):
     '''Esta funcion permite obtener todos los tipos de item de un proyecto especifico'''
@@ -934,7 +934,7 @@ class VerUsersEnEspera(ListView):
     -template_name: donde se asigna que template estara asignado esta view
     -queryset: Se filtra la lista de usuarios con estado aprobado falso, y es recibido por el template"""
     model = Usuario
-    template_name = "ListaUser.html"
+    template_name = "Menu/ListaUser.html"
     queryset = Usuario.objects.filter(esta_aprobado=False)
 
     #@method_decorator(permission_required('gestion.es_administrador',raise_exception=True))
@@ -949,7 +949,7 @@ class ActualizarUser(UpdateView):
     """    -model: especifa el modelo el cual esta siendo utilizado en la view"""
     form_class = PerfilUserEnEspera
     """    -form_class: especifica el form que sera utilidado dentro del template"""
-    template_name = 'UserEnEspera.html'
+    template_name = 'Menu/UserEnEspera.html'
     """-template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy('gestion:listaDeEspera')
     """    -succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
@@ -975,7 +975,7 @@ class CrearRol(CreateView):
     """    -model: especifa el modelo el cual esta siendo utilizado en la view"""
     form_class = RolForm
     """    -form_class: especifica el form que sera utilidado dentro del template"""
-    template_name = "CrearRol.html"
+    template_name = "proyectos/CrearRol.html"
     """    -template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy("gestion:menu")
     """-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
@@ -1006,7 +1006,7 @@ class ModificarRol(UpdateView):
     """ -model: especifa el modelo el cual esta siendo utilizado en la view"""
     form_class = RolForm
     """-form_class: especifica el form que sera utilidado dentro del template"""
-    template_name = 'CrearRol.html'
+    template_name = 'proyectos/CrearRol.html'
     """-template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy('gestion:menu')
     """-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
@@ -1026,14 +1026,14 @@ def listar_tipo_item(request,id_proyecto):
         'TipoItem':tipoItem,
         "proyectos":proyectos
     }
-    return render (request,'listarTipoItem.html',contexto)
+    return render (request,'proyectos/listarTipoItem.html',contexto)
 
 class VerRoles(ListView):
     """Vista creada para listar los roles que se encuentra dentro de un proyecto
     """
     model = Group
     """    -model:donde se asigna el Modelo utilizado"""
-    template_name = "misRoles.html"
+    template_name = "proyectos/misRoles.html"
     """    -template_name: donde se asigna que template estara asignado esta view"""
     def get_context_data(self, **kwargs):
         """recibe el id del proyecto y se listan los roles cone se id"""
@@ -1046,6 +1046,8 @@ class VerRoles(ListView):
             numero, divisor, nombre = grupo.name.partition('_')
             if (int(numero) == miid):
                 grupList += [{'grupo':grupo,'nombre':nombre}]
+
+        context['proyectos'] = Proyecto.objects.get(id_proyecto=miid)
 
         context['listGroup'] = grupList
         context['idProyecto'] = miid
@@ -1135,7 +1137,7 @@ def crearItem(request,Faseid):
     contexto={
         "form":form
     }
-    return render (request,'Item.html',contexto)
+    return render (request,'items/Item.html',contexto)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Crear Item')
 
@@ -1167,7 +1169,7 @@ def agg_listar_tipo_item(request,Fase):
         'TipoItem':tipoItem
 
     }
-    return render (request,'aggTI.html',contexto)
+    return render (request,'items/aggTI.html',contexto)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Crear Item')
 
@@ -1257,7 +1259,7 @@ def aggAtributos(request,idTI):
         'true':True,
         'false':False,
     }
-    return render (request,'aggAtributos.html',contexto)
+    return render (request,'items/aggAtributos.html',contexto)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Crear Item')
 
@@ -1380,7 +1382,7 @@ def relacionarItem(request,id_proyecto,id_item):
 
         return redirect('gestion:detallesFase',item[0].fase.id_Fase)
     else:
-        return render(request, 'relacionarItem.html', {'form': items,'list':list,'itemActual':itemActual})
+        return render(request, 'items/relacionarItem.html', {'form': items,'list':list,'itemActual':itemActual})
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Crear Item')
 
@@ -1662,7 +1664,7 @@ def editar_ti(request,id_ti):
             'tipo_item':tipo_item,
             "proyectos":Ti.fase.id_Proyecto
         }
-        return render(request,'editar_tipo_item.html',context)
+        return render(request,'proyectos/editar_tipo_item.html',context)
 
 def agregar_atributo_ti(request, id_ti):
     form = formset_factory(AtributeForm, extra=1)
@@ -1674,10 +1676,12 @@ def agregar_atributo_ti(request, id_ti):
                 atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=id_ti)
         return  redirect('gestion:editar_ti',id_ti=id_ti)
     else:
+        ti=TipoItem.objects.get(id_ti=id_ti)
         contexto={
-            'formset':form
+            'formset':form,
+            'proyectos':ti.fase.id_Proyecto
         }
-        return render(request,'crear_atributo.html',contexto)
+        return render(request,'proyectos/crear_atributo.html',contexto)
 
 def eliminar_atributo_ti(request,id_ti):
     tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
@@ -1692,8 +1696,9 @@ def eliminar_atributo_ti(request,id_ti):
     contexto={
         'atributos':atributos,
         'tipo_item':tipo_item,
+        'proyectos':tipo_item.fase.id_Proyecto
     }
-    return  render(request,'eliminar_atributo_ti.html',contexto)
+    return  render(request,'proyectos/eliminar_atributo_ti.html',contexto)
 
 def eliminar_tipo_item(request,id_ti):
     Atributo.objects.filter(ti_id=id_ti).delete()

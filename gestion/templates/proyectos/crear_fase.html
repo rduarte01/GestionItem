@@ -1,4 +1,6 @@
-{% extends 'creacionProyecto2.html'%}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
 {% block title %}
         <h1>Creacion de Fases</h1>
     {% endblock title %}
@@ -29,5 +31,21 @@
     <h1>Usted no es gerente de este proyecto, por tanto no puede crear fases</h1>
     <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
 {% endif %}
+{% block click %}
+<script LANGUAGE="JavaScript">
+        var cuenta=0;
+        function enviado() {
+                if (cuenta == 0)
+            {
+                cuenta++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+</script>
+{% endblock click %}
 
     {% endblock contect %}

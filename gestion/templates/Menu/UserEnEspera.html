@@ -1,27 +1,8 @@
-{% extends 'MenuAdminSistema.html'%}
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-
-
-    <script LANGUAGE="JavaScript">
-        var cuenta=0;
-        function enviado() {
-                if (cuenta == 0)
-            {
-                cuenta++;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-</script>
+{%extends 'Menu/base.html'%}
 
 
 
-{%block body %}
+{%block interno %}
 
     <form action="#" method="POST" onSubmit="return enviado()">
   {% csrf_token %}

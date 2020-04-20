@@ -1,18 +1,17 @@
-{% extends 'MenuAdminSistema.html'%}
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
+{%extends 'Menu/base.html'%}
 
-{%block body %}
+{%block interno %}
 
   {% if perms.gestion.es_administrador %}
+<div class="cities">
     <br>
     <h3> Nombre del usuario: {{user.username }}</h3>
     <h2>Correo del usuario : {{user.email}}</h2>
     <hr>
     <h2> Asigne los roles y estado del usuario</h2>
-
+</div>
     <div class="container">
+        <div class="cities">
          <form method="POST">{% csrf_token%}
 
             <div class="form-group">
@@ -34,6 +33,7 @@
             </div>
           <input class="btn btn-primary" type='submit' value= 'Save' />
     </form>
+        </div>
 
     </div>
   {%else%}

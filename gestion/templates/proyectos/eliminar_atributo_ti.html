@@ -1,10 +1,11 @@
-{% extends 'Menu.html' %}
-{% block body %}
+{%extends 'proyectos/base.html'%}
+{% block interno %}
     <br>
     <center><h2> Lista de atributos del tipo de item <strong>"{{ tipo_item.nombre}}"</strong>  </h2></center>
 
     <hr>
     {% if atributos %}
+<div class="cities">
           <form method='POST' onSubmit="return enviado()">
           {% csrf_token%}
 
@@ -32,6 +33,7 @@
         </table>
         <input class="btn btn-primary" type='submit' value='Eliminar'/>
         </form>
+</div>
     {%else%}
             <h2>Este tipo  de item {{tipo_item.nombre}} no tiene atributos para eliminar</h2>
     {%endif%}
