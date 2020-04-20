@@ -25,7 +25,7 @@ urlpatterns = [
     path('agregarUsuarios/<int:pk><int:nroFase>', views.agregarUsuarios, name='agregarUsuarios'),
     path('proyectos/', listar_proyectos, name='listar_proyectos'),
     path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
-    path('/itemCancelado/', itemCancelado, name='itemCancelado'),
+    path('itemCancelado/', itemCancelado, name='itemCancelado'),
 
     path('crear/TipoItem/<int:id_fase>',views.tipo_item_views_create,name='tipo_item_views_create'),
     path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>/<int:fase_id>',views.add_atribute,name='add_atribute'),
@@ -54,7 +54,6 @@ urlpatterns = [
     path('AggComite/<int:pk>', views.AggComite, name='AggComite'),
     path('desvinculacionComite/<int:pk>/<int:pk_user>', views.desvinculacionComite, name='desvinculacionComite'),
     path('DeleteComite/<int:pk>', views.DeleteComite, name='DeleteComite'),
-
     path('editar/tipo/item/<int:id_ti>',views.editar_ti,name='editar_ti'),
     path('editar/tipo/item/<int:id_ti>/agregar/atributo',views.agregar_atributo_ti,name='agregar_atributo_ti'),
     path('eliminar/atributo/tipo/item/<int:id_ti>',views.eliminar_atributo_ti,name='eliminar_atributo_ti'),

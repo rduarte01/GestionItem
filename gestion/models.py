@@ -140,17 +140,17 @@ class Atributo(models.Model):
 
 class Auditoria(models.Model):
     """TABLA EN DONDE SE GUARDAN LAS MODIFICACIONES QUE REALIZAN TODOS LOS USUARIOS EN EL SISTEMA"""
-    usuario= models.CharField(max_length=50)
+    usuario = models.CharField(max_length=50)
     """GUARDA EL NOMBRE DE USUARIO"""
-    fecha= models.CharField(max_length=50)
+    fecha = models.CharField(max_length=50)
     """GUARDA LA FECHA DE LA ACCION"""
-    accion= models.CharField(max_length=100)
+    accion = models.CharField(max_length=100)
     """GUARDA LA ACCION REALIZADA"""
-    proyecto=models.CharField(max_length=100,null=True)
+    proyecto = models.CharField(max_length=100, null=True)
     """PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO"""
-    id_proyecto=models.IntegerField(null=True)
+    id_proyecto = models.IntegerField(null=True)
     """PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO"""
-    fase=models.CharField(max_length=100,null=True)
+    fase = models.CharField(max_length=100, null=True)
     """PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO"""
 
 class User_Proyecto(models.Model):
