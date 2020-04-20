@@ -367,6 +367,14 @@ def tipo_item_views_create(request,id_fase):
         my_form=TipoItemForm(request.POST)
         if(my_form.is_valid()):
            nombre_ti,cantidad_atributos_ti=recoger_datos_tipo_item(my_form)
+           if( cantidad_atributos_ti==None or cantidad_atributos_ti<=0):
+               context = {
+                   "mensaje": "La cantidad de atributos del tipo de item debe de ser >=0 ",
+                   "titulo": "Cantidad Atributo erronea",
+                   "titulo_b2": "Intentalo de vuelta",
+                   "boton2": "",
+               }
+               return render(request, "Error.html", context)
            return redirect('gestion:add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti,fase_id=id_fase)
     else:
         my_form= TipoItemForm()
@@ -381,18 +389,30 @@ def tipo_item_views_create(request,id_fase):
 
 def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
     ''' Sirve para poder crear un nuevo atributo, asociando ese atributo a un tipo de item'''
+    cantidad_atributos=int(cantidad_atributos)
+    fase_id=int(fase_id)
     fase=Fase.objects.get(id_Fase=fase_id)
     #proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
     my_form = formset_factory(AtributeForm, extra=cantidad_atributos)
     if request.method == 'POST':
         my_form_set=my_form(request.POST)
         if(my_form_set.is_valid()):
-            tipo_item=TipoItem(nombre=nombre_ti,fase_id=fase_id)
-            tipo_item.save()
-            for form in my_form_set:
-                n,o,t=recoge_datos_atributo(form)
-                atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
-            return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
+            print('aca imprimo')
+            if validar_datos_form_atributo(my_form_set):
+                tipo_item=TipoItem(nombre=nombre_ti,fase_id=fase_id)
+                tipo_item.save()
+                for form in my_form_set:
+                    n,o,t=recoge_datos_atributo(form)
+                    atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
+                return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
+            else:
+                context = {
+                    "mensaje": "Debes de completar todos los campos del formulario",
+                    "titulo": "Error al cargar el formulario de atributo ",
+                    "titulo_b2": "Intentalo de vuelta",
+                    "boton2": "",
+                }
+                return render(request, "Error.html", context)
     else:
         contexto={'formset':my_form,
                  'cant_atributos': list(range(1,cantidad_atributos+1))
@@ -1483,3 +1503,12 @@ def validar_permiso(user,permiso,objecto):
     if user.has_perm(permiso,objecto):
         return True
     return False
+
+def validar_datos_form_atributo(form_set):
+    print('aca entro en la funcion')
+    for form in form_set:
+        print(form.cleaned_data)
+        if form.cleaned_data == {}:
+            print('retorno  false')
+            return False
+    return True

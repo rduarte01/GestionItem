@@ -26,9 +26,8 @@ urlpatterns = [
     path('proyectos/', listar_proyectos, name='listar_proyectos'),
     path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
     path('itemCancelado/', itemCancelado, name='itemCancelado'),
-
     path('crear/TipoItem/<int:id_fase>',views.tipo_item_views_create,name='tipo_item_views_create'),
-    path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>/<int:fase_id>',views.add_atribute,name='add_atribute'),
+    path('crear/atributo/<str:nombre_ti>/<str:cantidad_atributos>/<str:fase_id>',views.add_atribute,name='add_atribute'),
     path('listar/usuarios/aprobados',views.ver_usuarios_aprobados,name='ver_usuarios_aprobados'),
     path('getUser/<int:pk>',views.get_user,name='get_user'),
     path('estadoProyecto/<int:pk>', views.estadoProyecto, name='estado_Proyecto'),
