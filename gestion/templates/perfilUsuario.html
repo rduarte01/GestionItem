@@ -16,13 +16,21 @@
          <form method="POST">{% csrf_token%}
 
             <div class="form-group">
-                {{form.is_admin}}
+                {% if banAdmin == 'True' %}
+                    <input type="checkbox" name="admin" value="True" checked>
+                {% else %}
+                    <input type="checkbox" name="admin" value="True" >
+                {%endif%}
                 <label class="form-check-label">
                     {{form.is_admin.label}}
                 </label>
             </div>
             <div class="form-group">
-               {{form.is_manager}}
+                {% if banGerente == 'True' %}
+                    <input type="checkbox" name="gerente" value="True" checked>
+                {%else%}
+                    <input type="checkbox" name="gerente" value="True">
+                {%endif%}
                 <label class="form-check-label">
                     {{form.is_manager.label}}
                 </label>

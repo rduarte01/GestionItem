@@ -1,28 +1,30 @@
-{%extends 'Menu.html' %}
+{%extends 'detallesProyecto.html' %}
 {% block body %}
-    <h2>Lista de Tipo de Items del Proyecto</h2>
-    {% if TipoItem %}
-    <table class="table table-bordered">
-        <thead>
-            <th>Nombre Tipo Item</th>
-            <th> Fase que pertenece</th>
-            <th> Editar</th>
-            <th> Eliminar</th>
-        </thead>
-        <tbody>
-            {% for tipoitem in TipoItem %}
-               {%for tii in tipoitem.ti %}
-                     <tr>
-                        <td>{{tii.nombre}}</td>
-                        <td>{{ tipoitem.fase.nombre}}</td>
-                        <td><a class="btn btn-primary" href="{%url 'gestion:editar_ti' tii.id_ti%}" role="button">Editar Tipo de Item</a></td>
-                        <td><a class="btn btn-primary" href="{% url 'gestion:eliminar_tipo_item' tii.id_ti %}" role="button">Eliminar Tipo de Item</a></td>
-                    </tr>
+    <div class="jumbotron">
+        <h2>Lista de Tipo de Items del Proyecto</h2>
+        {% if TipoItem %}
+        <table class="table table-bordered">
+            <thead>
+                <th>Nombre Tipo Item</th>
+                <th> Fase que pertenece</th>
+                <th> Editar</th>
+                <th> Eliminar</th>
+            </thead>
+            <tbody>
+                {% for tipoitem in TipoItem %}
+                   {%for tii in tipoitem.ti %}
+                         <tr>
+                            <td>{{tii.nombre}}</td>
+                            <td>{{ tipoitem.fase.nombre}}</td>
+                            <td><a class="btn btn-primary" href="{%url 'gestion:editar_ti' tii.id_ti%}" role="button">Editar Tipo de Item</a></td>
+                            <td><a class="btn btn-primary" href="{% url 'gestion:eliminar_tipo_item' tii.id_ti %}" role="button">Eliminar Tipo de Item</a></td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
-        {% else %}
-        <h2>El Proyecto aun no tiene TIpo de items</h2>
-    {%endif%}
+            </tbody>
+        </table>
+            {% else %}
+            <h2>El Proyecto aun no tiene TIpo de items</h2>
+        {%endif%}
+    </div>
 {% endblock body%}

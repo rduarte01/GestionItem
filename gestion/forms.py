@@ -123,7 +123,7 @@ class TipoItemForm(forms.ModelForm):
         '''widget para especificar las clase de bootstap utilizada en nuestro html para nuestro form'''
     cantidad=forms.IntegerField(label="Cantidad de Atributos del Tipo de Item",
                                 max_value=10,required=False,
-                                widget=forms.TextInput(
+                                widget=forms.NumberInput(
                                         attrs={
                                             "placeholder": "Cantidad Tipo Item",
                                             'class':"form-control"

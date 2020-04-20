@@ -221,7 +221,6 @@ def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del
 #RUBEN
 def creacionProyecto(request):
     """PLANTILLA DE FORMULARIO PARA LA CREACION DE UN PROYECTO"""
-
     formProyecto = FormProyecto(request.POST or None)   ######## forms con proyecto
 
     if formProyecto.is_valid():
@@ -316,52 +315,49 @@ def get_user(request,pk):
     '''
     user_active=False
     if( request.method == 'POST' ):
-        form=SettingsUserFormJesus(request.POST)
-        print(request.POST)
-        if(form.is_valid()):
-            user = User.objects.get(id=pk)
-            is_admin,is_gerente,estado = recoger_datos_usuario_settings(form)
-            ban = True
-            if estado == 'False': #si el estado es falso
-                print('estado Falso')
-                if User_Proyecto.objects.filter(user_id=user.id).exists() :  #si el usuario no esta asociado a ningun proyecto
-                    proyectos_user= User_Proyecto.objects.filter(user_id=user.id)
-                    print('si esta asociada a un proyecto')
-                    print(proyectos_user)
-                    for pu in proyectos_user:
-                        if pu.activo:
-                            print('Esta activo')
-                            print(pu.proyecto_id)
-                            ban=False
-                            break
-            if ban:
-                print ('ban es true')
-                add_permission_admin(user, is_admin)
-                add_permission_gerente(user, is_gerente)
-                usuario=Usuario.objects.get(user_id=user.id)
-                usuario.esta_aprobado=estado
-                usuario.save()
-            else:
-                contexto={
-                    'mesanje_error':'El usuario esta activo en un proyecto por lo tanto no puedes desactivarlo, para hacerlo deben de darle de baja en el proyecto que en donde esta asociado   '
+        user = User.objects.get(id=pk)
 
-                }
-                return render(request,'error.html',contexto)
+        is_admin, is_gerente, estado = recoger_datos_usuario_settings(request.POST.copy())
+        print(is_admin,is_gerente,estado)
+        ban = True
+        if estado == 'False':  # si el estado es falso
+            print('estado Falso')
+            if User_Proyecto.objects.filter(
+                    user_id=user.id).exists():  # si el usuario no esta asociado a ningun proyecto
+                proyectos_user = User_Proyecto.objects.filter(user_id=user.id)
+                print('si esta asociada a un proyecto')
+                print(proyectos_user)
+                for pu in proyectos_user:
+                    if pu.activo:
+                        print('Esta activo')
+                        print(pu.proyecto_id)
+                        ban = False
+                        break
+        if ban:
+            print('ban es true')
+            add_permission_admin(user, is_admin)
+            add_permission_gerente(user, is_gerente)
+            usuario = Usuario.objects.get(user_id=user.id)
+            usuario.esta_aprobado = estado
+            usuario.save()
         else:
-            print("no es valido")
+            contexto = {
+                'mesanje_error': 'El usuario esta activo en un proyecto por lo tanto no puedes desactivarlo, para hacerlo deben de darle de baja en el proyecto que en donde esta asociado   '
 
+            }
+            return render(request, 'error.html', contexto)
         return redirect('gestion:ver_usuarios_aprobados')
     else:
         usuario=User.objects.get(id=pk)
-        banManager=request.user.has_perm('proyecto.is_gerente')
-        banGerente=request.user.has_perm('auth.is_administrador')
-        print(banGerente,banManager)
+        banAdmin=usuario.has_perm('gestion.es_administrador')
+        banGerente=usuario.has_perm('gestion.is_gerente')
+        print(banAdmin,banGerente)
         form=SettingsUserFormJesus()
         context = {
             'user': usuario,
             'form':form,
-            'banManager':banManager,
-            'banGerente':banGerente
+            'banAdmin':str(banAdmin),
+            'banGerente':str(banGerente)
         }
         return render(request,"perfilUsuario.html",context)
 
@@ -371,6 +367,14 @@ def tipo_item_views_create(request,id_fase):
         my_form=TipoItemForm(request.POST)
         if(my_form.is_valid()):
            nombre_ti,cantidad_atributos_ti=recoger_datos_tipo_item(my_form)
+           if( cantidad_atributos_ti==None or cantidad_atributos_ti<=0):
+               context = {
+                   "mensaje": "La cantidad de atributos del tipo de item debe de ser >=0 ",
+                   "titulo": "Cantidad Atributo erronea",
+                   "titulo_b2": "Intentalo de vuelta",
+                   "boton2": "",
+               }
+               return render(request, "Error.html", context)
            return redirect('gestion:add_atribute',nombre_ti=nombre_ti,cantidad_atributos=cantidad_atributos_ti,fase_id=id_fase)
     else:
         my_form= TipoItemForm()
@@ -385,18 +389,30 @@ def tipo_item_views_create(request,id_fase):
 
 def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
     ''' Sirve para poder crear un nuevo atributo, asociando ese atributo a un tipo de item'''
+    cantidad_atributos=int(cantidad_atributos)
+    fase_id=int(fase_id)
     fase=Fase.objects.get(id_Fase=fase_id)
     #proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
     my_form = formset_factory(AtributeForm, extra=cantidad_atributos)
     if request.method == 'POST':
         my_form_set=my_form(request.POST)
         if(my_form_set.is_valid()):
-            tipo_item=TipoItem(nombre=nombre_ti,fase_id=fase_id)
-            tipo_item.save()
-            for form in my_form_set:
-                n,o,t=recoge_datos_atributo(form)
-                atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
-            return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
+            print('aca imprimo')
+            if validar_datos_form_atributo(my_form_set):
+                tipo_item=TipoItem(nombre=nombre_ti,fase_id=fase_id)
+                tipo_item.save()
+                for form in my_form_set:
+                    n,o,t=recoge_datos_atributo(form)
+                    atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
+                return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
+            else:
+                context = {
+                    "mensaje": "Debes de completar todos los campos del formulario",
+                    "titulo": "Error al cargar el formulario de atributo ",
+                    "titulo_b2": "Intentalo de vuelta",
+                    "boton2": "",
+                }
+                return render(request, "Error.html", context)
     else:
         contexto={'formset':my_form,
                  'cant_atributos': list(range(1,cantidad_atributos+1))
@@ -426,9 +442,15 @@ def recoger_datos_usuario_settings(form):
     '''Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores
         dos booleanos para determinar si es gerente y administrador y el estado del usuario
     '''
-    is_admin = form.cleaned_data['is_admin']
-    is_gerente = form.cleaned_data['is_manager']
-    estado = form.cleaned_data['estado']
+    print('aca imprime')
+    print('aca imprime el form ',form)
+    is_admin = form.get('admin')
+    is_gerente = form.get('gerente')
+    estado = form.get('estado')
+    if(is_admin==None):
+        is_admin=False
+    if is_gerente==None:
+        is_gerente=False
     return is_admin,is_gerente,estado
 
 def add_permission_admin(user,is_admin):
@@ -468,12 +490,11 @@ def crearFase(request,nroFase):
         if nroFase != 0:
             cantidad = cantidad - 1
             CANTIDAD = cantidad
-
-
             nroFase=nroFase-1
             return redirect('gestion:crearFase',nroFase)
         else:
             assign_perm('is_gerente', request.user, x)
+            add_permission_gerente(request.user,False)
             return redirect('gestion:menu')
 
     context = {
@@ -859,6 +880,7 @@ def listar_tipo_item(request,id_proyecto):
 
     print(tipoItem)
     contexto={
+        'proyectos':Proyecto.objects.get(id_proyecto=id_proyecto),
         'TipoItem':tipoItem
     }
     return render (request,'listarTipoItem.html',contexto)
@@ -1139,10 +1161,6 @@ def ciclos(item,i,some_var):
     return False
 
 
-import dropbox
-import tempfile
-
-
 """
 dropbox
 gestionitems.fpuna@gmail.com    
@@ -1317,61 +1335,148 @@ def editar_ti(request,id_ti):
             formset.save()
             instancia_ti=formset_ti.save(commit=False)
             instancia_ti.save()
+            #user, accion, id_proyecto, proyecto, fase
+            registrarAuditoriaProyecto(request.user,"Edito Tipo de Item '"+tipo_item.nombre+"'",tipo_item.fase.id_Proyecto.id_proyecto,tipo_item.fase.id_Proyecto.nombre,tipo_item.fase.nombre)
         else:
             print('no es valido')
             print(formset.errors)
             print(formset_ti.errors)
-        return redirect('gestion:menu')
+        return redirect('gestion:listar_tipo_item',tipo_item.fase.id_Proyecto.id_proyecto)
     else:
-        formset_ti = TipoItemForm(instance=tipo_item)
-        formset = AtributeFormSet(queryset=query_atributos)
-        print('se imprime esto')
-
-        context={
-            'formset':formset,
-            'formset_ti':formset_ti,
-            'tipo_item':tipo_item
-        }
-        return render(request,'editar_tipo_item.html',context)
-
+        print(tipo_item.fase.id_Proyecto)
+        if validar_permiso(request.user,"is_gerente",tipo_item.fase.id_Proyecto) :  #primero se valida si es gerente en el proyecto actual
+            if not Item.objects.filter(ti_id=id_ti).exists() : ##el item no tiene asociado ningun tipo de item
+                formset_ti = TipoItemForm(instance=tipo_item)
+                formset = AtributeFormSet(queryset=query_atributos)
+                print('se imprime esto')
+                context={
+                    'formset':formset,
+                    'formset_ti':formset_ti,
+                    'tipo_item':tipo_item,
+                    'proyectos':tipo_item.fase.id_Proyecto
+                }
+                return render(request,'editar_tipo_item.html',context)
+            else:
+                context = {
+                    "mensaje": "Este Tipo de item ya esta asociado a un item, por lo tanto no puede ser editado",
+                    "titulo": "No se puede editar el tipo de item "+tipo_item.nombre,
+                    "titulo_b2": "Volver Atras",
+                    "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
+                }
+                return render(request, 'Error.html', context)
+        else:
+            context = {
+                "mensaje": "No eres gerente de proyecto, por lo tanto no puede editar el tipo de item"+ tipo_item.nombre,
+                "titulo": "No puede editar Tipo de item en este proyecto ",
+                "titulo_b2": "Volver Atras",
+                "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
+            }
+            return  render(request,"Error.html",context)
 def agregar_atributo_ti(request, id_ti):
     form = formset_factory(AtributeForm, extra=1)
+    tipo_item = TipoItem.objects.get(id_ti=id_ti)
     if(request.method=='POST'):
         my_form=form(request.POST)
         if my_form.is_valid():
             for form in my_form:
                 n,o,t=recoge_datos_atributo(form)
                 atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=id_ti)
+                registrarAuditoriaProyecto(request.user, "agrego el atributo '"+atributo1.nombre +"' al tipo de item '" + tipo_item.nombre + "'",
+                                           tipo_item.fase.id_Proyecto.id_proyecto, tipo_item.fase.id_Proyecto.nombre,
+                                           tipo_item.fase.nombre)
         return  redirect('gestion:editar_ti',id_ti=id_ti)
     else:
-        contexto={
-            'formset':form
-        }
-        return render(request,'crear_atributo.html',contexto)
-
+        if validar_permiso(request.user, "is_gerente",tipo_item.fase.id_Proyecto):  # primero se valida si es gerente en el proyecto actual)
+            if not Item.objects.filter(ti_id=id_ti).exists():
+                contexto={
+                    'formset':form
+                }
+                return render(request,'crear_atributo.html',contexto)
+            else:
+                context = {
+                    "mensaje": "Este Tipo de item ya esta asociado a un item, por lo tanto no se puede agregar un atributo mas",
+                    "titulo": "No se puede agregar un atributo mas  al atributo del   tipo de item " + tipo_item.nombre,
+                    "titulo_b2": "Volver Atras",
+                    "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
+                }
+                return render(request, 'Error.html', context)
+        else:
+            context = {
+                "mensaje": "No eres gerente de proyecto, por lo tanto no puedes agregar atributos  al tipo de item" + tipo_item.nombre,
+                "titulo": "Conflicto de Permiso ",
+                "titulo_b2": "Volver Atras",
+                "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
+            }
+            return render(request, "Error.html", context)
 def eliminar_atributo_ti(request,id_ti):
     tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
     if request.method=='POST':
         some_var = request.POST.getlist('checkbox')
         for id in some_var:
             instancia=Atributo.objects.get(id_atributo=id)
+            registrarAuditoriaProyecto(request.user,
+                                       "Elimino el atributo '" + instancia.nombre + "' del tipo de item '" + tipo_item.nombre + "'",
+                                       tipo_item.fase.id_Proyecto.id_proyecto, tipo_item.fase.id_Proyecto.nombre,
+                                       tipo_item.fase.nombre)
             instancia.delete()
         return redirect('gestion:editar_ti',id_ti=id_ti)
-
-    atributos=Atributo.objects.filter(ti_id=id_ti)
-    contexto={
-        'atributos':atributos,
-        'tipo_item':tipo_item,
-    }
-    return  render(request,'eliminar_atributo_ti.html',contexto)
+    if validar_permiso(request.user, "is_gerente",tipo_item.fase.id_Proyecto):  # primero se valida si es gerente en el proyecto actual)
+        if not Item.objects.filter(ti_id=id_ti).exists():
+            atributos=Atributo.objects.filter(ti_id=id_ti)
+            contexto={
+                'atributos':atributos,
+                'tipo_item':tipo_item,
+            }
+            return  render(request,'eliminar_atributo_ti.html',contexto)
+        else:
+            context = {
+                "mensaje": "Este Tipo de item ya esta asociado a un item, por lo tanto no puede ser Eliminar un atributo de ello",
+                "titulo": "No se puede Eliminar el atributo  tipo de item " + tipo_item.nombre,
+                "titulo_b2": "Volver Atras",
+                "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
+            }
+            return render(request, 'Error.html', context)
+    else:
+        context = {
+            "mensaje": "No eres gerente de proyecto, por lo tanto no puedes eliminar atributos  del tipo de item" + tipo_item.nombre,
+            "titulo": "Conflicto de Permiso ",
+            "titulo_b2": "Volver Atras",
+            "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
+        }
+        return render(request, "Error.html", context)
 
 def eliminar_tipo_item(request,id_ti):
-    Atributo.objects.filter(ti_id=id_ti).delete()
-    get_object_or_404(TipoItem, id_ti=id_ti).delete()
-    return redirect('gestion:menu')
+   tipo_item=get_object_or_404(TipoItem, id_ti=id_ti)
+   if validar_permiso(request.user,"is_gerente",tipo_item.fase.id_Proyecto):  #primero se valida si es gerente en el proyecto actual)
+        if not Item.objects.filter(ti_id=id_ti).exists():
+            Atributo.objects.filter(ti_id=id_ti).delete()
+            fase=get_object_or_404(TipoItem, id_ti=id_ti).fase
+            registrarAuditoriaProyecto(request.user,
+                                       "Elimino el tipo de item '" + tipo_item.nombre + "'",
+                                       tipo_item.fase.id_Proyecto.id_proyecto, tipo_item.fase.id_Proyecto.nombre,
+                                       tipo_item.fase.nombre)
+            tipo_item.delete()
+            return redirect('gestion:listar_tipo_item',fase.id_Proyecto.id_proyecto)
+        else:
+            tipo_item=TipoItem.objects.get(id_ti=id_ti)
+            context = {
+                "mensaje": "Este Tipo de item ya esta asociado a un item, por lo tanto no puede ser Eliminado",
+                "titulo": "No se puede Eliminar el tipo de item " + tipo_item.nombre,
+                "titulo_b2": "Volver Atras",
+                "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
+            }
+            return render(request, 'Error.html', context)
+   else:
+       context = {
+           "mensaje": "No eres gerente de proyecto, por lo tanto no puede Eliminar el tipo de item" + tipo_item.nombre,
+           "titulo": "No puede Eliminar el  Tipo de item en este proyecto ",
+           "titulo_b2": "Volver Atras",
+           "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
+       }
+       return render(request, "Error.html", context)
+
 
 def upload_book(request):
-
     form=BookForm()
     if request.method=='POST':
         form=BookForm(request.POST,request.FILES)
@@ -1393,3 +1498,17 @@ def list_book(request):
         'books':books
     }
     return render(request,'listar_book.html',contexto)
+
+def validar_permiso(user,permiso,objecto):
+    if user.has_perm(permiso,objecto):
+        return True
+    return False
+
+def validar_datos_form_atributo(form_set):
+    print('aca entro en la funcion')
+    for form in form_set:
+        print(form.cleaned_data)
+        if form.cleaned_data == {}:
+            print('retorno  false')
+            return False
+    return True

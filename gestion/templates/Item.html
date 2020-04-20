@@ -25,7 +25,6 @@
 {% endblock click %}
 
 {% block contect %}
-{% if perms.gestion.is_gerente %}
     <a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
 
       <div class="jumbotron">
@@ -35,10 +34,5 @@
          <input type="submit" class="btn btn-primary" value="Siguiente">
     </form>
       </div>
-{% else %}
-    <h1>Usted no es tiene el permiso</h1>
-    <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
-{% endif %}
-
 {% endblock %}
 
