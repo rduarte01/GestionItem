@@ -1,0 +1,30 @@
+{%extends 'Menu/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Contactos</title>
+    {%endblock%}
+</head>
+<body>
+{% block interno%}
+
+        <div class="container">
+
+          <div class="masthead">
+            <h3 class="muted">Gestion Items</h3>
+            <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
+          </div>
+          <!-- Jumbotron -->
+          <div class="jumbotron">
+            <h1>Gracias por usar nuestro sistema</h1>
+            <p class="lead">Si tiene algun inconveniente o consulta sobre el sistema favor escriba su inconveniente</p>
+          <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                {{form.as_p}}
+           <input class="btn btn-primary" type="submit"  value="Enviar duda o consulta">
+          </form>
+          </div>
+{% endblock interno%}
+
+</body>
+</html>

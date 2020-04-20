@@ -1,16 +1,16 @@
-{%extends 'detallesProyecto.html'%}
-{% load guardian_tags %}
-{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
-
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Detalles de Fase</title>
+    {%endblock%}
+</head>
+<body>
 {% block interno %}
     {% load guardian_tags %}
     {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
 
-    <title>Detalle de Fase</title>
     <div class="cities">
     <table class="table table-bordered">
     <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a>
@@ -18,12 +18,10 @@
             <tr>
                 <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
                 <td><h5>ESTADO: {{proyectos.estado}}</h5></td>
-
             </tr>
         </thead>
     </table>
     </div>
-
 
     <div class="cities">
     <table class="table table-bordered">
@@ -77,21 +75,7 @@
     </body>
     </html>
 
-    <html>
-    <head>
-    <style>
-    .cities {
-      background-color: silver;
-      color: white;
-      margin: 20px;
-      padding: 20px;
-    }
-    </style>
-    </head>
-    <body>
+{% endblock interno %}
 
-
-    {% endblock interno %}
-
-
-
+</body>
+</html>

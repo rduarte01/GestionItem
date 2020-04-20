@@ -1,0 +1,54 @@
+{%extends 'Menu/base.html'%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Menu Administrador</title>
+    {%endblock%}
+
+</head>
+<body>
+    {% block url%}
+        <a href="{% url 'gestion:menu' %}"> Gestion Items</a></div></div>
+        <li><a href="{% url 'gestion:perfil' %}">Perfil</a></li>
+        <li><a href="{%url 'gestion:listar_proyectos'%}">Trabaje sobre sus proyectos!</a></li>
+        {% if perms.gestion.es_administrador %}
+            <li><a href="{% url 'gestion:ver_usuarios_aprobados' %}">Usuarios Aceptados</a></li>
+        {% endif %}
+        {% if perms.gestion.is_gerente %}
+            <li><a href="{%url 'gestion:CrearProyecto' %}" >Usted es un Gerente! Cree un Proyecto!</a></li>
+         {% endif %}
+        <li><a href="{% url 'gestion:auditoria' %}">Auditoria</a></li>
+        <li><a href="{% url 'gestion:Contactos' %}">Contáctanos</a></li>
+        <li><a href="{% url 'gestion:logout' %}">Cerrar Sesion</a></li>
+    {%endblock%}
+    {%block interno %}
+                        <!-- Jumbotron -->
+    <div class="jumbotron text-center blue-grey lighten-5">
+                          <!-- Title -->
+        <h2 class="card-title h2">Gestion de Items</h2>
+                          <!-- Subtitle -->
+        <h3 class="indigo-text my-4 font-weight-bold">Bienvenido {{request.user}}! Es administrador del sistema</h3>
+                          <!-- Grid row -->
+        <div class="row d-flex justify-content-center">
+                            <!-- Grid column -->
+            <div class="col-xl-7 pb-2">
+                <h3>Debera de aceptar usuarios que se hayan registrado en el SSO para que pertenezcan al sistema</h3>
+            </div>
+                            <!-- Grid column -->
+        </div>
+                    <!-- Jumbotron -->                   <!-- Jumbotron -->
+        <div class="jumbotron">
+            <a class="btn btn-large btn-success" href="{% url 'gestion:listaDeEspera' %}" ><h4>Valide usuarios!</h4></a>
+            {% if perms.gestion.is_gerente %}
+                <a class="btn btn-large btn-success" href="{%url 'gestion:CrearProyecto' %}"><h5>Usted es un Gerente! Cree un Proyecto!</h5></a>
+            {% endif %}
+            <a class="btn btn-large btn-success" href="{%url 'gestion:listar_proyectos'%}"><h5>Trabaje sobre sus proyectos!</h5></a>
+
+        </div>
+    </div>
+    {% endblock interno %}
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+{%extends 'proyectos/base.html'%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Usuarios de Proyecto</title>
+    {%endblock%}
+</head>
+<body>
+{% block interno %}
+
+            <title>Usuarios del proyecto</title>
+
+            <h1>USUARIOS DEL PROYECTO:</h1>
+
+            <style>
+            #ocultar{display:none;}
+            </style>
+
+            <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' pk%}" role="button">Volver Atras</a>
+
+                  <div class="jumbotron">
+
+             <form method="POST" action="">{% csrf_token %}
+            <table class="table table-bordered">
+                <form method="POST" action="">{% csrf_token %}
+                    {%if list%}
+                        <tr>
+                            <td>NOMBRE</td>
+                            <td>EMAIL</td>
+                            {% if "is_gerente" in proyecto_perms %}
+                                <td>DESVINCULACIÓN</td>
+                            {% endif %}
+                        </tr>
+
+                        {%for list in list %}
+                          {%for i in form%}
+                                {%if list == i.id%}
+                        <tr>
+                            <td>{{i.username}}</td>
+                            <td>{{i.email}}</td>
+                            {% if "is_gerente" in proyecto_perms %}
+                                <td><a class="btn btn-primary" href="{% url 'gestion:desvinculacionProyecto' pk i.id%}" role="button">Desvincular del proyecto</a></td>
+                            {% endif %}
+                        </tr>
+                        {%endif%}
+                    {%endfor%}
+                    {%endfor%}
+                {%else%}
+                     <h1>Solo usted que es gerente forma parte del proyecto! favor añada usuarios.</h1>
+                    {%endif%}
+                </form>
+            </table>
+             </form>
+                  </div>
+
+{% endblock interno %}
+
+</body>
+</html>

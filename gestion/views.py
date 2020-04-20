@@ -145,7 +145,7 @@ def estadoProyecto(request,pk):
         "estado": p.estado,
         'proyecto':p
     }
-    return render(request, 'estadoProyecto.html',context)
+    return render(request, 'Menu/estado_proyecto.html',context)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Editar estado')
 
@@ -222,7 +222,7 @@ def Contactos(request):
         "form":form,
     }
     registrarAuditoria(request.user,'Ingreso en el apartado contactos')
-    return render(request,'Contactos.html', context)
+    return render(request,'Menu/contactos.html', context)
 
 #RUBEN
 def CantProyectos(request):
@@ -245,12 +245,12 @@ def menu(request):
     user = request.user
     if( user.usuario.esta_aprobado):
         if user.has_perm('gestion.es_administrador'):
-            return render(request,'menuAdmin.html')
+            return render(request,'Menu/MenuAdministrador.html')
         else:
-            return render(request, 'menu2.html')
+            return render(request, 'Menu/Menu.html')
     else:
         registrarAuditoria(request.user ,'Inicio Menu en espera de aprobacion')
-        return render(request, 'MenuEnEspera.html')
+        return render(request, 'Menu/MenuEnEspera.html')
 
 #RUBEN
 def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del archivo getion/forms
@@ -357,7 +357,7 @@ def perfil(request):
         'picture': auth0user.extra_data['picture'],
     }
 
-    return render(request, 'perfil.html', {
+    return render(request, 'Menu/perfil.html', {
         'auth0User': auth0user,
         'userdata': userdata,
         'nombre': user,
@@ -667,7 +667,7 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
             if ok:
                list.append(form[i].id)
 
-        return render(request, 'UsersProyecto.html', {'form': form,'list':list,'pk':pk,'proyectos':proyecto})
+        return render(request, 'proyectos/usuarios_proyectos.html', {'form': form,'list':list,'pk':pk,'proyectos':proyecto})
 
 #RUBEN
 def desvinculacionProyecto(request,pk,pk_user):
@@ -717,7 +717,7 @@ def listar_proyectos(request):
         'list': PROYECTOS_USUARIO,##PROYECTOS DEL USUARIO LOS CUAL SE DEBE MOSTRAR, SOLO ID
         'cant': cant####CANTIDAD DE PROYECTOS QUE POSEE
     }
-    return render(request, 'verProyectos.html', context)
+    return render(request, 'Menu/listar_proyectos.html', context)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Desvincular usuario del proyecto')
 
@@ -740,7 +740,7 @@ def detallesProyecto(request,pk):
         "proyectos":proyectos,
         "fases":fases,
     }
-    return render(request, 'detallesProyecto.html', context)
+    return render(request, 'proyectos/detalles_proyecto.html', context)
 
 #RUBEN
 def detallesFase(request,idFase):
@@ -759,7 +759,7 @@ def detallesFase(request,idFase):
         "fases":fases,
         "items":items,
     }
-    return render(request, 'detallesFase.html', context)
+    return render(request, 'proyectos/detalles_fase.html', context)
 
 def listar_relaciones(request,idItem):
     """
@@ -781,7 +781,7 @@ def listar_relaciones(request,idItem):
         "itemActual":itemActual,
         'proyectos':itemActual.fase.id_Proyecto
     }
-    return render(request, 'listar_relaciones.html', context)
+    return render(request, 'items/listar_relaciones.html', context)
 
 def listar_atributos(request,idAtributoTI,id_item):
     """
@@ -809,8 +809,7 @@ def listar_atributos(request,idAtributoTI,id_item):
         'proyectos': itemActual.fase.id_Proyecto,
         'item':itemActual
     }
-    return render(request, 'listar_atributos.html', context)
-
+    return render(request, 'items/listar_atributos.html', context)
 
 #RUBEN
 def proyectoCancelado(request):
@@ -1069,7 +1068,7 @@ def crearItem(request,Faseid):
     fases=Fase.objects.filter(id_Proyecto=proyecto)
     cont = 0
 
-    if(proyecto.estado != "INICIADO"):
+    if(proyecto.estado == "INICIADO"):
         context = {
             "mensaje": "EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado),
             "titulo": "PROYECTO NO INICIADO",
