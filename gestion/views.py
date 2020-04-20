@@ -1508,7 +1508,7 @@ gestionitems.fpuna@gmail.com
 GestionItem20202
 https://josevc93.github.io/python/Dropbox-y-python/
 """
-def subirArchivo(ruta,opcion,nombre):
+def comite(request,pk):
     """
     LISTA LOS USUARIOS DEL COMITE DE UN PROYECTO EN ESPECIFICO
     :param request:
@@ -1716,6 +1716,8 @@ def editar_ti(request,id_ti):
                 "boton2": "/lista/tipo/item/" + str(tipo_item.fase.id_Proyecto.id_proyecto),
             }
             return  render(request,"Error.html",context)
+
+
 def agregar_atributo_ti(request, id_ti):
     form = formset_factory(AtributeForm, extra=1)
     tipo_item = TipoItem.objects.get(id_ti=id_ti)
@@ -1732,9 +1734,11 @@ def agregar_atributo_ti(request, id_ti):
     else:
         if validar_permiso(request.user, "is_gerente",tipo_item.fase.id_Proyecto):  # primero se valida si es gerente en el proyecto actual)
             if not Item.objects.filter(ti_id=id_ti).exists():
-                    'formset':form
+                contexto={
+                    'formset':form,
+                    'proyectos':tipo_item.fase.id_Proyecto
                 }
-                return render(request,'crear_atributo.html',contexto)
+                return render(request,'proyectos/crear_atributo.html',contexto)
             else:
                 context = {
                     "mensaje": "Este Tipo de item ya esta asociado a un item, por lo tanto no se puede agregar un atributo mas",
@@ -1769,8 +1773,9 @@ def eliminar_atributo_ti(request,id_ti):
             contexto={
                 'atributos':atributos,
                 'tipo_item':tipo_item,
+                'proyectos': tipo_item.fase.id_Proyecto
             }
-            return  render(request,'eliminar_atributo_ti.html',contexto)
+            return  render(request,'proyectos/eliminar_atributo_ti.html',contexto)
         else:
             context = {
                 "mensaje": "Este Tipo de item ya esta asociado a un item, por lo tanto no puede ser Eliminar un atributo de ello",
@@ -1865,5 +1870,14 @@ def SubirArchivo(DOC, PATH):
     dbx = dropbox.Dropbox(TOKEN)
     dbx.files_upload(DOC.file.read(), PATH)
 
+def validar_datos_form_atributo(form_set):
+    for form in form_set:
+        if form.cleaned_data=={}:
+            return False
+    return True
 
 
+def validar_permiso(user,permiso, proyecto):
+    if user.has_perm(permiso,proyecto):
+        return True
+    return False

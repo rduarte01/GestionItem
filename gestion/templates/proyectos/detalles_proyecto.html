@@ -1,87 +1,9 @@
 {%extends 'proyectos/base.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+
     {%block title%}
         <title>Detalles de Proyectos</title>
     {%endblock%}
-</head>
-<body>
-<<<<<<< HEAD:gestion/templates/detallesProyecto.html
-{% block encabezado %}
-<div class="cities">
-<table class="table table-bordered">
-<a class="btn btn-primary" href="{%url 'gestion:listar_proyectos' %}" role="button">Volver Atras</a>
-      <thead>
-    <tr>
-        <td>NOMBRE DE PROYECTO</td>
-        <td>DESCRIPCION</td>
-        <td>ESTADO</td>
-    </tr>
-
-    </thead>
-<thead>
-<tr>
-        <td><h2>{{proyectos.nombre}}</h2></td>
-        <td><h4>{{proyectos.descripcion}}</h4></td>
-        <td><h2>{{proyectos.estado}}</h2></td>
-</tr>
-</thead>
-</table>
-</div>
-
-{% endblock %}
-
-{%block body%}
-<div class="cities">
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <td>FASES</td>
-        <td>DESCRIPCION</td>
-        <td>ESTADO</td>
-        <td>ESTADO DE FASES</td>
-        {% if "is_gerente" in proyecto_perms %}
-            {% if proyectos.estado != 'CANCELADO' %}
-            <td>AGREGA TI</td>
-            <td>IMPORTA TI</td>
-            {% endif %}
-        {% endif %}
-        <td>TRABAJAR!</td>
-
-    </tr>
-    </thead>
-    <tbody>
-        {%for fases in fases %}
-        {% if fases.id_Proyecto == proyectos  %}
-
-        <tr>
-            <td>{{fases.nombre}}</td>
-            <td>{{fases.descripcion}}</td>
-            <td>{{fases.estado}}</td>
-            {% if "is_gerente" in proyecto_perms %}
-            <td><a href=""class="btn btn-primary">CAMBIAR ESTADO</a></td>
-            {%else%}
-            <td>No es gerente</td>
-            {%endif%}
-
-            {% if "is_gerente" in proyecto_perms %}
-                {% if proyectos.estado != 'CANCELADO' %}
-                <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear Tipo Item</a> </td>
-                <td><a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-primary">Importar Tipo Item</a> </td>
-                {% endif %}
-            {% endif %}
-            <td><a href="{% url 'gestion:detallesFase' fases.id_Fase %}" class="btn btn-primary">DETALLES</a></td>
-        </tr>
-        {%endif%}
-        {%endfor%}
-<tbody>
-  </table>
- </div>
-</body>
-</html>
-=======
 {%block volver_atras %}
     <a class="btn btn-primary" href="{%url 'gestion:listar_proyectos' %}" role="button">Volver Atras</a>
 {%endblock %}
@@ -92,8 +14,6 @@
 
     <html>
     <body>
->>>>>>> Ruben:gestion/templates/proyectos/detalles_proyecto.html
-
     <div class="cities">
         <table class="table table-bordered">
             <thead>
@@ -139,14 +59,3 @@
     </body>
     </html>
 {% endblock interno %}
-
-<<<<<<< HEAD:gestion/templates/detallesProyecto.html
-    </tr>
-    </thead>
-</table>
-</div>
-{%endblock body%}
-=======
-</body>
-</html>
->>>>>>> Ruben:gestion/templates/proyectos/detalles_proyecto.html

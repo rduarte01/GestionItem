@@ -1,38 +1,8 @@
-<<<<<<< HEAD:gestion/templates/editar_tipo_item.html
-{% extends 'detallesProyecto.html' %}
 
-<hr>
-{%block encabezado%}
-<div class="cities">
-    <table class="table table-bordered">
-        <a class="btn btn-primary" href="{%url 'gestion:listar_proyectos' %}" role="button">Volver Atras</a>
-        <thead>
-                <th>NOMBRE DE PROYECTO</th>
-                <th>DESCRIPCION</th>
-                <th>ESTADO</th>
-            </thead>
-        <tbody>
-            <tr>
-                <td><h2>{{proyectos.nombre}}</h2></td>
-                <td><h4>{{proyectos.descripcion}}</h4></td>
-                <td><h2>{{proyectos.estado}}</h2></td>
-            </tr>
-        </tbody>
-    </table>
-  </div>
-{% endblock  %}
-
-{%block body%}
-<hr>
-<br>
-<div class="jumbotron">
-=======
 {%extends 'proyectos/base.html'%}
-
 {% block interno%}
 <div class="cities">
     <hr>
->>>>>>> Ruben:gestion/templates/proyectos/editar_tipo_item.html
     <form  method='POST' onSubmit="return enviado()">
             {% csrf_token%}
            {{ formset.management_form }}
@@ -69,20 +39,6 @@
             {%else%}
                <h2> Este tipo de item aun no tiene atributos</h2>
             {%endif%}
-<<<<<<< HEAD:gestion/templates/editar_tipo_item.html
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td><input class="btn btn-primary" type='submit' value= 'Actualizar' /> </td>
-                        <td><a href="{% url 'gestion:agregar_atributo_ti'  tipo_item.id_ti %}" class="btn btn-primary">Agregar Atributo</a></td>
-                        <td> <a href="{% url 'gestion:eliminar_atributo_ti'  tipo_item.id_ti %}" class="btn btn-primary">Eliminar Atributo</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-    </>
- {%endblock%}
-=======
              <input class="btn btn-primary" type='submit' value= 'Actualizar' />
              <br>
             <br>
@@ -94,4 +50,3 @@
 
 </div>
 {% endblock interno%}
->>>>>>> Ruben:gestion/templates/proyectos/editar_tipo_item.html

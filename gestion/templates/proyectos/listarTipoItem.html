@@ -1,20 +1,9 @@
-<<<<<<< HEAD:gestion/templates/listarTipoItem.html
-{%extends 'detallesProyecto.html' %}
-{% block body %}
-    <div class="jumbotron">
-        <h2>Lista de Tipo de Items del Proyecto</h2>
-        {% if TipoItem %}
-=======
 {%extends 'proyectos/base.html'%}
 
 {% block interno %}
-
-    {% block body %}
         <h2>Lista de Tipo de Items del Proyecto</h2>
         {% if TipoItem %}
 <div class="cities">
-
->>>>>>> Ruben:gestion/templates/proyectos/listarTipoItem.html
         <table class="table table-bordered">
             <thead>
                 <th>Nombre Tipo Item</th>
@@ -35,17 +24,8 @@
                 {% endfor %}
             </tbody>
         </table>
-<<<<<<< HEAD:gestion/templates/listarTipoItem.html
-            {% else %}
-            <h2>El Proyecto aun no tiene TIpo de items</h2>
-        {%endif%}
-    </div>
-{% endblock body%}
-=======
 </div>
             {% else %}
             <h2>El Proyecto aun no tiene TIpo de items</h2>
         {%endif%}
-    {% endblock body%}
 {% endblock interno %}
->>>>>>> Ruben:gestion/templates/proyectos/listarTipoItem.html
