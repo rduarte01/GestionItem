@@ -225,7 +225,6 @@ class Item(models.Model):
     actual=models.BooleanField(default=True)
     """SI ESTA EN TRUE SERA QUE EL ITEM ESTA ACTIVO Y NO UNA VERSION ANTERIOR"""
 
-
 class Relacion(models.Model):
     """MODELO DE RELACION DE ITEMS"""
     id_relacion= models.AutoField(primary_key = True) ###### clave de proyecto
@@ -235,21 +234,18 @@ class Relacion(models.Model):
     fin_item= models.IntegerField()
     """ITEM FIN DE RELACION"""
 
-from django.core.files.storage import FileSystemStorage
-fs = FileSystemStorage(location='/media/photos')
 
 class Atributo_Item(models.Model):
     """MODELO DE ATRIBUTO DE TI, EN EL CUAL SE GUARDARA EL VALOR DEPENDIENDO DEL TI"""
     id_atributo= models.AutoField(primary_key = True) ###### clave de proyecto
     """ID DEL ATRIBUTO_Item"""
-    idAtributoTI= models.IntegerField()
+    idAtributoTI= models.ForeignKey(Atributo, on_delete = models.CASCADE)
     """ID DEL TI CON EL CUAL SE IDENTIFICARA"""
     id_item= models.ForeignKey(Item, on_delete = models.CASCADE)
     """EL ITEM AL CUAL ESTA ASIGNADO"""
     #tipo=models.CharField(max_length=20)
     valor=models.CharField(max_length=1000,null=True)
     """VALOR QUE SERA STRING PERO DEPENDIENDO DEL ATRIBUTO SE PODRA OBTENER EL VALOR REQUERIDO"""
-    archivo = models.FileField(storage=fs,null=True)
 
 class Versiones(models.Model):
     """TABLA DE VERSIONES EL CUAL RELACIONA LA VERSION DEL ITEM"""
@@ -261,11 +257,10 @@ class Versiones(models.Model):
     """ITEM ASIGNADO"""
 
 class Comite(models.Model):
+    """TABLA QUE TENDRA LA RELACION USUARIO-PROYECTO PERO PARA UN COMITE DE UN PROYECTO EN ESPECIFICO"""
     id = models.AutoField(primary_key=True)  ###### clave de proyecto
     """ID AUTOMATICO"""
     id_proyecto=models.IntegerField()
+    """ID DEL PROYECTO"""
     id_user=models.IntegerField()
-class Book(models.Model):
-    title=models.CharField(max_length=100)
-    autor=models.CharField(max_length=100)
-    pdf=models.FileField(upload_to='Books')
+    """ID DEL USUARIO"""

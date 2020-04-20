@@ -1,0 +1,65 @@
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Comite de cambio</title>
+    {%endblock%}
+</head>
+<body>
+
+    {%block volver_atras %}
+    <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" role="button">Volver Atras</a>
+    {%endblock %}
+
+{% block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+
+{% if "is_gerente" in proyecto_perms %}
+    <div class="cities">
+    <table class="table table-bordered">
+          <thead>
+        <tr>
+                <td><a href="{% url 'gestion:AggComite' proyectos.id_proyecto%}" class="btn btn-primary">✚ CREAR COMITE</a></td>
+                <td><a href="{% url 'gestion:DeleteComite' proyectos.id_proyecto%}" class="btn btn-primary">- QUITAR USUARIOS DEL COMITE</a></td>
+        </tr>
+        </thead>
+    </table>
+    </div>
+{%endif%}
+
+    <div class="cities">
+    <table class="table table-bordered">
+        <form method="POST" action="">{% csrf_token %}
+            {%if list%}
+                <h1>El comite de cambio esta conformado por:</h1>
+                <tr>
+                    <td>NOMBRE</td>
+                    <td>EMAIL</td>
+                </tr>
+                {%for list in list %}
+                    {%for i in form%}
+                        {%if list == i.user.id%}
+                            <tr>
+                                <td>{{i.user.username}}</td>
+                                <td>{{i.user.email}}</td>
+                            </tr>
+                        {%endif%}
+                    {%endfor%}
+                {%endfor%}
+            {%else%}
+                <h1>NO HAY COMITE AUN</h1>
+            {%endif%}
+        </form>
+      </table>
+     </div>
+    </body>
+    </html>
+    <body>
+
+{% endblock interno%}
+
+
+</body>
+</html>

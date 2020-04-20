@@ -1,0 +1,74 @@
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Detalles de Fase</title>
+    {%endblock%}
+</head>
+<body>
+
+    {%block volver_atras %}
+        <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a>
+    {%endblock %}
+
+{% block interno %}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+
+    <div class="cities">
+    <table class="table table-bordered">
+          <thead>
+            <tr>
+                <td><h5>NOMBRE DE FASE : {{fases.nombre}}</h5></td>
+                <td><h5>DESCRIPCION : {{fases.descripcion}}</h5></td>
+                <td><h5>ESTADO : {{fases.estado}}</h5></td>
+            <!--{% if "is_gerente" in proyecto_perms %}-->
+                <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></td>
+            <!--{% endif%}-->
+            </tr>
+        </thead>
+    </table>
+    </div>
+
+
+    <div class="cities">
+    <table class="table table-bordered">
+        {% if items%}
+            <thead>
+            <tr>
+                <td><h5>ITEMS</h5></td>
+                <td><h5>DESCRIPCION</h5></td>
+                <td><h5>COSTO</h5></td>
+                <td><h5>VER RELACIONES</h5></td>
+                <td><h5>VER ATRIBUTOS</h5></td>
+
+            </tr>
+            </thead>
+            <tbody>
+                {%for items in items %}
+                <tr>
+                    <td>{{items.nombre}}</td>
+                    <td>{{items.descripcion}}</td>
+                    <td>{{items.costo}}</td>
+                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Relaciones</a></td>
+                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
+
+                </tr>
+
+                {%endfor%}
+            {%else%}
+            <td><h2>No hay items en la fase, crealos!</h2></td>
+
+        {%endif%}
+
+    <tbody>
+      </table>
+     </div>
+    </body>
+    </html>
+
+{% endblock interno %}
+
+</body>
+</html>

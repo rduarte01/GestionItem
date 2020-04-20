@@ -86,7 +86,8 @@
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests URLS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-gestion.tests.test_views">Tests Views</a></li>
 </ul>
 
             
@@ -170,6 +171,21 @@ debe de tener un atributo al crearlo</p>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="gestion.models.Atributo.atributo_item_set">
+<code class="sig-name descname">atributo_item_set</code><a class="headerlink" href="#gestion.models.Atributo.atributo_item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="gestion.models.Atributo.choises_data_type">
 <code class="sig-name descname">choises_data_type</code><em class="property"> = (('Decimal', 'Decimal'), ('Date', 'Date'), ('File', 'File'), ('String', 'Cadena'), ('Boolean', 'Boolean'))</em><a class="headerlink" href="#gestion.models.Atributo.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>En esta variable especificamos, las opciones que se van a tener para especificar el tipo de dato del atributo</p>
@@ -223,6 +239,61 @@ debe de tener un atributo al crearlo</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="gestion.models.Atributo_Item">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Atributo_Item</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo_Item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MODELO DE ATRIBUTO DE TI, EN EL CUAL SE GUARDARA EL VALOR DEPENDIENDO DEL TI</p>
+<dl class="exception">
+<dt id="gestion.models.Atributo_Item.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Atributo_Item.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Atributo_Item.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Atributo_Item.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo_Item.idAtributoTI">
+<code class="sig-name descname">idAtributoTI</code><a class="headerlink" href="#gestion.models.Atributo_Item.idAtributoTI" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ID DEL TI CON EL CUAL SE IDENTIFICARA</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo_Item.idAtributoTI_id">
+<code class="sig-name descname">idAtributoTI_id</code><a class="headerlink" href="#gestion.models.Atributo_Item.idAtributoTI_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo_Item.id_atributo">
+<code class="sig-name descname">id_atributo</code><a class="headerlink" href="#gestion.models.Atributo_Item.id_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ID DEL ATRIBUTO_Item</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo_Item.id_item">
+<code class="sig-name descname">id_item</code><a class="headerlink" href="#gestion.models.Atributo_Item.id_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>EL ITEM AL CUAL ESTA ASIGNADO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo_Item.id_item_id">
+<code class="sig-name descname">id_item_id</code><a class="headerlink" href="#gestion.models.Atributo_Item.id_item_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo_Item.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Atributo_Item.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Atributo_Item.valor">
+<code class="sig-name descname">valor</code><a class="headerlink" href="#gestion.models.Atributo_Item.valor" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>VALOR QUE SERA STRING PERO DEPENDIENDO DEL ATRIBUTO SE PODRA OBTENER EL VALOR REQUERIDO</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="gestion.models.Auditoria">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Auditoria</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Auditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>TABLA EN DONDE SE GUARDAN LAS MODIFICACIONES QUE REALIZAN TODOS LOS USUARIOS EN EL SISTEMA</p>
@@ -243,6 +314,12 @@ debe de tener un atributo al crearlo</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="gestion.models.Auditoria.fase">
+<code class="sig-name descname">fase</code><a class="headerlink" href="#gestion.models.Auditoria.fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="gestion.models.Auditoria.fecha">
 <code class="sig-name descname">fecha</code><a class="headerlink" href="#gestion.models.Auditoria.fecha" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA LA FECHA DE LA ACCION</p>
@@ -256,15 +333,66 @@ object the first time, the query is executed.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="gestion.models.Auditoria.id_proyecto">
+<code class="sig-name descname">id_proyecto</code><a class="headerlink" href="#gestion.models.Auditoria.id_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="gestion.models.Auditoria.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Auditoria.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Auditoria.proyecto">
+<code class="sig-name descname">proyecto</code><a class="headerlink" href="#gestion.models.Auditoria.proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.models.Auditoria.usuario">
 <code class="sig-name descname">usuario</code><a class="headerlink" href="#gestion.models.Auditoria.usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA EL NOMBRE DE USUARIO</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.Comite">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Comite</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Comite" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TABLA QUE TENDRA LA RELACION USUARIO-PROYECTO PERO PARA UN COMITE DE UN PROYECTO EN ESPECIFICO</p>
+<dl class="exception">
+<dt id="gestion.models.Comite.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Comite.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Comite.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Comite.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Comite.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Comite.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ID AUTOMATICO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Comite.id_proyecto">
+<code class="sig-name descname">id_proyecto</code><a class="headerlink" href="#gestion.models.Comite.id_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ID DEL PROYECTO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Comite.id_user">
+<code class="sig-name descname">id_user</code><a class="headerlink" href="#gestion.models.Comite.id_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ID DEL USUARIO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Comite.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Comite.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -390,6 +518,21 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="gestion.models.Fase.item_set">
+<code class="sig-name descname">item_set</code><a class="headerlink" href="#gestion.models.Fase.item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="gestion.models.Fase.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Fase.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA EL NOMBRE DE LA FASE</p>
@@ -438,6 +581,94 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <code class="sig-name descname">verbose_name_plural</code><em class="property"> = 'Fases'</em><a class="headerlink" href="#gestion.models.Fase.verbose_name_plural" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>NOMBRE DEL MODELO DENTRO DE ADMIN</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.Item">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Item</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MODELO DE ITEM</p>
+<dl class="exception">
+<dt id="gestion.models.Item.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Item.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Item.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Item.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.actual">
+<code class="sig-name descname">actual</code><a class="headerlink" href="#gestion.models.Item.actual" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>SI ESTA EN TRUE SERA QUE EL ITEM ESTA ACTIVO Y NO UNA VERSION ANTERIOR</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.atributo_item_set">
+<code class="sig-name descname">atributo_item_set</code><a class="headerlink" href="#gestion.models.Item.atributo_item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.costo">
+<code class="sig-name descname">costo</code><a class="headerlink" href="#gestion.models.Item.costo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>COSTO DEL ITEM</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.descripcion">
+<code class="sig-name descname">descripcion</code><a class="headerlink" href="#gestion.models.Item.descripcion" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>DESCRIPCION DEL ITEM</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.fase">
+<code class="sig-name descname">fase</code><a class="headerlink" href="#gestion.models.Item.fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>FASE  A LA CUAL PERTENECE EL ITEM</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.fase_id">
+<code class="sig-name descname">fase_id</code><a class="headerlink" href="#gestion.models.Item.fase_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.id_item">
+<code class="sig-name descname">id_item</code><a class="headerlink" href="#gestion.models.Item.id_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>GUARDA EL ID DEL ITEM</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.nombre">
+<code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Item.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>NOMBRE DEL ITEM</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Item.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.ti">
+<code class="sig-name descname">ti</code><a class="headerlink" href="#gestion.models.Item.ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TIPO DE ITEM QUE SE ASIGNARA AL ITEM</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Item.ti_id">
+<code class="sig-name descname">ti_id</code><a class="headerlink" href="#gestion.models.Item.ti_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -553,6 +784,45 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 </dd></dl>
 
 <dl class="class">
+<dt id="gestion.models.Relacion">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Relacion</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Relacion" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MODELO DE RELACION DE ITEMS</p>
+<dl class="exception">
+<dt id="gestion.models.Relacion.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Relacion.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Relacion.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Relacion.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Relacion.fin_item">
+<code class="sig-name descname">fin_item</code><a class="headerlink" href="#gestion.models.Relacion.fin_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ITEM FIN DE RELACION</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Relacion.id_relacion">
+<code class="sig-name descname">id_relacion</code><a class="headerlink" href="#gestion.models.Relacion.id_relacion" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ID DE RELACION</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Relacion.inicio_item">
+<code class="sig-name descname">inicio_item</code><a class="headerlink" href="#gestion.models.Relacion.inicio_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ITEM DE INICIO DE RELACION</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Relacion.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Relacion.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="gestion.models.TipoItem">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">TipoItem</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.TipoItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>»
@@ -597,6 +867,21 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <dt id="gestion.models.TipoItem.id_ti">
 <code class="sig-name descname">id_ti</code><a class="headerlink" href="#gestion.models.TipoItem.id_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>atributo que sive para identificar univocamente a cada tipo Item</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.TipoItem.item_set">
+<code class="sig-name descname">item_set</code><a class="headerlink" href="#gestion.models.TipoItem.item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -700,6 +985,45 @@ object the first time, the query is executed.</p>
 <dl class="attribute">
 <dt id="gestion.models.Usuario.user_id">
 <code class="sig-name descname">user_id</code><a class="headerlink" href="#gestion.models.Usuario.user_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gestion.models.Versiones">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Versiones</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Versiones" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TABLA DE VERSIONES EL CUAL RELACIONA LA VERSION DEL ITEM</p>
+<dl class="exception">
+<dt id="gestion.models.Versiones.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Versiones.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="gestion.models.Versiones.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Versiones.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Versiones.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Versiones.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ID AUTOMATICO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Versiones.id_Version">
+<code class="sig-name descname">id_Version</code><a class="headerlink" href="#gestion.models.Versiones.id_Version" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>VERSION DEL ITEM</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Versiones.id_item">
+<code class="sig-name descname">id_item</code><a class="headerlink" href="#gestion.models.Versiones.id_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>ITEM ASIGNADO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.models.Versiones.objects">
+<code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Versiones.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

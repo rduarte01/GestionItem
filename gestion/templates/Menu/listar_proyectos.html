@@ -1,0 +1,69 @@
+{%extends 'Menu/base.html'%}
+
+{%block imports%}
+    {% load guardian_tags %}
+{%endblock%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Lista de Proyectos</title>
+    {%endblock%}
+
+</head>
+<body>
+
+
+
+    {% block interno%}
+        <div class="cities">
+            <h2>-------------------------------------- Mis Proyectos --------------------------------------</h2>
+            <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
+            <table class="table table-bordered">
+                {% if proyectos%}
+                <thead>
+                    <tr>
+                        <td>Nombre de proyecto</td>
+                        <td>ID</td>
+                        <td>Descripcion</td>
+                        <td>Estado del proyecto</td>
+                        <td>Cambiar Estado</td>
+                        <td><h5>Echa un vistazo!</h5></td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {%for proyectos in proyectos%}
+                        {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+                            {%for list in list %}
+                                {% if list == proyectos.id_proyecto  %}
+                                    <tr>
+                                        <td>{{proyectos.nombre}}</td>
+                                        <td>{{proyectos.id_proyecto}}</td>
+                                        <td>{{proyectos.descripcion}}</td>
+                                        <td>{{proyectos.estado}}</td>
+                                        {% if "is_gerente" in proyecto_perms %}
+                                                {% if proyectos.estado == "CANCELADO"  %}
+                                                    <td>CANCELADO</td>
+                                                {%else%}
+                                                    <td><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}"class="btn btn-primary">Estados</a></td>
+                                                {%endif%}
+                                        {%else%}
+                                            <td>No es gerente</td>
+                                        {%endif%}
+                                            <td><a href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" class="btn btn-primary">Ver detalles</a></td>
+                                        </tr>
+                                    {% endif %}
+                                {%endfor%}
+                            {%endfor%}
+                        {% else %}
+                            <h1>No se encuentra asociado a ningun proyecto :(</h1>
+                        {% endif %}
+                </tbody>
+            </table>
+        </div>
+    {%endblock%}
+
+</body>
+</html>

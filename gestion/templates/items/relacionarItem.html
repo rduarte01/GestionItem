@@ -1,0 +1,79 @@
+{% extends 'creacionProyecto2.html'%}
+<title>Relacionar Items</title>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{% block title %}
+<h1>Selecciona items a relacionar con el item: {{itemActual.nombre}}</h1>
+<h5>------------------------ A tener en cuenta: --------------------------</h5>
+<h6>--> Se muestran los items de las fases actual, anterior y siguiente si hubiese</h6>
+<h6>--> Los items seleccionados apuntarian al item (selecion-->{{itemActual.nombre}}), exepto si el item seleccionado es de una fase siguiente en dicho caso la relacion es inversa ({{itemActual.nombre}}-->seleccion)</h6>
+<h6>--> Solo los items de la primera fase pueden no tener relaciones</h6>
+<h6>--> Los items que no pertenezcan a la primera fase deben contar con una relacion, directa o indirecta con la primera fase</h6>
+<h5>------------------------ Informacion sobre el item que se esta creando: --------------------------</h5>
+<h6>--> El item de nombre: {{itemActual.nombre}} pertenece a la fase de nombre: {{itemActual.fase.nombre}}</h6>
+
+{% endblock title%}
+
+
+<style>
+#ocultar{display:none;}
+</style>
+
+<!--{% if perms.gestion.crear_item %}-->
+    {% block contect %}
+        <div class="jumbotron">
+            <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                {% block content %}
+                    <div>
+                        <a class="btn btn-primary" href="{% url 'gestion:itemCancelado'%}" role="button">Cancelar</a>
+                    </div>
+                    <table class="table table-bordered">
+                        <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                            {%if list%}
+                                    <tr>
+                                        <td><h4>NOMBRE DEL ITEM</h4></td>
+                                        <td>DESCRIPCION</td>
+                                        <td>COSTO</td>
+                                        <td>FASE</td>
+                                        <td>TI</td>
+                                        <td>LA RELACION SERIA ASI:</td>
+                                    </tr>
+                                {%for list in list %}
+                                    {%for i in form%}
+                                        {%if list == i.id_item%}
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.id_item}}" id="{{i.id_item}}}">
+                                                        <label class="form-check-label" for="{{i.id_item}}}"><h5>{{ i.nombre }}</h5></label>
+                                                    </div>
+                                                </td>
+                                                <td>{{ i.descripcion }}</td>
+                                                <td>{{ i.costo }}</td>
+                                                <td>{{ i.fase.nombre }}</td>
+                                                <td>{{ i.ti }}</td>
+                                                {%if i.fase.id_Fase > itemActual.fase.id_Fase%}
+                                                    <td>{{i.nombre}} (fin) <-- (inicio) {{itemActual.nombre}}</td>
+                                                {%else%}
+                                                    <td>{{i.nombre}} (inicio) --> (fin) {{itemActual.nombre}}</td>
+                                                {%endif%}
+                                            </tr>
+                                        {%endif%}
+                                    {%endfor%}
+                                {%endfor%}
+                            {%else%}
+                                <td><h1>No hay items para seleccionar</h1></td>
+                            {%endif%}
+                    </form>
+                </table>
+        {% endblock %}
+             <input class="btn btn-primary" type="submit"  value="Guardar">
+         </form>
+        </div>
+    {% endblock %}
+<!--{% else %}
+        <h1>Usted no es tiene el permiso de crear item</h1>
+        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
+    {% endif %}-->

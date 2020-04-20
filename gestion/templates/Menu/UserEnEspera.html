@@ -1,0 +1,48 @@
+{%extends 'Menu/base.html'%}
+
+
+
+{%block interno %}
+
+    <form action="#" method="POST" onSubmit="return enviado()">
+  {% csrf_token %}
+  {% if error %}
+    <h2>{{ error }}</h2>
+  {% else %}
+      <div class="card">
+          <div class="card-header">
+              <strong>Edicion de Usuario</strong>
+          </div>
+          <div class="card-body card-block">
+              <form method="post" enctype="multipart/form-data" class="form-horizontal" onSubmit="return enviado()">
+                  <div class="row form-group">
+                      <div class="col col-md-3">Fecha de Registro:</div>
+                      <div class="col-12 col-md-9">{{ fecha_registro }}</div>
+                  </div>
+                  <div class="row form-group">
+                      <div class="col col-md-3">Username:</div>
+                      <div class="col-12 col-md-9">{{ nombre }}</div>
+                  </div>
+                  <div class="row form-group">
+                      <div class="col col-md-3">Email:</div>
+                      <div class="col-12 col-md-9">{{ email }}</div>
+                  </div>
+                  <div class="row form-group">
+                      <div class="col col-md-3">{{ form.esta_aprobado.label }}:</div>
+                      <div class="col-12 col-md-9">{{ form.esta_aprobado}}</div>
+                  </div>
+
+                  <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Registrar</button>
+                      <a href="javascript:history.back()" class="btn btn-danger"> Cancelar</a>
+
+                  </div>
+              </form>
+          </div>
+      </div>
+  {% endif %}
+
+</form>
+
+
+{%endblock%}

@@ -1,0 +1,71 @@
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Comite de proyecto</title>
+    {%endblock%}
+</head>
+<body>
+
+{% block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+
+        {% if "is_gerente" in proyecto_perms %}
+
+            <div class="cities">
+            <table class="table table-bordered">
+                <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                    {%if list%}
+                            <h2>Seleccione usuarios para el comite de cambio</h2>
+                            <h5>- Recuerde que el numero de usuarios para un comite debe de ser impar y mayor a un usuario</h5>
+                            <h5>- El gerente del proyecto siempre forma parte del comite</h5>
+                            <tr>
+                                <td><h4>NOMBRE</h4></td>
+                                <td><h4>CORREO</h4></td>
+                            </tr>
+                    {%for list in list %}
+                      {%for i in form%}
+                            {%if list == i.user.id%}
+                                {%if idGerente != i.user.id%}
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.user.id}}" id="{{i.user.id}}}">
+                                                <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5></label>
+                                            </div>
+                                    </td>
+                                        <td>{{ i.user.email }}</td>
+                                    </tr>
+                                {%else%}
+                                    <tr>
+                                        <td><strong>Gerente ya incluido: {{ i.user.username }}</strong></td>
+                                        <td>{{ i.user.email }}</td>
+                                    </tr>
+                                {%endif%}
+                            {%endif%}
+                        {%endfor%}
+                    {%endfor%}
+                    <input type="submit" class="btn btn-primary" value="Crear">
+                    {%else%}
+                        <h1>Sin usuarios para añadir al comite</h1>
+                    {%endif%}
+                </form>
+            </table>
+             </div>
+
+            </body>
+            </html>
+            <html>
+            <body>
+        {%else%}
+                <h1>Usted no es gerente de este proyecto, por tanto no puede agregar usuarios al comite</h1>
+                <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
+        {%endif%}
+
+    {% endblock interno%}
+
+
+</body>
+</html>

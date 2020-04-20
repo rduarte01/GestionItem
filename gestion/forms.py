@@ -2,23 +2,11 @@ from django import forms
 from django.forms import Textarea
 from .models import Fase
 from django.contrib.auth.models import User, Permission,Group,ContentType
-from .models import Proyecto,TipoItem,Atributo,Usuario,Item,Atributo_Item,Book
+from .models import Proyecto,TipoItem,Atributo,Usuario,Item,Atributo_Item
 ####### se escribe formulario
 from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
 
 
-class UploadDocumentForm(forms.ModelForm):
-    class Meta:
-        """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
-        model = Atributo_Item
-        """SE REALIZA FORMULARIO DEL MODELO PROYECTO"""
-        fields = [
-                "archivo",
-                  ]
-        """CAMPOS A MOSTRAR EN EL FORMULARIO"""
-        labels= {
-            "archivo":"Seleccione",
-        }
 
 
 class FormItem(forms.ModelForm):
@@ -276,8 +264,4 @@ class RolForm(forms.ModelForm):
             'permissions':forms.CheckboxSelectMultiple(),
         }
 
-class BookForm(forms.ModelForm):
-    class Meta:
-        model=Book
-        fields=('title','autor','pdf')
 

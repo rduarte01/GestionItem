@@ -1,0 +1,50 @@
+{%extends 'Menu/base.html'%}
+
+{%block title%}
+    <title>Auditoria</title>
+{%endblock%}
+    {% block interno%}
+
+        <h1>Auditoria</h1>
+        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
+        {% block content %}
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td>Usuario</td>
+
+                    <td>ID proyecto</td>
+                    <td>Nombre Proyecto</td>
+                    <td>Nombre Fase</td>
+
+                <td>Accion</td>
+                <td>Fecha y Hora</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% if auditoria %}
+            {%for auditoria in auditoria%}
+            <tr>
+                <td>{{auditoria.usuario}}</td>
+                {%if auditoria.id_proyecto%}
+                    <td>{{auditoria.id_proyecto}}</td>
+                    <td>{{auditoria.proyecto}}</td>
+                    <td>{{auditoria.fase}}</td>
+                {%else%}
+                    <td>--</td>
+                    <td>--</td>
+                    <td>--</td>
+                {%endif%}
+                <td>{{auditoria.accion}}</td>
+                <td>{{auditoria.fecha}}</td>
+            </tr>
+            {%endfor%}
+            {%endif%}
+            </tbody>
+
+        </table>
+
+
+        {% endblock %}
+
+    {% endblock interno%}

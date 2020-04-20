@@ -25,7 +25,10 @@ urlpatterns = [
     path('agregarUsuarios/<int:pk><int:nroFase>', views.agregarUsuarios, name='agregarUsuarios'),
     path('proyectos/', listar_proyectos, name='listar_proyectos'),
     path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
-    path('itemCancelado/', itemCancelado, name='itemCancelado'),
+    path('/itemCancelado/', itemCancelado, name='itemCancelado'),
+
+    path('DescargarArchivo/<int:id_item>/(?P<archivo>[a-zA-Z0-9])', DescargarArchivo, name='DescargarArchivo'),
+
     path('crear/TipoItem/<int:id_fase>',views.tipo_item_views_create,name='tipo_item_views_create'),
     path('crear/atributo/<str:nombre_ti>/<str:cantidad_atributos>/<str:fase_id>',views.add_atribute,name='add_atribute'),
     path('listar/usuarios/aprobados',views.ver_usuarios_aprobados,name='ver_usuarios_aprobados'),
@@ -58,9 +61,6 @@ urlpatterns = [
     path('eliminar/atributo/tipo/item/<int:id_ti>',views.eliminar_atributo_ti,name='eliminar_atributo_ti'),
     path('eliminar/tipo/item/<int:id_ti>',views.eliminar_tipo_item,name='eliminar_tipo_item'),
 
-    #practicas
-    path('subir/book',views.upload_book,name='upload_book'),
-    path('listar/book', views.list_book, name='listar_book')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
