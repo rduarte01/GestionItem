@@ -1,14 +1,18 @@
-{%extends 'detallesProyecto.html'%}
-    <title>Auditoria</title>
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Auditoria</title>
+    {%endblock%}
+</head>
+<body>
 
     {% block interno%}
 
         <h1>Auditoria</h1>
         <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
-        {% block content %}
+
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -45,7 +49,7 @@
 
         </table>
 
-
-        {% endblock %}
-
     {% endblock interno%}
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{%extends 'proyectos/base.html'%}
+
+    {%block title%}
+        <title>Crear TI</title>
+    {%endblock%}
+
+{% block interno %}
+{% load guardian_tags %}
+{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+
+
+{% if "is_gerente" in proyecto_perms %}
+    <div class="cities">
+        <table class="table table-bordered">
+                <form  method='POST' onSubmit="return enviado()">{% csrf_token%}
+                    {{tipo_item_form.as_p}}
+                    <input class="btn btn-primary" type='submit' value= 'Siguiente' />
+
+                </form>
+        </table>
+    </div>
+
+    {%else%}
+    <h1> Usted no es gerente de Proyecto para este {{proyecto.nombre}}, No puede crear Tipo de Item</h1>
+{% endif %}
+
+{% endblock %}

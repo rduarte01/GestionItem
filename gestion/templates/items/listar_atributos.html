@@ -8,66 +8,71 @@
 </head>
 <body>
 
+    {%block volver_atras %}
+    <a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase %}" role="button">Volver Atras</a>
+    {%endblock %}
+
+
 {% block interno %}
 
     <style>
     #ocultar{display:none;}
     </style>
 
-    <a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase %}" role="button">Volver Atras</a>
-
-          <div class="jumbotron">
 
 
+
+    <div class="cities">
     <table class="table table-bordered">
+          <thead>
+                <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
 
-        <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                <tr>
+                    <td><h5>VALORES</h5></td>
+                    <td>NOMBRE DE ATRIBUTO</td>
+                    <td>TIPO DE DATO</td>
+                    <td>ES OBLIGATORIO?</td>
+                    <td><h5>ACCIONES SOBRE ATRIBUTOS</h5></td>
+                </tr>
 
-        <tr>
-            <td><h5>VALORES</h5></td>
-            <td>NOMBRE DE ATRIBUTO</td>
-            <td>TIPO DE DATO</td>
-            <td>ES OBLIGATORIO?</td>
-            <td><h5>ACCIONES SOBRE ATRIBUTOS</h5></td>
-        </tr>
+                    {% for atributos in atributos%}
+                        {% for atributo in atributo%}
+                            {% if atributos.idAtributoTI.id_atributo == atributo.id_atributo%}
+                                <tr>
+                                    <td><strong>{{atributos.valor}}</strong></td>
+                                        <td>{{atributo.nombre}}</td>
+                                        <td>{{atributo.tipo_dato}}</td>
+                                        <td>{{atributo.es_obligatorio}}</td>
 
-            {% for atributos in atributos%}
-                {% for atributo in atributo%}
-                    {% if atributos.idAtributoTI.id_atributo == atributo.id_atributo%}
-                        <tr>
-                            <td><strong>{{atributos.valor}}</strong></td>
-                                <td>{{atributo.nombre}}</td>
-                                <td>{{atributo.tipo_dato}}</td>
-                                <td>{{atributo.es_obligatorio}}</td>
+                                            {%if atributo.tipo_dato == 'File'%}
+                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a>
+                                                <a class="btn btn-secondary" href="{% url 'gestion:DescargarArchivo' atributos.id_item.id_item atributos.valor%}" role="button" >DESCARGAR</a></td>
+                                            {%endif%}
 
-                                    {%if atributo.tipo_dato == 'File'%}
-                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a>
-                                        <a class="btn btn-secondary" href="{% url 'gestion:DescargarArchivo' atributos.id_item.id_item atributos.valor%}" role="button" >DESCARGAR</a></td>
-                                    {%endif%}
+                                            {%if atributo.tipo_dato == 'Decimal'%}
+                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
+                                            {%endif%}
 
-                                    {%if atributo.tipo_dato == 'Decimal'%}
-                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
-                                    {%endif%}
+                                            {%if atributo.tipo_dato == 'Date'%}
+                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
+                                            {%endif%}
 
-                                    {%if atributo.tipo_dato == 'Date'%}
-                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
-                                    {%endif%}
+                                            {%if atributo.tipo_dato == 'String'%}
+                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
+                                            {%endif%}
 
-                                    {%if atributo.tipo_dato == 'String'%}
-                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
-                                    {%endif%}
+                                            {%if atributo.tipo_dato == 'Boolean'%}
+                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
+                                            {%endif%}
+                                </tr>
+                            {%endif%}
+                        {%endfor%}
+                    {%endfor%}
 
-                                    {%if atributo.tipo_dato == 'Boolean'%}
-                                        <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
-                                    {%endif%}
-                        </tr>
-                    {%endif%}
-                {%endfor%}
-            {%endfor%}
-
-        </form>
+                </form>
+          </thead>
     </table>
-          </div>
+    </div>
 {% endblock interno %}
 
 

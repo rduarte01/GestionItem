@@ -455,9 +455,9 @@ def tipo_item_views_create(request,id_fase):
         proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto_id)
         context={
             'tipo_item_form': my_form,
-            'proyecto':proyecto
+            'proyectos':proyecto
            }
-        return render(request, 'crear_tipo_item.html', context)
+        return render(request, 'proyectos/crear_tipo_item.html', context)
 #Vistas agregadas por jesus
 
 def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
@@ -478,9 +478,10 @@ def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
             print("no valido")
     else:
         contexto={'formset':my_form,
-                 'cant_atributos': list(range(1,cantidad_atributos+1))
+                 'cant_atributos': list(range(1,cantidad_atributos+1)),
+                'proyectos':fase.id_Proyecto
                 }
-        return render(request,'crear_atributo.html',contexto)
+        return render(request,'proyectos/crear_atributo.html',contexto)
 
 #jesus
 def recoger_datos_tipo_item(my_form):
@@ -588,7 +589,7 @@ def auditoriaProyecto(request,pk):
         'auditoria':auditoria,
         'proyectos':proyectos
     }
-    return render(request, 'Auditoria.html', context)
+    return render(request, 'proyectos/ver_auditoria.html', context)
 
 #RUBEN
 def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
@@ -630,7 +631,7 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
             if ok:
                list.append(form[i].user.id)
             proyectos=Proyecto.objects.get(id_proyecto=pk)
-        return render(request, 'AggUser.html', {'form': form,'list':list,'pk':pk,"proyectos":proyectos})
+        return render(request, 'proyectos/agg_usuario_proyecto.html', {'form': form,'list':list,'pk':pk,"proyectos":proyectos})
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Agregar usuarios al proyecto')
 
@@ -1505,7 +1506,7 @@ def comite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/f
                 if ok:
                    list.append(form[i].user.id)
         print(list)
-        return render(request, 'comite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos,'idGerente':gerente.id})
+        return render(request, 'proyectos/ver_comite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos,'idGerente':gerente.id})
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'No es gerente')
 
@@ -1562,7 +1563,7 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
             if ok:
                list.append(form[i].user.id)
 
-        return render(request, 'AggComite.html', {'form': form,'list':list,'proyectos':proyectos,'idGerente':gerente.id})
+        return render(request, 'proyectos/agg_comite.html', {'form': form,'list':list,'proyectos':proyectos,'idGerente':gerente.id})
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'No es gerente')
 
@@ -1626,7 +1627,7 @@ def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo ge
                 if ok:
                    list.append(form[i].user.id)
         print(list)
-        return render(request, 'DeleteComite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos,'idGerente':gerente.id})
+        return render(request, 'proyectos/delete_comite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos,'idGerente':gerente.id})
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'No es gerente')
 

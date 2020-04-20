@@ -7,21 +7,14 @@
     {%endblock%}
 </head>
 <body>
+
+    {%block volver_atras %}
+        <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a>
+    {%endblock %}
+
 {% block interno %}
     {% load guardian_tags %}
     {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
-
-    <div class="cities">
-    <table class="table table-bordered">
-    <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a>
-          <thead>
-            <tr>
-                <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
-                <td><h5>ESTADO: {{proyectos.estado}}</h5></td>
-            </tr>
-        </thead>
-    </table>
-    </div>
 
     <div class="cities">
     <table class="table table-bordered">

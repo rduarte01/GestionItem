@@ -1,29 +1,33 @@
-{%extends 'detallesProyecto.html'%}
-{% load guardian_tags %}
-{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
-    <title>Comite de proyecto</title>
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Comite de cambio</title>
+    {%endblock%}
+</head>
+<body>
+
+    {%block volver_atras %}
+    <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" role="button">Volver Atras</a>
+    {%endblock %}
 
 {% block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
 
+{% if "is_gerente" in proyecto_perms %}
     <div class="cities">
     <table class="table table-bordered">
-    <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" role="button">Volver Atras</a>
           <thead>
         <tr>
-            <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
-            <td><h5>ESTADO</h5></td>
-            <td><h6>{{proyectos.estado}}</h6></td>
-            {% if "is_gerente" in proyecto_perms %}
                 <td><a href="{% url 'gestion:AggComite' proyectos.id_proyecto%}" class="btn btn-primary">✚ CREAR COMITE</a></td>
                 <td><a href="{% url 'gestion:DeleteComite' proyectos.id_proyecto%}" class="btn btn-primary">- QUITAR USUARIOS DEL COMITE</a></td>
-            {%endif%}
         </tr>
         </thead>
     </table>
     </div>
+{%endif%}
 
     <div class="cities">
     <table class="table table-bordered">
@@ -52,18 +56,10 @@
      </div>
     </body>
     </html>
-
-    <html>
-    <head>
-    <style>
-    .cities {
-      background-color: silver;
-      color: white;
-      margin: 20px;
-      padding: 20px;
-    }
-    </style>
-    </head>
     <body>
 
 {% endblock interno%}
+
+
+</body>
+</html>

@@ -50,10 +50,34 @@
 				<span class="hamb-bottom"></span>
             </button>
             <div class="container">
+                {%block volver_atras %}
+                    <a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
+                {%endblock %}
+
+                {%block titulo_proyecto %}
+                        <div class="cities">
+                            <table class="table table-bordered">
+
+                                <thead>
+                                <tr>
+                                    <td>NOMBRE DE PROYECTO</td>
+                                    <td>DESCRIPCION</td>
+                                    <td>ESTADO</td>
+                                </tr>
+                                </thead>
+                                <thead>
+                                <tr>
+                                    <td><h2>{{proyectos.nombre}}</h2></td>
+                                    <td><h4>{{proyectos.descripcion}}</h4></td>
+                                    <td><h2>{{proyectos.estado}}</h2></td>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                {% endblock %}
 
                 {%block interno %}
-
-                <h1>sin contenido</h1>
+                    <h1>sin contenido</h1>
                 {% endblock interno %}
 
                 <div class="row">

@@ -1,25 +1,18 @@
-{%extends 'detallesProyecto.html'%}
-{% load guardian_tags %}
-{% get_obj_perms request.user for proyectos as "proyecto_perms" %}
-    <title>Comite de proyecto</title>
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Comite de proyecto</title>
+    {%endblock%}
+</head>
+<body>
 
 {% block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
 
         {% if "is_gerente" in proyecto_perms %}
-            <div class="cities">
-            <table class="table table-bordered">
-            <a class="btn btn-primary" href="{% url 'gestion:comite' proyectos.id_proyecto%}" role="button">Volver Atras</a>
-                  <thead>
-                    <tr>
-                        <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
-                        <td><h5>ESTADO: {{proyectos.estado}}</h5></td>
-                    </tr>
-                </thead>
-            </table>
-            </div>
 
             <div class="cities">
             <table class="table table-bordered">
@@ -65,16 +58,6 @@
             </body>
             </html>
             <html>
-            <head>
-            <style>
-            .cities {
-              background-color: silver;
-              color: black;
-              margin: 20px;
-              padding: 20px;
-            }
-            </style>
-            </head>
             <body>
         {%else%}
                 <h1>Usted no es gerente de este proyecto, por tanto no puede agregar usuarios al comite</h1>
@@ -83,3 +66,6 @@
 
     {% endblock interno%}
 
+
+</body>
+</html>

@@ -8,6 +8,10 @@
     {%endblock%}
 </head>
 <body>
+{%block volver_atras %}
+            <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' pk%}" role="button">Volver Atras</a>
+{%endblock %}
+
 {% block interno %}
 
             <title>Usuarios del proyecto</title>
@@ -18,12 +22,11 @@
             #ocultar{display:none;}
             </style>
 
-            <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' pk%}" role="button">Volver Atras</a>
 
-                  <div class="jumbotron">
+    <div class="cities">
+    <table class="table table-bordered">
+          <thead>
 
-             <form method="POST" action="">{% csrf_token %}
-            <table class="table table-bordered">
                 <form method="POST" action="">{% csrf_token %}
                     {%if list%}
                         <tr>
@@ -51,10 +54,9 @@
                      <h1>Solo usted que es gerente forma parte del proyecto! favor añada usuarios.</h1>
                     {%endif%}
                 </form>
-            </table>
-             </form>
-                  </div>
-
+          </thead>
+    </table>
+    </div>
 {% endblock interno %}
 
 </body>

@@ -1,29 +1,25 @@
-{% extends 'detallesProyecto.html'%}
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Añadir usuarios</title>
+    {%endblock%}
+</head>
+<body>
+    {%block volver_atras %}
+    <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' pk%}" role="button">Volver Atras</a>
+    {%endblock %}
 
-
-
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-
-
-{% block interno %}
-    <title>Agrega Usuarios</title>
+    {% block interno %}
     <h1>Añade usuarios a tu proyecto!</h1>
 
-    <style>
-    #ocultar{display:none;}
-    </style>
-
-    {% block contect %}
     {% if perms.gestion.is_gerente %}
 
-    <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' pk%}" role="button">Volver Atras</a>
-        <div class="jumbotron">
-            <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-                {% block content %}
-                    <table class="table table-bordered">
-                        <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+    <div class="cities">
+    <table class="table table-bordered">
+          <thead>
+          <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
                             {%if list%}
                                 <tr>
                                     <td><h4>NOMBRE</h4></td>
@@ -49,15 +45,15 @@
                                 <h1>Sin usuarios para añadir al proyecto</h1>
                             {%endif%}
                         </form>
-                    </table>
-                {% endblock %}
+          </thead>
+    </table>
+    </div>
 
-            </form>
-        </div>
         {% else %}
             <h1>Usted no es tiene el permiso</h1>
             <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
         {% endif %}
-    {% endblock %}
 
 {% endblock interno %}
+</body>
+</html>
