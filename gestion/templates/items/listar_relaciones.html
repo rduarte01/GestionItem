@@ -9,12 +9,7 @@
 </head>
 <body>
 
-
     {% block interno %}
-            <table class="table table-bordered" >
-            <td><h2>Relaciones del item de nombre {{itemActual.nombre}}</h2></td>
-        </table>
-
 
     <div class="cities">
     <table class="table table-bordered">
@@ -22,6 +17,9 @@
 
             <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
                 {%if relaciones%}
+
+                        <tr><h3>Relaciones del item de nombre {{itemActual.nombre}}</h3></tr>
+
                         <tr>
                             <td>NOMBRE DE ITEM</td>
                             <td>NOMBRE DE FASE A LA QUE PERTENECE</td>

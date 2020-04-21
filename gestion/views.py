@@ -214,9 +214,16 @@ def Contactos(request):
         asunto= "Inconveniente o consulta de: "+ str(user)
         guardarAuditoria = "El usuario envio la siguiente consulta o inquietud: "+ mensaje
         registrarAuditoria(request.user, guardarAuditoria)
-
         CorreoMail(asunto,mensaje,"gerardocabrer@gmail.com")
-        return redirect('gestion:menu')
+        context = {
+            "mensaje": "GRACIAS POR UTILIZAR NUESTRO SISTEMA! :)",
+            "titulo": "MENSAJE ENVIADO",
+            "titulo_b1": "SALIR",
+            "boton1": "/menu/",
+            "titulo_b2": "",
+            "boton2": "",
+        }
+        return render(request, 'Error.html', context)
 
     context={
         "form":form,
@@ -304,11 +311,24 @@ def creacionProyecto(request):
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
         ### NADA QUE TOCAR
+        cantidad = formProyecto.cleaned_data
+        cantidad_fases=cantidad.get("fase")##### PARA WALTER
+        if(cantidad_fases<=0):
+            context = {
+                "mensaje": "LA FASE DEBE SER MAYOR A 1",
+                "titulo": "ERROR EN FASE",
+                "titulo_b2": "INTENTAR DE NUEVO",
+                "boton2": "/creacionProyecto/",
+                "titulo_b1": "SALIR",
+                "boton1": "/menu/",
+            }
+            return render(request, "Error.html", context)
+
         instanceProyecto.save()######## guarda a la BD, en medio se puede manipular el texto
 
         global CANTIDAD
-        cantidad = formProyecto.cleaned_data
-        cantidad_fases=cantidad.get("fase")##### PARA WALTER
+
+
         CANTIDAD=cantidad_fases-1
 
 

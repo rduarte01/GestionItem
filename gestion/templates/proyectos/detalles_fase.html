@@ -23,8 +23,9 @@
                 <td><h5>NOMBRE DE FASE : {{fases.nombre}}</h5></td>
                 <td><h5>DESCRIPCION : {{fases.descripcion}}</h5></td>
                 <td><h5>ESTADO : {{fases.estado}}</h5></td>
-            <!--{% if "is_gerente" in proyecto_perms %}-->
+
                 <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></td>
+            <!--{% if "is_gerente" in proyecto_perms %}-->
             <!--{% endif%}-->
             </tr>
         </thead>

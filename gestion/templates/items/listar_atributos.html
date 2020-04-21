@@ -13,6 +13,8 @@
     {%endblock %}
 
 
+
+
 {% block interno %}
 
     <style>
@@ -26,6 +28,7 @@
     <table class="table table-bordered">
           <thead>
                 <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                    <tr><h3>Lista de atributos del item de nombre {{itemActual.nombre}}</h3></tr>
 
                 <tr>
                     <td><h5>VALORES</h5></td>
