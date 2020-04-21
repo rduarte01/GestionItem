@@ -11,3 +11,7 @@ GestionItem/__pycache__/
 books/
 
 media/
+
+gestion/migrations/__pycache__/
+
+gestion/migrations/
