@@ -1,15 +1,17 @@
-{% extends 'Menu.html' %}
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-              {% block campos %}
-                  <li class="active"><a href="{%url 'gestion:menu'%}">Inicio</a></li>
-                  <li><a href="{%url 'gestion:perfil'%}">Perfil</a></li>
-                  <li><a href="{%url 'gestion:logout'%}">Cerrar_Sesion</a></li>
-                  <li><a href="#">Ayuda</a></li>
-                {% endblock campos %}
+{% extends 'Menu/base.html' %}
+
+
+    {%block title%}
+        <title>En espera</title>
+    {%endblock%}
+              {% block url %}
+                <a href="{% url 'gestion:menu' %}"> Gestion Items</a></div></div>
+                <li><a href="{% url 'gestion:perfil' %}">Perfil</a></li>
+                <li><a href="{% url 'gestion:Contactos' %}">Contáctanos</a></li>
+                <li><a href="{% url 'gestion:logout' %}">Cerrar Sesion</a></li>
+                {% endblock url %}
   <body>
-  {%block body %}
+  {%block interno %}
   <div class="container">
       <div class="masthead">
         <h3 class="muted">Gestión de Item</h3>

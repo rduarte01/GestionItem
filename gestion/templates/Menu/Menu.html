@@ -37,12 +37,26 @@
             <!-- Jumbotron -->                   <!-- Jumbotron -->
             <div class="jumbotron">
                 {% if perms.gestion.is_gerente %}
-                    <a class="btn btn-large btn-success" href="{%url 'gestion:CrearProyecto' %}"><h4>Usted es un Gerente! Cree un Proyecto!</h4></a>
+                <button type="button" class="btn btn-large btn-success" data-toggle="modal" data-target="#basicExampleModal"><h5>Usted es un Gerente! Cree un Proyecto!</h5></button>
                 {% endif %}
                     <a class="btn btn-large btn-success" href="{%url 'gestion:listar_proyectos'%}"><h4>Trabaje sobre sus proyectos!</h4></a>
             </div>
         </div>
     {% endblock interno %}
 
+
+            {%block modal-title%}
+            <strong>Creacion de Proyecto</strong>
+            {%endblock%}
+
+            {%block modal%}
+                <h5>Fue seleccionado como gerente para un proyecto, cree el proyecto teniendo en cuenta que solo podra crear un
+                proyecto, caso contrario tendra que pedirle nuevamente el permiso al administrador del sistema
+                    para crear otro, gracias por utilizar nuestro sistema! Exitos.</h5>
+        {%endblock%}
+        {%block boton-modal%}
+            <a class="btn btn-primary" href="{%url 'gestion:CrearProyecto' %}">Continuar</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {%endblock%}
 </body>
 </html>

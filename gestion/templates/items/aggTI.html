@@ -13,13 +13,12 @@
 #ocultar{display:none;}
 </style>
 
-<!--{% if perms.gestion.crear_item %}-->
 
-    {% block contect %}
+
         <a class="btn btn-primary" href="{% url 'gestion:itemCancelado'%}" role="button">Cancelar</a>
         <div class="jumbotron">
          <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-        {% block content %}
+
         <table class="table table-bordered">
             <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
                 <tr>
@@ -32,11 +31,12 @@
                 {% endfor %}
             </form>
         </table>
-        {% endblock %}
+
          </form>
         </div>
-    {% endblock %}
 
+
+<!--{% if perms.gestion.crear_item %}-->
 <!--{% else %}
         <h1>Usted no es tiene el permiso de crear item</h1>
         <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
