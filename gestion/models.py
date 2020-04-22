@@ -4,6 +4,8 @@ from django.contrib.auth.models import User,Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+#-----------------------MODELO PROYECTO-----------------------------------------
+
 class Proyecto(models.Model):
     """
     PRIMARY_KEY AUTOMATICO A MEDIDA QUE SE AGREGA PROYECTOS
@@ -40,12 +42,14 @@ class Proyecto(models.Model):
                        )
         """DEFINE LOS PERMISOS DEL MODELO PROYECTO"""
 
+#-----------------------MODELO FASE-----------------------------------------
+
 class Fase(models.Model):
     """Se tiene el modelo fase, el cual será utilizado en el proyecto para albergar a los items y poder
     dividirlos en etapas.
     Las fases tendrán dos estados: Abierta y Cerrada, por defecto adoptará el estado de Abierto."""
 
-    choises_data_type = (
+    choices_data_type = (
         ("Abierta", "Abierta"),
         ("Cerrada", "Cerrada")
     )
@@ -57,7 +61,7 @@ class Fase(models.Model):
     """GUARDA EL NOMBRE DE LA FASE"""
     descripcion = models.TextField('Descripción', blank = False, null = False)
     """GUARDA LA DESCRIPCION DE LA FASE"""
-    estado = models.CharField('Estado', max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'Abierta')
+    estado = models.CharField('Estado', max_length = 10, blank = False, null = False, choices = choices_data_type, default = 'Abierta')
     """GUARDA EL ESTADO DE LA FASE"""
     id_Proyecto = models.ForeignKey(Proyecto, on_delete = models.CASCADE)
     """SSE RELACIONA LA FASE CON EL PROYECTO"""
@@ -84,6 +88,8 @@ class Fase(models.Model):
     ordering = ['id_Fase']
     """ORDENA POR ID DE FASE"""
 
+#-----------------------MODELO TIPO DE ITEM-----------------------------------------
+
 class TipoItem(models.Model):
     """"
         Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string
@@ -107,6 +113,7 @@ class TipoItem(models.Model):
     def __str__(self):
         return '{}'.format(self.nombre)
 
+#-----------------------MODELO ATRIBUTO DE TIPO DE ITEM-----------------------------------------
 
 class Atributo(models.Model):
     """"
@@ -137,6 +144,8 @@ class Atributo(models.Model):
         '''Clase que provee meta datos de como para el modelo Atributo'''
         ordering=['nombre']
         '''para saber por que atibuto vamos a ordenar'''
+
+#-----------------------MODELO AUDITORIA-----------------------------------------
 
 class Auditoria(models.Model):
     """TABLA EN DONDE SE GUARDAN LAS MODIFICACIONES QUE REALIZAN TODOS LOS USUARIOS EN EL SISTEMA"""
@@ -210,6 +219,15 @@ class Usuario(models.Model):
 
 class Item(models.Model):
     """MODELO DE ITEM"""
+
+    choises_data_type = (
+        ("Creado", "Creado"),
+        ("Aprobado", "Aprobado"),
+        ("Finalizado", "Finalizado"),
+        ("En revision", "En revision")
+    )
+    """ESTADOS POSIBLES DE CADA UNO DE LOS ITEMS DEL PROYECTO, POR DEFECTO, AL CREAR UN ITEM TENDRA ESTADO CREADO"""
+
     id_item= models.AutoField(primary_key = True) ###### clave de proyecto
     """GUARDA EL ID DEL ITEM"""
     nombre= models.CharField(max_length=30)
@@ -224,6 +242,23 @@ class Item(models.Model):
     """FASE  A LA CUAL PERTENECE EL ITEM"""
     actual=models.BooleanField(default=True)
     """SI ESTA EN TRUE SERA QUE EL ITEM ESTA ACTIVO Y NO UNA VERSION ANTERIOR"""
+    estado = models.CharField('Estado', max_length = 20, blank = False, null = False, choices = choises_data_type, default = 'Creado')
+    """ATRIBUTO CORRESPONDIENTE AL ESTADO QUE ADOPTARÁ UN DETERMINADO ITEM, EL MISMO VARÍA DURANTE EL TRANSCURSO DEL PROYECTO SEGÚN LO QUE EL USUARIO DECIDA"""
+
+    class Meta:
+        verbose_name = 'Item'
+        """MANERA EN LA CUAL SERÁ LLAMADO EN SINGULAR UN ITEM"""
+        verbose_name_plural = 'Items'
+        """MANERA EN LA CUAL SERA LLAMADO UN ITEM EN FORMA PLURAL"""
+        ordering = ['id_item']
+        """CAMPO POR EL CUAL SE ORDENARÁ UNA LISTA DE ITEMS, EN ESTE CASO, OPTAMOS POR ORDENARLOS A TRAVES DE SU ID"""
+
+    def __str__(self):
+        """HACE REFERENCIA A LA MANERA EN LA CUAL QUEREMOS VISUALIZAR LOS ITEMS, EN ESTE CASO LOS VEREMOS POR SU NOMBRE, POR DEFECTO SE 
+        VISUALIZA DE LA SIGUIENTE MANERA: ITEM OBJECT(1), ITEM OBJECT(2), Y ASÍ SUCESIVAMENTE. 
+        """
+        return self.nombre
+        """SE VISUALIZA LOS ITEMS POR SU NOMBRE"""
 
 class Relacion(models.Model):
     """MODELO DE RELACION DE ITEMS"""
@@ -268,3 +303,52 @@ class Book(models.Model):
     title=models.CharField(max_length=100)
     autor=models.CharField(max_length=100)
     pdf=models.FileField(upload_to='Books')
+
+#-----------------------MODELO LINEA BASE-----------------------------------------
+
+class LineaBase(models.Model):
+    """
+    HACE REFERENCIA A UN CONJUNTO DETERMINADO DE ITEMS APROBADOS EN UNA FASE, LOS CUALES PASAN A FORMAR PARTE DE UNA LINEA BASE, EL USUARIO ES QUIEN DECIDE
+    EL MOMENTO EN EL CUAL DESEA QUE ESTOS ITEMS SE AGRUPEN DE ESTA MANERA, UNA VEZ MÁS SEÑALANDO QUE LOS MISMOS DEBEN ESTAR APROBADOS OBLIGATORIAMENTE. 
+    """
+
+    choices_data_type = (
+        ("Cerrada", "Cerrada"),
+        ("Rota", "Rota"),
+        ("Comprometida", "Comprometida")
+    )
+    """
+    POSIBLES OPCIONES DE ESTADO DE LAS LINEAS BASE, POR DEFECTO LA LB TENDRÁ ESTADO CERRADA 
+    """
+    idLB = models.AutoField(primary_key = True)
+    """
+    HACE REFERENCIA AL ID QUE VA A LLEVAR CADA LINEA BASE EN UNA FASE DETERMINADA, CABE DESTACAR QUE EL ID ES UNICO E IRREPETIBLE
+    """
+    nombreLB = models.CharField('Nombre de Linea Base', max_length = 50, blank = False, null = False)
+    """
+    HACE REFERENCIA AL NOMBRE QUE LLEVARA LA LINEA BASE EN UNA FASE DETERMINADA, ASI COMO EL ID, TAMBIÉN EL NOMBRE ES UNICO E IRREPETIBLE
+    """
+    #items = models.ForeignKey(Item, on_delete = models.CASCADE)
+    """
+    HACE REFERENCIA AL CONJUNTO DE ITEMS QUE COMPONEN LA LINEA BASE
+    """
+    #idFase = models.ForeignKey(Fase, on_delete = models.CASCADE)
+    """
+    HACE REFERENCIA A LA FASE A LA CUAL PERTENECE LA LINEA BASE, PUEDE MÁS DE UNA LINEA BASE EN UNA MISMA FASE PERO NO PUEDEN COMPARTIR ITEMS
+    """
+    estado = models.CharField('Estado', max_length = 50, blank = False, null = False, choices = choices_data_type, default = 'Cerrada')
+    """HACE REFERENCIA A UN ESTADO EN CONCRETO DE UNA DETERMINADA LINEA BASE, LA MISMA TENDRÁ POR DEFECTO EL ESTADO CERRADA"""
+    
+    class Meta:
+        ordering = ['nombreLB']
+        """SE ORDENARAN LAS LINEAS BASE DE ACUERDO AL NOMBRE"""
+        verbose_name = 'Linea Base'
+        """DENOMINACION SINGULAR DE UNA LINEA BASE"""
+        verbose_name_plural = 'Lineas Base'
+        """DENOMINACION PLURAL DE UNA LINEA BASE, EN ESTE CASO MAS DE UNA"""
+
+class LB_item(models.Model):
+
+    id = models.AutoField(primary_key = True)
+    item = models.ForeignKey(Item, on_delete = models.CASCADE)
+    lb = models.ForeignKey(LineaBase, on_delete = models.CASCADE)

@@ -10,3 +10,5 @@ pytest
 pytest-django
 pytest-cov
 mixer
+django-guardian
+dropbox

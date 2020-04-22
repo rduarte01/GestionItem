@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado
+from .views import crearFase, listar_auditoria,listar_proyectos, proyectoCancelado, CrearLB
 from . import views
 #from .views import estadoProyecto,detallesProyecto,UsersProyecto,desvinculacionProyecto,ModificarRol,VerRoles,agregarUsuarios, VerUsersEnEspera, ActualizarUser, CrearRol, crearItem,agg_listar_tipo_item,aggAtributos,relacionarItem,detallesFase,listar_relaciones,listar_atributos,itemCancelado,comite,AggComite,desvinculacionComite,DeleteComite,auditoriaProyecto
 from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
+#from django.contrib.auth.decorators import login_required
 
 
 
@@ -27,7 +28,7 @@ urlpatterns = [
     path('agregarUsuarios/<int:pk><int:nroFase>', views.agregarUsuarios, name='agregarUsuarios'),
     path('proyectos/', listar_proyectos, name='listar_proyectos'),
     path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
-    path('/itemCancelado/', itemCancelado, name='itemCancelado'),
+    path('itemCancelado/', itemCancelado, name='itemCancelado'),
 
     path('crear/TipoItem/<int:id_fase>',views.tipo_item_views_create,name='tipo_item_views_create'),
     path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>/<int:fase_id>',views.add_atribute,name='add_atribute'),
@@ -61,10 +62,13 @@ urlpatterns = [
     path('editar/tipo/item/<int:id_ti>/agregar/atributo',views.agregar_atributo_ti,name='agregar_atributo_ti'),
     path('eliminar/atributo/tipo/item/<int:id_ti>',views.eliminar_atributo_ti,name='eliminar_atributo_ti'),
     path('eliminar/tipo/item/<int:id_ti>',views.eliminar_tipo_item,name='eliminar_tipo_item'),
+    path('crearLB/<int:pk>/', CrearLB.as_view(), name = 'crearLB'),
+    path('cambiarEstadoItem/<int:pk>/', views.modificarEstadoItem, name = 'cambiarEstadoItem'),
 
     #practicas
     path('subir/book/<int:id_proyecto>/<int:id_item>',views.upload_book,name='upload_book'),
-    path('listar/book/<int:id_item>', views.list_book, name='listar_book')
+    path('listar/book/<int:id_item>', views.list_book, name='listar_book'),
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

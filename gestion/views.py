@@ -8,12 +8,12 @@ from django.contrib.auth.models import Permission,Group
 from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
 from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario,Book
-from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm,BookForm
+from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm,BookForm, LBForm
 from time import gmtime, strftime
-from .forms import FaseForm, FormProyectoEstados,FormItem
+from .forms import FaseForm, FormProyectoEstados,FormItem, FormItemFase
 from django.db.models import Count
 from django.utils.decorators import method_decorator
-from .models import Proyecto,TipoItem,Atributo,Item,Fase,Atributo_Item,Relacion,Versiones,Comite
+from .models import Proyecto,TipoItem,Atributo,Item,Fase,Atributo_Item,Relacion,Versiones,Comite, LineaBase, LB_item
 from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -23,6 +23,8 @@ from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required_or_403
 from django.shortcuts import get_object_or_404
 from django.core.files.storage import FileSystemStorage
+from django.http import Http404
+#from django.views.generic import View
 
 
 #### GLOBALES
@@ -1641,3 +1643,115 @@ def subirArchivo(ruta,opcion,nombre):
     else:
         # Descarga archivo
         dbx.files_download_to_file(ruta, nombre)
+
+#------------------CREACION DE LINEA BASE----------------------
+
+class CrearLB(CreateView):
+    """
+    HACE REFERENCIA A LA CREACIÓN DE UN CONJUNTO DE ITEMS AGRUPADOS QUE TENGAN ESTADO APROBADO, ES UNA ESPECIE DE ENCAPSULAMIENTO DE ESTOS ITEMS, A
+    MEDIDA QUE SE VA DESARROLLANDO UN PROYECTO ES NECESARIO ENCAPSULAR LOS ITEMS PARA PODER PASAR A FASES SIGUIENTES.
+
+
+    :param request: metodo http enviado desde el navegador para ejecutar la funcion
+    :param pk: id de fase a la cual está relacionada la Linea Base a ser creada
+    """
+    model = LineaBase
+    form_class = LBForm
+    template_name = 'crearLB.html'
+    success_url = reverse_lazy('gestion:detallesFase')
+
+    def get_context_data(self, **kwargs):
+
+        contexto = super(CrearLB, self).get_context_data(**kwargs)
+        idfase = self.kwargs.get('pk', None)
+        contexto['fase'] = idfase
+        #print(idfase)
+        lista_items = Item.objects.filter(fase = idfase, estado = 'Aprobado')
+        contexto['items'] = lista_items
+
+        try:
+            fase = Fase.objects.get(id_Fase = idfase)
+            lista = LB_item.objects.all()
+        except :
+            lista = None
+        
+        listaItems = []
+
+        for i in lista_items:
+            ok = True
+            for j in lista:
+                if i.id_item == j.item.id_item:
+                    ok = False
+                    break
+            if ok == True:
+                listaItems.append(i.id_item)
+                print(listaItems)
+        
+        contexto['listaitems'] = listaItems
+
+        return contexto
+
+    def post(self, request, *args, **kwargs):
+        
+        try:
+            ultimaLB = LineaBase.objects.last()
+        except :
+            ultimaLB = None
+
+        if ultimaLB == None:
+            lb = '0'
+        else:
+            lb = str(ultimaLB.idLB)
+
+        seleccion = request.POST.getlist('checkbox')
+        
+        pk = kwargs['pk']
+
+        nombrelb = 'LineaBase' + str(int(lb) + 1) + 'Fase' + str(pk)
+        
+        p = LineaBase(nombreLB = nombrelb)
+
+        p.save()
+
+        x = LineaBase.objects.last()
+
+        for seleccion in seleccion:
+            
+            item = Item.objects.get(id_item = seleccion)
+
+            p = LB_item(item = item, lb = x)
+
+            p.save()
+        
+
+
+    #nombreLB = LineaBase1Fase2
+    #idLB = 1 ----> 1 + 1 
+    #Fase = 2
+        return redirect('gestion:listar_proyectos')
+
+def modificarEstadoItem(request, pk):
+
+    form = FormItemFase(request.POST)
+
+    item = Item.objects.get(id_item = pk)
+
+    contexto = {
+        'form' : form,
+        'item' : item,
+    }
+
+    if form.is_valid():
+
+        x=form.cleaned_data
+        z=x.get("estado")#### ESTADO SELECCIONADO
+
+        item.estado = z
+
+        if z == 'Aprobado':
+            
+            item.save()
+
+        return redirect('gestion:cambiarEstadoItem', pk)
+
+    return render(request, 'cambiarEstadoItem.html', contexto)

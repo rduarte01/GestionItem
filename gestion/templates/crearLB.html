@@ -1,0 +1,44 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Creación de Linea Base</h2>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+
+            </button>
+        </div>
+        <form action="{% url 'gestion:crearLB' fase %}" method="POST">
+
+            {% csrf_token %}
+
+            <div class="modal-body">
+                
+                {% for item in items %}
+
+                    
+                    {% for a in listaitems %}
+                    
+                        {% if item.id_item == a %}
+                            <br>
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{item.id_item}}"
+                                            id="{{item.id_item}}}">
+                                        <label class="form-check-label" for="{{item.id_item}}}">
+                                            <h5>{{ item.nombre }}</h5>
+                                        </label>
+                                    </div>
+                                </td>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+                <button class="btn bn-primary" type="submit">Confirmar</button>
+            </div>
+
+        </form>
+    </div>
+</div>

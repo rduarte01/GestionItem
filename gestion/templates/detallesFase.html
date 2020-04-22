@@ -7,92 +7,154 @@
 {% bootstrap_javascript jquery='full' %}
 
 {% block interno %}
-    <title>Detalle de Fase</title>
-    <div class="cities">
+<title>Detalle de Fase</title>
+<div class="cities">
     <table class="table table-bordered">
-    <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a>
-          <thead>
+        <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}"
+            role="button">Volver Atras</a>
+        <thead>
             <tr>
-                <td><h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5></td>
-                <td><h5>ESTADO</h5></td>
-                <td><h6>{{proyectos.estado}}</h6></td>
+                <td>
+                    <h5>NOMBRE DE PROYECTO : {{proyectos.nombre}}</h5>
+                </td>
+                <td>
+                    <h5>ESTADO</h5>
+                </td>
+                <td>
+                    <h6>{{proyectos.estado}}</h6>
+                </td>
             </tr>
         </thead>
     </table>
-    </div>
+</div>
 
 
-    <div class="cities">
+<div class="cities">
     <table class="table table-bordered">
-          <thead>
+        <thead>
             <tr>
-                <td><h5>NOMBRE DE FASE : {{fases.nombre}}</h5></td>
-                <td><h5>DESCRIPCION : {{fases.descripcion}}</h5></td>
-                <td><h5>ESTADO : {{fases.estado}}</h5></td>
+                <td>
+                    <h5>NOMBRE DE FASE : {{fases.nombre}}</h5>
+                </td>
+                <td>
+                    <h5>DESCRIPCION : {{fases.descripcion}}</h5>
+                </td>
+                <td>
+                    <h5>ESTADO : {{fases.estado}}</h5>
+                </td>
             </tr>
         </thead>
     </table>
-    </div>
+</div>
 
 
-    <div class="cities">
+<div class="cities">
     <table class="table table-bordered">
         {% if items%}
-            <thead>
+        <thead>
             <tr>
-                <td><h5>ITEMS</h5></td>
-                <td><h5>DESCRIPCION</h5></td>
-                <td><h5>COSTO</h5></td>
-                <td><h5>VER RELACIONES</h5></td>
-                <td><h5>VER ATRIBUTOS</h5></td>
+                <td>
+                    <h5>ITEMS</h5>
+                </td>
+                <td>
+                    <h5>DESCRIPCION</h5>
+                </td>
+                <td>
+                    <h5>COSTO</h5>
+                </td>
+                <td>
+                    <h5>VER RELACIONES</h5>
+                </td>
+                <td>
+                    <h5>VER ATRIBUTOS</h5>
+                </td>
 
-                <td><h5>VER ARCHIVOS</h5></td>
+                <td>
+                    <h5>VER ARCHIVOS</h5>
+                </td>
+
+                <td>
+                    <h5>CAMBIAR ESTADO</h5>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-                {%for items in items %}
-                <tr>
-                    <td>{{items.nombre}}</td>
-                    <td>{{items.descripcion}}</td>
-                    <td>{{items.costo}}</td>
-                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Relaciones</a></td>
-                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
+        </thead>
+        <tbody>
+            {%for items in items %}
+            <tr>
+                <td>{{items.nombre}}</td>
+                <td>{{items.descripcion}}</td>
+                <td>{{items.costo}}</td>
+                <td><a type="button" class="btn btn-primary"
+                        href="{% url 'gestion:listar_relaciones' items.id_item %}">Relaciones</a></td>
+                <td><a type="button" class="btn btn-primary"
+                        href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}">Atributos TI</a>
+                </td>
 
-                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_book' items.id_item  %}" >Ver Archivos adjuntos</a></td>
-                </tr>
-                {%endfor%}
+                <td><a type="button" class="btn btn-primary" href="{% url 'gestion:listar_book' items.id_item  %}">Ver
+                        Archivos adjuntos</a></td>
+
+                <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}">Estado
+                        Item</a></td>
+            </tr>
+            {%endfor%}
             {%else%}
-            <td><h2>No hay items en la fase, crealos!</h2></td>
-        {%endif%}
-    <tbody>
-      </table>
-     </div>
-    </body>
-    </html>
+            <td>
+                <h2>No hay items en la fase, crealos!</h2>
+            </td>
+            {%endif%}
+        <tbody>
+    </table>
+</div>
+</body>
 
-        <div class="cities">
+</html>
+
+<div class="cities">
     <table class="table table-bordered">
-          <thead>
-        <tr>
-            <!--{% if "is_gerente" in proyecto_perms %}-->
+        <thead>
+            <tr>
+                
                 <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></td>
-            <!--{% endif%}-->
-                <td><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}"class="btn btn-primary">VER TI DEL PROYECTO</a></td>
-        </tr>
+                
+                <td><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}" class="btn btn-primary">VER TI DEL PROYECTO</a></td>
+                <td><button class="btn btn-primary" type="button" onclick="abrir_modal_creacion('{% url 'gestion:crearLB' fases.id_Fase %}')">Crear Linea Base</button></td>-->
+            </tr>
         </thead>
     </table>
+</div>
+
+<html>
+
+<head>
+    <style>
+        .cities {
+            background-color: silver;
+            color: white;
+            margin: 20px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="modal fade" id="creacion" role="dialog">
+
     </div>
 
-    <html>
-    <head>
-    <style>
-    .cities {
-      background-color: silver;
-      color: white;
-      margin: 20px;
-      padding: 20px;
-    }
-    </style>
-    </head>
-    <body>
-{% endblock interno %}
+    {% endblock interno %}
+
+
+    {% block extrajs %}
+
+    <script type="text/javascript">
+
+        var $ = jQuery.noConflict();
+        function abrir_modal_creacion(url) {
+            $('#creacion').load(url, function () {
+                $(this).modal('show');
+            });
+        }
+
+    </script>
+    {% endblock extrajs %}
