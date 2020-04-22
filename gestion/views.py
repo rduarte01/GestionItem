@@ -1116,7 +1116,7 @@ def crearItem(request,Faseid):
     fases=Fase.objects.filter(id_Proyecto=proyecto)
     cont = 0
 
-    if(proyecto.estado == "INICIADO"):
+    if(proyecto.estado != "INICIADO"):
         context = {
             "mensaje": "EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado),
             "titulo": "PROYECTO NO INICIADO",
