@@ -3,15 +3,23 @@
 {% bootstrap_javascript jquery='full' %}
 
 {% block title %}
-    <h1>Creacion de Proyecto</h1>
+
 {% endblock title%}
 
 {% block contect %}
     {% if perms.gestion.is_gerente %}
-        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a>
         <div class="jumbotron">
+         <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a><h1>Creacion de Proyecto</h1>
+                 <br>
+                <br>
             <form method="POST"  action="" onSubmit="return enviado()">{% csrf_token %}
                 {{ formProyecto.as_p }}
+
+                <h6>Ingrese la cantidad de fases para el proyecto</h6>
+                <input type="number" class="form-control" name="fase" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <br>
+                <br>
+                <br>
                 <input type="submit" class="btn btn-primary" value="Guardar">
             </form>
           </div>

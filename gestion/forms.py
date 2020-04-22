@@ -60,7 +60,6 @@ class FormProyecto(forms.ModelForm):
     FORMULARIO PARA INICIO DE PROYECTO EN DONDE SE MOSTRARN LOS CAMPOS COMO NOMBRE DE PROYECTO,
     DESCRIPCION, ESTADO Y SE DESPLEGARAN LOS USUARIOS A SER AÑADIDOS AL PROYECTO EN CREACION
     """
-    fase = forms.IntegerField()
     class Meta:
         """META PARA DEFINIR LOS CAMPOS A MOSTRAR EN EL FORMULARIO"""
         model = Proyecto
@@ -73,7 +72,7 @@ class FormProyecto(forms.ModelForm):
         """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {
             "nombre":"Ingrese un Nombre para el proyecto",
-            "descripcion":"Ingrese una descripcion si lo desea",
+            "descripcion":"Ingrese una descripcion para el proyecto",
             "users":"Seleccione los usuarios a añadir",
         }
         """LA ETIQUETA DE CADA CAMPO"""

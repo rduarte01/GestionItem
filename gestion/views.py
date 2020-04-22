@@ -311,8 +311,11 @@ def creacionProyecto(request):
     if formProyecto.is_valid():
         instanceProyecto = formProyecto.save(commit=False)########## impide que se guarde a la BD
         ### NADA QUE TOCAR
-        cantidad = formProyecto.cleaned_data
-        cantidad_fases=cantidad.get("fase")##### PARA WALTER
+        cantidad = request.POST.get("fase")
+
+        cantidad_fases=int(cantidad[0])##### PARA WALTER
+
+        print(cantidad_fases)
         if(cantidad_fases<=0):
             context = {
                 "mensaje": "LA FASE DEBE SER MAYOR A 1",
