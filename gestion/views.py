@@ -411,8 +411,14 @@ def ver_usuarios_aprobados(request):
     return render(request,'Menu/usuariosAprobados.html',context)
 
 def get_user(request,pk):
-    ''' Sirve para poder asignar o sacar los permisos es_gerente , es_administrador
-        y cambiar el estado de un usario en especifico
+    '''
+    Sirve para poder asignar o sacar los permisos es_gerente , es_administrador
+        y cambiar el estado de un usario en especifico recibido como parametro,
+        solo se permitira realizar esta accion al administrador de sistema, en caso de que el usuario
+        no tenga dicho permiso se mostrara un mensaje de error
+    :param request:
+    :param pk:
+    :return:
     '''
     user_active=False
     if( request.method == 'POST' ):
@@ -463,7 +469,15 @@ def get_user(request,pk):
         return render(request,"Menu/perfilUsuario.html",context)
 
 def tipo_item_views_create(request,id_fase):
-    '''Sirve para crear un tipo de item,en una fase en especifica'''
+    '''
+    Sirve para crear un tipo de item,en una fase en especifica, la fase especifica es recibida como
+    parametro en la funcion, si los datos del tipo de item son validos(nombre y cantidad de atributos) , entonces
+    la funcion redirige la continuidad de la accion a la view add_atribute, en caso de no ser valido
+    muestra un mensaje (explicativo) de error
+    :param request:
+    :param id_fase:
+    :return:
+    '''
     if request.method == "POST":
         my_form=TipoItemForm(request.POST)
         if(my_form.is_valid()):
@@ -489,7 +503,18 @@ def tipo_item_views_create(request,id_fase):
 #Vistas agregadas por jesus
 
 def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
-    ''' Sirve para poder crear un nuevo atributo, asociando ese atributo a un tipo de item'''
+    '''
+        Esta funcion realiza dos cosas , crea un tipo de item cuyo nombre sera el recibido como segundo parametro
+        en la funcion , y un conjunto de atributos asociados al tipo de  item creado, la cantida de
+        atributos creado es especificado como tercer parametro en la funcion, la funcion solo creara el tipo
+        de item, si todos los atributos recibidos son validos, en caso contrario mostrara
+        un mensaje de error al usuario.
+    :param request:
+    :param nombre_ti:
+    :param cantidad_atributos:
+    :param fase_id:
+    :return:
+    '''
     cantidad_atributos=int(cantidad_atributos)
     fase_id=int(fase_id)
     fase=Fase.objects.get(id_Fase=fase_id)
@@ -523,8 +548,11 @@ def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
 
 #jesus
 def recoger_datos_tipo_item(my_form):
-    '''Sirve para recoger los datos despues de un POST en un formulario de tipo de item, retorna el
+    '''
+    Sirve para recoger los datos despues de un POST en un formulario de tipo de item, retorna el
         valor del nombre del tipo de item y la cantidad de atributos del tipo de item
+    :param my_form:
+    :return: String,Integer
     '''
     nombre = my_form.cleaned_data['nombre']
     valor = my_form.cleaned_data['cantidad']
@@ -532,8 +560,11 @@ def recoger_datos_tipo_item(my_form):
 
 #jesus
 def recoge_datos_atributo(form):
-    '''Sirve para recoger los datos despues de un POST en un formulario de atributo, retorna el
+    '''
+    Sirve para recoger los datos despues de un POST en un formulario de atributo, retorna el
             valor del nombre del atributo, si es obligatorio, y el tipo de dato
+    :param form:
+    :return: String, boolean,String
     '''
     nombre_atributo = form.cleaned_data.get('nombre')
     obligatoriedad = form.cleaned_data.get('es_obligatorio')
@@ -541,8 +572,11 @@ def recoge_datos_atributo(form):
     return nombre_atributo,obligatoriedad,tipo_dato_atibuto
 
 def recoger_datos_usuario_settings(form):
-    '''Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores
+    '''
+    Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores
         dos booleanos para determinar si es gerente y administrador y el estado del usuario
+    :param form:
+    :return: Boolean ,Boolean,String
     '''
     print('aca imprime')
     print('aca imprime el form ',form)
@@ -556,7 +590,14 @@ def recoger_datos_usuario_settings(form):
     return is_admin,is_gerente,estado
 
 def add_permission_admin(user,is_admin):
-    '''Funcion que permite agregar o sacar el permiso es_administrador a un usario, no retorna nada'''
+    '''
+    Funcion que permite agregar o sacar el permiso administrador de sistema a un usario recibido como parametro,
+    si el segundo parametro es True entonces agrega el permiso a el usuario,
+    en caso de que sea False lo saca
+    :param user:
+    :param is_admin:
+    :return:
+    '''
     content_type = ContentType.objects.get_for_model(Usuario)
     if (is_admin):  # se agrega el es_administrador
         permission = Permission.objects.get(content_type=content_type, codename='es_administrador')
@@ -567,7 +608,14 @@ def add_permission_admin(user,is_admin):
         user.user_permissions.remove(permission)
 
 def add_permission_gerente(user,is_gerente):
-    '''Funcion que permite agregar o sacar el permiso is_gerente a un usario, no retorna nada'''
+    '''
+    Funcion que permite agregar o sacar el permiso is_gerente a un usario recibido como parametro,
+    si el segundo parametro es True entonces agrega el permiso gerente de proyecto  a el usuario,
+    en caso de que sea False lo saca
+    :param user:
+    :param is_gerente:
+    :return:
+    '''
     content_type = ContentType.objects.get_for_model(Proyecto)
     if (is_gerente):  # se agrega el es_administrador
         permission = Permission.objects.get(content_type=content_type, codename='is_gerente')
@@ -900,9 +948,13 @@ def get_fase_proyecto(request,id_fase):
     return render(request,'opcionesFase.html',contexto)
 
 def importar_tipo_item(request,id_fase):
-    '''esta funcion permite importar tipos de item en un proyecto , filtrando aquellos tipo
-        items de los proyectos de los que esta asociado el usuario y que aun no se tenga en  las
-        fases dell proyecto.
+    '''esta funcion permite importar tipos de item en un proyecto, para ello lista un conjunto
+     de tipos de item , de los tipos de items
+    disponibles para importar solo se muestran aquellos  aquellos tipos de items de otros proyectos en
+    donde el usuario tambien este asociado, tambien filtra los tipos de items cuyo nombre ya no exista en el
+    proyecto a donde se quiere importar
+    La funcion solo permite importar tipos de items a  a los gerente de Proyecto  Si esta restriccion no se cumple
+    se mostrara un mensaje (explicativo) del Error
     '''
     fase = Fase.objects.get(id_Fase=id_fase)
     if(request.method=='POST'):
@@ -955,7 +1007,12 @@ def importar_tipo_item(request,id_fase):
         return render(request,'proyectos/listaTipoItem.html',contexto)
 
 def get_all_tipo_item(id_proyecto):
-    '''Esta funcion permite obtener todos los tipos de item de un proyecto especifico'''
+    '''
+    Esta funcion permite obtener todos los tipos de item de un proyecto especifico recibido como parametro,
+    en caso de que el proyecto no tenga ningun tipo de items, la funcion  retorna una lista vacia
+    :param id_proyecto:
+    :return: Lista de Tipo de Items
+    '''
     fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
     list_tipo_item=[]
     list_tipo_item_name=[]
@@ -1034,8 +1091,14 @@ class CrearRol(CreateView):
         return super(CrearRol,self).post(request,**kwargs)
 
 def validar_usuario(user):
-    """Valida al usuario al inicio del sistema, el primer usuario se le asigna el rol de administrador del sistema
-    se le agrega el estado aprobado"""
+    '''
+    Valida al usuario al inicio del sistema, si el usuario recibido como parametro es el primer usuario
+    del sistema se le asigna el rol de administrador  del sistema y se le agrega el estado aprobado, para
+    los otros usuarios nuevos (que se logearon por primera vez)  por default se le asigna el esta
+    Desaprobado, para que luego el administrador del Sistema lo apruebe
+    :param user:
+    :return:
+    '''
     if (User.objects.count() == 2):
         add_permission_admin(user, True)
         Usuario.objects.create(esta_aprobado=True,user_id=user.id)
@@ -1255,7 +1318,7 @@ def aggAtributos(request,idTI):
                     if(x[ini] == '' and tiposAtributo[ini].es_obligatorio == True):
                         ok=True
                         nombre=tiposAtributo[ini].nombre
-                if(ok==True):
+                if( ok == True ):
                     context = {
                         "mensaje": "EL ATRIBUTO ES OBLIGATRIO FAVOR INGRESE UN VALOR PARA EL ATRIBUTO: "+nombre,
                         "titulo": "NO INGRESO VALOR Y EL ATRIBUTO ES OBLIGATORIO",
@@ -1688,6 +1751,19 @@ def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo ge
     #errorPermiso(request,'No es gerente')
 
 def editar_ti(request,id_ti):
+    '''
+       Esta funcion permite editar el nombre del Tipo de Item y los atributos del mismo, para ello lista
+       todos los atributos del Tipo de Item y para cada atributo da la posibilidad de editar sus caracteristicas
+       (nombre,Tipo Dato, Obligatoriedad), tambien da la opcion de agregar nuevos atributos y eliminar atributos ya
+       existentes del Tipo de Item.
+       La funcion solo permite editar Tipo de items a los gerente de Proyecto, y tambien valida que solo se podran
+       editar aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
+       cumplen se mostrara un mensaje (explicativo) del Error
+
+    :param request:
+    :param id_ti:
+    :return: None
+    '''
     tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
     Ti=TipoItem.objects.get(id_ti=id_ti)
 
@@ -1742,6 +1818,18 @@ def editar_ti(request,id_ti):
 
 
 def agregar_atributo_ti(request, id_ti):
+    '''
+    Esta funcion permite agregar un nuevo atributo a un Tipo de Item pasado como parametro, para el nuevo
+    atributo se deberan de completar sus caracteristicas(nombre,tipo de dato,obligatoriedad), si no se
+    definen todas las carateristicas del atributo, se mostrar un mensaje de error , y le dara la posibilidad
+    de  intentarlo de nuevo.
+     La funcion solo permite agregar un atributo al  Tipo de item a los gerente de Proyecto, y tambien valida
+     que solo se podran agregar atributos  aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
+     cumplen se mostrara un mensaje (explicativo) del Error
+     :param request:
+    :param id_ti:
+    :return:
+    '''
     form = formset_factory(AtributeForm, extra=1)
     tipo_item = TipoItem.objects.get(id_ti=id_ti)
     if(request.method=='POST'):
@@ -1779,6 +1867,17 @@ def agregar_atributo_ti(request, id_ti):
             }
             return render(request, "Error.html", context)
 def eliminar_atributo_ti(request,id_ti):
+    '''
+    Esta funcion lista todos los atributos (con una opcion de seleccionar )de un Tipo de Item
+    pasado como parametro, para cada atributo seleccionado por el usuario , se eliminara el atributo del
+    tipo item
+     La funcion solo permite eliminar atributos de Tipo de items a los gerente de Proyecto, y tambien valida
+     que solo se podran eliminar aquellos  atributos de tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
+       cumplen se mostrara un mensaje (explicativo) del Error
+    :param request:
+    :param id_ti:
+    :return:
+    '''
     tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
     if request.method=='POST':
         some_var = request.POST.getlist('checkbox')
@@ -1824,6 +1923,16 @@ def eliminar_atributo_ti(request,id_ti):
     return  render(request,'eliminar_atributo_ti.html',contexto)
 
 def eliminar_tipo_item(request,id_ti):
+   '''
+    Esta funcion permite eliminar un Tipo de Item pasado como parametro, como consecuencia esta funcion tambien
+    elimina todos los atributos relacionados a ese Tipo de Item.
+   La funcion solo permite eliminar el tipo de Item  a los gerente de Proyecto, y tambien valida
+    que solo se podran eliminar aquellos  tipo de item que no esten asociados aun a un Item. Si estas
+    ultimas dos restricciones no se cumplen se mostrara un mensaje (explicativo) del Error
+   :param request:
+   :param id_ti:
+   :return:
+   '''
    tipo_item=get_object_or_404(TipoItem, id_ti=id_ti)
    if validar_permiso(request.user,"is_gerente",tipo_item.fase.id_Proyecto):  #primero se valida si es gerente en el proyecto actual)
         if not Item.objects.filter(ti_id=id_ti).exists():
@@ -1894,6 +2003,15 @@ def SubirArchivo(DOC, PATH):
     dbx.files_upload(DOC.file.read(), PATH)
 
 def validar_datos_form_atributo(form_set):
+    '''
+    Esta funcion permite validar una coleccion de forms del Modelo Atributo recibidos desde un POST, La validacion consiste en
+    verificar que ninguno de los form recibidos es un diccionario vacio (es decir el usuario no ingreso
+    nada) y con eso validar la consistencia del sistema, en caso de que el usuario de olvido de ingresar algun
+    dato de algun Atributo, la funcion retornara False, si, no todos los forms recibidos son correctos entonces
+    se retornara True
+    :param form_set:
+    :return: Boolean
+    '''
     for form in form_set:
         if form.cleaned_data=={}:
             return False
@@ -1901,6 +2019,16 @@ def validar_datos_form_atributo(form_set):
 
 
 def validar_permiso(user,permiso, proyecto):
+    '''
+        Esta funcion permite validar el permiso de un usuario para un proyecto en especifico,  el nombre del
+        permiso es recibido como segundo parametro en la funcion y el proyecto como tercer parametro  ,
+        si el usuario tiene  el permiso  para  el  proyecto recibido entonces la funcion retornara True,
+        en caso Contrario retornara False
+    :param user:
+    :param permiso:
+    :param proyecto:
+    :return:
+    '''
     if user.has_perm(permiso,proyecto):
         return True
     return False
