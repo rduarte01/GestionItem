@@ -47,6 +47,7 @@
                             {% if proyectos.estado != 'CANCELADO' %}
                                 <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear Tipo Item</a> </td>
                                 <td><a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-primary">Importar Tipo Item</a> </td>
+                                <td><a href="{% url 'gestion:seleccionar_usuario_rol' fases.id_Fase %}" class="btn btn-primary">Asignar Roles</a> </td>
                             {% endif %}
                         {% endif %}
                         <td><a href="{% url 'gestion:detallesFase' fases.id_Fase %}" class="btn btn-primary">DETALLES</a></td>

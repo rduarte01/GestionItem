@@ -4,10 +4,11 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import  render,redirect
 from django.contrib.auth.models import User
+from guardian.models import *
 from django.contrib.auth.models import Permission,Group
 from django.views.generic import TemplateView,ListView,UpdateView, CreateView
 from django.urls import reverse_lazy
-from .models import Proyecto, Auditoria, User_Proyecto,Fase,Permisos,Usuario
+from .models import *
 from .forms import FormProyecto,FormAyuda,SettingsUserFormJesus,PerfilUserEnEspera,RolForm
 from time import gmtime, strftime
 from .forms import FaseForm, FormProyectoEstados,FormItem
@@ -19,7 +20,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
 from django.forms.models import modelformset_factory
-from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm,get_groups_with_perms,remove_perm
 from guardian.decorators import permission_required_or_403
 from django.shortcuts import get_object_or_404
 from django.core.files.storage import FileSystemStorage
@@ -1079,16 +1080,18 @@ class CrearRol(CreateView):
     """    -form_class: especifica el form que sera utilidado dentro del template"""
     template_name = "proyectos/CrearRol.html"
     """    -template_name: donde se asigna que template estara asignado esta view"""
-    success_url = reverse_lazy("gestion:menu")
+    #success_url = reverse_lazy("gestion:menu",)
     """-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
     def post(self, request, *args, **kwargs):
         """    La funcion redeclara es la de post, en donde se realiza una modificacion del nombre declarado
             para la creacion, agregandole el id del proyecto perteneciente delate, esto para el reconocimiento
             del proyecto pertenciente de este Rol a crear"""
-
         request.POST = request.POST.copy()
-        request.POST['name']  = self.kwargs['proyecto']+'_'+request.POST['name']
+        request.POST['name']= self.kwargs['proyecto']+'_'+request.POST['name']
         return super(CrearRol,self).post(request,**kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('gestion:asignar_rol_proyecto',kwargs={'nombre': self.object.name})
 
 def validar_usuario(user):
     '''
@@ -1118,6 +1121,9 @@ class ModificarRol(UpdateView):
     """-template_name: donde se asigna que template estara asignado esta view"""
     success_url = reverse_lazy('gestion:menu')
     """-succes_url: es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo"""
+    def get_success_url(self):
+        return reverse_lazy('gestion:modificar_rol_proyecto',kwargs={'nombre': self.object.name})
+
 def listar_tipo_item(request,id_proyecto):
     """Lista los tipos de item asociado a un proyecto"""
     fases=Fase.objects.filter(id_Proyecto_id=id_proyecto)
@@ -1177,9 +1183,13 @@ def crearItem(request,Faseid):
     fase=Fase.objects.get(id_Fase=Faseid)
     proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto.id_proyecto)
     fases=Fase.objects.filter(id_Proyecto=proyecto)
-    cont = 0
+    cont = 1
+    if request.user.has_perm('crear_lb',proyecto) and validar_rol_fase('crear_lb',fase,request.user):
+        print('tiene el permiso de crear_item')
+    else:
+        print('no tiene el permiso')
 
-    if(proyecto.estado != "INICIADO"):
+    if(proyecto.estado == "INICIADO"):
         context = {
             "mensaje": "EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado),
             "titulo": "PROYECTO NO INICIADO",
@@ -1192,10 +1202,10 @@ def crearItem(request,Faseid):
 
     if( fases.count() != 1):#si no es de la primera fase
         for faseSIG in reversed(fases):
-            cont += 1
             if(faseSIG==fase):#se verifica que fase es
                 print("la fase es la nro: ",cont)
                 break
+            cont += 1
     if(cont != 1 ):# si no es de la primera fase valida si hay items en la fase anterior
         item_fase=Item.objects.filter(fase=fase.id_Fase-1)
         print(item_fase)
@@ -1759,7 +1769,6 @@ def editar_ti(request,id_ti):
        La funcion solo permite editar Tipo de items a los gerente de Proyecto, y tambien valida que solo se podran
        editar aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
        cumplen se mostrara un mensaje (explicativo) del Error
-
     :param request:
     :param id_ti:
     :return: None
@@ -2032,3 +2041,207 @@ def validar_permiso(user,permiso, proyecto):
     if user.has_perm(permiso,proyecto):
         return True
     return False
+
+def Asignar_Rol_usuario_proyecto(request,id_Fase,id_usuario):
+    '''
+    Esta funcion es la encargada de asignar un conjunto de roles a un usuario en una determinada fase,
+    ese conjunto de roles se optiene de un POST, de los roles recibidos se verifica cada uno para determinar
+    si el usuario ya lo tiene, si es asi no hace nada, pero en caso que el usuario no lo tenga, entoces
+    se registra ese rol  a el usuario en esa fase.
+    De los roles que no se marco se lo  llama a la funcion eliminar_rol_proyecto_usuario para que tambien
+    elimine aquellos roles que el gerente no marco
+    :param request:
+    :param id_Fase:
+    :param id_usuario:
+    :return:
+    '''
+    fase=Fase.objects.get(id_Fase=id_Fase)
+    proyecto=fase.id_Proyecto
+    usuario = User.objects.get(id=id_usuario)
+    print('el id del proyecto  es',proyecto.id_proyecto)
+    if  request.method=='POST':
+        rolNombreProyecto=[]
+        rolesProyecto = Group.objects.all() #Otengo Todo los roles del Proyecto
+        for rolProyecto in rolesProyecto:
+            id_proyecto, nombre_rol = rolProyecto.name.split('_')
+            if int(id_proyecto) == proyecto.id_proyecto :
+                rolNombreProyecto = rolNombreProyecto+[rolProyecto.name] #Todo los roles le agrego a una lista
+
+        roles = request.POST.getlist('roles') #Obtengo los roles del Form
+        print('roles del form',roles)
+        for rol in roles:
+            group=Group.objects.get(name=rol)
+            rolNombreProyecto.remove(rol)
+            if not FASE_ROL.objects.filter(id_fase_id=fase.id_Fase,id_rol_id=group.id,id_usuario_id=usuario.id).exists():
+                FASE_ROL.objects.create(id_fase_id=id_Fase,id_rol=group,id_usuario=usuario)
+
+            usuario.groups.add(group)
+        if rolNombreProyecto:
+            print('roles a eliminar',rolNombreProyecto)
+            eliminar_rol_proyecto_usuario(fase.id_Fase,rolNombreProyecto,usuario)
+        return redirect('gestion:seleccionar_usuario_rol',id_fase=id_Fase)
+    else:
+        roles=Group.objects.all()
+        roles_listar=[]
+        roles_listar2 = []
+        fase=Fase.objects.get(id_Fase=id_Fase)
+        for rol in roles:
+            id_proyecto,nombre_rol=rol.name.split('_')
+            if(int(id_proyecto)==fase.id_Proyecto.id_proyecto):
+                if FASE_ROL.objects.filter(id_fase_id=fase.id_Fase,id_rol_id=rol.id,id_usuario_id=usuario.id).exists():
+                    ban=1
+                else:
+                    ban=0
+                roles_listar=roles_listar+[
+                    {
+                        'nombre_lindo': nombre_rol,
+                        'nombre_real': rol.name,
+                        'ban':ban
+                    }
+                ]
+        contexto={
+            'roles':roles_listar,
+            'proyectos':proyecto
+        }
+        return  render(request,'proyectos/asignarRol.html',contexto)
+
+def asignar_rol_proyecto(request,nombre):
+    '''Esta funcion es la encargada se asignar todos los permisos de un rol, pero para un determinado
+    proyecto utilizando django guardia, para ello obtiene todos los permisos del rol y asigna ese permiso
+    a al mismo rol pero para un determinado proyecto.
+    '''
+    id_proyecto,nombre_rol=nombre.split('_')
+    proyecto=Proyecto.objects.get(id_proyecto=id_proyecto)
+    rol=Group.objects.get(name=nombre)
+    permisos=rol.permissions.all()
+    for permiso in permisos:
+        assign_perm(permiso.codename,rol,proyecto)
+
+    return redirect('gestion:menu')
+
+def modificar_rol_proyecto(request,nombre):
+    '''
+    Esta funcion es la encargada de modificar los permisos de un  rol en un determinado proyecto, este
+    funcion se activa luego de modificar un rol en un proyecto, entoce lo que realiza es busca todos los permisos
+    que tiene ahora el nuevo rol actualizado y todos los permisos del viejo rol,entonces verifica aquellos
+    nuevos que se agrego y aquellos que se eliminaron y lo actualiza tambien los permisos del viejo rol
+    Vale recalcar que el viejo rol es que esta asociado a django gurdian, y el rol actualizado es el de Django
+
+    :param request:
+    :param nombre:
+    :return:
+    '''
+    id_proyecto, nombre_rol = nombre.split('_')
+    proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
+    rol = Group.objects.get(name=nombre)
+    permisos = rol.permissions.all()
+
+
+    lista_permisos_viejos=get_groups_with_perms(proyecto,attach_perms=True)[rol]
+    print('viejos sin borrar',lista_permisos_viejos)
+
+    list_permisos_actual=[]#La lista de permisos actualizados del Rol 'nombre'
+    for permiso in permisos:
+        list_permisos_actual=list_permisos_actual + [permiso.codename]
+    print('actual sin borra',list_permisos_actual)
+    '''aca se recorre para saber que permisos actualizar al proyecto'''
+
+    for permiso in lista_permisos_viejos[:]:
+        if permiso in list_permisos_actual: #esto ya es lo que el usuario tiene
+            list_permisos_actual.remove(permiso) #eliminamos del actual y del viejo
+            lista_permisos_viejos.remove(permiso)
+    '''Aca son dos iteraciones, el primero es lista_permisos_actual que son los permisos que faltan agregar'''
+    for permiso in list_permisos_actual:
+        assign_perm(permiso,rol,proyecto)
+    '''aca la segunda iteracion que son los permisos que se sacaron del rol, por lo tanto hay que eliminar del rol django guardian'''
+    for permiso in lista_permisos_viejos:
+       remove_perm(permiso,rol,proyecto)
+
+    print('viejo borrado', lista_permisos_viejos)
+    print('actual borrado', list_permisos_actual)
+
+    return redirect('gestion:menu')
+
+
+
+from guardian.shortcuts import get_objects_for_user
+from guardian.models import *
+def validar_rol_fase(permiso,fase,usuario):
+    '''
+    Esta funcion es la encargada de validar si un usuario tiene un determinado permiso,en una fase especifica
+    para ello optiene el nombre del  rol al cual esta asociado el permiso,y ese rol busca en la tabla Fase_ROl para determinar
+    si ese rol esta asociado a ese usuario, en la fase en el que se esta trabajando, si el usuario tiene el
+    rol se retorna True, en caso contrario se retorna False
+
+    :param permiso:
+    :param fase:
+    :param usuario:
+    :return: Boolean
+    '''
+    print(permiso)
+    content_type = ContentType.objects.get(model='proyecto')
+    per = Permission.objects.get(content_type=content_type.id,codename=permiso)
+    print(per.id)
+    print('id del proyecto'+str(fase.id_Proyecto.id_proyecto))
+    roles = GroupObjectPermission.objects.filter(object_pk=fase.id_Proyecto.id_proyecto,permission_id=per.id)
+    print(roles)
+    for rol in roles:
+        print(fase.id_Fase,rol.group_id,usuario.id)
+        if FASE_ROL.objects.filter(id_fase_id=fase.id_Fase,id_rol_id=rol.group_id,id_usuario_id=usuario.id).exists():
+            print('Si tiene ese rol en esa Fase')
+            return True
+    print('No, no tiene ese rol para esta fase')
+    return  False
+
+def seleccionar_usuario_rol(request,id_fase):
+    '''
+    Esta funcion es la encargada de listar todos los usuario que existen en el proyecto,de todos los
+    listados  se selecciona uno y este usuario seleccionado  es aquel al  cual se le va a asignar o sacar
+    roles en una determinada fase(id_fase).
+    :param request:
+    :param id_fase:
+    :return:
+    '''
+    pk=Fase.objects.get(id_Fase=id_fase).id_Proyecto_id
+    proyecto=Proyecto.objects.get(id_proyecto=pk)
+    user = request.user  ## USER ACTUAL
+    form = Usuario.objects.all()
+    registrados = User_Proyecto.objects.all()
+
+    ##hacer  el if para mostra el mensaje de error si es que el proyecto aun no tiene roles
+
+    if request.method=='POST':
+        some_var=request.POST.getlist('radio')
+        return  redirect('gestion:Asignar_Rol_usuario_proyecto',id_Fase=id_fase,id_usuario=some_var[0])
+
+    else:
+        list = []
+        for i in range(form.count()):
+            ok = False
+            if form[i].id != user.id:  # and form[i].esta_aprobado == True :
+                for x in range(registrados.count()):
+                    if registrados[x].proyecto_id == pk:
+                        if form[i].id == registrados[x].user_id:
+                            ok = True
+            if ok:
+                list.append(form[i].id)
+        return render(request, 'proyectos/seleccionar_usuario_rol.html',
+                      {'form': form, 'list': list, 'pk': pk, "proyectos": proyecto})
+
+
+def eliminar_rol_proyecto_usuario(id_fase, listaRoles, usuario):
+    '''
+     Esta funcion es la encargada de sacar los roles de una  fase a un usario en  especifico,
+     recibe una lista de roles como parametros, que seria los roles que el gerente no marco en el form al
+     momento de asignar el rol a un usuario, de esa lista de roles se verifica aquellos que el usuario tiene,
+     si es asi, se le saca el rol en esa fase al usuario.
+    :param id_fase:
+    :param listaRoles:
+    :param usuario:
+    :return: None
+    '''
+    for rol in listaRoles:
+        group = Group.objects.get(name=rol)
+        print(id_fase, group.id, usuario.id)
+        if FASE_ROL.objects.filter(id_fase_id=id_fase, id_rol_id=group.id, id_usuario_id=usuario.id).exists():
+            FASE_ROL.objects.get(id_fase_id=id_fase, id_rol_id=group.id, id_usuario_id=usuario.id).delete()

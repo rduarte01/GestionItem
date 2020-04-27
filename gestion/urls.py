@@ -60,7 +60,10 @@ urlpatterns = [
     path('editar/tipo/item/<int:id_ti>/agregar/atributo',views.agregar_atributo_ti,name='agregar_atributo_ti'),
     path('eliminar/atributo/tipo/item/<int:id_ti>',views.eliminar_atributo_ti,name='eliminar_atributo_ti'),
     path('eliminar/tipo/item/<int:id_ti>',views.eliminar_tipo_item,name='eliminar_tipo_item'),
-
+    path('asignar/rol/usuario/proyecto/<int:id_Fase>/<int:id_usuario>',views.Asignar_Rol_usuario_proyecto,name='Asignar_Rol_usuario_proyecto'),
+    path('asignar/rol/<str:nombre>/proyecto',views.asignar_rol_proyecto,name='asignar_rol_proyecto'),
+    path('modificar/rol/<str:nombre>/proyecto',views.modificar_rol_proyecto,name='modificar_rol_proyecto'),
+    path('seleccionar/usuario/para/asignar/rol/proyecto/<int:id_fase>',views.seleccionar_usuario_rol,name='seleccionar_usuario_rol'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

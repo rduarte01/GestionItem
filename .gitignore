@@ -15,3 +15,5 @@ media/
 gestion/migrations/__pycache__/
 
 gestion/migrations/
+
+gestion/tests/__pycache__/

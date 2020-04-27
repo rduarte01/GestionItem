@@ -37,7 +37,16 @@ class Proyecto(models.Model):
         """ SE AGREGAN DOS PERMISOS NECESARIOS, UNO PARA EL GERENTE Y OTRO PARA EL ADMINISTRADOR DEL SISTEMA"""
         permissions = (("is_gerente", "Permiso de gerente de proyectos"),
                        ("is_administradorSistema", "Permiso de Administrador del sistema"),
-                       )
+                        ("crear_item", "Puede Crear Item"),
+                        ("editar_item", "Puede Editar Item"),
+                        ("desactivar_item", "Puede Desactivar Item"),
+                        ("reversionar_item", "Puede Reversionar Item"),
+                        ("aprobar_item", "Puede Aprobar Item"),
+                        ("crear_lb", "Puede Crear LB"),
+                        ("cerrar_lb", "Puede Cerrar LB"),
+                        ("generar_solicitud", "Puede Generar Solicitud de Cambio"),
+
+                )
         """DEFINE LOS PERMISOS DEL MODELO PROYECTO"""
 
 class Fase(models.Model):
@@ -72,10 +81,6 @@ class Fase(models.Model):
         que los mismos se manejan por fases. En conclusión: Un usuario puede tener un rol solamente en una fase o en
         varias fases, esto depende del gerente el proyecto, quien es el encargado de asignar los roles a los usuarios"""
 
-    permissions = (
-        ("Poder Aprobar Fase", "Aprobar Fase"),
-        ("Poder Crear Fase", "Crear Fase")
-    )
     """PERMISOS QUE REQUIERE FASE"""
     verbose_name = 'Fase'
     """NOMBRE DEL MODELO DENTRO DE ADMIN"""
@@ -170,6 +175,7 @@ class FASE_ROL(models.Model):
     """ID FASE"""
     id_rol=models.ForeignKey(Group,on_delete=models.CASCADE)
     """ID DEL ROL"""
+    id_usuario=models.ForeignKey(User,on_delete=models.CASCADE,default=0)
 
 #Ger
 class Permisos(models.Model):

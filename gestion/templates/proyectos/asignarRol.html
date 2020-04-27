@@ -1,0 +1,37 @@
+{%extends 'proyectos/base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Comite de proyecto</title>
+    {%endblock%}
+</head>
+<body>
+
+{% block interno%}
+    <div class="container">
+            <div class="cities">
+              <h2>Selecciona los Proyectos a asignar al Usuario:</h2><br>
+             <form method="POST">{% csrf_token%}
+                {% for rol in roles %}
+                    {% if rol.ban == 1 %}
+                        <div class="form-group">
+                            <input type="checkbox" name='roles' value="{{rol.nombre_real}}" checked >
+                            <label class="form-check-label">
+                                {{rol.nombre_lindo}}
+                            </label>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <input type="checkbox" name='roles' value="{{rol.nombre_real}}" >
+                            <label class="form-check-label">
+                                {{rol.nombre_lindo}}
+                            </label>
+                        </div>
+                    {%endif%}
+                 {%endfor%}
+              <input class="btn btn-primary" type='submit' value= 'Save' />
+        </form>
+      </div>
+    </div>
+{%endblock%}
