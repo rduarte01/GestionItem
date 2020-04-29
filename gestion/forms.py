@@ -270,6 +270,7 @@ class BookForm(forms.ModelForm):
         fields=('title','autor','pdf')
 
 class LBForm(forms.ModelForm):
+    
     class Meta:
 
         model = LineaBase

@@ -225,6 +225,7 @@ class Item(models.Model):
         ("Aprobado", "Aprobado"),
         ("Finalizado", "Finalizado"),
         ("En revision", "En revision")
+        #
     )
     """ESTADOS POSIBLES DE CADA UNO DE LOS ITEMS DEL PROYECTO, POR DEFECTO, AL CREAR UN ITEM TENDRA ESTADO CREADO"""
 
@@ -348,7 +349,13 @@ class LineaBase(models.Model):
         """DENOMINACION PLURAL DE UNA LINEA BASE, EN ESTE CASO MAS DE UNA"""
 
 class LB_item(models.Model):
-
+    """
+    ESTA CLASE SERÁ UTILIZADA PARA RELACIONAR UNA LINEA BASE CON UN ITEM, ASI TENDRÁ SOLO EL ID DE UN ITEM Y EL ID DE LA
+    LINEA BASE A LA CUAL PERTENECE, UN ATRIBUTO ADICIONAL SERÁ EL ID DE LA CLASE LB_item.
+    """
     id = models.AutoField(primary_key = True)
+    """ID PERTENECIENTE A LA FASE LB_item"""
     item = models.ForeignKey(Item, on_delete = models.CASCADE)
+    """ID PERTENECIENE A LA CLASE Item"""
     lb = models.ForeignKey(LineaBase, on_delete = models.CASCADE)
+    """ID PERTENECIENTE A LA CLASE LineaBase"""

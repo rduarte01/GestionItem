@@ -1653,14 +1653,30 @@ class CrearLB(CreateView):
 
 
     :param request: metodo http enviado desde el navegador para ejecutar la funcion
+    :type request: dict
+
     :param pk: id de fase a la cual está relacionada la Linea Base a ser creada
+    :type pk: int
     """
+
     model = LineaBase
     form_class = LBForm
     template_name = 'crearLB.html'
     success_url = reverse_lazy('gestion:detallesFase')
 
     def get_context_data(self, **kwargs):
+        """Se obtiene el contexto enviado a la función.
+
+
+        :param self: se trata del mismo objecto a ser usado, en este caso seria una instancia de LineaBase
+        :type self: LineaBase
+
+        :param **kwargs: se guardan los parametros enviados, en este caso se puede obtener el id de fase desde este parámetro
+        :param **kwargs: dict
+
+        :return: retorna un contexto
+        :rtype: context
+        """
 
         contexto = super(CrearLB, self).get_context_data(**kwargs)
         idfase = self.kwargs.get('pk', None)
@@ -1692,6 +1708,24 @@ class CrearLB(CreateView):
         return contexto
 
     def post(self, request, *args, **kwargs):
+        """se obtienen los datos cargados del formulario del navegador y se guardan en la base de datos del sistema
+        
+
+        :param self: objeto al cual se está haciendo referencia, en este caso es una instancia de Linea Base
+        :type self: LineaBase
+
+        :param request:  metodo HTTP enviado desde el navegador a la funcion
+        :type request: dict
+
+        :param *args: parametros adicionales recibidos(en este caso ninguno)
+        :type *args: None
+
+        :param **kwargs: parametros adicionales recibidos(en este caso ninguno)
+        :type **kwargs: None
+
+        :return: retorna una redireccion(HTTP 302)
+        :rtype: dict
+        """
         
         try:
             ultimaLB = LineaBase.objects.last()
@@ -1731,6 +1765,20 @@ class CrearLB(CreateView):
         return redirect('gestion:listar_proyectos')
 
 def modificarEstadoItem(request, pk):
+    """La funcion realiza la labor de modificar el estado de cualquier item, los estados disponibles son:
+        - Creado
+        - Finalizado
+        - Aprobado
+        - En revision
+    
+    :param request: peticion HTTP enviada desde el navegador
+    :type request: dict
+    :param pk: id de item a ser modificado
+    :type pk: int
+
+    :return: retorna un render con los datos del item a ser modificado
+    :rtype: form
+    """
 
     form = FormItemFase(request.POST)
 
