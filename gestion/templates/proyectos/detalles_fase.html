@@ -25,6 +25,8 @@
                 <td><h5>ESTADO : {{fases.estado}}</h5></td>
 
                 <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></td>
+                <td><button class="btn btn-primary" type="button" onclick="abrir_modal_creacion('{% url 'gestion:crearLB' fases.id_Fase %}')">Crear Linea Base</button></td>
+
             <!--{% if "is_gerente" in proyecto_perms %}-->
             <!--{% endif%}-->
             </tr>
@@ -43,6 +45,7 @@
                 <td><h5>COSTO</h5></td>
                 <td><h5>VER RELACIONES</h5></td>
                 <td><h5>VER ATRIBUTOS</h5></td>
+                <td><h5>CAMBIAR ESTADO ITEM</h5></td>
 
             </tr>
             </thead>
@@ -54,7 +57,7 @@
                     <td>{{items.costo}}</td>
                    <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Relaciones</a></td>
                    <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
-
+                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}">Estado Item</a></td>
                 </tr>
 
                 {%endfor%}

@@ -264,3 +264,52 @@ class RolForm(forms.ModelForm):
         }
 
 
+class LBForm(forms.ModelForm):
+    
+    class Meta:
+
+        model = LineaBase
+
+        fields = [
+            'nombreLB',
+          #  'items',
+            #'idFase',
+        ]
+        label = {
+            'nombreLB': 'Nombre de la Linea Base',
+            #'items': 'Item(s)',
+            #'idFase': 'Fase'
+        }
+
+        widgets = {
+
+            'nombreLB': forms.TextInput(
+                attrs = {
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese el nombre de la LB',
+                }
+            ),
+            #'items': forms.SelectMultiple(
+             #   attrs = {
+              #      'class': 'form-control'
+               # }
+            #),
+        }
+
+class FormItemFase(forms.Form):
+    """FORM PARA MOSTRAR LOS ESTADOS QUE PUEDE TENER UN ITEM"""
+    choises_data_type = (
+        ("Creado", "Creado"),
+        ("Aprobado", "Aprobado"),
+        ("Finalizado", "Finalizado"),
+        ("En revision", "En revision")
+    )
+    """MEDIANTE CHOICES MOSTRAMOS LAS OPCIONES EN EL HTML"""
+
+    estado = forms.ChoiceField(
+        label="Estado del Proyecto",
+        required="Creado",
+        widget=forms.Select(attrs={"class":"form-control" }),
+        choices=choises_data_type,
+    )
+    """EL ESTADO CON EL CUAL GUARDAREMOS EL POST"""

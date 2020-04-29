@@ -216,6 +216,16 @@ class Usuario(models.Model):
 
 class Item(models.Model):
     """MODELO DE ITEM"""
+
+    choises_data_type = (
+        ("Creado", "Creado"),
+        ("Aprobado", "Aprobado"),
+        ("Finalizado", "Finalizado"),
+        ("En revision", "En revision")
+        #Falta cancelado
+    )
+    """ESTADOS POSIBLES DE CADA UNO DE LOS ITEMS DEL PROYECTO, POR DEFECTO, AL CREAR UN ITEM TENDRA ESTADO CREADO"""
+
     id_item= models.AutoField(primary_key = True) ###### clave de proyecto
     """GUARDA EL ID DEL ITEM"""
     nombre= models.CharField(max_length=30)
@@ -230,6 +240,15 @@ class Item(models.Model):
     """FASE  A LA CUAL PERTENECE EL ITEM"""
     actual=models.BooleanField(default=True)
     """SI ESTA EN TRUE SERA QUE EL ITEM ESTA ACTIVO Y NO UNA VERSION ANTERIOR"""
+    estado = models.CharField('Estado', max_length = 20, blank = False, null = False, choices = choises_data_type, default = 'Creado')
+    """ATRIBUTO CORRESPONDIENTE AL ESTADO QUE ADOPTARÁ UN DETERMINADO ITEM, EL MISMO VARÍA DURANTE EL TRANSCURSO DEL PROYECTO SEGÚN LO QUE EL USUARIO DECIDA"""
+
+    def __str__(self):
+        """HACE REFERENCIA A LA MANERA EN LA CUAL QUEREMOS VISUALIZAR LOS ITEMS, EN ESTE CASO LOS VEREMOS POR SU NOMBRE, POR DEFECTO SE 
+        VISUALIZA DE LA SIGUIENTE MANERA: ITEM OBJECT(1), ITEM OBJECT(2), Y ASÍ SUCESIVAMENTE. 
+        """
+        return self.nombre
+        """SE VISUALIZA LOS ITEMS POR SU NOMBRE"""
 
 class Relacion(models.Model):
     """MODELO DE RELACION DE ITEMS"""
@@ -270,3 +289,58 @@ class Comite(models.Model):
     """ID DEL PROYECTO"""
     id_user=models.IntegerField()
     """ID DEL USUARIO"""
+
+#-----------------------MODELO LINEA BASE-----------------------------------------
+
+class LineaBase(models.Model):
+    """
+    HACE REFERENCIA A UN CONJUNTO DETERMINADO DE ITEMS APROBADOS EN UNA FASE, LOS CUALES PASAN A FORMAR PARTE DE UNA LINEA BASE, EL USUARIO ES QUIEN DECIDE
+    EL MOMENTO EN EL CUAL DESEA QUE ESTOS ITEMS SE AGRUPEN DE ESTA MANERA, UNA VEZ MÁS SEÑALANDO QUE LOS MISMOS DEBEN ESTAR APROBADOS OBLIGATORIAMENTE. 
+    """
+
+    choices_data_type = (
+        ("Cerrada", "Cerrada"),
+        ("Rota", "Rota"),
+        ("Comprometida", "Comprometida")
+    )
+    """
+    POSIBLES OPCIONES DE ESTADO DE LAS LINEAS BASE, POR DEFECTO LA LB TENDRÁ ESTADO CERRADA 
+    """
+    idLB = models.AutoField(primary_key = True)
+    """
+    HACE REFERENCIA AL ID QUE VA A LLEVAR CADA LINEA BASE EN UNA FASE DETERMINADA, CABE DESTACAR QUE EL ID ES UNICO E IRREPETIBLE
+    """
+    nombreLB = models.CharField('Nombre de Linea Base', max_length = 50, blank = False, null = False)
+    """
+    HACE REFERENCIA AL NOMBRE QUE LLEVARA LA LINEA BASE EN UNA FASE DETERMINADA, ASI COMO EL ID, TAMBIÉN EL NOMBRE ES UNICO E IRREPETIBLE
+    """
+    #items = models.ForeignKey(Item, on_delete = models.CASCADE)
+    """
+    HACE REFERENCIA AL CONJUNTO DE ITEMS QUE COMPONEN LA LINEA BASE
+    """
+    #idFase = models.ForeignKey(Fase, on_delete = models.CASCADE)
+    """
+    HACE REFERENCIA A LA FASE A LA CUAL PERTENECE LA LINEA BASE, PUEDE MÁS DE UNA LINEA BASE EN UNA MISMA FASE PERO NO PUEDEN COMPARTIR ITEMS
+    """
+    estado = models.CharField('Estado', max_length = 50, blank = False, null = False, choices = choices_data_type, default = 'Cerrada')
+    """HACE REFERENCIA A UN ESTADO EN CONCRETO DE UNA DETERMINADA LINEA BASE, LA MISMA TENDRÁ POR DEFECTO EL ESTADO CERRADA"""
+    
+    class Meta:
+        ordering = ['nombreLB']
+        """SE ORDENARAN LAS LINEAS BASE DE ACUERDO AL NOMBRE"""
+        verbose_name = 'Linea Base'
+        """DENOMINACION SINGULAR DE UNA LINEA BASE"""
+        verbose_name_plural = 'Lineas Base'
+        """DENOMINACION PLURAL DE UNA LINEA BASE, EN ESTE CASO MAS DE UNA"""
+
+class LB_item(models.Model):
+    """
+    ESTA CLASE SERÁ UTILIZADA PARA RELACIONAR UNA LINEA BASE CON UN ITEM, ASI TENDRÁ SOLO EL ID DE UN ITEM Y EL ID DE LA
+    LINEA BASE A LA CUAL PERTENECE, UN ATRIBUTO ADICIONAL SERÁ EL ID DE LA CLASE LB_item.
+    """
+    id = models.AutoField(primary_key = True)
+    """ID PERTENECIENTE A LA FASE LB_item"""
+    item = models.ForeignKey(Item, on_delete = models.CASCADE)
+    """ID PERTENECIENE A LA CLASE Item"""
+    lb = models.ForeignKey(LineaBase, on_delete = models.CASCADE)
+    """ID PERTENECIENTE A LA CLASE LineaBase"""
