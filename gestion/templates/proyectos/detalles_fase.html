@@ -72,7 +72,28 @@
     </body>
     </html>
 
+    <div 
+        class="modal fade" id="creacion" role="dialog">
+    </div>
+
+
 {% endblock interno %}
+
+{% block javascript %}
+
+<script type="text/javascript">
+  
+    var $ = jQuery.noConflict();
+    function abrir_modal_creacion(url){
+      $('#creacion').load(url, function(){
+        $(this).modal('show');
+      })
+    }
+  
+  </script>
+
+{% endblock javascript %}
+
 
 </body>
 </html>

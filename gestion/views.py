@@ -2264,7 +2264,7 @@ class CrearLB(CreateView):
 
     model = LineaBase
     form_class = LBForm
-    template_name = 'crearLB.html'
+    template_name = 'proyectos/crearLB.html'
     success_url = reverse_lazy('gestion:detallesFase')
 
     def get_context_data(self, **kwargs):
@@ -2407,4 +2407,4 @@ def modificarEstadoItem(request, pk):
 
         return redirect('gestion:cambiarEstadoItem', pk)
 
-    return render(request, 'proyectos/cambiarEstadoItem.html', contexto)
+    return render(request, 'items/cambiarEstadoItem.html', contexto)
