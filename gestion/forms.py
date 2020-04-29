@@ -2,7 +2,7 @@ from django import forms
 from django.forms import Textarea
 from .models import Fase
 from django.contrib.auth.models import User, Permission,Group,ContentType
-from .models import Proyecto,TipoItem,Atributo,Usuario,Item,Atributo_Item
+from .models import Proyecto,TipoItem,Atributo,Usuario,Item,Atributo_Item, LineaBase
 ####### se escribe formulario
 from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
 

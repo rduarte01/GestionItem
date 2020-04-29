@@ -14,8 +14,8 @@ from time import gmtime, strftime
 from .forms import FaseForm, FormProyectoEstados,FormItem
 from django.db.models import Count
 from django.utils.decorators import method_decorator
-from .models import Proyecto,TipoItem,Atributo,Item,Fase,Atributo_Item,Relacion,Versiones,Comite
-from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm
+from .models import Proyecto,TipoItem,Atributo,Item,Fase,Atributo_Item,Relacion,Versiones,Comite, LineaBase, LB_item
+from .forms import FormProyecto,TipoItemForm,AtributeForm,RolForm, LBForm, FormItemFase
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.forms import formset_factory
@@ -2407,4 +2407,4 @@ def modificarEstadoItem(request, pk):
 
         return redirect('gestion:cambiarEstadoItem', pk)
 
-    return render(request, 'cambiarEstadoItem.html', contexto)
+    return render(request, 'proyectos/cambiarEstadoItem.html', contexto)
