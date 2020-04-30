@@ -2200,29 +2200,38 @@ def Asignar_Rol_usuario_proyecto(request,id_Fase,id_usuario):
             eliminar_rol_proyecto_usuario(fase.id_Fase,rolNombreProyecto,usuario)
         return redirect('gestion:seleccionar_usuario_rol',id_fase=id_Fase)
     else:
-        roles=Group.objects.all()
-        roles_listar=[]
-        roles_listar2 = []
-        fase=Fase.objects.get(id_Fase=id_Fase)
-        for rol in roles:
-            id_proyecto,nombre_rol=rol.name.split('_')
-            if(int(id_proyecto)==fase.id_Proyecto.id_proyecto):
-                if FASE_ROL.objects.filter(id_fase_id=fase.id_Fase,id_rol_id=rol.id,id_usuario_id=usuario.id).exists():
-                    ban=1
-                else:
-                    ban=0
-                roles_listar=roles_listar+[
-                    {
-                        'nombre_lindo': nombre_rol,
-                        'nombre_real': rol.name,
-                        'ban':ban
-                    }
-                ]
-        contexto={
-            'roles':roles_listar,
-            'proyectos':proyecto
-        }
-        return  render(request,'proyectos/asignarRol.html',contexto)
+        if validar_permiso(request.user, "is_gerente", fase.id_Proyecto):  # primero se valida si es gerente en el proyecto actual
+            roles=Group.objects.all()
+            roles_listar=[]
+            roles_listar2 = []
+            fase=Fase.objects.get(id_Fase=id_Fase)
+            for rol in roles:
+                id_proyecto,nombre_rol=rol.name.split('_')
+                if(int(id_proyecto)==fase.id_Proyecto.id_proyecto):
+                    if FASE_ROL.objects.filter(id_fase_id=fase.id_Fase,id_rol_id=rol.id,id_usuario_id=usuario.id).exists():
+                        ban=1
+                    else:
+                        ban=0
+                    roles_listar=roles_listar+[
+                        {
+                            'nombre_lindo': nombre_rol,
+                            'nombre_real': rol.name,
+                            'ban':ban
+                        }
+                    ]
+            contexto={
+                'roles':roles_listar,
+                'proyectos':proyecto
+            }
+            return  render(request,'proyectos/asignarRol.html',contexto)
+        else:
+            context = {
+                "mensaje": "No eres gerente de proyecto, por lo tanto no puede Asignar Rol en la fase" +str(fase.id_Fase) ,
+                "titulo": "Conflicto de permiso ",
+                "titulo_b2": "Salir",
+                "boton2": "/proyectos/",
+            }
+            return render(request, "Error.html", context)
 
 def asignar_rol_proyecto(request,nombre):
     '''Esta funcion es la encargada se asignar todos los permisos de un rol, pero para un determinado
@@ -2335,7 +2344,7 @@ def seleccionar_usuario_rol(request,id_fase):
     user = request.user  ## USER ACTUAL
     form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
-
+    fase=Fase.objects.get(id_Fase=id_fase)
     ##hacer  el if para mostra el mensaje de error si es que el proyecto aun no tiene roles
 
     if request.method=='POST':
@@ -2343,18 +2352,28 @@ def seleccionar_usuario_rol(request,id_fase):
         return  redirect('gestion:Asignar_Rol_usuario_proyecto',id_Fase=id_fase,id_usuario=some_var[0])
 
     else:
-        list = []
-        for i in range(form.count()):
-            ok = False
-            if form[i].id != user.id:  # and form[i].esta_aprobado == True :
-                for x in range(registrados.count()):
-                    if registrados[x].proyecto_id == pk:
-                        if form[i].id == registrados[x].user_id:
-                            ok = True
-            if ok:
-                list.append(form[i].id)
-        return render(request, 'proyectos/seleccionar_usuario_rol.html',
-                      {'form': form, 'list': list, 'pk': pk, "proyectos": proyecto})
+        if validar_permiso(request.user, "is_gerente", fase.id_Proyecto):  # primero se valida si es gerente en el proyecto actual)
+            list = []
+            for i in range(form.count()):
+                ok = False
+                if form[i].id != user.id:  # and form[i].esta_aprobado == True :
+                    for x in range(registrados.count()):
+                        if registrados[x].proyecto_id == pk:
+                            if form[i].id == registrados[x].user_id:
+                                ok = True
+                if ok:
+                    list.append(form[i].id)
+            return render(request, 'proyectos/seleccionar_usuario_rol.html',
+                          {'form': form, 'list': list, 'pk': pk, "proyectos": proyecto})
+        else:
+            context = {
+                "mensaje": "No eres gerente de proyecto, por lo tanto no puede Asignar Rol en la fase" + str(
+                    fase.id_Fase),
+                "titulo": "Conflicto de Permiso ",
+                "titulo_b2": "Salir",
+                "boton2": "/proyectos/",
+            }
+            return render(request, "Error.html", context)
 
 
 def eliminar_rol_proyecto_usuario(id_fase, listaRoles, usuario):
