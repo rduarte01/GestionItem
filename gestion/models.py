@@ -28,10 +28,6 @@ class Proyecto(models.Model):
     """INFORMACION REFERENTE AL PROYECTO A CREAR"""
     estado= models.CharField('Estado', max_length = 10, blank = False, null = False, choices = choises_data_type, default = 'CREADO')
     """EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO, POR DEFAULT QUEDA EN CREADO"""
-    users= models.ManyToManyField(User, blank=True)
-    """HACE REFERENCIA A LOS USERS DEL SISTEMA"""
-    ###-Fases: Fases[*]
-    ###-Rol: Rol[*]
 
     class Meta:
         """ SE AGREGAN DOS PERMISOS NECESARIOS, UNO PARA EL GERENTE Y OTRO PARA EL ADMINISTRADOR DEL SISTEMA"""

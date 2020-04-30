@@ -1215,8 +1215,7 @@ def crearItem(request,Faseid):
     try:
         fase = Fase.objects.get(id_Fase=Faseid)
     except:
-        HttpResponse.status_code = 400
-        return HttpResponse(request,"id de fase invalida")
+        return HttpResponse(request,"id de fase invalida",status=400)
 
     #if(request.user.has_perm('crear_item'):----------------------------------------------------
 
@@ -1293,8 +1292,8 @@ def agg_listar_tipo_item(request,Fase):
     """
     tipoItem = TipoItem.objects.filter(fase_id=Fase)
     if(tipoItem.count() == 0):
-        HttpResponse.status_code = 400
-        return HttpResponse(request,"id de fase invalida")
+
+        return HttpResponse(request,"id de fase invalida",status=400)
 
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
 
@@ -1331,8 +1330,8 @@ def aggAtributos(request,idTI):
     atributos= Atributo.objects.filter(ti_id=idTI)
 
     if(atributos.count() == 0):
-        HttpResponse.status_code = 400
-        return HttpResponse(request,"id de TI invalida")
+
+        return HttpResponse(request,"id de TI invalida",status=400)
 
 
     if request.method == 'POST':
@@ -1435,8 +1434,8 @@ def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
             break
 
     if(ok==False):
-        HttpResponse.status_code = 400
-        return HttpResponse("id de TI invalida")
+
+        return HttpResponse("id de TI invalida",status=400)
 
     mostrarActual = True
     mostrarSig = False# ya no muestra la sig fase
@@ -1498,8 +1497,8 @@ def relacionarItem(request,id_proyecto,id_item):
         list=lista_items_relacion(itemActual,fases,id_proyecto,id_item)
         items = Item.objects.filter(actual=True)
     except:
-        HttpResponse.status_code = 400
-        return HttpResponse(request, "id de TI invalida")
+
+        return HttpResponse(request, "id de TI invalida",status=400)
 
 
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este

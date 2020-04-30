@@ -38,7 +38,7 @@ class Test_Crear_Item(TestCase):
         request.user = mixer.blend(User)
 
         id_fase=fase.id_Fase
- #       id_fase=999999999999999 #no existe
+        #id_fase=999 #no existe
         response = crearItem(request, Faseid=id_fase)
 
         assert response.status_code == 200 ,"Id de la fase enviada como parametro invalida"
@@ -64,12 +64,10 @@ class Test_Crear_Item(TestCase):
     def test_ti_en_fase(self):
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
         fase=mixer.blend('gestion.Fase',nombre='f1',id_Proyecto=proyecto)
-        mixer.blend('gestion.TipoItem',nombre='TI1',fase=fase)
+
+        mixer.blend('gestion.TipoItem',nombre='TI1',fase=fase)#restriccion
 
         assert hayTiFase(fase) != True, "No hay Ti en la fase por ende no se puede crear item"
-
-@pytest.mark.django_db
-class Test_Atributos(TestCase):
 
     def test_lista_ti(self):
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
@@ -103,8 +101,7 @@ class Test_Atributos(TestCase):
 
         assert response.status_code == 200, "Id del TI invalida, no se puede crear item si su TI no tiene atributos"
 
-@pytest.mark.django_db
-class Test_Relacion(TestCase):
+
     def test_relacion_item(self):
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
         fase1=mixer.blend('gestion.Fase', nombre='f1', id_Proyecto=proyecto)
