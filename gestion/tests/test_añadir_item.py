@@ -107,9 +107,11 @@ class Test_Atributos(TestCase):
 class Test_Relacion(TestCase):
     def test_relacion_item(self):
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
-        fase=mixer.blend('gestion.Fase', nombre='f1', id_Proyecto=proyecto)
-        item=mixer.blend('gestion.Item',nombre='i1',fase=fase)
+        fase1=mixer.blend('gestion.Fase', nombre='f1', id_Proyecto=proyecto)
+        fase2=mixer.blend('gestion.Fase', nombre='f2', id_Proyecto=proyecto)
+        fase3=mixer.blend('gestion.Fase', nombre='f3', id_Proyecto=proyecto)
 
+        item=mixer.blend('gestion.Item',nombre='i1',fase=fase1)
 
         path = reverse('gestion:relacionarItem', kwargs={'id_proyecto': proyecto.id_proyecto,'id_item': item.id_item})
         request = RequestFactory().get(path)
@@ -118,3 +120,19 @@ class Test_Relacion(TestCase):
         response = relacionarItem(request, proyecto.id_proyecto,item.id_item)
 
         assert response.status_code == 200, "Id del item o proyecto enviado como parametro invalida, no se puede crear item sin relaciones"
+
+    def test_relacion_lista_item(self):
+        proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
+        fase1=mixer.blend('gestion.Fase', nombre='f1', id_Proyecto=proyecto)
+        fase2=mixer.blend('gestion.Fase', nombre='f2', id_Proyecto=proyecto)
+        fase3=mixer.blend('gestion.Fase', nombre='f3', id_Proyecto=proyecto)
+
+        proyecto2=mixer.blend('gestion.Proyecto',nombre='p1')
+        fase4=mixer.blend('gestion.Fase', nombre='f1', id_Proyecto=proyecto2)
+
+        item=mixer.blend('gestion.Item',nombre='i1',fase=fase1)#restriccion
+        fases=Fase.objects.filter(id_Proyecto=proyecto)
+
+        lista_items_relacion(item, fases,proyecto.id_proyecto,item.id_item)
+        listVacia=[]
+        assert lista_items_relacion(item, fases,proyecto.id_proyecto,item.id_item)==listVacia , "El item no pertenece a las fases del proyecto enviado"

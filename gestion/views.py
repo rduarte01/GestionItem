@@ -1421,21 +1421,32 @@ def aggAtributos(request,idTI):
     #errorPermiso(request,'Crear Item')
 
 def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
+
+
     list = []
     nroFase = 0
+    ok=False
     for fase in reversed(fases):
         print(fase)
         nroFase += 1
         if (itemActual.fase == fase):
-            print("la fase en donde esta mi item es: ", fase)
+            print("la fase en donde esta mi item es: ", fase," nro ",nroFase)
+            ok=True
             break
+
+    if(ok==False):
+        HttpResponse.status_code = 400
+        return HttpResponse("id de TI invalida")
+
     mostrarActual = True
     mostrarSig = False# ya no muestra la sig fase
     mostrarAnte = False
 
-    if (nroFase == fases.count() and fases.count() != 1):  # si es la ultima, le muestro el anterior
-        mostrarAnte = True
-
+    if(fases.count() != 1):
+        if(nroFase == 1):
+            print("")
+        else:
+            mostrarAnte = True
 
     if (mostrarActual == True):
         items = Item.objects.filter(actual=True, fase=itemActual.fase)
@@ -1461,6 +1472,7 @@ def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
                 list.append(items[i].id_item)
                 # print("se añadio en list item: ",items[i])
     print("lista a mostrar: ", list)
+
     return list
 
 #RUBEN
