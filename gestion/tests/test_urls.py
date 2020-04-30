@@ -25,3 +25,10 @@ class TestUrls:
         """
         path = reverse('gestion:get_user', kwargs = {'pk': 2})
         assert resolve(path).view_name == 'gestion:get_user', "Se ha producido un error. La vista no es la correcta para la url gestion:get_user"
+
+    def test_url_elimar_ti(self):
+        print('aca aun no explota')
+        path = reverse('gestion:eliminar_atributo_ti', kwargs={'id_ti': 1})
+        print('aca explota')
+        print(resolve(path).view_name)
+        assert resolve(path).view_name == 'gestion:eliminar_atributo_ti'

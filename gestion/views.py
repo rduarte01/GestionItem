@@ -1773,8 +1773,11 @@ def editar_ti(request,id_ti):
     :param id_ti:
     :return: None
     '''
-    tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
-    Ti=TipoItem.objects.get(id_ti=id_ti)
+    try:
+        tipo_item = TipoItem.objects.get(id_ti=id_ti)
+        print('editar_tipo_item')
+    except TipoItem.DoesNotExist:
+        return HttpResponse('solicitud erronea, tipo de item no existe', status=400)
 
     query_atributos = Atributo.objects.filter(ti_id=tipo_item.id_ti)
     AtributeFormSet = modelformset_factory(Atributo, form=AtributeForm,exclude=('id_atributo',), extra=0)
@@ -1840,7 +1843,13 @@ def agregar_atributo_ti(request, id_ti):
     :return:
     '''
     form = formset_factory(AtributeForm, extra=1)
-    tipo_item = TipoItem.objects.get(id_ti=id_ti)
+
+    try:
+        tipo_item = TipoItem.objects.get(id_ti=id_ti)
+        print('agregar_atriburo_tipo_item')
+    except TipoItem.DoesNotExist:
+        return HttpResponse('solicitud erronea, tipo de item no existe', status=400)
+
     if(request.method=='POST'):
         my_form=form(request.POST)
         if my_form.is_valid():
@@ -1887,7 +1896,11 @@ def eliminar_atributo_ti(request,id_ti):
     :param id_ti:
     :return:
     '''
-    tipo_item = get_object_or_404(TipoItem, id_ti=id_ti)
+    try:
+        tipo_item = TipoItem.objects.get(id_ti=id_ti)
+    except TipoItem.DoesNotExist:
+        return HttpResponse('solicitud erronea, tipo de item no existe', status=400)
+
     if request.method=='POST':
         some_var = request.POST.getlist('checkbox')
         for id in some_var:
@@ -1899,6 +1912,7 @@ def eliminar_atributo_ti(request,id_ti):
             instancia.delete()
         return redirect('gestion:editar_ti',id_ti=id_ti)
     if validar_permiso(request.user, "is_gerente",tipo_item.fase.id_Proyecto):  # primero se valida si es gerente en el proyecto actual)
+       # print('es gerente')
         if not Item.objects.filter(ti_id=id_ti).exists():
             atributos=Atributo.objects.filter(ti_id=id_ti)
             contexto={
@@ -1906,7 +1920,7 @@ def eliminar_atributo_ti(request,id_ti):
                 'tipo_item':tipo_item,
                 'proyectos': tipo_item.fase.id_Proyecto
             }
-            return  render(request,'proyectos/eliminar_atributo_ti.html',contexto)
+            return render(request,'proyectos/eliminar_atributo_ti.html',contexto)
         else:
             context = {
                 "mensaje": "Este Tipo de item ya esta asociado a un item, por lo tanto no puede ser Eliminar un atributo de ello",
@@ -1916,6 +1930,7 @@ def eliminar_atributo_ti(request,id_ti):
             }
             return render(request, 'Error.html', context)
     else:
+        #print('No es gerente')
         context = {
             "mensaje": "No eres gerente de proyecto, por lo tanto no puedes eliminar atributos  del tipo de item" + tipo_item.nombre,
             "titulo": "Conflicto de Permiso ",
@@ -1931,6 +1946,8 @@ def eliminar_atributo_ti(request,id_ti):
     }
     return  render(request,'eliminar_atributo_ti.html',contexto)
 
+from django.http import HttpResponse
+
 def eliminar_tipo_item(request,id_ti):
    '''
     Esta funcion permite eliminar un Tipo de Item pasado como parametro, como consecuencia esta funcion tambien
@@ -1942,9 +1959,17 @@ def eliminar_tipo_item(request,id_ti):
    :param id_ti:
    :return:
    '''
-   tipo_item=get_object_or_404(TipoItem, id_ti=id_ti)
+   print(id_ti)
+   try:
+       tipo_item = TipoItem.objects.get(id_ti=id_ti)
+   except TipoItem.DoesNotExist:
+        return HttpResponse('solicitud erronea, tipo de item no existe', status=400)
+
    if validar_permiso(request.user,"is_gerente",tipo_item.fase.id_Proyecto):  #primero se valida si es gerente en el proyecto actual)
-        if not Item.objects.filter(ti_id=id_ti).exists():
+        print(' es gerente')
+        print('ACA IMPRIMO ALGOOO',Item.validar_ti_item(id_ti))
+        if not Item.validar_ti_item(id_ti):
+            print('acaaa')
             Atributo.objects.filter(ti_id=id_ti).delete()
             fase=get_object_or_404(TipoItem, id_ti=id_ti).fase
             registrarAuditoriaProyecto(request.user,
@@ -1963,6 +1988,7 @@ def eliminar_tipo_item(request,id_ti):
             }
             return render(request, 'Error.html', context)
    else:
+       print('no es gerente')
        context = {
            "mensaje": "No eres gerente de proyecto, por lo tanto no puede Eliminar el tipo de item" + tipo_item.nombre,
            "titulo": "No puede Eliminar el  Tipo de item en este proyecto ",
@@ -2055,9 +2081,19 @@ def Asignar_Rol_usuario_proyecto(request,id_Fase,id_usuario):
     :param id_usuario:
     :return:
     '''
-    fase=Fase.objects.get(id_Fase=id_Fase)
+    try:
+        fase = Fase.objects.get(id_Fase=id_Fase)
+    except Fase.DoesNotExist:
+        return HttpResponse('solicitud erronea, fase no existe', status=400)
+
+    try:
+        usuario = User.objects.get(id=id_usuario)
+    except User.DoesNotExist:
+        return HttpResponse('solicitud erronea, usuario no existe', status=400)
+
+
     proyecto=fase.id_Proyecto
-    usuario = User.objects.get(id=id_usuario)
+
     print('el id del proyecto  es',proyecto.id_proyecto)
     if  request.method=='POST':
         rolNombreProyecto=[]
@@ -2178,20 +2214,29 @@ def validar_rol_fase(permiso,fase,usuario):
     :param usuario:
     :return: Boolean
     '''
-    print(permiso)
     content_type = ContentType.objects.get(model='proyecto')
     per = Permission.objects.get(content_type=content_type.id,codename=permiso)
-    print(per.id)
-    print('id del proyecto'+str(fase.id_Proyecto.id_proyecto))
     roles = GroupObjectPermission.objects.filter(object_pk=fase.id_Proyecto.id_proyecto,permission_id=per.id)
-    print(roles)
+    valor=False
     for rol in roles:
-        print(fase.id_Fase,rol.group_id,usuario.id)
-        if FASE_ROL.objects.filter(id_fase_id=fase.id_Fase,id_rol_id=rol.group_id,id_usuario_id=usuario.id).exists():
-            print('Si tiene ese rol en esa Fase')
+        g=Group.objects.get(id=rol.group_id)
+        valor=verifacar_roles_usuario(g,fase,usuario)
+        if valor:
             return True
-    print('No, no tiene ese rol para esta fase')
-    return  False
+    return False
+def verifacar_roles_usuario(rol,fase,usuario):
+    '''
+    Esta funcion es la encarganda de validar si un usuario tiene un rol especifico en una determinada fase
+    si tiene, retorna un True, si no retorna un False
+    :param rol:
+    :param fase:
+    :param usuario:
+    :return: Boolean
+    '''
+    if FASE_ROL.objects.filter(id_fase_id=fase.id_Fase,id_rol_id=rol.id,id_usuario_id=usuario.id).exists():
+        print('Si tiene ese rol en esa Fase')
+        return True
+    return False
 
 def seleccionar_usuario_rol(request,id_fase):
     '''
