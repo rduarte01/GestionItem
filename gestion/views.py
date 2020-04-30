@@ -190,6 +190,8 @@ def registrarAuditoriaProyecto(user,accion,id_proyecto,proyecto,fase):
     p = Auditoria(usuario= user,fecha=showtime, accion=accion,id_proyecto=id_proyecto,proyecto=proyecto,fase=fase)###### FALTA ARREGLAR USER
     p.save()
 
+from threading import *
+
 #RUBEN
 def CorreoMail(asunto,mensaje,correo):
     """
@@ -199,9 +201,9 @@ def CorreoMail(asunto,mensaje,correo):
     :param mensaje: MENSAJE A ENVIAR
     :param correo: EMAIL
     """
-
     mail=EmailMessage(asunto,mensaje,to={correo})
     mail.send()
+
 #RUBEN
 def Contactos(request):
     """DESPLIEGA UN APARTADO EN DONDE EL USUARIO INGRESA SU DUDA O INCONVENIENTE Y SE ENVIA A LOS DESARROLLADORES
@@ -215,7 +217,11 @@ def Contactos(request):
         asunto= "Inconveniente o consulta de: "+ str(user)
         guardarAuditoria = "El usuario envio la siguiente consulta o inquietud: "+ mensaje
         registrarAuditoria(request.user, guardarAuditoria)
-        CorreoMail(asunto,mensaje,"gerardocabrer@gmail.com")
+
+        ##correo se envia en segundo plano
+        t = Timer(1,CorreoMail,args=(asunto,mensaje,"gerardocabrer@gmail.com"))
+        t.start()
+
         context = {
             "mensaje": "GRACIAS POR UTILIZAR NUESTRO SISTEMA! :)",
             "titulo": "MENSAJE ENVIADO",
@@ -1223,7 +1229,7 @@ def crearItem(request,Faseid):
     else:
         print("")
 
-    if(proyecto.estado != "INICIADO"):
+    if(proyecto.estado == "INICIADO"):
         context = {
             "mensaje": "EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado),
             "titulo": "PROYECTO NO INICIADO",
@@ -1380,7 +1386,16 @@ def aggAtributos(request,idTI):
                                 print("no vacio",DOC[0])
                                 ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
                                 PATH = f'/{ruta}/{DOC[0]}'
-                                SubirArchivo(DOC[0], PATH)
+                                #SubirArchivo(DOC[0], PATH)
+                                #print("--",DOC[0])
+
+                                ##se sube archivo a dropbox en segundo plano
+                                t2 = Thread(
+                                    target=SubirArchivo,
+                                    args=(DOC[0],PATH),
+                                )
+                                t2.start()
+
                                 p = Atributo_Item(idAtributoTI=atr, id_item=item, valor=str(DOC[0]))
                                 p.save()
                             else:
@@ -1523,6 +1538,7 @@ def relacionarItem(request,id_proyecto,id_item):
                 p = Relacion(fin_item=id_item,inicio_item=id)
                 p.save()
                 print(itemActual.nombre," <-- ",itemSeleccionado.nombre)
+
         #----------------------------------------------------------#
         ## se puede volver generico si se restringe preguntando si el item es igual al ultimo
         version=Versiones(id_Version=1,id_item=id_item)#SE GUARDA LA VERSION
@@ -1548,6 +1564,10 @@ def itemCancelado(request):
 
     instanceItem = Atributo_Item.objects.filter(id_item = x)
     for i in instanceItem:
+        if(i.idAtributoTI.tipo_dato=='File'):
+            id_proyecto = str(i.id_item.fase.id_Proyecto.id_proyecto)
+            ruta = f'/{id_proyecto}'
+            dbx.files_delete(ruta)
         i.delete()
 
     return  redirect("gestion:menu")
@@ -2039,8 +2059,12 @@ def SubirArchivo(DOC, PATH):
     :param DOC: ARCHIVO SELECCIONADO POR EL USUARIO
     :param PATH: DIRECCION QUE TENDRA LA CARPETA EN DROPBOX
     """
+
     dbx = dropbox.Dropbox(TOKEN)
     dbx.files_upload(DOC.file.read(), PATH)
+    print("SUBIO A DROPBOX ---> ", DOC)
+
+
 
 def validar_datos_form_atributo(form_set):
     '''
