@@ -1,17 +1,16 @@
 from django.urls import reverse
 from django.test import RequestFactory
 from django.contrib.auth.models import User, AnonymousUser
-from gestion.views import perfil, agregarUsuarios, estadoProyecto, importar_tipo_item, menu, tipo_item_views_create, CrearRol, ModificarRol, AggUser, creacionProyecto, crearFase
+from gestion.views import *
 from mixer.backend.django import mixer
 from django.test import TestCase
 import pytest
-from gestion.models import Proyecto, Fase, Atributo, TipoItem, Usuario, FASE_ROL
-
+from gestion.models import *
+from django.contrib.contenttypes.models import ContentType
 
 @pytest.mark.django_db
 class TestViews(TestCase):
-    
-        
+
     def test_perfil_authenticated(self):
         """
         Comprueba si se muestra el perfil del usuario solicitante.

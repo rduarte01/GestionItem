@@ -239,6 +239,10 @@ class Item(models.Model):
     estado = models.CharField('Estado', max_length = 20, blank = False, null = False, choices = choises_data_type, default = 'Creado')
     """ATRIBUTO CORRESPONDIENTE AL ESTADO QUE ADOPTARÁ UN DETERMINADO ITEM, EL MISMO VARÍA DURANTE EL TRANSCURSO DEL PROYECTO SEGÚN LO QUE EL USUARIO DECIDA"""
 
+    @staticmethod
+    def validar_ti_item(id_ti):
+        return Item.objects.filter(ti_id = id_ti).exists()
+
     def __str__(self):
         """HACE REFERENCIA A LA MANERA EN LA CUAL QUEREMOS VISUALIZAR LOS ITEMS, EN ESTE CASO LOS VEREMOS POR SU NOMBRE, POR DEFECTO SE 
         VISUALIZA DE LA SIGUIENTE MANERA: ITEM OBJECT(1), ITEM OBJECT(2), Y ASÍ SUCESIVAMENTE. 
