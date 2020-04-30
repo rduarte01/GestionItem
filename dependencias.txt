@@ -5,8 +5,10 @@ django-bootstrap4
 sphinx_rtd_theme
 sphinx
 bootstrap4
-psycopg2
+psycopg2-binary
 pytest
 pytest-django
 pytest-cov
 mixer
+dropbox
+django-guardian

@@ -190,6 +190,8 @@ def registrarAuditoriaProyecto(user,accion,id_proyecto,proyecto,fase):
     p = Auditoria(usuario= user,fecha=showtime, accion=accion,id_proyecto=id_proyecto,proyecto=proyecto,fase=fase)###### FALTA ARREGLAR USER
     p.save()
 
+from threading import *
+
 #RUBEN
 def CorreoMail(asunto,mensaje,correo):
     """
@@ -199,9 +201,9 @@ def CorreoMail(asunto,mensaje,correo):
     :param mensaje: MENSAJE A ENVIAR
     :param correo: EMAIL
     """
-
     mail=EmailMessage(asunto,mensaje,to={correo})
     mail.send()
+
 #RUBEN
 def Contactos(request):
     """DESPLIEGA UN APARTADO EN DONDE EL USUARIO INGRESA SU DUDA O INCONVENIENTE Y SE ENVIA A LOS DESARROLLADORES
@@ -215,7 +217,11 @@ def Contactos(request):
         asunto= "Inconveniente o consulta de: "+ str(user)
         guardarAuditoria = "El usuario envio la siguiente consulta o inquietud: "+ mensaje
         registrarAuditoria(request.user, guardarAuditoria)
-        CorreoMail(asunto,mensaje,"gerardocabrer@gmail.com")
+
+        ##correo se envia en segundo plano
+        t = Timer(1,CorreoMail,args=(asunto,mensaje,"gerardocabrer@gmail.com"))
+        t.start()
+
         context = {
             "mensaje": "GRACIAS POR UTILIZAR NUESTRO SISTEMA! :)",
             "titulo": "MENSAJE ENVIADO",
@@ -1166,6 +1172,35 @@ class VerRoles(ListView):
         context['listGroup'] = grupList
         context['idProyecto'] = miid
         return context
+
+from django.http import HttpResponse
+
+
+def fase1SinItems(fases,fase):
+    cont = 1
+    if (fases.count() != 1):  # si no es de la primera fase
+        for faseSIG in reversed(fases):
+            if (faseSIG == fase):  # se verifica que fase es
+                break
+            cont += 1
+    if (cont != 1):
+        item_fase=Item.objects.filter(fase=fase.id_Fase-1)
+        if(item_fase.count() == 0):
+            return True
+    return False
+
+
+def hayTiFase(fase):
+    try:
+        ti = TipoItem.objects.filter(fase=fase)
+    except:
+        ti = None
+
+    if (ti == None or ti.count() == 0):  # muestra mensaje de error si no hay TI no se puede crear item
+        return True
+    return False
+
+
 #RUBEN
 def crearItem(request,Faseid):
     """
@@ -1177,17 +1212,21 @@ def crearItem(request,Faseid):
     :param Faseid: ID DE LA FASE EN LA QUE SE CREARA EL ITEM
     :return: ITEM.HTML
     """
+    try:
+        fase = Fase.objects.get(id_Fase=Faseid)
+    except:
+        return HttpResponse(request,"id de fase invalida",status=400)
 
     #if(request.user.has_perm('crear_item'):----------------------------------------------------
 
-    fase=Fase.objects.get(id_Fase=Faseid)
+
     proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto.id_proyecto)
     fases=Fase.objects.filter(id_Proyecto=proyecto)
-    cont = 1
-    if request.user.has_perm('crear_lb',proyecto) and validar_rol_fase('crear_lb',fase,request.user):
+
+    if request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',fase,request.user):
         print('tiene el permiso de crear_item')
     else:
-        print('no tiene el permiso')
+        print("")
 
     if(proyecto.estado == "INICIADO"):
         context = {
@@ -1200,30 +1239,17 @@ def crearItem(request,Faseid):
         }
         return render(request, 'Error.html', context)
 
-    if( fases.count() != 1):#si no es de la primera fase
-        for faseSIG in reversed(fases):
-            if(faseSIG==fase):#se verifica que fase es
-                print("la fase es la nro: ",cont)
-                break
-            cont += 1
-    if(cont != 1 ):# si no es de la primera fase valida si hay items en la fase anterior
-        item_fase=Item.objects.filter(fase=fase.id_Fase-1)
-        print(item_fase)
-        if(item_fase.count() == 0):
-            print("error")
-            context = {
-                "mensaje": "LA FASE ANTERIOR NO CONTIENE ITEMS POR ENDE NO PODRA RELACIONAR CON LA PRIMERA FASE, CREE ITEM EN LA FASE ANTERIOR A ESTA Y LUEGO INTENTE NUEVAMENTE",
-                "titulo": "NO HAY ITEMS EN LA FASE ANTERIOR",
-                "titulo_b1": "",
-                "boton1": "",
-                "titulo_b2": "VOLVER A DETALLES DE LA FASE",
-                "boton2": "/detallesFase/"+str(Faseid),
-            }
-            return render(request, 'Error.html', context)
-        else:
-            print("no hay error")
-    else:
-        print("es la primera fase")
+
+    if(fase1SinItems(fases,fase)):# si no es de la primera fase y la F1 no tiene items muestra error
+        context = {
+            "mensaje": "LA FASE ANTERIOR NO CONTIENE ITEMS POR ENDE NO PODRA RELACIONAR CON LA PRIMERA FASE, CREE ITEM EN LA FASE ANTERIOR A ESTA Y LUEGO INTENTE NUEVAMENTE",
+            "titulo": "NO HAY ITEMS EN LA FASE ANTERIOR",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "VOLVER A DETALLES DE LA FASE",
+            "boton2": "/detallesFase/"+str(Faseid),
+        }
+        return render(request, 'Error.html', context)
 
     form= FormItem(request.POST)
     if form.is_valid():
@@ -1231,16 +1257,10 @@ def crearItem(request,Faseid):
 
         datosFormulario= form.cleaned_data
         fase= Fase.objects.get(id_Fase=Faseid)
-        print("fase :",fase.id_Fase)
         item=Item(nombre=datosFormulario.get('nombre'),descripcion=datosFormulario.get('descripcion'),costo=datosFormulario.get('costo'),fase=fase)
 
-        try:
-            ti = TipoItem.objects.filter(fase=fase)
-        except:
-            ti = None
-        print(ti.count())
 
-        if (ti==None or ti.count()==0 ):# muestra mensaje de error si no hay TI no se puede crear item
+        if (hayTiFase(fase)):# muestra mensaje de error si no hay TI no se puede crear item
             context = {
                 "mensaje": "LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE"": ",
                 "titulo": "NO HAY TIPOS DE ITEM",
@@ -1259,6 +1279,8 @@ def crearItem(request,Faseid):
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Crear Item')
 
+#def status_code():
+
 #RUBEN
 def agg_listar_tipo_item(request,Fase):
     """
@@ -1268,6 +1290,10 @@ def agg_listar_tipo_item(request,Fase):
     :param Fase: ID DE LA FASE DEL CUAL DEBE LISTAR LOS TI
     :return: AGGTI.HTML
     """
+    tipoItem = TipoItem.objects.filter(fase_id=Fase)
+    if(tipoItem.count() == 0):
+
+        return HttpResponse(request,"id de fase invalida",status=400)
 
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
 
@@ -1280,12 +1306,10 @@ def agg_listar_tipo_item(request,Fase):
         item.save()
 
         return redirect('gestion:aggAtributos',tipoItem2[0].id_ti)
-    tipoItem = TipoItem.objects.filter(fase_id=Fase)
-    for i in tipoItem:
-        print(i.nombre)
+
+
     contexto={
         'TipoItem':tipoItem
-
     }
     return render (request,'items/aggTI.html',contexto)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
@@ -1302,9 +1326,14 @@ def aggAtributos(request,idTI):
     :param idTI: ID DEL TI SELECCIONADO POR EL USUARIO
     :return: REDIRIGE AL TEMPLATE AGGATRIBUTOS
     """
-
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
     atributos= Atributo.objects.filter(ti_id=idTI)
+
+    if(atributos.count() == 0):
+
+        return HttpResponse(request,"id de TI invalida",status=400)
+
+
     if request.method == 'POST':
         itemID = Item.objects.last()
         ti = TipoItem.objects.get(id_ti=idTI)
@@ -1356,7 +1385,16 @@ def aggAtributos(request,idTI):
                                 print("no vacio",DOC[0])
                                 ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
                                 PATH = f'/{ruta}/{DOC[0]}'
-                                SubirArchivo(DOC[0], PATH)
+                                #SubirArchivo(DOC[0], PATH)
+                                #print("--",DOC[0])
+
+                                ##se sube archivo a dropbox en segundo plano
+                                t2 = Thread(
+                                    target=SubirArchivo,
+                                    args=(DOC[0],PATH),
+                                )
+                                t2.start()
+
                                 p = Atributo_Item(idAtributoTI=atr, id_item=item, valor=str(DOC[0]))
                                 p.save()
                             else:
@@ -1381,6 +1419,61 @@ def aggAtributos(request,idTI):
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Crear Item')
 
+def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
+
+
+    list = []
+    nroFase = 0
+    ok=False
+    for fase in reversed(fases):
+        print(fase)
+        nroFase += 1
+        if (itemActual.fase == fase):
+            print("la fase en donde esta mi item es: ", fase," nro ",nroFase)
+            ok=True
+            break
+
+    if(ok==False):
+
+        return HttpResponse("id de TI invalida",status=400)
+
+    mostrarActual = True
+    mostrarSig = False# ya no muestra la sig fase
+    mostrarAnte = False
+
+    if(fases.count() != 1):
+        if(nroFase == 1):
+            print("")
+        else:
+            mostrarAnte = True
+
+    if (mostrarActual == True):
+        items = Item.objects.filter(actual=True, fase=itemActual.fase)
+        print("se muestrar items de la fase actual: ", items)
+        for i in range(items.count()):  ###todos los items del proyecto
+            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
+                list.append(items[i].id_item)
+                # print("se añadio en list item: ",items[i])
+    if (mostrarSig == True):  ####### EVALUAR SI MOSTRAR SIG POR AHORA QUEDA
+        faseSig = Fase.objects.get(id_Fase=(itemActual.fase.id_Fase + 1))
+        items = Item.objects.filter(actual=True, fase=faseSig)
+        print("se muestrar items de la fase sig: ", items)
+        for i in range(items.count()):  ###todos los items del proyecto
+            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
+                list.append(items[i].id_item)
+                # print("se añadio en list item: ",items[i])
+    if (mostrarAnte == True):
+        faseAnt = Fase.objects.get(id_Fase=(itemActual.fase.id_Fase - 1))
+        items = Item.objects.filter(actual=True, fase=faseAnt)
+        print("se muestrar items de la fase ant: ", items)
+        for i in range(items.count()):  ###todos los items del proyecto
+            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
+                list.append(items[i].id_item)
+                # print("se añadio en list item: ",items[i])
+    print("lista a mostrar: ", list)
+
+    return list
+
 #RUBEN
 def relacionarItem(request,id_proyecto,id_item):
     """
@@ -1396,54 +1489,18 @@ def relacionarItem(request,id_proyecto,id_item):
     :return: REDIRIGE AL TEMPLATE RELACIONAR_ITEM
     """
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
+    try:
+        proyecto=Proyecto.objects.get(id_proyecto=id_proyecto)#se obtiene el proyecto
+        fases=Fase.objects.filter(id_Proyecto=proyecto)#se obtienen las fases del proyecto
+        itemActual=Item.objects.get(id_item=id_item)
+        list=[]
+        list=lista_items_relacion(itemActual,fases,id_proyecto,id_item)
+        items = Item.objects.filter(actual=True)
+    except:
 
-    proyecto=Proyecto.objects.get(id_proyecto=id_proyecto)#se obtiene el proyecto
-    fases=Fase.objects.filter(id_Proyecto=proyecto)#se obtienen las fases del proyecto
-    list = []#se guardaran todos los items del proyecto
-    print(fases)
-    itemActual=Item.objects.get(id_item=id_item)
-    nroFase=0
-    for fase in reversed(fases):
-        print(fase)
-        nroFase+=1
-        if (itemActual.fase==fase):
-            print("la fase en donde esta mi item es: ",fase)
-            break
-    mostrarActual=True
-    mostrarSig=False
-    mostrarAnte=False
-    if(nroFase == 1):#si mi fase es la primera, solo le muestro items de la primera y segunda fase
-        mostrarSig=True
-    elif(nroFase == fases.count()):#si es la ultima, le muestro el anterior
-        mostrarAnte=True
-    else:#si no esta en la primera o ultima fase le muestro el ant y sig
-        mostrarAnte=True
-        mostrarSig=True
-    if(mostrarActual==True):
-        items = Item.objects.filter(actual=True,fase=itemActual.fase)
-        print("se muestrar items de la fase actual: ",items)
-        for i in range(items.count()):  ###todos los items del proyecto
-            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
-                list.append(items[i].id_item)
-                #print("se añadio en list item: ",items[i])
-    if(mostrarSig==True):####### EVALUAR SI MOSTRAR SIG POR AHORA QUEDA
-        faseSig=Fase.objects.get(id_Fase=(itemActual.fase.id_Fase+1))
-        items = Item.objects.filter(actual=True,fase=faseSig)
-        print("se muestrar items de la fase sig: ",items)
-        for i in range(items.count()):  ###todos los items del proyecto
-            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
-                list.append(items[i].id_item)
-                #print("se añadio en list item: ",items[i])
-    if(mostrarAnte==True):
-        faseAnt=Fase.objects.get(id_Fase=(itemActual.fase.id_Fase-1))
-        items = Item.objects.filter(actual=True,fase=faseAnt)
-        print("se muestrar items de la fase ant: ",items)
-        for i in range(items.count()):  ###todos los items del proyecto
-            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
-                list.append(items[i].id_item)
-                #print("se añadio en list item: ",items[i])
-    print("lista a mostrar: ",list)
-    items = Item.objects.filter(actual=True)
+        return HttpResponse(request, "id de TI invalida",status=400)
+
+
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
         some_var=request.POST.getlist('checkbox')
         #print(some_var)
@@ -1492,6 +1549,7 @@ def relacionarItem(request,id_proyecto,id_item):
                 p = Relacion(fin_item=id_item,inicio_item=id)
                 p.save()
                 print(itemActual.nombre," <-- ",itemSeleccionado.nombre)
+
         #----------------------------------------------------------#
         ## se puede volver generico si se restringe preguntando si el item es igual al ultimo
         version=Versiones(id_Version=1,id_item=id_item)#SE GUARDA LA VERSION
@@ -1517,6 +1575,10 @@ def itemCancelado(request):
 
     instanceItem = Atributo_Item.objects.filter(id_item = x)
     for i in instanceItem:
+        if(i.idAtributoTI.tipo_dato=='File'):
+            id_proyecto = str(i.id_item.fase.id_Proyecto.id_proyecto)
+            ruta = f'/{id_proyecto}'
+            dbx.files_delete(ruta)
         i.delete()
 
     return  redirect("gestion:menu")
@@ -2008,8 +2070,12 @@ def SubirArchivo(DOC, PATH):
     :param DOC: ARCHIVO SELECCIONADO POR EL USUARIO
     :param PATH: DIRECCION QUE TENDRA LA CARPETA EN DROPBOX
     """
+
     dbx = dropbox.Dropbox(TOKEN)
     dbx.files_upload(DOC.file.read(), PATH)
+    print("SUBIO A DROPBOX ---> ", DOC)
+
+
 
 def validar_datos_form_atributo(form_set):
     '''

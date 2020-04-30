@@ -19,13 +19,14 @@
             <thead>
             <tr>
                 <td>FASES</td>
-                <td>DESCRIPCION</td>
+
                 <td>ESTADO</td>
                 <td>ESTADO DE FASES</td>
                 {% if "is_gerente" in proyecto_perms %}
                     {% if proyectos.estado != 'CANCELADO' %}
-                        <td>AGREGA TI</td>
-                        <td>IMPORTA TI</td>
+
+                        <td>TIPO DE ITEM</td>
+                        <td>ROLES</td>
                     {% endif %}
                 {% endif %}
                 <td>TRABAJAR!</td>
@@ -36,7 +37,7 @@
                 {% if fases.id_Proyecto == proyectos  %}
                     <tr>
                         <td>{{fases.nombre}}</td>
-                        <td>{{fases.descripcion}}</td>
+
                         <td>{{fases.estado}}</td>
                         {% if "is_gerente" in proyecto_perms %}
                             <td><a href=""class="btn btn-primary">CAMBIAR ESTADO</a></td>
@@ -45,9 +46,9 @@
                         {%endif%}
                         {% if "is_gerente" in proyecto_perms %}
                             {% if proyectos.estado != 'CANCELADO' %}
-                                <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear Tipo Item</a> </td>
-                                <td><a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-primary">Importar Tipo Item</a> </td>
-                                <td><a href="{% url 'gestion:seleccionar_usuario_rol' fases.id_Fase %}" class="btn btn-primary">Asignar Roles</a> </td>
+                                <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear TI </a>
+                                <a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-danger"> Importar TI</a> </td>
+                                <td><a href="{% url 'gestion:seleccionar_usuario_rol' fases.id_Fase %}" class="btn btn-primary">Asignar Usuario</a> </td>
                             {% endif %}
                         {% endif %}
                         <td><a href="{% url 'gestion:detallesFase' fases.id_Fase %}" class="btn btn-primary">DETALLES</a></td>
