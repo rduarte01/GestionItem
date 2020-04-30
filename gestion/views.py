@@ -1200,6 +1200,16 @@ def hayTiFase(fase):
         return True
     return False
 
+def sinPermiso(request,permiso):
+    context = {
+        "mensaje": "NO SE POSEE EL PERMISO: " + str(permiso)+" SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+        "titulo": "SIN PERMISO",
+        "titulo_b1": "",
+        "boton1": "",
+        "titulo_b2": "SALIR",
+        "boton2": "/detallesProyecto/",
+    }
+    return render(request, 'Error.html', context)
 
 #RUBEN
 def crearItem(request,Faseid):
@@ -1226,9 +1236,17 @@ def crearItem(request,Faseid):
     if request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',fase,request.user):
         print('tiene el permiso de crear_item')
     else:
-        print("")
+        context = {
+            "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+            "titulo": "SIN PERMISO",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "SALIR",
+            "boton2": "/proyectos/",
+        }
+        return render(request, 'Error.html', context)
 
-    if(proyecto.estado == "INICIADO"):
+    if(proyecto.estado != "INICIADO"):
         context = {
             "mensaje": "EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado),
             "titulo": "PROYECTO NO INICIADO",
@@ -1292,7 +1310,6 @@ def agg_listar_tipo_item(request,Fase):
     """
     tipoItem = TipoItem.objects.filter(fase_id=Fase)
     if(tipoItem.count() == 0):
-
         return HttpResponse(request,"id de fase invalida",status=400)
 
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
@@ -2497,7 +2514,6 @@ def modificarEstadoItem(request, pk):
     """
 
     form = FormItemFase(request.POST)
-
     item = Item.objects.get(id_item = pk)
 
     contexto = {
@@ -2506,15 +2522,26 @@ def modificarEstadoItem(request, pk):
     }
 
     if form.is_valid():
-
         x=form.cleaned_data
         z=x.get("estado")#### ESTADO SELECCIONADO
 
         item.estado = z
 
-        if z == 'Aprobado':
-            
+        if z == 'Finalizado':
             item.save()
+        elif(z == 'Aprobado'):
+            if(item.estado=='Finalizado'):
+                item.save()
+            else:
+                context = {
+                    "mensaje": "EL ITEM DEBE ESTAR FINALIZADO PARA PODER SER APROBADO",
+                    "titulo": "ESTADO DEL ITEM ",
+                    "titulo_b1": "",
+                    "boton1": "" ,
+                    "titulo_b2": "Salir",
+                    "boton2": "/cambiarEstadoItem/" + str(pk),
+                }
+                return render(request, 'Error.html', context)
 
         return redirect('gestion:cambiarEstadoItem', pk)
 

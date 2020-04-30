@@ -299,10 +299,8 @@ class LBForm(forms.ModelForm):
 class FormItemFase(forms.Form):
     """FORM PARA MOSTRAR LOS ESTADOS QUE PUEDE TENER UN ITEM"""
     choises_data_type = (
-        ("Creado", "Creado"),
-        ("Aprobado", "Aprobado"),
         ("Finalizado", "Finalizado"),
-        ("En revision", "En revision")
+        ("Aprobado", "Aprobado"),
     )
     """MEDIANTE CHOICES MOSTRAMOS LAS OPCIONES EN EL HTML"""
 
