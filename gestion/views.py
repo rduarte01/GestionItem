@@ -1233,7 +1233,7 @@ def crearItem(request,Faseid):
     proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto.id_proyecto)
     fases=Fase.objects.filter(id_Proyecto=proyecto)
 
-    if request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',fase,request.user):
+    if validar_permiso(request.user,"is_gerente",fase.id_Proyecto) or request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',fase,request.user):
         print('tiene el permiso de crear_item')
     else:
         context = {
@@ -2566,12 +2566,13 @@ def modificarEstadoItem(request, pk):
         x=form.cleaned_data
         z=x.get("estado")#### ESTADO SELECCIONADO
 
-        item.estado = z
-
         if z == 'Finalizado':
+            item.estado = z
             item.save()
         elif(z == 'Aprobado'):
             if(item.estado=='Finalizado'):
+
+                item.estado = z
                 item.save()
             else:
                 context = {
@@ -2589,6 +2590,11 @@ def modificarEstadoItem(request, pk):
     return render(request, 'items/cambiarEstadoItem.html', contexto)
 
 def obtener_todos_roles_proyecto(id_proyecto):
+    '''
+    Esta funcion es la encargada de obtener todos los roles asociado a un proyecto, retorna una lista de roles
+    :param id_proyecto:
+    :return: Lista
+    '''
     rolNombreProyecto = []
     rolesProyecto = Group.objects.all()  # Otengo Todo los roles del Proyecto
     print(id_proyecto)
