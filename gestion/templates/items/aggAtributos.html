@@ -17,7 +17,7 @@
 
 
     {% block contect %}
-        <a class="btn btn-primary" href="{% url 'gestion:itemCancelado'%}" role="button">Cancelar</a>
+        <a class="btn btn-primary" href="{% url 'gestion:itemCancelado' id_item%}" role="button">Cancelar</a>
         <div class="jumbotron">
             <form method="POST" action="" onSubmit="return enviado()" enctype="multipart/form-data">{% csrf_token %}
                 {% block content %}

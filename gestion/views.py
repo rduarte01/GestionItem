@@ -1244,9 +1244,9 @@ def crearItem(request,Faseid):
             "titulo_b2": "SALIR",
             "boton2": "/proyectos/",
         }
-        return render(request, 'Error.html', context)
+        #return render(request, 'Error.html', context)
 
-    if(proyecto.estado != "INICIADO"):
+    if(proyecto.estado == "INICIADO"):
         context = {
             "mensaje": "EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado),
             "titulo": "PROYECTO NO INICIADO",
@@ -1308,6 +1308,7 @@ def agg_listar_tipo_item(request,Fase):
     :param Fase: ID DE LA FASE DEL CUAL DEBE LISTAR LOS TI
     :return: AGGTI.HTML
     """
+    item_id=Item.objects.last()
     tipoItem = TipoItem.objects.filter(fase_id=Fase)
     if(tipoItem.count() == 0):
         return HttpResponse(request,"id de fase invalida",status=400)
@@ -1326,7 +1327,8 @@ def agg_listar_tipo_item(request,Fase):
 
 
     contexto={
-        'TipoItem':tipoItem
+        'TipoItem':tipoItem,
+        'id_item':item_id.id_item
     }
     return render (request,'items/aggTI.html',contexto)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
@@ -1426,11 +1428,12 @@ def aggAtributos(request,idTI):
         itemID=Item.objects.last()
         ti=TipoItem.objects.get(id_ti=idTI)
         return redirect('gestion:relacionarItem',ti.fase.id_Proyecto.id_proyecto,itemID.id_item)
-
+    item_id = Item.objects.last()
     contexto={
         'atributos':atributos,
         'true':True,
         'false':False,
+        'id_item':item_id.id_item
     }
     return render (request,'items/aggAtributos.html',contexto)
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
@@ -1579,28 +1582,44 @@ def relacionarItem(request,id_proyecto,id_item):
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Crear Item')
 
-def itemCancelado(request):
+def itemCancelado(request,pk):
     """
     METODO PARA CANCELAR UN ITEM
     :return: REDIRIGE AL MENU PRINCIPAL
     """
 
     #if(request.user.has_perm('crear_item')):----------------------------------------------------
-
-    x = Item.objects.last()
+    try:
+        x = Item.objects.get(id_item=pk)
+    except:
+        context = {
+            "mensaje": "EL ITEM YA NO EXISTE ",
+            "titulo": "ITEM",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, 'Error.html', context)
+    try:
+        ruta = f'/{x.fase.id_Proyecto.id_proyecto}/{x.id_item}'
+        dbx = dropbox.Dropbox(TOKEN)
+        dbx.files_delete(ruta)
+        print("borro archivos adjuntos")
+    except:
+        print("sin archivos adj. que borrar")
     x.delete()
 
     instanceItem = Atributo_Item.objects.filter(id_item = x)
+
     for i in instanceItem:
-        if(i.idAtributoTI.tipo_dato=='File'):
-            id_proyecto = str(i.id_item.fase.id_Proyecto.id_proyecto)
-            ruta = f'/{id_proyecto}'
-            dbx.files_delete(ruta)
         i.delete()
 
     return  redirect("gestion:menu")
     #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
     #errorPermiso(request,'Crear Item')
+
+
 
 def primeraFase(id_proyecto,id_item,some_var):
     """

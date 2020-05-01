@@ -25,7 +25,7 @@ urlpatterns = [
     path('agregarUsuarios/<int:pk><int:nroFase>', views.agregarUsuarios, name='agregarUsuarios'),
     path('proyectos/', listar_proyectos, name='listar_proyectos'),
     path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
-    path('/itemCancelado/', itemCancelado, name='itemCancelado'),
+    path('/itemCancelado/<int:pk>', itemCancelado, name='itemCancelado'),
 
     path('DescargarArchivo/<int:id_item>/(?P<archivo>[a-zA-Z0-9])', DescargarArchivo, name='DescargarArchivo'),
 
