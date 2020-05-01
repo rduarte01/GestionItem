@@ -2174,8 +2174,16 @@ def Asignar_Rol_usuario_proyecto(request,id_Fase,id_usuario):
     except User.DoesNotExist:
         return HttpResponse('solicitud erronea, usuario no existe', status=400)
 
-
     proyecto=fase.id_Proyecto
+
+    if  obtener_todos_roles_proyecto(proyecto.id_proyecto)==[] :
+        context = {
+            "mensaje": "El Proyecto aun no tiene roles, creelos antes de asingar" ,
+            "titulo": "No existe Roles ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
 
     print('el id del proyecto  es',proyecto.id_proyecto)
     if  request.method=='POST':
@@ -2339,6 +2347,11 @@ def seleccionar_usuario_rol(request,id_fase):
     :param id_fase:
     :return:
     '''
+    try:
+        fase = Fase.objects.get(id_Fase=id_fase)
+    except Fase.DoesNotExist:
+        return HttpResponse('solicitud erronea, fase no existe', status=400)
+
     pk=Fase.objects.get(id_Fase=id_fase).id_Proyecto_id
     proyecto=Proyecto.objects.get(id_proyecto=pk)
     user = request.user  ## USER ACTUAL
@@ -2346,6 +2359,15 @@ def seleccionar_usuario_rol(request,id_fase):
     registrados = User_Proyecto.objects.all()
     fase=Fase.objects.get(id_Fase=id_fase)
     ##hacer  el if para mostra el mensaje de error si es que el proyecto aun no tiene roles
+
+    if obtener_todos_roles_proyecto(proyecto.id_proyecto) ==[]:
+        context = {
+            "mensaje": "El Proyecto aun no tiene roles, creelos antes de asingar",
+            "titulo": "No existe Roles ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
 
     if request.method=='POST':
         some_var=request.POST.getlist('radio')
@@ -2565,3 +2587,15 @@ def modificarEstadoItem(request, pk):
         return redirect('gestion:cambiarEstadoItem', pk)
 
     return render(request, 'items/cambiarEstadoItem.html', contexto)
+
+def obtener_todos_roles_proyecto(id_proyecto):
+    rolNombreProyecto = []
+    rolesProyecto = Group.objects.all()  # Otengo Todo los roles del Proyecto
+    print(id_proyecto)
+    for rolProyecto in rolesProyecto:
+        id_Proyecto, nombre_rol = rolProyecto.name.split('_')
+        if int(id_Proyecto) == id_proyecto:
+            rolNombreProyecto = rolNombreProyecto + [rolProyecto.name]  # Todo los roles le agrego a una lista
+
+    print(rolNombreProyecto)
+    return rolNombreProyecto
