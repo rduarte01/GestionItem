@@ -10,7 +10,8 @@ from django.contrib.contenttypes.models import ContentType
 
 @pytest.mark.django_db
 class TestViews(TestCase):
-
+    
+        
     def test_perfil_authenticated(self):
         """
         Comprueba si se muestra el perfil del usuario solicitante.
@@ -62,10 +63,10 @@ class TestViews(TestCase):
         path = reverse('gestion:CrearProyecto')
         request = RequestFactory().post(path)
 
-        #proyecto1 = Proyecto.objects.last()
+        proyecto1 = Proyecto.objects.last()
         response = creacionProyecto(request)
         assert response.status_code == 200
-        #assert proyecto == proyecto1, "No se ha creado el proyecto"
+        assert proyecto == proyecto1, "No se ha creado el proyecto"
     
     #path('crear_fase/', views.crearFase, name='crearFase'),
     def test_creacionFase(self):
@@ -110,8 +111,10 @@ class TestViews(TestCase):
 
         user1 = Usuario.objects.last()
 
+        id = int(user1.user)
+
         mixer.blend('gestion.Usuario')
-        path = reverse('gestion:agregarUsuarios', kwargs = {'pk': 1})
+        path = reverse('gestion:agregarUsuarios', kwargs = {'pk': id})
         request = RequestFactory().get(path)
         request.user = AnonymousUser()
 
@@ -252,7 +255,7 @@ class TestViews(TestCase):
             user = User.objects.get(id = user1.id)
         )
         
-        path = reverse('gestion:menu')
+       path = reverse('gestion:menu')
         request = RequestFactory().get(path)
 
         request.user = User.objects.last()
@@ -263,7 +266,7 @@ class TestViews(TestCase):
 
         assert response.status_code == 200, "No se ha podido completar la operacion, codigo de salida distinto a 200"
 
-    #path('crearRol/<str:proyecto>', CrearRol.as_view(), name='crearRol'),
+#path('crearRol/<str:proyecto>', CrearRol.as_view(), name='crearRol'),
     def test_CrearRol(self):
         """
         Comprueba si se realiza correctamente la creacion de un Rol. Se compara si el resultado es distinto a None ya que el metodo super() de
