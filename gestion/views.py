@@ -80,7 +80,8 @@ def estadoProyecto(request,pk):
         #print(pk)
 
         if(z=="FINALIZADO"):
-            registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Finalizado")
+
+            #registrarAuditoriaProyecto(request.user," cambio el estado a finalizado ",p.id_proyecto,p.nombre,"")
             return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
         elif(z=="INICIADO"):
             ok=False
@@ -121,6 +122,7 @@ def estadoProyecto(request,pk):
                 registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Iniciado")
                 p.estado=z####### SE ASIGNA ESTADO
                 p.save()##### SE GUARDA
+                registrarAuditoriaProyecto(request.user, " cambio el estado a iniciado ", p.id_proyecto, p.nombre, "")
                 return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
 
             context = {
@@ -136,7 +138,7 @@ def estadoProyecto(request,pk):
 
         elif(z=="CANCELADO"):
             if(p.estado != 'FINALIZADO'):
-                registrarAuditoria(request.user,"cambio el estado del proyecto : "+str(p.nombre)+ " a Cancelado")
+                registrarAuditoriaProyecto(request.user, " cambio el estado a cancelado ", p.id_proyecto, p.nombre, "")
                 p.estado=z####### SE ASIGNA ESTADO
                 p.save()##### SE GUARDA
                 return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
@@ -245,7 +247,7 @@ def Contactos(request):
     context={
         "form":form,
     }
-    registrarAuditoria(request.user,'Ingreso en el apartado contactos')
+
     return render(request,'Menu/contactos.html', context)
 
 #RUBEN
@@ -290,8 +292,11 @@ def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del
         #if form.is_valid():
         some_var=request.POST.getlist('checkbox')
         print(some_var)
+        proy=Proyectoobjects.get(id_proyecto=pk)
         for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
             id_user =id
+            usuario=User.objects.get(id=id)
+            registrarAuditoriaProyecto(request.user, " agrego al usuario "+str(usuario.username)+' al proyecto ', proy.id_proyecto, proy.nombre, "")
             p = User_Proyecto(user_id= id_user ,proyecto_id= pk,activo= True)
             p.save()
 
@@ -368,8 +373,6 @@ def creacionProyecto(request):
     }
 
     return render(request,'proyectos/crear_proyecto.html', context)
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'No es gerente')
 
 def index(request):
     """INICIO DE APLICACION, SOLICITUD DE INICIAR SESION DEL SISTEMA, SOLO SE MUESTRA SI NO SE ESTA REGISTRADO EN EL SSO"""
@@ -386,7 +389,6 @@ def perfil(request):
     Realiza consultas de los datos del usuario que esta realizando la
     solicitud, y lo envia al html, para asi mostrarselo sus datos de ese usuario"""
 
-    registrarAuditoria(request.user, 'Ingreso en el apartado perfil')
     usuario=Usuario.objects.get(user_id=request.user.id)
     user = request.user
     auth0user = user.social_auth.filter(provider='auth0')[0]
@@ -405,8 +407,6 @@ def perfil(request):
 
 def logout(request):
     """PARA DESLOGUEARSE, CERRAR SESION DEL SSO VUELVE A MOSTRAR INICIO"""
-
-    registrarAuditoria(request.user,'Cerro sesión')
 
     django_logout(request)
     #modificar para mi app
@@ -644,7 +644,7 @@ def add_permission_gerente(user,is_gerente):
 
 def crearFase(request,nroFase):
     """METODO PARA CREAR FASES"""
-    #if(request.user.has_perm('id_gerente')):---------------------------------------------
+
     fase = FaseForm(request.POST)
     global CANTIDAD
     cantidad = CANTIDAD
@@ -669,8 +669,7 @@ def crearFase(request,nroFase):
     'form': fase
     }
     return render(request, 'proyectos/crear_fase.html', context)
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'No es gerente')
+
 
 #RUBEN
 def listar_auditoria(request):
@@ -1202,6 +1201,13 @@ from django.http import HttpResponse
 
 
 def fase1SinItems(fases,fase):
+    """
+    Verifica si la fase en la que se quiere crear el item podra tener relacion con la primera fase
+
+    :param fases: lista de fases
+    :param fase: la fase en la que se quiere crear el item
+    :return: true si no tiene relacion con fase 1, false caso contrario
+    """
     cont = 1
     print("fases: ",fases)
     print("fase: ",fase)
@@ -1230,6 +1236,11 @@ def fase1SinItems(fases,fase):
 
 
 def hayTiFase(fase):
+    """
+    Verifica si hay TI en la fase
+    :param fase: fase en donde se creara el item
+    :return: true si no hay, caso contrario false
+    """
     try:
         ti = TipoItem.objects.filter(fase=fase)
     except:
