@@ -292,7 +292,7 @@ def agregarUsuarios(request,pk,nroFase):#esta enlazado con la clase FaseForm del
         #if form.is_valid():
         some_var=request.POST.getlist('checkbox')
         print(some_var)
-        proy=Proyectoobjects.get(id_proyecto=pk)
+        proy=Proyecto.objects.get(id_proyecto=pk)
         for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
             id_user =id
             usuario=User.objects.get(id=id)
@@ -1349,6 +1349,16 @@ def crearItem(request,Faseid):
         }
         return render(request, 'Error.html', context)
 
+    if (hayTiFase(fase)):  # muestra mensaje de error si no hay TI no se puede crear item
+        context = {
+            "mensaje": "LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE"": ",
+            "titulo": "NO HAY TIPOS DE ITEM",
+            "titulo_b1": "AÑADE TI A LA FASE",
+            "boton1": "/crear/TipoItem/" + str(Faseid),
+            "titulo_b2": "VOLVER A DETALLES DE LA FASE",
+            "boton2": "/detallesFase/" + str(Faseid),
+        }
+        return render(request, 'Error.html', context)
     form= FormItem(request.POST)
     if form.is_valid():
         form.save(commit=False)
@@ -1356,18 +1366,6 @@ def crearItem(request,Faseid):
         datosFormulario= form.cleaned_data
         fase= Fase.objects.get(id_Fase=Faseid)
         item=Item(nombre=datosFormulario.get('nombre'),descripcion=datosFormulario.get('descripcion'),costo=datosFormulario.get('costo'),fase=fase)
-
-
-        if (hayTiFase(fase)):# muestra mensaje de error si no hay TI no se puede crear item
-            context = {
-                "mensaje": "LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE"": ",
-                "titulo": "NO HAY TIPOS DE ITEM",
-                "titulo_b1": "AÑADE TI A LA FASE",
-                "boton1": "/crear/TipoItem/"+str(Faseid) ,
-                "titulo_b2": "VOLVER A DETALLES DE LA FASE",
-                "boton2": "/detallesFase/"+str(Faseid),
-            }
-            return render(request, 'Error.html', context)
         item.save()
         return redirect('gestion:agg_listar_tipo_item',Faseid)
     contexto={
@@ -1388,7 +1386,7 @@ def agg_listar_tipo_item(request,id_fase):
     fase_proyecto=Fase.objects.get(id_Fase=id_fase)
     proyecto=Proyecto.objects.get(id_proyecto=fase_proyecto.id_Proyecto.id_proyecto)
 
-    if request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',fase_proyecto,request.user):
+    if validar_permiso(request.user,"is_gerente",fase_proyecto.id_Proyecto) or request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',fase_proyecto,request.user):
         print('tiene el permiso de crear_item')
     else:
         context = {
@@ -1438,7 +1436,7 @@ def aggAtributos(request,idTI):
 
     atributos= Atributo.objects.filter(ti_id=idTI)
 
-    if request.user.has_perm('crear_item',atributos[0].ti.fase.id_Proyecto) and validar_rol_fase('crear_item',atributos[0].ti.fase,request.user):
+    if validar_permiso(request.user,"is_gerente",atributos[0].ti.fase.id_Proyecto) or request.user.has_perm('crear_item',atributos[0].ti.fase.id_Proyecto) and validar_rol_fase('crear_item',atributos[0].ti.fase,request.user):
         print('tiene el permiso de crear_item')
     else:
         context = {
@@ -1621,7 +1619,7 @@ def relacionarItem(request,id_proyecto,id_item):
         return HttpResponse(request, "id de TI invalida",status=400)
 
 
-    if request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',itemActual.fase):
+    if validar_permiso(request.user,"is_gerente",proyecto) or request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',itemActual.fase):
         print('tiene el permiso de crear_item')
     else:
         context = {
@@ -1859,9 +1857,14 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
     :param pk: ID DEL PROYECTO AL CUAL SE AGREGARA EL COMITE
     :return: REDIRIGUE AL TEMPLATE AGGCOMITE
     """
+   ##ESte es lo que yo(presi) le agregue
+    try:
+        proyectos = Proyecto.objects.get(id_proyecto=pk)
+    except Proyecto.DoesNotExist:
+        return HttpResponse("Proyecto no existe",status=400)
+
     try:
         proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
-        proyectos_ = User_Proyecto.objects.get(proyecto_id=pk)
     except:
         return HttpResponse("Proyecto no existe",status=400)
 
