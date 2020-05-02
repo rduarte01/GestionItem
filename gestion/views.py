@@ -495,6 +495,25 @@ def tipo_item_views_create(request,id_fase):
     :param id_fase:
     :return:
     '''
+    ##validacion del estado del proyecto
+    try:
+        fase = Fase.objects.get(id_Fase=id_fase)
+    except Fase.DoesNotExist:
+        return HttpResponse('solicitud erronea, fase no existe', status=400)
+
+    context = validar_proyecto_cancelado(fase.id_Proyecto.id_proyecto)
+    if context != {}:
+        return render(request, 'Error.html', context)
+
+    if not validar_permiso(request.user, "is_gerente", fase.id_Proyecto):
+        context = {
+            "mensaje": "No eres gerente de proyecto, por lo tanto no puedes crear Tipo de Item",
+            "titulo": "Conflicto de permiso ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
+
     if request.method == "POST":
         my_form=TipoItemForm(request.POST)
         if(my_form.is_valid()):
@@ -547,6 +566,9 @@ def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
                 for form in my_form_set:
                     n,o,t=recoge_datos_atributo(form)
                     atributo1=Atributo.objects.create(nombre=n,es_obligatorio=o,tipo_dato=t,ti_id=tipo_item.id_ti)
+                registrarAuditoriaProyecto(request.user, "Creo el tipo de item'" + tipo_item.nombre+ "'",
+                                           fase.id_Proyecto.id_proyecto, fase.id_Proyecto.nombre,
+                                           fase.nombre)
                 return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
             else:
                 context = {
@@ -987,14 +1009,32 @@ def importar_tipo_item(request,id_fase):
     La funcion solo permite importar tipos de items a  a los gerente de Proyecto  Si esta restriccion no se cumple
     se mostrara un mensaje (explicativo) del Error
     '''
-    fase = Fase.objects.get(id_Fase=id_fase)
+    ##validacion del estado del proyecto
+    try:
+        fase = Fase.objects.get(id_Fase=id_fase)
+    except Fase.DoesNotExist:
+        return HttpResponse('solicitud erronea, fase no existe', status=400)
+
+    context = validar_proyecto_cancelado(fase.id_Proyecto.id_proyecto)
+    if context != {}:
+        return render(request, 'Error.html', context)
+
+    if not validar_permiso(request.user, "is_gerente", fase.id_Proyecto):
+        context = {
+            "mensaje": "No eres gerente de proyecto, por lo tanto no puedes crear Tipo de Item",
+            "titulo": "Conflicto de permiso ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
+
     if(request.method=='POST'):
         print('es post')
         some_var = request.POST.getlist('checkbox')
         print(some_var)
         for id in some_var:
-            print (id_fase)
-            print (id)
+            print(id_fase)
+            print(id)
             ti=TipoItem.objects.get(id_ti=id)#capturamos el tipo de item
             atributos=Atributo.objects.filter(ti_id=id) #optenemos todos los atributos de ese tipo de item
             ti.id_ti=None #clonamos el tipo de item
@@ -1004,6 +1044,9 @@ def importar_tipo_item(request,id_fase):
                     atributo.id_atributo=None
                     atributo.ti_id=ti.id_ti
                     atributo.save()
+            registrarAuditoriaProyecto(request.user, "Importo el tipo de item: "+ti.nombre,
+                                       fase.id_Proyecto.id_proyecto, fase.id_Proyecto.nombre,
+                                       fase.nombre)
         return redirect('gestion:detalles_Proyecto',pk=fase.id_Proyecto_id)
     else:
         print('es get')
@@ -1972,6 +2015,10 @@ def editar_ti(request,id_ti):
     except TipoItem.DoesNotExist:
         return HttpResponse('solicitud erronea, tipo de item no existe', status=400)
 
+    context=validar_proyecto_cancelado(tipo_item.fase.id_Proyecto.id_proyecto)
+    if context!={}:
+        return render(request, 'Error.html', context)
+
     query_atributos = Atributo.objects.filter(ti_id=tipo_item.id_ti)
     AtributeFormSet = modelformset_factory(Atributo, form=AtributeForm,exclude=('id_atributo',), extra=0)
     if request.method=='POST':
@@ -2043,6 +2090,10 @@ def agregar_atributo_ti(request, id_ti):
     except TipoItem.DoesNotExist:
         return HttpResponse('solicitud erronea, tipo de item no existe', status=400)
 
+    context = validar_proyecto_cancelado(tipo_item.fase.id_Proyecto.id_proyecto)
+    if context != {}:
+        return render(request, 'Error.html', context)
+
     if(request.method=='POST'):
         my_form=form(request.POST)
         if my_form.is_valid():
@@ -2093,6 +2144,11 @@ def eliminar_atributo_ti(request,id_ti):
         tipo_item = TipoItem.objects.get(id_ti=id_ti)
     except TipoItem.DoesNotExist:
         return HttpResponse('solicitud erronea, tipo de item no existe', status=400)
+
+    ##validacion del estado del proyecto
+    context = validar_proyecto_cancelado(tipo_item.fase.id_Proyecto.id_proyecto)
+    if context != {}:
+        return render(request, 'Error.html', context)
 
     if request.method=='POST':
         some_var = request.POST.getlist('checkbox')
@@ -2157,6 +2213,11 @@ def eliminar_tipo_item(request,id_ti):
        tipo_item = TipoItem.objects.get(id_ti=id_ti)
    except TipoItem.DoesNotExist:
         return HttpResponse('solicitud erronea, tipo de item no existe', status=400)
+
+    ##validacion del estado del proyecto
+   context = validar_proyecto_cancelado(tipo_item.fase.id_Proyecto.id_proyecto)
+   if context != {}:
+       return render(request, 'Error.html', context)
 
    if validar_permiso(request.user,"is_gerente",tipo_item.fase.id_Proyecto):  #primero se valida si es gerente en el proyecto actual)
         print(' es gerente')
@@ -2290,6 +2351,10 @@ def Asignar_Rol_usuario_proyecto(request,id_Fase,id_usuario):
 
     proyecto=fase.id_Proyecto
 
+    context = validar_proyecto_cancelado(proyecto.id_proyecto)
+    if context != {}:
+        return render(request, 'Error.html', context)
+
     if  obtener_todos_roles_proyecto(proyecto.id_proyecto)==[] :
         context = {
             "mensaje": "El Proyecto aun no tiene roles, creelos antes de asingar" ,
@@ -2315,11 +2380,16 @@ def Asignar_Rol_usuario_proyecto(request,id_Fase,id_usuario):
             rolNombreProyecto.remove(rol)
             if not FASE_ROL.objects.filter(id_fase_id=fase.id_Fase,id_rol_id=group.id,id_usuario_id=usuario.id).exists():
                 FASE_ROL.objects.create(id_fase_id=id_Fase,id_rol=group,id_usuario=usuario)
-
+                id_proyecto, nombre_rol = group.name.split('_')
+                registrarAuditoriaProyecto(request.user, "Asigno  el rol: "+ nombre_rol  +" al usuario '" + usuario.username + "'",
+                                           fase.id_Proyecto.id_proyecto, fase.id_Proyecto.nombre,
+                                           fase.nombre)
             usuario.groups.add(group)
         if rolNombreProyecto:
             print('roles a eliminar',rolNombreProyecto)
-            eliminar_rol_proyecto_usuario(fase.id_Fase,rolNombreProyecto,usuario)
+            eliminar_rol_proyecto_usuario(fase.id_Fase,rolNombreProyecto,usuario,request.user)
+
+
         return redirect('gestion:seleccionar_usuario_rol',id_fase=id_Fase)
     else:
         if validar_permiso(request.user, "is_gerente", fase.id_Proyecto):  # primero se valida si es gerente en el proyecto actual
@@ -2468,6 +2538,12 @@ def seleccionar_usuario_rol(request,id_fase):
 
     pk=Fase.objects.get(id_Fase=id_fase).id_Proyecto_id
     proyecto=Proyecto.objects.get(id_proyecto=pk)
+
+    #validar el estado del proyecto
+    context = validar_proyecto_cancelado(proyecto.id_proyecto)
+    if context != {}:
+        return render(request, 'Error.html', context)
+
     user = request.user  ## USER ACTUAL
     form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
@@ -2512,7 +2588,7 @@ def seleccionar_usuario_rol(request,id_fase):
             return render(request, "Error.html", context)
 
 
-def eliminar_rol_proyecto_usuario(id_fase, listaRoles, usuario):
+def eliminar_rol_proyecto_usuario(id_fase, listaRoles, usuario,user):
     '''
      Esta funcion es la encargada de sacar los roles de una  fase a un usario en  especifico,
      recibe una lista de roles como parametros, que seria los roles que el gerente no marco en el form al
@@ -2523,10 +2599,16 @@ def eliminar_rol_proyecto_usuario(id_fase, listaRoles, usuario):
     :param usuario:
     :return: None
     '''
+    fase=Fase.objects.get(id_Fase=id_fase)
     for rol in listaRoles:
         group = Group.objects.get(name=rol)
         print(id_fase, group.id, usuario.id)
         if FASE_ROL.objects.filter(id_fase_id=id_fase, id_rol_id=group.id, id_usuario_id=usuario.id).exists():
+            id_proyecto, nombre_rol = group.name.split('_')
+            registrarAuditoriaProyecto(user,
+                                       "Removio el rol: " + nombre_rol + " al usuario '" + usuario.username + "'",
+                                       fase.id_Proyecto.id_proyecto, fase.id_Proyecto.nombre,
+                                       fase.nombre)
             FASE_ROL.objects.get(id_fase_id=id_fase, id_rol_id=group.id, id_usuario_id=usuario.id).delete()
 
 
@@ -2719,3 +2801,18 @@ def obtener_todos_roles_proyecto(id_proyecto):
 
     print(rolNombreProyecto)
     return rolNombreProyecto
+
+
+def validar_proyecto_cancelado(id_proyecto):
+    proyecto= Proyecto.objects.get(id_proyecto=id_proyecto)
+    context={}
+    if (proyecto.estado == "CANCELADO"):
+        context = {
+            "mensaje": "EL Proyecto ya se encuentra cancelado, por lo tanto ya no puede realizar acciones dentro de el: " ,
+            "titulo": "PROYECTO CANCELADO",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "Volver a Mis Proyectos",
+            "boton2": "/proyectos/",
+        }
+    return  context
