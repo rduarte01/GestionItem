@@ -1,4 +1,4 @@
-{%extends 'Menu/base.html'%}
+{%extends 'proyectos/base.html'%}
 
 
 <html lang="en">
@@ -11,17 +11,13 @@
 </head>
 <body>
 {%block interno%}
-    {% load guardian_tags %}
-    {% get_obj_perms request.user for proyecto as "proyecto_perms" %}
 
-        <h1><a class="btn btn-primary" href="{%url 'gestion:listar_proyectos'%}" role="button">Volver Atras</a>Cambiar estado de proyecto</h1>
             <div class="center">
 
               <h4>-------------------------------------------------------------------</h4>
                 <h5>Estado del proyecto actual: ----> {{estado}} <-----</h5>
               <h4>-------------------------------------------------------------------</h4>
             </div>
-    {% if "is_gerente" in proyecto_perms %}
 
           <div class="jumbotron">
 
@@ -35,10 +31,6 @@
             </form>
               </div>
 
-    {% else %}
-        <h1>Usted no es gerente de este proyecto, por tanto no puede cambiar de estado</h1>
-        <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
-    {% endif %}
 {%endblock%}
 
 

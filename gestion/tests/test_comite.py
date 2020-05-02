@@ -17,8 +17,8 @@ class Test_comite(TestCase):
         path = reverse('gestion:AggComite', kwargs={'pk': proyecto.id_proyecto})
         request = RequestFactory().get(path)
         request.user = mixer.blend('auth.User')
-
-        mixer.blend('gestion.User_Proyecto', proyecto_id=proyecto.id_proyecto)
+        usuario = mixer.blend('auth.User', username='usuarioPruba')
+        mixer.blend('gestion.User_Proyecto', proyecto_id=proyecto.id_proyecto,user_id=usuario.id)
 
 
         id=proyecto.id_proyecto

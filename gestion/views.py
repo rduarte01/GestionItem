@@ -59,7 +59,17 @@ def estadoProyecto(request,pk):
     :return: ESTADOPROYECTO.HTML
     """
 
-    #if(request.user.has_perm('id_gerente')):----------------------------------------------
+    proyecto_validar=Proyecto.objects.get(id_proyecto=pk)
+
+    if validar_permiso(request.user, "is_gerente",proyecto_validar)==False:  # primero se valida si es gerente en el proyecto actual)
+        context = {
+            "mensaje": "No eres gerente de proyecto, por lo tanto no puedes cambiar el estado" ,
+            "titulo": "Conflicto de Permiso ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
+
 
     form=FormProyectoEstados(request.POST)
     p = Proyecto.objects.get(id_proyecto=pk)  ##### BUSCA EL PROYECTO CON ID
@@ -144,11 +154,11 @@ def estadoProyecto(request,pk):
     context={
         "form":form,
         "estado": p.estado,
-        'proyecto':p
+        'proyecto':p,
+        'proyectos': p
     }
     return render(request, 'Menu/estado_proyecto.html',context)
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Editar estado')
+
 
 def errorPermiso(permiso):
     """
@@ -1797,6 +1807,7 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
     """
     try:
         proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
+        proyectos_ = User_Proyecto.objects.get(proyecto_id=pk)
     except:
         return HttpResponse("Proyecto no existe",status=400)
 
