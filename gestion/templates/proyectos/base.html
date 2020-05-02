@@ -28,7 +28,8 @@
             <li><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" >Usuarios del proyecto</a></li>
             {% if "is_gerente" in proyecto_perms %}
                 {% if proyectos.estado != 'CANCELADO' %}
-                     <li><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}">✚ Usuarios</a></li>
+                   <li><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}">Estado Proyecto</a></li>
+                    <li><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}">✚ Usuarios</a></li>
                      <li><a href="{% url 'gestion:misRoles' proyectos.id_proyecto %}">✚ Rol</a></li>
                 {% endif %}
             {% endif %}

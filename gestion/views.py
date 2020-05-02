@@ -59,7 +59,17 @@ def estadoProyecto(request,pk):
     :return: ESTADOPROYECTO.HTML
     """
 
-    #if(request.user.has_perm('id_gerente')):----------------------------------------------
+    proyecto_validar=Proyecto.objects.get(id_proyecto=pk)
+
+    if validar_permiso(request.user, "is_gerente",proyecto_validar)==False:  # primero se valida si es gerente en el proyecto actual)
+        context = {
+            "mensaje": "No eres gerente de proyecto, por lo tanto no puedes cambiar el estado" ,
+            "titulo": "Conflicto de Permiso ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
+
 
     form=FormProyectoEstados(request.POST)
     p = Proyecto.objects.get(id_proyecto=pk)  ##### BUSCA EL PROYECTO CON ID
@@ -144,11 +154,11 @@ def estadoProyecto(request,pk):
     context={
         "form":form,
         "estado": p.estado,
-        'proyecto':p
+        'proyecto':p,
+        'proyectos': p
     }
     return render(request, 'Menu/estado_proyecto.html',context)
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Editar estado')
+
 
 def errorPermiso(permiso):
     """
@@ -701,7 +711,7 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
     :param pk: ID DEL PROYECTO
     :return: AGGUSER.HTML
     """
-    #if(request.user.has_perm('is_gerente')):--------------------------------------------------------
+
     user= request.user## USER ACTUAL
     form = Usuario.objects.all()
     registrados = User_Proyecto.objects.all()
@@ -719,6 +729,17 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
         #form.save()
         return redirect('gestion:detalles_Proyecto',pk)
     else:
+        proyectos = Proyecto.objects.get(id_proyecto=pk)
+        if validar_permiso(request.user, "is_gerente",proyectos) == False:  # primero se valida si es gerente en el proyecto actual)
+
+            context = {
+                "mensaje": "No eres gerente de proyecto, por lo tanto no añadir usuarios al proyecto",
+                "titulo": "Conflicto de Permiso ",
+                "titulo_b2": "Salir",
+                "boton2": "/proyectos/",
+            }
+            return render(request, "Error.html", context)
+
         list=[]
         for i in range(form.count()):
             ok = False
@@ -732,8 +753,6 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
                list.append(form[i].user.id)
             proyectos=Proyecto.objects.get(id_proyecto=pk)
         return render(request, 'proyectos/agg_usuario_proyecto.html', {'form': form,'list':list,'pk':pk,"proyectos":proyectos})
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Agregar usuarios al proyecto')
 
 #RUBEN
 def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
@@ -784,6 +803,17 @@ def desvinculacionProyecto(request,pk,pk_user):
     except:
         usersComite = None
 
+    proyectos = Proyecto.objects.get(id_proyecto=pk)
+    if validar_permiso(request.user, "is_gerente",proyectos) == False:  # primero se valida si es gerente en el proyecto actual)
+
+        context = {
+            "mensaje": "No eres gerente de proyecto, por lo tanto no puedes desvincular usuarios",
+            "titulo": "Conflicto de Permiso ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
+
     if usersComite!=None:
         for id in usersComite:
             usuario=User.objects.get(id=id.id_user)
@@ -798,7 +828,6 @@ def desvinculacionProyecto(request,pk,pk_user):
                 }
                 return render(request, 'Error.html', context)
 
-    #if(request.user.has_perm('is_gerente')):--------------------------------------
     instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
     instanceUser.delete()
     return redirect('gestion:UsersProyecto',pk)
@@ -819,8 +848,6 @@ def listar_proyectos(request):
         'cant': cant####CANTIDAD DE PROYECTOS QUE POSEE
     }
     return render(request, 'Menu/listar_proyectos.html', context)
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Desvincular usuario del proyecto')
 
 from django.core import serializers
 
@@ -915,7 +942,7 @@ def listar_atributos(request,idAtributoTI,id_item):
 #RUBEN
 def proyectoCancelado(request):
     """METODO PARA CANCELAR UN PROYECTO"""
-    #if(request.user.has_perm('is_gerente')):------------------------------------------------
+
     x = Proyecto.objects.last()
     instanceFase = Fase.objects.filter(id_Proyecto = x.id_proyecto)
     for i in instanceFase:
@@ -930,8 +957,6 @@ def proyectoCancelado(request):
         i.delete()
 
     return  redirect("gestion:menu")
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'No es gerente')
 
 def ver_proyecto(request,pk):
     """MUESTRA LOS DETALLES DE UN PROYECTO"""
@@ -1178,15 +1203,29 @@ from django.http import HttpResponse
 
 def fase1SinItems(fases,fase):
     cont = 1
+    print("fases: ",fases)
+    print("fase: ",fase)
     if (fases.count() != 1):  # si no es de la primera fase
+        print("el proyecto posee ",fases.count()," fases")
         for faseSIG in reversed(fases):
+            print("recorrido ",faseSIG)
             if (faseSIG == fase):  # se verifica que fase es
+                print("se encontro fase buscada: ",fase)
+                print("cont= ",cont)
                 break
             cont += 1
+    else:
+        print("solo hay una fase sale de la funcion")
+        return False
+
     if (cont != 1):
+        print("se ingresa proque cont no es 1")
         item_fase=Item.objects.filter(fase=fase.id_Fase-1)
+        print("items de la fase anterior ",item_fase)
         if(item_fase.count() == 0):
+            print("no hay item retorna true")
             return True
+    print("hay items en la fase anterior retorna false")
     return False
 
 
@@ -1200,16 +1239,6 @@ def hayTiFase(fase):
         return True
     return False
 
-def sinPermiso(request,permiso):
-    context = {
-        "mensaje": "NO SE POSEE EL PERMISO: " + str(permiso)+" SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
-        "titulo": "SIN PERMISO",
-        "titulo_b1": "",
-        "boton1": "",
-        "titulo_b2": "SALIR",
-        "boton2": "/detallesProyecto/",
-    }
-    return render(request, 'Error.html', context)
 
 #RUBEN
 def crearItem(request,Faseid):
@@ -1226,9 +1255,6 @@ def crearItem(request,Faseid):
         fase = Fase.objects.get(id_Fase=Faseid)
     except:
         return HttpResponse(request,"id de fase invalida",status=400)
-
-    #if(request.user.has_perm('crear_item'):----------------------------------------------------
-
 
     proyecto=Proyecto.objects.get(id_proyecto=fase.id_Proyecto.id_proyecto)
     fases=Fase.objects.filter(id_Proyecto=proyecto)
@@ -1258,7 +1284,7 @@ def crearItem(request,Faseid):
         return render(request, 'Error.html', context)
 
 
-    if(fase1SinItems(fases,fase)):# si no es de la primera fase y la F1 no tiene items muestra error
+    if(fase1SinItems(fases,fase)==True):# si no es de la primera fase y la F1 no tiene items muestra error
         context = {
             "mensaje": "LA FASE ANTERIOR NO CONTIENE ITEMS POR ENDE NO PODRA RELACIONAR CON LA PRIMERA FASE, CREE ITEM EN LA FASE ANTERIOR A ESTA Y LUEGO INTENTE NUEVAMENTE",
             "titulo": "NO HAY ITEMS EN LA FASE ANTERIOR",
@@ -1294,13 +1320,9 @@ def crearItem(request,Faseid):
         "form":form
     }
     return render (request,'items/Item.html',contexto)
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Crear Item')
-
-#def status_code():
 
 #RUBEN
-def agg_listar_tipo_item(request,Fase):
+def agg_listar_tipo_item(request,id_fase):
     """
     LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
     CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO
@@ -1308,16 +1330,32 @@ def agg_listar_tipo_item(request,Fase):
     :param Fase: ID DE LA FASE DEL CUAL DEBE LISTAR LOS TI
     :return: AGGTI.HTML
     """
-    tipoItem = TipoItem.objects.filter(fase_id=Fase)
+
+    fase_proyecto=Fase.objects.get(id_Fase=id_fase)
+    proyecto=Proyecto.objects.get(id_proyecto=fase_proyecto.id_Proyecto.id_proyecto)
+
+    if request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',fase_proyecto,request.user):
+        print('tiene el permiso de crear_item')
+    else:
+        context = {
+            "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+            "titulo": "SIN PERMISO",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "SALIR",
+            "boton2": "/proyectos/",
+        }
+        return render(request, 'Error.html', context)
+
+    item_id=Item.objects.last()
+    tipoItem = TipoItem.objects.filter(fase_id=id_fase)
     if(tipoItem.count() == 0):
         return HttpResponse(request,"id de fase invalida",status=400)
-
-    #if(request.user.has_perm('crear_item')):----------------------------------------------------
 
     if request.method == 'POST':
         x=request.POST.get('ti')
         item=Item.objects.last()
-        tipoItem2 = TipoItem.objects.filter(nombre=x,fase_id=Fase)
+        tipoItem2 = TipoItem.objects.filter(nombre=x,fase_id=id_fase)
         print(tipoItem2)
         item.ti =tipoItem2[0]
         item.save()
@@ -1326,11 +1364,10 @@ def agg_listar_tipo_item(request,Fase):
 
 
     contexto={
-        'TipoItem':tipoItem
+        'TipoItem':tipoItem,
+        'id_item':item_id.id_item
     }
     return render (request,'items/aggTI.html',contexto)
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Crear Item')
 
 #RUBEN
 import os
@@ -1343,8 +1380,23 @@ def aggAtributos(request,idTI):
     :param idTI: ID DEL TI SELECCIONADO POR EL USUARIO
     :return: REDIRIGE AL TEMPLATE AGGATRIBUTOS
     """
-    #if(request.user.has_perm('crear_item')):----------------------------------------------------
+
+
     atributos= Atributo.objects.filter(ti_id=idTI)
+
+    if request.user.has_perm('crear_item',atributos[0].ti.fase.id_Proyecto) and validar_rol_fase('crear_item',atributos[0].ti.fase,request.user):
+        print('tiene el permiso de crear_item')
+    else:
+        context = {
+            "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+            "titulo": "SIN PERMISO",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "SALIR",
+            "boton2": "/proyectos/",
+        }
+        return render(request, 'Error.html', context)
+
 
     if(atributos.count() == 0):
 
@@ -1360,7 +1412,6 @@ def aggAtributos(request,idTI):
         for c in atributos:
             print(c.id_atributo)
             contador=contador+1
-        ###alzar a dropbox-------validar file
 
         item=Item.objects.last()#SE OBTIENE EL ITEM CREADO RECIENTEMENTE
         list=[]
@@ -1426,15 +1477,14 @@ def aggAtributos(request,idTI):
         itemID=Item.objects.last()
         ti=TipoItem.objects.get(id_ti=idTI)
         return redirect('gestion:relacionarItem',ti.fase.id_Proyecto.id_proyecto,itemID.id_item)
-
+    item_id = Item.objects.last()
     contexto={
         'atributos':atributos,
         'true':True,
         'false':False,
+        'id_item':item_id.id_item
     }
     return render (request,'items/aggAtributos.html',contexto)
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Crear Item')
 
 def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
 
@@ -1505,7 +1555,6 @@ def relacionarItem(request,id_proyecto,id_item):
     :param id_item: ID DEL ITEM CREANDO
     :return: REDIRIGE AL TEMPLATE RELACIONAR_ITEM
     """
-    #if(request.user.has_perm('crear_item')):----------------------------------------------------
     try:
         proyecto=Proyecto.objects.get(id_proyecto=id_proyecto)#se obtiene el proyecto
         fases=Fase.objects.filter(id_Proyecto=proyecto)#se obtienen las fases del proyecto
@@ -1516,6 +1565,20 @@ def relacionarItem(request,id_proyecto,id_item):
     except:
 
         return HttpResponse(request, "id de TI invalida",status=400)
+
+
+    if request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',itemActual.fase):
+        print('tiene el permiso de crear_item')
+    else:
+        context = {
+            "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+            "titulo": "SIN PERMISO",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "SALIR",
+            "boton2": "/proyectos/",
+        }
+        return render(request, 'Error.html', context)
 
 
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
@@ -1576,31 +1639,57 @@ def relacionarItem(request,id_proyecto,id_item):
         return redirect('gestion:detallesFase',item[0].fase.id_Fase)
     else:
         return render(request, 'items/relacionarItem.html', {'form': items,'list':list,'itemActual':itemActual})
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Crear Item')
 
-def itemCancelado(request):
+
+def itemCancelado(request,pk):
     """
     METODO PARA CANCELAR UN ITEM
     :return: REDIRIGE AL MENU PRINCIPAL
     """
 
-    #if(request.user.has_perm('crear_item')):----------------------------------------------------
+    try:
+        x = Item.objects.get(id_item=pk)
+    except:
+        context = {
+            "mensaje": "EL ITEM YA NO EXISTE ",
+            "titulo": "ITEM",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, 'Error.html', context)
 
-    x = Item.objects.last()
+    if request.user.has_perm('crear_item',x.fase.id_Proyecto) and validar_rol_fase('crear_item',x.fase,request.user):
+        print('tiene el permiso de crear_item')
+    else:
+        context = {
+            "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+            "titulo": "SIN PERMISO",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "SALIR",
+            "boton2": "/proyectos/",
+        }
+        return render(request, 'Error.html', context)
+
+    try:
+        ruta = f'/{x.fase.id_Proyecto.id_proyecto}/{x.id_item}'
+        dbx = dropbox.Dropbox(TOKEN)
+        dbx.files_delete(ruta)
+        print("borro archivos adjuntos")
+    except:
+        print("sin archivos adj. que borrar")
     x.delete()
 
     instanceItem = Atributo_Item.objects.filter(id_item = x)
+
     for i in instanceItem:
-        if(i.idAtributoTI.tipo_dato=='File'):
-            id_proyecto = str(i.id_item.fase.id_Proyecto.id_proyecto)
-            ruta = f'/{id_proyecto}'
-            dbx.files_delete(ruta)
         i.delete()
 
     return  redirect("gestion:menu")
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'Crear Item')
+
+
 
 def primeraFase(id_proyecto,id_item,some_var):
     """
@@ -1677,12 +1766,6 @@ import dropbox
 import tempfile
 
 
-"""
-dropbox
-gestionitems.fpuna@gmail.com    
-GestionItem20202
-https://josevc93.github.io/python/Dropbox-y-python/
-"""
 def comite(request,pk):
     """
     LISTA LOS USUARIOS DEL COMITE DE UN PROYECTO EN ESPECIFICO
@@ -1690,11 +1773,10 @@ def comite(request,pk):
     :param pk: ID DEL PROYECTO DEL CUAL SE LISTARA LOS USUARIOS QUE SE ENCUENTRAN EN EL COMITE
     :return: REDIRIGE AL TEMPLATE COMITE
     """
-    #if(request.user.has_perm('is_gerente')):----------------------------------------------------
 
     proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
     gerente = User.objects.get(id=proyecto[0].user_id)
-    print(gerente.username)
+
 
     comite = Comite.objects.all()
     form = Usuario.objects.all()
@@ -1715,8 +1797,6 @@ def comite(request,pk):
                    list.append(form[i].user.id)
         print(list)
         return render(request, 'proyectos/ver_comite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos,'idGerente':gerente.id})
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'No es gerente')
 
 #RUBEN
 def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getion/forms
@@ -1725,11 +1805,26 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
     :param pk: ID DEL PROYECTO AL CUAL SE AGREGARA EL COMITE
     :return: REDIRIGUE AL TEMPLATE AGGCOMITE
     """
-    #if(request.user.has_perm('is_gerente')):----------------------------------------------------
+    try:
+        proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
+        proyectos_ = User_Proyecto.objects.get(proyecto_id=pk)
+    except:
+        return HttpResponse("Proyecto no existe",status=400)
 
-    proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
     gerente = User.objects.get(id=proyecto[0].user_id)
     print(gerente.username)
+
+    proyecto_validar=Proyecto.objects.get(id_proyecto=pk)
+
+    if validar_permiso(request.user, "is_gerente",proyecto_validar)==False:  # primero se valida si es gerente en el proyecto actual)
+
+        context = {
+            "mensaje": "No eres gerente de proyecto, por lo tanto no puedes crear el comite de cambio" ,
+            "titulo": "Conflicto de Permiso ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
 
     proyectos=Proyecto.objects.get(id_proyecto=pk)
     comite= Comite.objects.all()
@@ -1772,8 +1867,6 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
                list.append(form[i].user.id)
 
         return render(request, 'proyectos/agg_comite.html', {'form': form,'list':list,'proyectos':proyectos,'idGerente':gerente.id})
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'No es gerente')
 
 #RUBEN
 def desvinculacionComite(request,pk,pk_user):
@@ -1793,11 +1886,23 @@ def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo ge
     :param pk: ID DEL PROYECTO DEL CUAL SE QUIERE DESHACER EL COMITE
     :return: RETORNA EN EL TEMPLATE COMITE
     """
-    #if(request.user.has_perm('is_gerente')):----------------------------------------------------
 
     proyecto = User_Proyecto.objects.filter(proyecto_id=pk)
     gerente = User.objects.get(id=proyecto[0].user_id)
     print(gerente.username)
+
+    proyecto_validar=Proyecto.objects.get(id_proyecto=pk)
+
+    if validar_permiso(request.user, "is_gerente",proyecto_validar)==False:  # primero se valida si es gerente en el proyecto actual)
+
+        context = {
+            "mensaje": "No eres gerente de proyecto, por lo tanto no puedes eliminar el comite de cambio" ,
+            "titulo": "Conflicto de Permiso ",
+            "titulo_b2": "Salir",
+            "boton2": "/proyectos/",
+        }
+        return render(request, "Error.html", context)
+
 
     comite = Comite.objects.all()
     form = Usuario.objects.all()
@@ -1836,8 +1941,6 @@ def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo ge
                    list.append(form[i].user.id)
         print(list)
         return render(request, 'proyectos/delete_comite.html', {'form': form,'list':list,'pk':pk,'proyectos':proyectos,'idGerente':gerente.id})
-    #else:------------------------------------SI NO TIENE EL PERMISO-------------------------------------
-    #errorPermiso(request,'No es gerente')
 
 def editar_ti(request,id_ti):
     '''

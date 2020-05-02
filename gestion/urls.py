@@ -25,7 +25,7 @@ urlpatterns = [
     path('agregarUsuarios/<int:pk><int:nroFase>', views.agregarUsuarios, name='agregarUsuarios'),
     path('proyectos/', listar_proyectos, name='listar_proyectos'),
     path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
-    path('/itemCancelado/', itemCancelado, name='itemCancelado'),
+    path('/itemCancelado/<int:pk>', itemCancelado, name='itemCancelado'),
 
     path('DescargarArchivo/<int:id_item>/(?P<archivo>[a-zA-Z0-9])', DescargarArchivo, name='DescargarArchivo'),
 
@@ -44,7 +44,7 @@ urlpatterns = [
     path('crearRol/<str:proyecto>', CrearRol.as_view(), name='crearRol'),
     path('modRol/<int:pk>', ModificarRol.as_view(), name='modificarRol'),
     path('lista/tipo/item/<int:id_proyecto>',views.listar_tipo_item, name='listar_tipo_item'),
-    path('aggTI/<int:Fase>', views.agg_listar_tipo_item, name='agg_listar_tipo_item'),
+    path('aggTI/<int:id_fase>', views.agg_listar_tipo_item, name='agg_listar_tipo_item'),
     path('misRoles/<int:proyecto>', VerRoles.as_view(), name="misRoles"),
     path('crearItem/<int:Faseid>', views.crearItem, name="crearItem"),
     path('aggAtributos/<int:idTI>', views.aggAtributos, name="aggAtributos"),

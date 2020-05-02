@@ -27,7 +27,7 @@
             <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
                 {% block content %}
                     <div>
-                        <a class="btn btn-primary" href="{% url 'gestion:itemCancelado'%}" role="button">Cancelar</a>
+                        <a class="btn btn-primary" href="{% url 'gestion:itemCancelado' itemActual.id_item%}" role="button">Cancelar</a>
                     </div>
                     <table class="table table-bordered">
                         <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
