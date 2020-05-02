@@ -1178,15 +1178,29 @@ from django.http import HttpResponse
 
 def fase1SinItems(fases,fase):
     cont = 1
+    print("fases: ",fases)
+    print("fase: ",fase)
     if (fases.count() != 1):  # si no es de la primera fase
+        print("el proyecto posee ",fases.count()," fases")
         for faseSIG in reversed(fases):
+            print("recorrido ",faseSIG)
             if (faseSIG == fase):  # se verifica que fase es
+                print("se encontro fase buscada: ",fase)
+                print("cont= ",cont)
                 break
             cont += 1
+    else:
+        print("solo hay una fase sale de la funcion")
+        return False
+
     if (cont != 1):
+        print("se ingresa proque cont no es 1")
         item_fase=Item.objects.filter(fase=fase.id_Fase-1)
+        print("items de la fase anterior ",item_fase)
         if(item_fase.count() == 0):
+            print("no hay item retorna true")
             return True
+    print("hay items en la fase anterior retorna false")
     return False
 
 
@@ -1244,9 +1258,9 @@ def crearItem(request,Faseid):
             "titulo_b2": "SALIR",
             "boton2": "/proyectos/",
         }
-        #return render(request, 'Error.html', context)
+        return render(request, 'Error.html', context)
 
-    if(proyecto.estado == "INICIADO"):
+    if(proyecto.estado != "INICIADO"):
         context = {
             "mensaje": "EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado),
             "titulo": "PROYECTO NO INICIADO",
@@ -1258,7 +1272,7 @@ def crearItem(request,Faseid):
         return render(request, 'Error.html', context)
 
 
-    if(fase1SinItems(fases,fase)):# si no es de la primera fase y la F1 no tiene items muestra error
+    if(fase1SinItems(fases,fase)==True):# si no es de la primera fase y la F1 no tiene items muestra error
         context = {
             "mensaje": "LA FASE ANTERIOR NO CONTIENE ITEMS POR ENDE NO PODRA RELACIONAR CON LA PRIMERA FASE, CREE ITEM EN LA FASE ANTERIOR A ESTA Y LUEGO INTENTE NUEVAMENTE",
             "titulo": "NO HAY ITEMS EN LA FASE ANTERIOR",
