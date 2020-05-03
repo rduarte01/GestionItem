@@ -10,8 +10,14 @@ import pytest
 
 @pytest.mark.django_db
 class Test_comite(TestCase):
+    
 
     def test_AggComite(self):
+        """
+        TEST DE AGREGAR COMITE A UN PROYECTO, SE REQUIERE DE UN PROYECTO, USUARIOS ASOCIADOS AL MISMO
+        SE VALIDA EL ID DEL PROYECTO EN LA FUNCION, SI EL PROYECTO EXISTE RETORNA UN STATUS 200, CASO CONTRARIO
+        EL PROYECTO NO EXISTE POR ENDE NO PUEDE CONTINUAR LA FUNCION
+        """
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
 
         path = reverse('gestion:AggComite', kwargs={'pk': proyecto.id_proyecto})

@@ -12,6 +12,11 @@ import pytest
 class Test_Crear_Item(TestCase):
 
     def test_item_create(self):
+        """
+        TEST DE CREAR ITEM, SE NECESITA UN PROYECTO Y FASES DEL MISMO, SE PASA COMO PARAMETROS
+        EL ID DE LA FASE EN DONDE SE CREARA EL ITEM Y SI LA FASE PERTENECE AL PROYECTO RETORNA UN
+        STATUS 200, CASO CONTRARIO UN STATUS 400 NO PUDIENDO CONTINUAR
+        """
         proyecto = Proyecto.objects.create(
             nombre="p1",
             descripcion='.',
@@ -45,6 +50,10 @@ class Test_Crear_Item(TestCase):
 
 
     def test_fase_uno_validation(self):
+        """
+        TEST EN DONDE SE VALIDA SI LA FASE ANTERIOR POSEE ITEMS, RETORNA TRUE SI NO EXISTE CASO CONTRARIO
+        FALSE
+        """
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
 
         fase1=mixer.blend('gestion.Fase',nombre='f1',id_Proyecto=proyecto)
@@ -62,6 +71,10 @@ class Test_Crear_Item(TestCase):
 
 
     def test_ti_en_fase(self):
+        """
+        VALIDA SI EXISTE TI EN LA FASE EN DONDE SE QUIERE CREAR EL ITEM RETORNA TRUE SI NO EXISTE
+        CASO CONTRARIO FALSE
+        """
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
         fase=mixer.blend('gestion.Fase',nombre='f1',id_Proyecto=proyecto)
 
@@ -70,6 +83,9 @@ class Test_Crear_Item(TestCase):
         assert hayTiFase(fase) != True, "No hay Ti en la fase por ende no se puede crear item"
 
     def test_lista_ti(self):
+        """
+        MUESTRA LA LISTA DE TI DE UNA FASE, SE VALIDA SI EL PARAMETRO DE EL ID DE LA FASE ES  CORRECTA
+        """
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
         fase=mixer.blend('gestion.Fase',nombre='f1',id_Proyecto=proyecto)
 
@@ -84,6 +100,9 @@ class Test_Crear_Item(TestCase):
         assert response.status_code == 200, "Id de la fase enviada como parametro invalida, no se puede crear item sin TI"
 
     def test_atributos(self):
+        """
+        MUESTRA LA LISTA DE ATRIBUTOS DE TI DE UNA FASE, SE VALIDA SI EL PARAMETRO DE EL ID DEL TI ES  CORRECTA
+        """
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
         fase=mixer.blend('gestion.Fase',nombre='f1',id_Proyecto=proyecto)
         ti=mixer.blend('gestion.TipoItem', nombre='ti', fase=fase)
@@ -103,6 +122,11 @@ class Test_Crear_Item(TestCase):
 
 
     def test_relacion_item(self):
+        """
+        MUESTRA LA LISTA DE ITEMS DISPONIBLES CON LOS CUALES EL ITEM A SER CREADO PUEDE RELACIONARSE
+        VERIFICA QUE EL ID DEL PROYECTO E ITEMS SEAN LOS CORRECTOS
+
+        """
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
         fase1=mixer.blend('gestion.Fase', nombre='f1', id_Proyecto=proyecto)
         fase2=mixer.blend('gestion.Fase', nombre='f2', id_Proyecto=proyecto)
@@ -119,6 +143,9 @@ class Test_Crear_Item(TestCase):
         assert response.status_code == 200, "Id del item o proyecto enviado como parametro invalida, no se puede crear item sin relaciones"
 
     def test_relacion_lista_item(self):
+        """
+        RETORNA LA LISTA DE ITEMS CON LOS CUALES ES POSIBLE RELACIONARSE EL ITEM A SER CREADO
+        """
         proyecto=mixer.blend('gestion.Proyecto',nombre='p1')
         fase1=mixer.blend('gestion.Fase', nombre='f1', id_Proyecto=proyecto)
         fase2=mixer.blend('gestion.Fase', nombre='f2', id_Proyecto=proyecto)

@@ -1,83 +1,137 @@
 {%extends 'proyectos/base.html'%}
+{%block imports%}
+    {% load guardian_tags %}
+{%endblock%}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     {%block title%}
         <title>Atributos de item</title>
     {%endblock%}
+
 </head>
 <body>
+                {%block volver_atras %}
+                {%endblock %}
 
-    {%block volver_atras %}
-    <a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase %}" role="button">Volver Atras</a>
-    {%endblock %}
+{%block titulo_proyecto %}
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                   <div class="card-body">
 
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                            <td>NOMBRE DE PROYECTO</td>
+                                            <td>DESCRIPCION</td>
+                                            <td>ESTADO</td>
+                                </thead>
+                                <tbody>
+                                    <td>{{proyectos.nombre}}</td>
+                                    <td>{{proyectos.descripcion}}</td>
+                                    <td>{{proyectos.estado}}</td> </tr>
 
+                                </tbody>
 
+                            </table>
+                        </div>
+              </div>
+{%endblock%}
 
-{% block interno %}
+{%block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+              <!-- Dropdown Card Example -->
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Atributos de item</h6>
 
-    <style>
-    #ocultar{display:none;}
-    </style>
+                  <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a></h6>
 
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    {% if not atributos %}
+                        <div class="alert alert-info">No hay atributos del item</div>
+                    {% else %}
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <td>VALORES</td>
+                            <td>NOMBRE DE ATRIBUTO</td>
+                            <td>TIPO DE DATO</td>
+                            <td>ES OBLIGATORIO?</td>
+                            <td>ACCIONES SOBRE ATRIBUTOS</td>
+                        </thead>
+                        <tbody>
+                              {% for atributos in atributos%}
+                                            {% for atributo in atributo%}
+                                                {% if atributos.idAtributoTI.id_atributo == atributo.id_atributo%}
+                                                    <tr>
+                                                        <td><strong>{{atributos.valor}}</strong></td>
+                                                            <td>{{atributo.nombre}}</td>
+                                                            <td>{{atributo.tipo_dato}}</td>
+                                                            <td>{{atributo.es_obligatorio}}</td>
 
+                                                                {%if atributo.tipo_dato == 'File'%}
+                                                                    <td><a class="btn btn-primary" href="" role="button" >EDITAR</a>
+                                                                    <a class="btn btn-secondary" href="{% url 'gestion:DescargarArchivo' atributos.id_item.id_item atributos.valor%}" role="button" >DESCARGAR</a></td>
+                                                                {%endif%}
 
+                                                                {%if atributo.tipo_dato == 'Decimal'%}
+                                                                    <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
+                                                                {%endif%}
 
-    <div class="cities">
-    <table class="table table-bordered">
-          <thead>
-                <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-                    <tr><h3>Lista de atributos del item de nombre {{itemActual.nombre}}</h3></tr>
+                                                                {%if atributo.tipo_dato == 'Date'%}
+                                                                    <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
+                                                                {%endif%}
 
-                <tr>
-                    <td><h5>VALORES</h5></td>
-                    <td>NOMBRE DE ATRIBUTO</td>
-                    <td>TIPO DE DATO</td>
-                    <td>ES OBLIGATORIO?</td>
-                    <td><h5>ACCIONES SOBRE ATRIBUTOS</h5></td>
-                </tr>
+                                                                {%if atributo.tipo_dato == 'String'%}
+                                                                    <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
+                                                                {%endif%}
 
-                    {% for atributos in atributos%}
-                        {% for atributo in atributo%}
-                            {% if atributos.idAtributoTI.id_atributo == atributo.id_atributo%}
-                                <tr>
-                                    <td><strong>{{atributos.valor}}</strong></td>
-                                        <td>{{atributo.nombre}}</td>
-                                        <td>{{atributo.tipo_dato}}</td>
-                                        <td>{{atributo.es_obligatorio}}</td>
+                                                                {%if atributo.tipo_dato == 'Boolean'%}
+                                                                    <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
+                                                                {%endif%}
+                                                    </tr>
+                                                {%endif%}
+                                            {%endfor%}
+                                        {%endfor%}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+              </div>
+    <script>
+  // Call the dataTables jQuery plugin
+  $(document).ready(function() {
+    $('.table').DataTable({
+      "language": {
+        "sProcessing": "Procesando...",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sEmptyTable": "Ningún dato disponible en esta tabla",
+        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sSearch": "Buscar:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst": "<span class='fa fa-angle-double-left'></span>",
+            "sLast": "<span class='fa fa-angle-double-right'></span>",
+            "sNext": "<span class='fa fa-angle-right'></span>",
+            "sPrevious": "<span class='fa fa-angle-left'></span>"
+        },
+        "oAria": {
+            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+      }
+    });
+  });
+  </script>
+{%endblock%}
 
-                                            {%if atributo.tipo_dato == 'File'%}
-                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a>
-                                                <a class="btn btn-secondary" href="{% url 'gestion:DescargarArchivo' atributos.id_item.id_item atributos.valor%}" role="button" >DESCARGAR</a></td>
-                                            {%endif%}
-
-                                            {%if atributo.tipo_dato == 'Decimal'%}
-                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
-                                            {%endif%}
-
-                                            {%if atributo.tipo_dato == 'Date'%}
-                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
-                                            {%endif%}
-
-                                            {%if atributo.tipo_dato == 'String'%}
-                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
-                                            {%endif%}
-
-                                            {%if atributo.tipo_dato == 'Boolean'%}
-                                                <td><a class="btn btn-primary" href="" role="button" >EDITAR</a></td>
-                                            {%endif%}
-                                </tr>
-                            {%endif%}
-                        {%endfor%}
-                    {%endfor%}
-
-                </form>
-          </thead>
-    </table>
-    </div>
-{% endblock interno %}
-
-
-</body>
-</html>
