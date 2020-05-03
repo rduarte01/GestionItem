@@ -2694,7 +2694,7 @@ class CrearLB(CreateView):
         return contexto
 
     def post(self, request, *args, **kwargs):
-        """se obtienen los datos cargados del formulario del navegador y se guardan en la base de datos del sistema
+        """Se obtienen los datos cargados del formulario del navegador y se guardan en la base de datos del sistema
         
 
         :param self: objeto al cual se está haciendo referencia, en este caso es una instancia de Linea Base
@@ -2742,7 +2742,9 @@ class CrearLB(CreateView):
             p = LB_item(item = item, lb = x)
 
             p.save()
-        
+
+
+        registrarAuditoriaProyecto(request.user, "Se ha creado una LB con nombre " + nombrelb, fase.id_Proyecto, fase.id_Proyecto.nombre, fase.nombre)
 
 
     #nombreLB = LineaBase1Fase2
@@ -2783,11 +2785,14 @@ def modificarEstadoItem(request, pk):
         if z == 'Finalizado':
             item.estado = z
             item.save()
+            registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Finalizado ", item.fase.id_Proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
+
         elif(z == 'Aprobado'):
             if(item.estado=='Finalizado'):
 
                 item.estado = z
                 item.save()
+                registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Aprobado ", item.fase.id_Proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
             else:
                 context = {
                     "mensaje": "EL ITEM DEBE ESTAR FINALIZADO PARA PODER SER APROBADO",

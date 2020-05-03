@@ -33,17 +33,15 @@
 
                                 </tbody>
 
-                                <thead>
-                                    <td>NOMBRE DE FASE</td>
-                                    <td>DESCRIPCION</td>
-                                    <td>ESTADO</td>
+                <td><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></td>
+                <td><button class="btn btn-primary" type="button" onclick="abrir_modal_creacion('{% url 'gestion:crearLB' fases.id_Fase %}')">Crear Linea Base</button></td>
 
-                                </thead>
-                                <tbody>
-                                    <td>{{fases.nombre}}</td>
-                                    <td>{{fases.descripcion}}</td>
-                                    <td>{{fases.estado}}</td>
-                                </tbody>
+            <!--{% if "is_gerente" in proyecto_perms %}-->
+            <!--{% endif%}-->
+            </tr>
+        </thead>
+    </table>
+    </div>
 
                             </table>
                         </div>
@@ -131,18 +129,17 @@
   });
   </script>
 
-{%endblock%}
-
-
 {% block javascript %}
-                    <script type="text/javascript" >
 
-                        var $ = jQuery.noConflict();
-                        function abrir_modal_creacion(url){
-                          $('#creacion').load(url, function(){
-                            $(this).modal('show');
-                          })
-                        }
-                </script>
+<script type="text/javascript">
+  
+    var $ = jQuery.noConflict();
+    function abrir_modal_creacion(url){
+      $('#creacion').load(url, function(){
+        $(this).modal('show');
+      })
+    }
+
+  </script>
 
 {% endblock javascript %}
