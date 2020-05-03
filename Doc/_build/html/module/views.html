@@ -87,7 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html">Tests URLS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-gestion.tests.test_views">Tests Views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#tests-views">Tests Views</a></li>
 </ul>
 
             
@@ -196,7 +196,7 @@ especifican los siguientes atributos:</p>
 
 <dl class="attribute">
 <dt id="gestion.views.ActualizarUser.template_name">
-<code class="sig-name descname">template_name</code><em class="property"> = 'UserEnEspera.html'</em><a class="headerlink" href="#gestion.views.ActualizarUser.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">template_name</code><em class="property"> = 'Menu/UserEnEspera.html'</em><a class="headerlink" href="#gestion.views.ActualizarUser.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>donde se asigna que template estara asignado esta view</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -233,6 +233,21 @@ FILTRANDO LOS USUARIOS QUE NO FORMAN PARTE DEL PROYECTO</p>
 </dl>
 </dd></dl>
 
+<dl class="function">
+<dt id="gestion.views.Asignar_Rol_usuario_proyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">Asignar_Rol_usuario_proyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_Fase</em>, <em class="sig-param">id_usuario</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.Asignar_Rol_usuario_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion es la encargada de asignar un conjunto de roles a un usuario en una determinada fase,
+ese conjunto de roles se optiene de un POST, de los roles recibidos se verifica cada uno para determinar
+si el usuario ya lo tiene, si es asi no hace nada, pero en caso que el usuario no lo tenga, entoces
+se registra ese rol  a el usuario en esa fase.
+De los roles que no se marco se lo  llama a la funcion eliminar_rol_proyecto_usuario para que tambien
+elimine aquellos roles que el gerente no marco
+:param request:
+:param id_Fase:
+:param id_usuario:
+:return:</p>
+</dd></dl>
+
 <dl class="data">
 <dt id="gestion.views.CANTIDAD">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CANTIDAD</code><em class="property"> = 1</em><a class="headerlink" href="#gestion.views.CANTIDAD" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -263,6 +278,90 @@ ELECTRONICO DE ACUERDO A UNA ACCION
 </dd></dl>
 
 <dl class="class">
+<dt id="gestion.views.CrearLB">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CrearLB</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearLB" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>HACE REFERENCIA A LA CREACIÓN DE UN CONJUNTO DE ITEMS AGRUPADOS QUE TENGAN ESTADO APROBADO, ES UNA ESPECIE DE ENCAPSULAMIENTO DE ESTOS ITEMS, A
+MEDIDA QUE SE VA DESARROLLANDO UN PROYECTO ES NECESARIO ENCAPSULAR LOS ITEMS PARA PODER PASAR A FASES SIGUIENTES.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(en Python versión 3.8)"><em>dict</em></a>) – metodo http enviado desde el navegador para ejecutar la funcion</p></li>
+<li><p><strong>pk</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(en Python versión 3.8)"><em>int</em></a>) – id de fase a la cual está relacionada la Linea Base a ser creada</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="gestion.views.CrearLB.form_class">
+<code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.CrearLB.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.LBForm" title="gestion.forms.LBForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.LBForm</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.views.CrearLB.get_context_data">
+<code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearLB.get_context_data" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Se obtiene el contexto enviado a la función.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="models.html#gestion.models.LineaBase" title="gestion.models.LineaBase"><em>LineaBase</em></a>) – se trata del mismo objecto a ser usado, en este caso seria una instancia de LineaBase</p></li>
+<li><p><strong>**kwargs</strong> – <p>se guardan los parametros enviados, en este caso se puede obtener el id de fase desde este parámetro</p>
+</p></li>
+<li><p><strong>**kwargs</strong> – <p>dict</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>retorna un contexto</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto</dt>
+<dd class="field-odd"><p>context</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.CrearLB.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.CrearLB.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>alias de <a class="reference internal" href="models.html#gestion.models.LineaBase" title="gestion.models.LineaBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.models.LineaBase</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.views.CrearLB.post">
+<code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearLB.post" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>se obtienen los datos cargados del formulario del navegador y se guardan en la base de datos del sistema</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="models.html#gestion.models.LineaBase" title="gestion.models.LineaBase"><em>LineaBase</em></a>) – objeto al cual se está haciendo referencia, en este caso es una instancia de Linea Base</p></li>
+<li><p><strong>request</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(en Python versión 3.8)"><em>dict</em></a>) – metodo HTTP enviado desde el navegador a la funcion</p></li>
+<li><p><strong>*args</strong> – <p>parametros adicionales recibidos(en este caso ninguno)</p>
+</p></li>
+<li><p><strong>**kwargs</strong> – <p>parametros adicionales recibidos(en este caso ninguno)</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>retorna una redireccion(HTTP 302)</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(en Python versión 3.8)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.CrearLB.success_url">
+<code class="sig-name descname">success_url</code><a class="headerlink" href="#gestion.views.CrearLB.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gestion.views.CrearLB.template_name">
+<code class="sig-name descname">template_name</code><em class="property"> = 'proyectos/crearLB.html'</em><a class="headerlink" href="#gestion.views.CrearLB.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="gestion.views.CrearRol">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CrearRol</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearRol" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Se muestra la ventana para la creacion de un nuevo rol dentro de un proyecto, en donde se
@@ -271,6 +370,12 @@ especifican los siguientes atributos:</p>
 <dt id="gestion.views.CrearRol.form_class">
 <code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.CrearRol.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.RolForm" title="gestion.forms.RolForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.RolForm</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gestion.views.CrearRol.get_success_url">
+<code class="sig-name descname">get_success_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearRol.get_success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Return the URL to redirect to after processing a valid form.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -288,19 +393,8 @@ del proyecto pertenciente de este Rol a crear</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gestion.views.CrearRol.success_url">
-<code class="sig-name descname">success_url</code><em class="property"> = '/menu/'</em><a class="headerlink" href="#gestion.views.CrearRol.success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>es especifica a que direccion se redirigira la view una vez actualizado el objeto dentro del modelo</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>-succes_url</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="gestion.views.CrearRol.template_name">
-<code class="sig-name descname">template_name</code><em class="property"> = 'CrearRol.html'</em><a class="headerlink" href="#gestion.views.CrearRol.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">template_name</code><em class="property"> = 'proyectos/CrearRol.html'</em><a class="headerlink" href="#gestion.views.CrearRol.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>donde se asigna que template estara asignado esta view</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -342,6 +436,12 @@ MEDIANTE ELLO SE OBTIENE EL LINK DE DESCARGA DEL ARCHIVO Y SE ABRE LA URL MEDIAN
 <dd><p>alias de <a class="reference internal" href="forms.html#gestion.forms.RolForm" title="gestion.forms.RolForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">gestion.forms.RolForm</span></code></a></p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gestion.views.ModificarRol.get_success_url">
+<code class="sig-name descname">get_success_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ModificarRol.get_success_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Return the URL to redirect to after processing a valid form.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="gestion.views.ModificarRol.model">
 <code class="sig-name descname">model</code><a class="headerlink" href="#gestion.views.ModificarRol.model" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -361,7 +461,7 @@ MEDIANTE ELLO SE OBTIENE EL LINK DE DESCARGA DEL ARCHIVO Y SE ABRE LA URL MEDIAN
 
 <dl class="attribute">
 <dt id="gestion.views.ModificarRol.template_name">
-<code class="sig-name descname">template_name</code><em class="property"> = 'CrearRol.html'</em><a class="headerlink" href="#gestion.views.ModificarRol.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">template_name</code><em class="property"> = 'proyectos/CrearRol.html'</em><a class="headerlink" href="#gestion.views.ModificarRol.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>donde se asigna que template estara asignado esta view</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -427,7 +527,7 @@ MEDIANTE ELLO SE OBTIENE EL LINK DE DESCARGA DEL ARCHIVO Y SE ABRE LA URL MEDIAN
 
 <dl class="attribute">
 <dt id="gestion.views.VerRoles.template_name">
-<code class="sig-name descname">template_name</code><em class="property"> = 'misRoles.html'</em><a class="headerlink" href="#gestion.views.VerRoles.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">template_name</code><em class="property"> = 'proyectos/misRoles.html'</em><a class="headerlink" href="#gestion.views.VerRoles.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>donde se asigna que template estara asignado esta view</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -461,12 +561,12 @@ Se especifica el atributos
 
 <dl class="attribute">
 <dt id="gestion.views.VerUsersEnEspera.queryset">
-<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet []&gt;</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">queryset</code><em class="property"> = &lt;QuerySet [&lt;Usuario: Usuario object (3)&gt;]&gt;</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.queryset" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="gestion.views.VerUsersEnEspera.template_name">
-<code class="sig-name descname">template_name</code><em class="property"> = 'ListaUser.html'</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-name descname">template_name</code><em class="property"> = 'Menu/ListaUser.html'</em><a class="headerlink" href="#gestion.views.VerUsersEnEspera.template_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -474,19 +574,48 @@ Se especifica el atributos
 <dl class="function">
 <dt id="gestion.views.add_atribute">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_atribute</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">nombre_ti</em>, <em class="sig-param">cantidad_atributos</em>, <em class="sig-param">fase_id</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_atribute" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Sirve para poder crear un nuevo atributo, asociando ese atributo a un tipo de item</p>
+<dd><blockquote>
+<div><p>Esta funcion realiza dos cosas , crea un tipo de item cuyo nombre sera el recibido como segundo parametro
+en la funcion , y un conjunto de atributos asociados al tipo de  item creado, la cantida de
+atributos creado es especificado como tercer parametro en la funcion, la funcion solo creara el tipo
+de item, si todos los atributos recibidos son validos, en caso contrario mostrara
+un mensaje de error al usuario.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>nombre_ti</strong> – </p></li>
+<li><p><strong>cantidad_atributos</strong> – </p></li>
+<li><p><strong>fase_id</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.add_permission_admin">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_permission_admin</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">is_admin</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_permission_admin" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Funcion que permite agregar o sacar el permiso es_administrador a un usario, no retorna nada</p>
+<dd><p>Funcion que permite agregar o sacar el permiso administrador de sistema a un usario recibido como parametro,
+si el segundo parametro es True entonces agrega el permiso a el usuario,
+en caso de que sea False lo saca
+:param user:
+:param is_admin:
+:return:</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.add_permission_gerente">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">add_permission_gerente</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">is_gerente</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.add_permission_gerente" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Funcion que permite agregar o sacar el permiso is_gerente a un usario, no retorna nada</p>
+<dd><p>Funcion que permite agregar o sacar el permiso is_gerente a un usario recibido como parametro,
+si el segundo parametro es True entonces agrega el permiso gerente de proyecto  a el usuario,
+en caso de que sea False lo saca
+:param user:
+:param is_gerente:
+:return:</p>
 </dd></dl>
 
 <dl class="function">
@@ -502,7 +631,7 @@ SI CUMPLIO CON LA RESTRICCION DE OBLIGATORIEDAD REDIRIGE A LA VENTANA DE RELACIO
 
 <dl class="function">
 <dt id="gestion.views.agg_listar_tipo_item">
-<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">agg_listar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">Fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.agg_listar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">agg_listar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.agg_listar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>LISTA LOS TIPOS DE ITEMS DE UNA FASE EN ESPECIFICA, RECIBE EL ID DE LA FASE, AL SELECCIONAR EL TI SE GUARDA EN EL ITEM
 CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE DICHO TI SELECCIONADO
 :param request:
@@ -519,7 +648,33 @@ CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE
 <dl class="function">
 <dt id="gestion.views.agregar_atributo_ti">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">agregar_atributo_ti</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.agregar_atributo_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Esta funcion permite agregar un nuevo atributo a un Tipo de Item pasado como parametro, para el nuevo
+atributo se deberan de completar sus caracteristicas(nombre,tipo de dato,obligatoriedad), si no se
+definen todas las carateristicas del atributo, se mostrar un mensaje de error , y le dara la posibilidad
+de  intentarlo de nuevo.</p>
+<blockquote>
+<div><p>La funcion solo permite agregar un atributo al  Tipo de item a los gerente de Proyecto, y tambien valida
+que solo se podran agregar atributos  aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
+cumplen se mostrara un mensaje (explicativo) del Error
+:param request:</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><p><strong>id_ti</strong> – </p>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.asignar_rol_proyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">asignar_rol_proyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">nombre</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.asignar_rol_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion es la encargada se asignar todos los permisos de un rol, pero para un determinado
+proyecto utilizando django guardia, para ello obtiene todos los permisos del rol y asigna ese permiso
+a al mismo rol pero para un determinado proyecto.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.auditoriaProyecto">
@@ -631,17 +786,101 @@ OPCIONES
 <dl class="function">
 <dt id="gestion.views.editar_ti">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">editar_ti</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.editar_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><blockquote>
+<div><p>Esta funcion permite editar el nombre del Tipo de Item y los atributos del mismo, para ello lista
+todos los atributos del Tipo de Item y para cada atributo da la posibilidad de editar sus caracteristicas
+(nombre,Tipo Dato, Obligatoriedad), tambien da la opcion de agregar nuevos atributos y eliminar atributos ya
+existentes del Tipo de Item.
+La funcion solo permite editar Tipo de items a los gerente de Proyecto, y tambien valida que solo se podran
+editar aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
+cumplen se mostrara un mensaje (explicativo) del Error</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>id_ti</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.eliminar_atributo_ti">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">eliminar_atributo_ti</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.eliminar_atributo_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Esta funcion lista todos los atributos (con una opcion de seleccionar )de un Tipo de Item
+pasado como parametro, para cada atributo seleccionado por el usuario , se eliminara el atributo del
+tipo item</p>
+<blockquote>
+<div><p>La funcion solo permite eliminar atributos de Tipo de items a los gerente de Proyecto, y tambien valida
+que solo se podran eliminar aquellos  atributos de tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se</p>
+<blockquote>
+<div><p>cumplen se mostrara un mensaje (explicativo) del Error</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>id_ti</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.eliminar_rol_proyecto_usuario">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">eliminar_rol_proyecto_usuario</code><span class="sig-paren">(</span><em class="sig-param">id_fase</em>, <em class="sig-param">listaRoles</em>, <em class="sig-param">usuario</em>, <em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.eliminar_rol_proyecto_usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><blockquote>
+<div><p>Esta funcion es la encargada de sacar los roles de una  fase a un usario en  especifico,
+recibe una lista de roles como parametros, que seria los roles que el gerente no marco en el form al
+momento de asignar el rol a un usuario, de esa lista de roles se verifica aquellos que el usuario tiene,
+si es asi, se le saca el rol en esa fase al usuario.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id_fase</strong> – </p></li>
+<li><p><strong>listaRoles</strong> – </p></li>
+<li><p><strong>usuario</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.eliminar_tipo_item">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">eliminar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.eliminar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><blockquote>
+<div><p>Esta funcion permite eliminar un Tipo de Item pasado como parametro, como consecuencia esta funcion tambien
+elimina todos los atributos relacionados a ese Tipo de Item.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>La funcion solo permite eliminar el tipo de Item  a los gerente de Proyecto, y tambien valida</dt><dd><p>que solo se podran eliminar aquellos  tipo de item que no esten asociados aun a un Item. Si estas
+ultimas dos restricciones no se cumplen se mostrara un mensaje (explicativo) del Error</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>id_ti</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.errorPermiso">
@@ -675,6 +914,23 @@ MENOS CUANDO ESTE FINALIZADO.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.fase1SinItems">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">fase1SinItems</code><span class="sig-paren">(</span><em class="sig-param">fases</em>, <em class="sig-param">fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.fase1SinItems" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Verifica si la fase en la que se quiere crear el item podra tener relacion con la primera fase</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fases</strong> – lista de fases</p></li>
+<li><p><strong>fase</strong> – la fase en la que se quiere crear el item</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>true si no tiene relacion con fase 1, false caso contrario</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.getUsers">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">getUsers</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.getUsers" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>«TRAE INFORMACION DE USUARIO</p>
@@ -683,7 +939,10 @@ MENOS CUANDO ESTE FINALIZADO.</p>
 <dl class="function">
 <dt id="gestion.views.get_all_tipo_item">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">get_all_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">id_proyecto</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.get_all_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Esta funcion permite obtener todos los tipos de item de un proyecto especifico</p>
+<dd><p>Esta funcion permite obtener todos los tipos de item de un proyecto especifico recibido como parametro,
+en caso de que el proyecto no tenga ningun tipo de items, la funcion  retorna una lista vacia
+:param id_proyecto:
+:return: Lista de Tipo de Items</p>
 </dd></dl>
 
 <dl class="function">
@@ -695,16 +954,45 @@ MENOS CUANDO ESTE FINALIZADO.</p>
 <dl class="function">
 <dt id="gestion.views.get_user">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">get_user</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.get_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Sirve para poder asignar o sacar los permisos es_gerente , es_administrador
-y cambiar el estado de un usario en especifico</p>
+<dd><dl class="simple">
+<dt>Sirve para poder asignar o sacar los permisos es_gerente , es_administrador</dt><dd><p>y cambiar el estado de un usario en especifico recibido como parametro,
+solo se permitira realizar esta accion al administrador de sistema, en caso de que el usuario
+no tenga dicho permiso se mostrara un mensaje de error</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>pk</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.hayTiFase">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">hayTiFase</code><span class="sig-paren">(</span><em class="sig-param">fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.hayTiFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Verifica si hay TI en la fase
+:param fase: fase en donde se creara el item
+:return: true si no hay, caso contrario false</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.importar_tipo_item">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">importar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.importar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>esta funcion permite importar tipos de item en un proyecto , filtrando aquellos tipo
-items de los proyectos de los que esta asociado el usuario y que aun no se tenga en  las
-fases dell proyecto.</p>
+<dd><dl class="simple">
+<dt>esta funcion permite importar tipos de item en un proyecto, para ello lista un conjunto</dt><dd><p>de tipos de item , de los tipos de items</p>
+</dd>
+</dl>
+<p>disponibles para importar solo se muestran aquellos  aquellos tipos de items de otros proyectos en
+donde el usuario tambien este asociado, tambien filtra los tipos de items cuyo nombre ya no exista en el
+proyecto a donde se quiere importar
+La funcion solo permite importar tipos de items a  a los gerente de Proyecto  Si esta restriccion no se cumple
+se mostrara un mensaje (explicativo) del Error</p>
 </dd></dl>
 
 <dl class="function">
@@ -715,10 +1003,15 @@ fases dell proyecto.</p>
 
 <dl class="function">
 <dt id="gestion.views.itemCancelado">
-<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">itemCancelado</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.itemCancelado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">itemCancelado</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.itemCancelado" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>METODO PARA CANCELAR UN ITEM
 :return: REDIRIGE AL MENU PRINCIPAL</p>
 </dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.lista_items_relacion">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">lista_items_relacion</code><span class="sig-paren">(</span><em class="sig-param">itemActual</em>, <em class="sig-param">fases</em>, <em class="sig-param">id_proyecto</em>, <em class="sig-param">id_item</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.lista_items_relacion" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.listar_atributos">
@@ -790,6 +1083,63 @@ GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PART
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.modificarEstadoItem">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">modificarEstadoItem</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">pk</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.modificarEstadoItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="simple">
+<dt>La funcion realiza la labor de modificar el estado de cualquier item, los estados disponibles son:</dt><dd><ul class="simple">
+<li><p>Creado</p></li>
+<li><p>Finalizado</p></li>
+<li><p>Aprobado</p></li>
+<li><p>En revision</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(en Python versión 3.8)"><em>dict</em></a>) – peticion HTTP enviada desde el navegador</p></li>
+<li><p><strong>pk</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(en Python versión 3.8)"><em>int</em></a>) – id de item a ser modificado</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>retorna un render con los datos del item a ser modificado</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto</dt>
+<dd class="field-odd"><p>form</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.modificar_rol_proyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">modificar_rol_proyecto</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">nombre</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.modificar_rol_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion es la encargada de modificar los permisos de un  rol en un determinado proyecto, este
+funcion se activa luego de modificar un rol en un proyecto, entoce lo que realiza es busca todos los permisos
+que tiene ahora el nuevo rol actualizado y todos los permisos del viejo rol,entonces verifica aquellos
+nuevos que se agrego y aquellos que se eliminaron y lo actualiza tambien los permisos del viejo rol
+Vale recalcar que el viejo rol es que esta asociado a django gurdian, y el rol actualizado es el de Django</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>nombre</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.obtener_todos_roles_proyecto">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">obtener_todos_roles_proyecto</code><span class="sig-paren">(</span><em class="sig-param">id_proyecto</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.obtener_todos_roles_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion es la encargada de obtener todos los roles asociado a un proyecto, retorna una lista de roles
+:param id_proyecto:
+:return: Lista</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.perfil">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">perfil</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.perfil" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>SOLICITUD DE AUTENTICACION PARA MOSTRAR EL PERFIL DEL USUARIO||
@@ -818,22 +1168,52 @@ BUSCA EL IDITEM
 <dl class="function">
 <dt id="gestion.views.recoge_datos_atributo">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoge_datos_atributo</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoge_datos_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Sirve para recoger los datos despues de un POST en un formulario de atributo, retorna el
-valor del nombre del atributo, si es obligatorio, y el tipo de dato</p>
+<dd><dl class="simple">
+<dt>Sirve para recoger los datos despues de un POST en un formulario de atributo, retorna el</dt><dd><p>valor del nombre del atributo, si es obligatorio, y el tipo de dato</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><p><strong>form</strong> – </p>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>String, boolean,String</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.recoger_datos_tipo_item">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoger_datos_tipo_item</code><span class="sig-paren">(</span><em class="sig-param">my_form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoger_datos_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Sirve para recoger los datos despues de un POST en un formulario de tipo de item, retorna el
-valor del nombre del tipo de item y la cantidad de atributos del tipo de item</p>
+<dd><dl class="simple">
+<dt>Sirve para recoger los datos despues de un POST en un formulario de tipo de item, retorna el</dt><dd><p>valor del nombre del tipo de item y la cantidad de atributos del tipo de item</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><p><strong>my_form</strong> – </p>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>String,Integer</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.recoger_datos_usuario_settings">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">recoger_datos_usuario_settings</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.recoger_datos_usuario_settings" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores
-dos booleanos para determinar si es gerente y administrador y el estado del usuario</p>
+<dd><dl class="simple">
+<dt>Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores</dt><dd><p>dos booleanos para determinar si es gerente y administrador y el estado del usuario</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><p><strong>form</strong> – </p>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>Boolean ,Boolean,String</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -869,16 +1249,98 @@ EL ITEM ACTUAL Y LA VERSION 1 EN LA CREACION SE EVALUA:
 </dd></dl>
 
 <dl class="function">
+<dt id="gestion.views.seleccionar_usuario_rol">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">seleccionar_usuario_rol</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.seleccionar_usuario_rol" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion es la encargada de listar todos los usuario que existen en el proyecto,de todos los
+listados  se selecciona uno y este usuario seleccionado  es aquel al  cual se le va a asignar o sacar
+roles en una determinada fase(id_fase).
+:param request:
+:param id_fase:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gestion.views.tipo_item_views_create">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">tipo_item_views_create</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">id_fase</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.tipo_item_views_create" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Sirve para crear un tipo de item,en una fase en especifica</p>
+<dd><p>Sirve para crear un tipo de item,en una fase en especifica, la fase especifica es recibida como
+parametro en la funcion, si los datos del tipo de item son validos(nombre y cantidad de atributos) , entonces
+la funcion redirige la continuidad de la accion a la view add_atribute, en caso de no ser valido
+muestra un mensaje (explicativo) de error
+:param request:
+:param id_fase:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.validar_datos_form_atributo">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">validar_datos_form_atributo</code><span class="sig-paren">(</span><em class="sig-param">form_set</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.validar_datos_form_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion permite validar una coleccion de forms del Modelo Atributo recibidos desde un POST, La validacion consiste en
+verificar que ninguno de los form recibidos es un diccionario vacio (es decir el usuario no ingreso
+nada) y con eso validar la consistencia del sistema, en caso de que el usuario de olvido de ingresar algun
+dato de algun Atributo, la funcion retornara False, si, no todos los forms recibidos son correctos entonces
+se retornara True
+:param form_set:
+:return: Boolean</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.validar_permiso">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">validar_permiso</code><span class="sig-paren">(</span><em class="sig-param">user</em>, <em class="sig-param">permiso</em>, <em class="sig-param">proyecto</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.validar_permiso" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><blockquote>
+<div><p>Esta funcion permite validar el permiso de un usuario para un proyecto en especifico,  el nombre del
+permiso es recibido como segundo parametro en la funcion y el proyecto como tercer parametro  ,
+si el usuario tiene  el permiso  para  el  proyecto recibido entonces la funcion retornara True,
+en caso Contrario retornara False</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> – </p></li>
+<li><p><strong>permiso</strong> – </p></li>
+<li><p><strong>proyecto</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.validar_proyecto_cancelado">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">validar_proyecto_cancelado</code><span class="sig-paren">(</span><em class="sig-param">id_proyecto</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.validar_proyecto_cancelado" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.validar_rol_fase">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">validar_rol_fase</code><span class="sig-paren">(</span><em class="sig-param">permiso</em>, <em class="sig-param">fase</em>, <em class="sig-param">usuario</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.validar_rol_fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion es la encargada de validar si un usuario tiene un determinado permiso,en una fase especifica
+para ello optiene el nombre del  rol al cual esta asociado el permiso,y ese rol busca en la tabla Fase_ROl para determinar
+si ese rol esta asociado a ese usuario, en la fase en el que se esta trabajando, si el usuario tiene el
+rol se retorna True, en caso contrario se retorna False</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>permiso</strong> – </p></li>
+<li><p><strong>fase</strong> – </p></li>
+<li><p><strong>usuario</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gestion.views.validar_usuario">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">validar_usuario</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.validar_usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Valida al usuario al inicio del sistema, el primer usuario se le asigna el rol de administrador del sistema
-se le agrega el estado aprobado</p>
+<dd><p>Valida al usuario al inicio del sistema, si el usuario recibido como parametro es el primer usuario
+del sistema se le asigna el rol de administrador  del sistema y se le agrega el estado aprobado, para
+los otros usuarios nuevos (que se logearon por primera vez)  por default se le asigna el esta
+Desaprobado, para que luego el administrador del Sistema lo apruebe
+:param user:
+:return:</p>
 </dd></dl>
 
 <dl class="function">
@@ -891,6 +1353,17 @@ se le agrega el estado aprobado</p>
 <dt id="gestion.views.ver_usuarios_aprobados">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">ver_usuarios_aprobados</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.ver_usuarios_aprobados" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Lista todos los usarios aprobados en el sistema</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gestion.views.verifacar_roles_usuario">
+<code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">verifacar_roles_usuario</code><span class="sig-paren">(</span><em class="sig-param">rol</em>, <em class="sig-param">fase</em>, <em class="sig-param">usuario</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.verifacar_roles_usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion es la encarganda de validar si un usuario tiene un rol especifico en una determinada fase
+si tiene, retorna un True, si no retorna un False
+:param rol:
+:param fase:
+:param usuario:
+:return: Boolean</p>
 </dd></dl>
 
 </div>

@@ -741,9 +741,13 @@ def AggUser(request,pk):#esta enlazado con la clase FaseForm del archivo getion/
         #if form.is_valid():
         some_var=request.POST.getlist('checkbox')
         print(some_var)
-
-        for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
+        proyectos=Proyecto.objects.get(id_proyecto=pk)
+        for id in some_var:
             id_user =id
+            usuario = User.objects.get(id=id_user)
+            registrarAuditoriaProyecto(request.user, "Añadio al proyecto al usuario: " + str(usuario.username),
+                                       proyectos.id_proyecto, proyectos.nombre, "")
+
             p = User_Proyecto(user_id= id_user ,proyecto_id= pk,activo= True)
             p.save()
 
@@ -785,7 +789,7 @@ def UsersProyecto(request,pk):#esta enlazado con la clase FaseForm del archivo g
     :return: USERSPROYECTO.HTML
     """
     proyecto=Proyecto.objects.get(id_proyecto=pk)
-    registrarAuditoria(request.user, 'Ingreso al apartado de registro de usuarios a un proyecto')
+
     user= request.user## USER ACTUAL
     form = User.objects.all()
     registrados = User_Proyecto.objects.all()
@@ -850,7 +854,12 @@ def desvinculacionProyecto(request,pk,pk_user):
                 return render(request, 'Error.html', context)
 
     instanceUser = User_Proyecto.objects.filter(proyecto_id = pk, user_id = pk_user)
+    usuario = User.objects.get(id=pk_user)
+    registrarAuditoriaProyecto(request.user, "Desvinculo del proyecto al usuario: " + str(usuario.username),
+                               proyectos.id_proyecto, proyectos.nombre, "")
+
     instanceUser.delete()
+
     return redirect('gestion:UsersProyecto',pk)
 
 #RUBEN
@@ -1905,6 +1914,8 @@ def AggComite(request,pk):#esta enlazado con la clase FaseForm del archivo getio
         p.save()
         for id in some_var:###### SE GUARDAN EN USER_PROYECTOS LAS RELACIONES
             id_user =id
+            usuario=User.objects.get(id=id_user)
+            registrarAuditoriaProyecto(request.user,"Añadio al comite de cambio al usuario: "+str(usuario.username),proyectos.id_proyecto,proyectos.nombre,"")
             p=Comite(id_proyecto=pk,id_user=id_user)
             p.save()
 
@@ -1981,6 +1992,10 @@ def DeleteComite(request,pk):#esta enlazado con la clase FaseForm del archivo ge
 
         for id in some_var:
             id_user =id
+            usuario = User.objects.get(id=id_user)
+            registrarAuditoriaProyecto(request.user, "Desvinculo del comite de cambio al usuario: " + str(usuario.username),
+                                       proyectos.id_proyecto, proyectos.nombre, "")
+
             desvinculacionComite(request,pk,id_user)
 
 

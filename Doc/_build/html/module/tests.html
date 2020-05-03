@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tests URLS &mdash; documentación de GestionItem - 0.1</title>
+  <title>Tests &mdash; documentación de GestionItem - 0.1</title>
   
 
   
@@ -85,8 +85,7 @@
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tests URLS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#module-gestion.tests.test_views">Tests Views</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tests</a></li>
 </ul>
 
             
@@ -132,7 +131,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Tests URLS</li>
+      <li>Tests</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -152,7 +151,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-gestion.tests.test_urls">
-<span id="tests-urls"></span><h1>Tests URLS<a class="headerlink" href="#module-gestion.tests.test_urls" title="Enlazar permanentemente con este título">¶</a></h1>
+<span id="tests"></span><h1>Tests<a class="headerlink" href="#module-gestion.tests.test_urls" title="Enlazar permanentemente con este título">¶</a></h1>
 <dl class="class">
 <dt id="gestion.tests.test_urls.TestUrls">
 <em class="property">class </em><code class="sig-prename descclassname">gestion.tests.test_urls.</code><code class="sig-name descname">TestUrls</code><a class="headerlink" href="#gestion.tests.test_urls.TestUrls" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -177,112 +176,168 @@
 :return: si la redireccion se llevó a cabo satisfactoriamente retorna OK, caso contrario retorna un mensaje de error</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="gestion.tests.test_urls.TestUrls.test_url_elimar_ti">
+<code class="sig-name descname">test_url_elimar_ti</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_urls.TestUrls.test_url_elimar_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
-</div>
-<div class="section" id="module-gestion.tests.test_views">
-<span id="tests-views"></span><h1>Tests Views<a class="headerlink" href="#module-gestion.tests.test_views" title="Enlazar permanentemente con este título">¶</a></h1>
-<dl class="class">
-<dt id="gestion.tests.test_views.TestViews">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.tests.test_views.</code><code class="sig-name descname">TestViews</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<span class="target" id="module-gestion.tests.test_views"></span><span class="target" id="module-gestion.tests.test_tipo_item"></span><dl class="class">
+<dt id="gestion.tests.test_tipo_item.TestViews">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.tests.test_tipo_item.</code><code class="sig-name descname">TestViews</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><dl class="attribute">
-<dt id="gestion.tests.test_views.TestViews.pytestmark">
-<code class="sig-name descname">pytestmark</code><em class="property"> = [Mark(name='django_db', args=(), kwargs={})]</em><a class="headerlink" href="#gestion.tests.test_views.TestViews.pytestmark" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dt id="gestion.tests.test_tipo_item.TestViews.pytestmark">
+<code class="sig-name descname">pytestmark</code><em class="property"> = [Mark(name='django_db', args=(), kwargs={})]</em><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews.pytestmark" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_Agg_User">
-<code class="sig-name descname">test_Agg_User</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_Agg_User" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si se agrega correctamente un usuario a un proyecto</p>
+<dt id="gestion.tests.test_tipo_item.TestViews.test_Asignar_Rol_usuario_proyecto">
+<code class="sig-name descname">test_Asignar_Rol_usuario_proyecto</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews.test_Asignar_Rol_usuario_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_tipo_item.TestViews.test_agregar_atributo_ti">
+<code class="sig-name descname">test_agregar_atributo_ti</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews.test_agregar_atributo_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Este test verifica la views eliminar_atributo_ti, validando si el status del metodo http es 200
+:return:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_CrearRol">
-<code class="sig-name descname">test_CrearRol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_CrearRol" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si se realiza correctamente la creacion de un Rol. Se compara si el resultado es distinto a None ya que el metodo super() de
-la funcion crearRol devuelve una direccion de memoria como respuesta.
-return: Si no se lleva a cabo correctamente la creacion de un rol devuelve un mensaje de error, de lo contrario no se visualiza nada.</p>
+<dt id="gestion.tests.test_tipo_item.TestViews.test_editar_ti">
+<code class="sig-name descname">test_editar_ti</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews.test_editar_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Este test verifica la views eliminar_atributo_ti, validando si el status del metodo http es 200
+:return:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_add_atributo">
-<code class="sig-name descname">test_add_atributo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_add_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba que se crea correctamente un atributo para un tipo de item determinados. La funcion recibe un request
-return: Si no se realiza correctamente la creacion de un atributo lanza un mensaje de error, caso contrario no se visualiza nada.</p>
+<dt id="gestion.tests.test_tipo_item.TestViews.test_eliminar_atributo_ti">
+<code class="sig-name descname">test_eliminar_atributo_ti</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews.test_eliminar_atributo_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Este test verifica la views eliminar_atributo_ti, validando si el status del metodo http es 200,
+el valor  sera distinto a 200 en caso en que le pasemos un parametro que no exista en la base de
+datos a nuestra funcion
+:return:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_agregarUsuario">
-<code class="sig-name descname">test_agregarUsuario</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_agregarUsuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba que se agregue correctamente un usuario a un proyecto. Recibe el ID de un usuario y muestra los usuarios que
-pueden ser añadidos a él.
-return: Si no se agrega un usuario a un proyecto se lanza un mensaje de error, caso contrario se omiten mensajes.</p>
+<dt id="gestion.tests.test_tipo_item.TestViews.test_eliminar_tipo_item">
+<code class="sig-name descname">test_eliminar_tipo_item</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews.test_eliminar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Este test verifica la views eliminar_tipo_item, validando si el status del metodo http es 200, el valor
+sera distinto a 200 en caso en que le pasemos un parametro que no exista en la base de datos a nuestra funcion
+:return:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_creacionFase">
-<code class="sig-name descname">test_creacionFase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_creacionFase" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Verifica que la creacion de fases se haga de manera correcta.
-return: Si no se ha llevado a cabo la correcta creacion de una fase emitirá un mensaje de error, caso contrario no emitirá ningún mensaje</p>
+<dt id="gestion.tests.test_tipo_item.TestViews.test_item_asociado_ti">
+<code class="sig-name descname">test_item_asociado_ti</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews.test_item_asociado_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Este test verifica que un tipo de item o este asociado a un item para poder eliminarlo
+:return:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_creacionProyecto">
-<code class="sig-name descname">test_creacionProyecto</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_creacionProyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Verifica que la creacion de proyecto se realice de manera correcta.
-return: Si la creacion no se ha realizado retorna un mensaje de error, caso contrario no devuelve ningun mensaje.</p>
+<dt id="gestion.tests.test_tipo_item.TestViews.test_validar_rol_fase">
+<code class="sig-name descname">test_validar_rol_fase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_tipo_item.TestViews.test_validar_rol_fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-gestion.tests.test_LB_estadoItem"></span><dl class="class">
+<dt id="gestion.tests.test_LB_estadoItem.TestViews">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.tests.test_LB_estadoItem.</code><code class="sig-name descname">TestViews</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_LB_estadoItem.TestViews" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.tests.test_LB_estadoItem.TestViews.pytestmark">
+<code class="sig-name descname">pytestmark</code><em class="property"> = [Mark(name='django_db', args=(), kwargs={})]</em><a class="headerlink" href="#gestion.tests.test_LB_estadoItem.TestViews.pytestmark" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_LB_estadoItem.TestViews.test_crearLB">
+<code class="sig-name descname">test_crearLB</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_LB_estadoItem.TestViews.test_crearLB" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se realiza correctamente la creacion de una Linea Base en una fase determinada. Muestra un mensaje de error si
+no se pudo realizar la accion.
+return: Muestra un mensaje de error si algo salió mal, caso contrario no se muestra ningún mensaje</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_estado_proyecto">
-<code class="sig-name descname">test_estado_proyecto</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_estado_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si se realiza correctamente la modificacion de estado de un proyecto determinado
-return: Si no se obtiene una respuesta Http 200 se emite un mensaje de error, de lo contrario no se visualiza nada</p>
+<dt id="gestion.tests.test_LB_estadoItem.TestViews.test_modificarEstadoItem">
+<code class="sig-name descname">test_modificarEstadoItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_LB_estadoItem.TestViews.test_modificarEstadoItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Comprueba si se realiza correctamente la modificacion de estado de un item. Si ocurre un error, se visualiza en pantalla un mensaje
+de que no se pudo modificar el estado del item en cuestion.
+return: Retorna un mensaje de error si algo salió mal, caso contrario no se visualiza nada.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-gestion.tests.test_comite"></span><dl class="class">
+<dt id="gestion.tests.test_comite.Test_comite">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.tests.test_comite.</code><code class="sig-name descname">Test_comite</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_comite.Test_comite" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.tests.test_comite.Test_comite.pytestmark">
+<code class="sig-name descname">pytestmark</code><em class="property"> = [Mark(name='django_db', args=(), kwargs={})]</em><a class="headerlink" href="#gestion.tests.test_comite.Test_comite.pytestmark" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_comite.Test_comite.test_AggComite">
+<code class="sig-name descname">test_AggComite</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_comite.Test_comite.test_AggComite" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TEST DE AGREGAR COMITE A UN PROYECTO, SE REQUIERE DE UN PROYECTO, USUARIOS ASOCIADOS AL MISMO
+SE VALIDA EL ID DEL PROYECTO EN LA FUNCION, SI EL PROYECTO EXISTE RETORNA UN STATUS 200, CASO CONTRARIO
+EL PROYECTO NO EXISTE POR ENDE NO PUEDE CONTINUAR LA FUNCION</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-gestion.tests.test_añadir_item"></span><dl class="class">
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item">
+<em class="property">class </em><code class="sig-prename descclassname">gestion.tests.test_añadir_item.</code><code class="sig-name descname">Test_Crear_Item</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item.pytestmark">
+<code class="sig-name descname">pytestmark</code><em class="property"> = [Mark(name='django_db', args=(), kwargs={})]</em><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item.pytestmark" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item.test_atributos">
+<code class="sig-name descname">test_atributos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item.test_atributos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MUESTRA LA LISTA DE ATRIBUTOS DE TI DE UNA FASE, SE VALIDA SI EL PARAMETRO DE EL ID DEL TI ES  CORRECTA</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_importar_tipo_de_item">
-<code class="sig-name descname">test_importar_tipo_de_item</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_importar_tipo_de_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si se ha llevado a cabo correctamente la importacion de un tipo de item en una fase determinada.
-El metodo importar_tipo_item recibe como parametros un request y un id de una fase
-return: Si no se ha llevado a cabo correctamente la importacion retorna un mensaje de error, caso contrario no se visualiza nada.</p>
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item.test_fase_uno_validation">
+<code class="sig-name descname">test_fase_uno_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item.test_fase_uno_validation" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TEST EN DONDE SE VALIDA SI LA FASE ANTERIOR POSEE ITEMS, RETORNA TRUE SI NO EXISTE CASO CONTRARIO
+FALSE</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_menu">
-<code class="sig-name descname">test_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_menu" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si se ha llevado a cabo correctamente el montado de la vista menu del sistema.
-El metodo menu recibe como parametro un request
-return: Retorna un mensaje de error si la operacion no se ha llevado a cabo correctamente, caso contrario no se visualiza nada.</p>
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item.test_item_create">
+<code class="sig-name descname">test_item_create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item.test_item_create" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>TEST DE CREAR ITEM, SE NECESITA UN PROYECTO Y FASES DEL MISMO, SE PASA COMO PARAMETROS
+EL ID DE LA FASE EN DONDE SE CREARA EL ITEM Y SI LA FASE PERTENECE AL PROYECTO RETORNA UN
+STATUS 200, CASO CONTRARIO UN STATUS 400 NO PUDIENDO CONTINUAR</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_modificar_rol">
-<code class="sig-name descname">test_modificar_rol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_modificar_rol" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si se realiza correctamente la modificacion de un rol. Se compara con None el resultado ya que las funciones
-internas devuelven direcciones de memoria.
-return: Si no se lleva a cabo la modificacion de un rol devuelve un mensaje de error, caso contrario no se visualiza nada.</p>
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item.test_lista_ti">
+<code class="sig-name descname">test_lista_ti</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item.test_lista_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MUESTRA LA LISTA DE TI DE UNA FASE, SE VALIDA SI EL PARAMETRO DE EL ID DE LA FASE ES  CORRECTA</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_perfil_authenticated">
-<code class="sig-name descname">test_perfil_authenticated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_perfil_authenticated" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si se muestra el perfil del usuario solicitante.
-return: Si no se realiza correctamente la visualizacion del perfil del usuario retorna un mensaje de error, caso contrario se omiten mensajes.</p>
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item.test_relacion_item">
+<code class="sig-name descname">test_relacion_item</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item.test_relacion_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>MUESTRA LA LISTA DE ITEMS DISPONIBLES CON LOS CUALES EL ITEM A SER CREADO PUEDE RELACIONARSE
+VERIFICA QUE EL ID DEL PROYECTO E ITEMS SEAN LOS CORRECTOS</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_usuario_aprobado">
-<code class="sig-name descname">test_usuario_aprobado</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_usuario_aprobado" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si la cantidad de usuarios aprobados es correcta. Cabe resaltar que por defecto un usuario recien creado no esta aprobado
-return: Devuelve un mensaje de error si la cantidad de usuarios aprobados no esta acorde a los usuarios creados inicialmente(deben ser distintos)</p>
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item.test_relacion_lista_item">
+<code class="sig-name descname">test_relacion_lista_item</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item.test_relacion_lista_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>RETORNA LA LISTA DE ITEMS CON LOS CUALES ES POSIBLE RELACIONARSE EL ITEM A SER CREADO</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="gestion.tests.test_views.TestViews.test_usuario_no_aprobado">
-<code class="sig-name descname">test_usuario_no_aprobado</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_views.TestViews.test_usuario_no_aprobado" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Comprueba si la cantidad de usuarios no aprobados es correcta
-return: Devuelve un mensaje de error si la cantidad de usuarios no aprobados no coincide con la cantidad de usuarios creados inicialmente</p>
+<dt id="gestion.tests.test_añadir_item.Test_Crear_Item.test_ti_en_fase">
+<code class="sig-name descname">test_ti_en_fase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gestion.tests.test_añadir_item.Test_Crear_Item.test_ti_en_fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>VALIDA SI EXISTE TI EN LA FASE EN DONDE SE QUIERE CREAR EL ITEM RETORNA TRUE SI NO EXISTE
+CASO CONTRARIO FALSE</p>
 </dd></dl>
 
 </dd></dl>
