@@ -60,9 +60,9 @@
                   <h6 class="m-0 font-weight-bold text-primary">Detalles de Fase</h6>
 
                   <h6 class="m-0 font-weight-bold text-primary"><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></h6>
-                  <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary"  onclick="abrir_modal_creacion('{% url 'gestion:crearLB' fases.id_Fase %}')" href="" >Crear Linea Base</a></h6>
-
+                  <h6 class="m-0 font-weight-bold text-primary"><td><button class="btn btn-primary" type="button" onclick="abrir_modal_creacion('{% url 'gestion:crearLB' fases.id_Fase %}')">Crear Linea Base</button></td></h6>
                   <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a></h6>
+
 
                 </div>
                 <!-- Card Body -->
@@ -98,14 +98,6 @@
                 </div>
               </div>
     <script>
-
-    var $ = jQuery.noConflict();
-    function abrir_modal_creacion(url){
-      $('#creacion').load(url, function(){
-        $(this).modal('show');
-      })
-    }
-
 
 
   // Call the dataTables jQuery plugin
@@ -143,13 +135,14 @@
 
 
 {% block javascript %}
-                <script>
+                    <script type="text/javascript" >
 
-    var $ = jQuery.noConflict();
-    function abrir_modal_creacion(url){
-      $('#creacion').load(url, function(){
-        $(this).modal('show');
-      })
-    }
-</script>
+                        var $ = jQuery.noConflict();
+                        function abrir_modal_creacion(url){
+                          $('#creacion').load(url, function(){
+                            $(this).modal('show');
+                          })
+                        }
+                </script>
+
 {% endblock javascript %}
