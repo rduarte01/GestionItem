@@ -2676,7 +2676,15 @@ def ver_lb(request,pk):
     return render(request, 'items/ver_lb.html', context)
 
 def CrearLB(request,pk):
+    '''
+        Esta funncion es la encargada de crear una linea base, para ello recibe el id de la fase en donde se va a crear,
+        y hace un filtrado de todos  los items aprobados y que no se encuentren en otra Linea Base
+        Se requere el permiso crear_LB, si no tiene se muestra un mensaje de error
 
+    :param request:
+    :param pk:
+    :return:
+    '''
 
     form = LBForm(request.POST)
     """
@@ -2697,19 +2705,19 @@ def CrearLB(request,pk):
     except:
         lista = None
 
-    ### PERMISO #####
-    # if validar_permiso(request.user,"crear_item",fase.id_Proyecto) or request.user.has_perm('crear_item',fase.id_Proyecto) and validar_rol_fase('crear_lb',fase,request.user):
-    #    print('tiene el permiso de crear_item')
-    # else:
-    #   context = {
-    #      "mensaje": "NO SE POSEE EL PERMISO: crear_lb" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
-    #     "titulo": "SIN PERMISO  ",
-    #     "titulo_b1": "",
-    #    "boton1": "",
-    #    "titulo_b2": "SALIR",
-    #    "boton2": "/detallesFase/"+str(pk),
-    # }
-    # return render(request, 'Error.html', context)
+    if validar_permiso(request.user,"is_gerente",fase.id_Proyecto) or request.user.has_perm('crear_lb',fase.id_Proyecto) and validar_rol_fase('crear_lb',fase,request.user):
+        print('tiene el permiso de crear_lb')
+    else:
+        print('NO tiene el permiso de crear_lb')
+        context = {
+            "mensaje": "NO SE POSEE EL PERMISO: crear_lb" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+            "titulo": "SIN PERMISO  ",
+            "titulo_b1": "",
+            "boton1": "",
+            "titulo_b2": "SALIR",
+            "boton2": "/detallesFase/"+str(pk),
+            }
+        return render(request, 'Error.html', context)
 
     if request.method == 'POST':
         print("entro")
@@ -2740,6 +2748,7 @@ def CrearLB(request,pk):
 
     listaItems = []
 
+
     for i in lista_items:
         ok = True
         for j in lista:
@@ -2747,9 +2756,11 @@ def CrearLB(request,pk):
                 ok = False
                 break
         if ok == True:
+
             listaItems.append(i.id_item)
             print(listaItems)
 
+    print('print ',listaItems)
     item_verificador = Item.objects.last()
     lista=[]
     context={
@@ -2821,6 +2832,7 @@ def modificarEstadoItem(request, pk):
 
                 item.estado = z
                 item.save()
+                print('actualizA EN LA BD el estado')
                 registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Aprobado ", item.fase.id_Proyecto.id_proyecto
                                            , item.fase.id_Proyecto.nombre, item.fase.nombre)
             else:

@@ -94,8 +94,8 @@ class TestViews(TestCase):
         idfase = fase1.id_Fase
         path = reverse('gestion:crearLB', kwargs = {'pk': idfase})
         request = RequestFactory().get(path)
-
-        response = CrearLB()
+        request.user=mixer.blend('auth.User')
+        response = CrearLB(request,idfase)
         #print(response)
 
         assert response != None, "No se pudo crear la Linea Base solicitada, el metodo retorna un objeto tipo None"

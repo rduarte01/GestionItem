@@ -64,16 +64,19 @@
                                 {% for item in items %}
                                     {% for a in listaitems %}
                                         {% if item.id_item == a %}
-                                            <br>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{item.id_item}}"
-                                                            id="{{item.id_item}}}">
-                                                        <label class="form-check-label" for="{{item.id_item}}}">
-                                                            <h5>{{ item.nombre }}</h5>
-                                                        </label>
-                                                    </div>
-                                                </td>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="checkbox" value="{{item.id_item}}"
+                                                                id="{{item.id_item}}}">
+                                                            <label class="form-check-label" for="{{item.id_item}}}">
+                                                                <h5>{{ item.nombre }}</h5>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}
