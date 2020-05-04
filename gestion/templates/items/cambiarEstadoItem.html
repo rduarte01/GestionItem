@@ -6,7 +6,7 @@
 <title>Estado del Item</title>
 
 {% block title %}
-    <h1>                <h1><a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>Cambiar estado de proyecto</h1>
+    <h1>                <h1><a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase %}" role="button">Volver Atras</a>Cambiar estado de proyecto</h1>
             <div class="center">
 
               <h4>-------------------------------------------------------------------</h4>
