@@ -2689,7 +2689,22 @@ class CrearLB(CreateView):
                 listaItems.append(i.id_item)
                 print(listaItems)
         
+        item_verificador = Item.objects.last()
+
         contexto['listaitems'] = listaItems
+
+        #if request.user.has_perm('crear_lb',item_verificador.fase.id_Proyecto) and validar_rol_fase('crear_lb',item_verificador.fase,request.user):# se consulta si posee el permiso de crear linea base
+        #   print('tiene el permiso de crear_lb')
+        #else:
+        #   context = {
+        #       "mensaje": "NO SE POSEE EL PERMISO: crear_lb" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+        #       "titulo": "SIN PERMISO",
+        #       "titulo_b1": "",
+        #       "boton1": "",
+        #       "titulo_b2": "SALIR",
+        #       "boton2": "/proyectos/",
+        #   }
+        #   return render(request, 'Error.html', context)
 
         return contexto
 
@@ -2787,8 +2802,23 @@ def modificarEstadoItem(request, pk):
             item.save()
             registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Finalizado ", item.fase.id_Proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
 
-        elif(z == 'Aprobado'):
-            if(item.estado=='Finalizado'):
+        elif(z == 'Aprobado'):#si la seleccion hecha es aprobar el item
+
+            if request.user.has_perm('aprobar_item',item.fase.id_Proyecto) and validar_rol_fase('aprobar_item',item.fase,request.user):# se consulta si posee el permiso de aprobar un item
+                print('tiene el permiso de aprobar_item')
+            else:
+                context = {
+                    "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+                    "titulo": "SIN PERMISO",
+                    "titulo_b1": "",
+                    "boton1": "",
+                    "titulo_b2": "SALIR",
+                    "boton2": "/proyectos/",
+                }
+                return render(request, 'Error.html', context)
+
+
+            if(item.estado=='Finalizado'): # se consulta si el estado previo del item era Finalizado, caso contrario se lanza un mensaje de error
 
                 item.estado = z
                 item.save()
