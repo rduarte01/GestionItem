@@ -6,11 +6,6 @@ Tests
    :undoc-members:
 
 
-.. automodule :: gestion.tests.test_views
-   :members:
-   :undoc-members:
-
-
 .. automodule :: gestion.tests.test_tipo_item
    :members:
    :undoc-members:

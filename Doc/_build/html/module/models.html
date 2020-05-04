@@ -86,8 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests URLS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#tests-views">Tests Views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests</a></li>
 </ul>
 
             
@@ -154,23 +153,23 @@
             
   <div class="section" id="module-gestion.models">
 <span id="models"></span><h1>Models<a class="headerlink" href="#module-gestion.models" title="Enlazar permanentemente con este título">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Atributo">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Atributo</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Atributo</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>»
 Este es el modelo Atributo, que se relaciona con Tipo de Item, y sirve para representa todos los valores
 debe de tener un atributo al crearlo</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Atributo.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Atributo.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Atributo.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Atributo.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.atributo_item_set">
 <code class="sig-name descname">atributo_item_set</code><a class="headerlink" href="#gestion.models.Atributo.atributo_item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -185,52 +184,52 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.choises_data_type">
 <code class="sig-name descname">choises_data_type</code><em class="property"> = (('Decimal', 'Decimal'), ('Date', 'Date'), ('File', 'File'), ('String', 'Cadena'), ('Boolean', 'Boolean'))</em><a class="headerlink" href="#gestion.models.Atributo.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>En esta variable especificamos, las opciones que se van a tener para especificar el tipo de dato del atributo</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.es_obligatorio">
 <code class="sig-name descname">es_obligatorio</code><a class="headerlink" href="#gestion.models.Atributo.es_obligatorio" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>variable que sirve para identificar si un atributo es obligatorio o no</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="gestion.models.Atributo.get_tipo_dato_display">
 <code class="sig-name descname">get_tipo_dato_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: tipo_dato&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo.get_tipo_dato_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.id_atributo">
 <code class="sig-name descname">id_atributo</code><a class="headerlink" href="#gestion.models.Atributo.id_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>variable que sirve para identificar univocamente a cada atributi</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Atributo.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>varible que sirve para almacena el nombre del atributo</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Atributo.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.ti">
 <code class="sig-name descname">ti</code><a class="headerlink" href="#gestion.models.Atributo.ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>variable que sirve para hacer referencia a que tipo de item esta asociado el atributo</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.ti_id">
 <code class="sig-name descname">ti_id</code><a class="headerlink" href="#gestion.models.Atributo.ti_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo.tipo_dato">
 <code class="sig-name descname">tipo_dato</code><a class="headerlink" href="#gestion.models.Atributo.tipo_dato" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>variable que sirve para almacenar el tipo de dato del atributo</p>
@@ -238,54 +237,54 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Atributo_Item">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Atributo_Item</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo_Item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Atributo_Item</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Atributo_Item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MODELO DE ATRIBUTO DE TI, EN EL CUAL SE GUARDARA EL VALOR DEPENDIENDO DEL TI</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Atributo_Item.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Atributo_Item.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Atributo_Item.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Atributo_Item.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo_Item.idAtributoTI">
 <code class="sig-name descname">idAtributoTI</code><a class="headerlink" href="#gestion.models.Atributo_Item.idAtributoTI" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID DEL TI CON EL CUAL SE IDENTIFICARA</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo_Item.idAtributoTI_id">
 <code class="sig-name descname">idAtributoTI_id</code><a class="headerlink" href="#gestion.models.Atributo_Item.idAtributoTI_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo_Item.id_atributo">
 <code class="sig-name descname">id_atributo</code><a class="headerlink" href="#gestion.models.Atributo_Item.id_atributo" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID DEL ATRIBUTO_Item</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo_Item.id_item">
 <code class="sig-name descname">id_item</code><a class="headerlink" href="#gestion.models.Atributo_Item.id_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>EL ITEM AL CUAL ESTA ASIGNADO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo_Item.id_item_id">
 <code class="sig-name descname">id_item_id</code><a class="headerlink" href="#gestion.models.Atributo_Item.id_item_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo_Item.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Atributo_Item.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Atributo_Item.valor">
 <code class="sig-name descname">valor</code><a class="headerlink" href="#gestion.models.Atributo_Item.valor" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>VALOR QUE SERA STRING PERO DEPENDIENDO DEL ATRIBUTO SE PODRA OBTENER EL VALOR REQUERIDO</p>
@@ -293,63 +292,63 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Auditoria">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Auditoria</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Auditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Auditoria</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Auditoria" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>TABLA EN DONDE SE GUARDAN LAS MODIFICACIONES QUE REALIZAN TODOS LOS USUARIOS EN EL SISTEMA</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Auditoria.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Auditoria.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Auditoria.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Auditoria.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Auditoria.accion">
 <code class="sig-name descname">accion</code><a class="headerlink" href="#gestion.models.Auditoria.accion" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA LA ACCION REALIZADA</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Auditoria.fase">
 <code class="sig-name descname">fase</code><a class="headerlink" href="#gestion.models.Auditoria.fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Auditoria.fecha">
 <code class="sig-name descname">fecha</code><a class="headerlink" href="#gestion.models.Auditoria.fecha" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA LA FECHA DE LA ACCION</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Auditoria.id">
 <code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Auditoria.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
 object the first time, the query is executed.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Auditoria.id_proyecto">
 <code class="sig-name descname">id_proyecto</code><a class="headerlink" href="#gestion.models.Auditoria.id_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Auditoria.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Auditoria.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Auditoria.proyecto">
 <code class="sig-name descname">proyecto</code><a class="headerlink" href="#gestion.models.Auditoria.proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>PARA FILTRAR AUDITORIA DE UN PROYECTO EN ESPECIFICO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Auditoria.usuario">
 <code class="sig-name descname">usuario</code><a class="headerlink" href="#gestion.models.Auditoria.usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA EL NOMBRE DE USUARIO</p>
@@ -357,89 +356,89 @@ object the first time, the query is executed.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Comite">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Comite</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Comite" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Comite</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Comite" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>TABLA QUE TENDRA LA RELACION USUARIO-PROYECTO PERO PARA UN COMITE DE UN PROYECTO EN ESPECIFICO</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Comite.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Comite.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Comite.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Comite.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Comite.id">
 <code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Comite.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID AUTOMATICO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Comite.id_proyecto">
 <code class="sig-name descname">id_proyecto</code><a class="headerlink" href="#gestion.models.Comite.id_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID DEL PROYECTO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Comite.id_user">
 <code class="sig-name descname">id_user</code><a class="headerlink" href="#gestion.models.Comite.id_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID DEL USUARIO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Comite.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Comite.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.FASE_ROL">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">FASE_ROL</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.FASE_ROL" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">FASE_ROL</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.FASE_ROL" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>TABLA QUE RELACIONARA LA FASE CON EL ROL</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.FASE_ROL.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.FASE_ROL.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.FASE_ROL.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.FASE_ROL.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.FASE_ROL.id">
 <code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.FASE_ROL.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
 object the first time, the query is executed.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.FASE_ROL.id_fase">
 <code class="sig-name descname">id_fase</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID FASE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.FASE_ROL.id_fase_id">
 <code class="sig-name descname">id_fase_id</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_fase_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.FASE_ROL.id_rol">
 <code class="sig-name descname">id_rol</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_rol" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID DEL ROL</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.FASE_ROL.id_rol_id">
 <code class="sig-name descname">id_rol_id</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_rol_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.FASE_ROL.id_usuario">
 <code class="sig-name descname">id_usuario</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related object on the forward side of a many-to-one or
@@ -452,53 +451,53 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.FASE_ROL.id_usuario_id">
 <code class="sig-name descname">id_usuario_id</code><a class="headerlink" href="#gestion.models.FASE_ROL.id_usuario_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.FASE_ROL.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.FASE_ROL.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Fase">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Fase</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Fase</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Se tiene el modelo fase, el cual será utilizado en el proyecto para albergar a los items y poder
 dividirlos en etapas.
 Las fases tendrán dos estados: Abierta y Cerrada, por defecto adoptará el estado de Abierto.</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Fase.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Fase.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Fase.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Fase.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.choises_data_type">
 <code class="sig-name descname">choises_data_type</code><em class="property"> = (('Abierta', 'Abierta'), ('Cerrada', 'Cerrada'))</em><a class="headerlink" href="#gestion.models.Fase.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>DEFINE LOS ESTADOS DEL MODELO FASE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.descripcion">
 <code class="sig-name descname">descripcion</code><a class="headerlink" href="#gestion.models.Fase.descripcion" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA LA DESCRIPCION DE LA FASE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.estado">
 <code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.Fase.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA EL ESTADO DE LA FASE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.fase_rol_set">
 <code class="sig-name descname">fase_rol_set</code><a class="headerlink" href="#gestion.models.Fase.fase_rol_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -513,29 +512,29 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="gestion.models.Fase.get_estado_display">
 <code class="sig-name descname">get_estado_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: estado&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Fase.get_estado_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.id_Fase">
 <code class="sig-name descname">id_Fase</code><a class="headerlink" href="#gestion.models.Fase.id_Fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID DE LA FASE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.id_Proyecto">
 <code class="sig-name descname">id_Proyecto</code><a class="headerlink" href="#gestion.models.Fase.id_Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>SSE RELACIONA LA FASE CON EL PROYECTO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.id_Proyecto_id">
 <code class="sig-name descname">id_Proyecto_id</code><a class="headerlink" href="#gestion.models.Fase.id_Proyecto_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.item_set">
 <code class="sig-name descname">item_set</code><a class="headerlink" href="#gestion.models.Fase.item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -550,24 +549,24 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Fase.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA EL NOMBRE DE LA FASE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Fase.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.ordering">
 <code class="sig-name descname">ordering</code><em class="property"> = ['id_Fase']</em><a class="headerlink" href="#gestion.models.Fase.ordering" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ORDENA POR ID DE FASE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.tipoitem_set">
 <code class="sig-name descname">tipoitem_set</code><a class="headerlink" href="#gestion.models.Fase.tipoitem_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -582,13 +581,13 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.verbose_name">
 <code class="sig-name descname">verbose_name</code><em class="property"> = 'Fase'</em><a class="headerlink" href="#gestion.models.Fase.verbose_name" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>NOMBRE DEL MODELO DENTRO DE ADMIN</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Fase.verbose_name_plural">
 <code class="sig-name descname">verbose_name_plural</code><em class="property"> = 'Fases'</em><a class="headerlink" href="#gestion.models.Fase.verbose_name_plural" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>NOMBRE DEL MODELO DENTRO DE ADMIN</p>
@@ -596,27 +595,27 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Item">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Item</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Item</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MODELO DE ITEM</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Item.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Item.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Item.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Item.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.actual">
 <code class="sig-name descname">actual</code><a class="headerlink" href="#gestion.models.Item.actual" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>SI ESTA EN TRUE SERA QUE EL ITEM ESTA ACTIVO Y NO UNA VERSION ANTERIOR</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.atributo_item_set">
 <code class="sig-name descname">atributo_item_set</code><a class="headerlink" href="#gestion.models.Item.atributo_item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -631,53 +630,53 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.choises_data_type">
 <code class="sig-name descname">choises_data_type</code><em class="property"> = (('Creado', 'Creado'), ('Aprobado', 'Aprobado'), ('Finalizado', 'Finalizado'), ('En revision', 'En revision'))</em><a class="headerlink" href="#gestion.models.Item.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ESTADOS POSIBLES DE CADA UNO DE LOS ITEMS DEL PROYECTO, POR DEFECTO, AL CREAR UN ITEM TENDRA ESTADO CREADO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.costo">
 <code class="sig-name descname">costo</code><a class="headerlink" href="#gestion.models.Item.costo" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>COSTO DEL ITEM</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.descripcion">
 <code class="sig-name descname">descripcion</code><a class="headerlink" href="#gestion.models.Item.descripcion" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>DESCRIPCION DEL ITEM</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.estado">
 <code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.Item.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ATRIBUTO CORRESPONDIENTE AL ESTADO QUE ADOPTARÁ UN DETERMINADO ITEM, EL MISMO VARÍA DURANTE EL TRANSCURSO DEL PROYECTO SEGÚN LO QUE EL USUARIO DECIDA</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.fase">
 <code class="sig-name descname">fase</code><a class="headerlink" href="#gestion.models.Item.fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>FASE  A LA CUAL PERTENECE EL ITEM</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.fase_id">
 <code class="sig-name descname">fase_id</code><a class="headerlink" href="#gestion.models.Item.fase_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="gestion.models.Item.get_estado_display">
 <code class="sig-name descname">get_estado_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: estado&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Item.get_estado_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.id_item">
 <code class="sig-name descname">id_item</code><a class="headerlink" href="#gestion.models.Item.id_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>GUARDA EL ID DEL ITEM</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.lb_item_set">
 <code class="sig-name descname">lb_item_set</code><a class="headerlink" href="#gestion.models.Item.lb_item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -692,124 +691,124 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Item.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>NOMBRE DEL ITEM</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Item.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.ti">
 <code class="sig-name descname">ti</code><a class="headerlink" href="#gestion.models.Item.ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>TIPO DE ITEM QUE SE ASIGNARA AL ITEM</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Item.ti_id">
 <code class="sig-name descname">ti_id</code><a class="headerlink" href="#gestion.models.Item.ti_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="gestion.models.Item.validar_ti_item">
-<em class="property">static </em><code class="sig-name descname">validar_ti_item</code><span class="sig-paren">(</span><em class="sig-param">id_ti</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Item.validar_ti_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">validar_ti_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id_ti</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Item.validar_ti_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.LB_item">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">LB_item</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.LB_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">LB_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.LB_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ESTA CLASE SERÁ UTILIZADA PARA RELACIONAR UNA LINEA BASE CON UN ITEM, ASI TENDRÁ SOLO EL ID DE UN ITEM Y EL ID DE LA
 LINEA BASE A LA CUAL PERTENECE, UN ATRIBUTO ADICIONAL SERÁ EL ID DE LA CLASE LB_item.</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.LB_item.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.LB_item.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.LB_item.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.LB_item.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LB_item.id">
 <code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.LB_item.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID PERTENECIENTE A LA FASE LB_item</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LB_item.item">
 <code class="sig-name descname">item</code><a class="headerlink" href="#gestion.models.LB_item.item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID PERTENECIENE A LA CLASE Item</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LB_item.item_id">
 <code class="sig-name descname">item_id</code><a class="headerlink" href="#gestion.models.LB_item.item_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LB_item.lb">
 <code class="sig-name descname">lb</code><a class="headerlink" href="#gestion.models.LB_item.lb" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID PERTENECIENTE A LA CLASE LineaBase</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LB_item.lb_id">
 <code class="sig-name descname">lb_id</code><a class="headerlink" href="#gestion.models.LB_item.lb_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LB_item.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.LB_item.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.LineaBase">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">LineaBase</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.LineaBase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">LineaBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.LineaBase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>HACE REFERENCIA A UN CONJUNTO DETERMINADO DE ITEMS APROBADOS EN UNA FASE, LOS CUALES PASAN A FORMAR PARTE DE UNA LINEA BASE, EL USUARIO ES QUIEN DECIDE
 EL MOMENTO EN EL CUAL DESEA QUE ESTOS ITEMS SE AGRUPEN DE ESTA MANERA, UNA VEZ MÁS SEÑALANDO QUE LOS MISMOS DEBEN ESTAR APROBADOS OBLIGATORIAMENTE.</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.LineaBase.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.LineaBase.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.LineaBase.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.LineaBase.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LineaBase.choices_data_type">
 <code class="sig-name descname">choices_data_type</code><em class="property"> = (('Cerrada', 'Cerrada'), ('Rota', 'Rota'), ('Comprometida', 'Comprometida'))</em><a class="headerlink" href="#gestion.models.LineaBase.choices_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>POSIBLES OPCIONES DE ESTADO DE LAS LINEAS BASE, POR DEFECTO LA LB TENDRÁ ESTADO CERRADA</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LineaBase.estado">
 <code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.LineaBase.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>HACE REFERENCIA A UN ESTADO EN CONCRETO DE UNA DETERMINADA LINEA BASE, LA MISMA TENDRÁ POR DEFECTO EL ESTADO CERRADA</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="gestion.models.LineaBase.get_estado_display">
 <code class="sig-name descname">get_estado_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: estado&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.LineaBase.get_estado_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LineaBase.idLB">
 <code class="sig-name descname">idLB</code><a class="headerlink" href="#gestion.models.LineaBase.idLB" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>HACE REFERENCIA AL ID QUE VA A LLEVAR CADA LINEA BASE EN UNA FASE DETERMINADA, CABE DESTACAR QUE EL ID ES UNICO E IRREPETIBLE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LineaBase.lb_item_set">
 <code class="sig-name descname">lb_item_set</code><a class="headerlink" href="#gestion.models.LineaBase.lb_item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -824,86 +823,86 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LineaBase.nombreLB">
 <code class="sig-name descname">nombreLB</code><a class="headerlink" href="#gestion.models.LineaBase.nombreLB" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>HACE REFERENCIA AL NOMBRE QUE LLEVARA LA LINEA BASE EN UNA FASE DETERMINADA, ASI COMO EL ID, TAMBIÉN EL NOMBRE ES UNICO E IRREPETIBLE</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.LineaBase.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.LineaBase.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Permisos">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Permisos</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Permisos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Permisos</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Permisos" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Modelo creado especificamente para la creacion
 de permisos dentro de un proyecto, para la asignacion
 a usuarios quienes no son gerentes del proyecto</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Permisos.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Permisos.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Permisos.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Permisos.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Permisos.id">
 <code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Permisos.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
 object the first time, the query is executed.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Permisos.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Permisos.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Proyecto">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Proyecto</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Proyecto</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>PRIMARY_KEY AUTOMATICO A MEDIDA QUE SE AGREGA PROYECTOS
 MODELO DE PROYECTO GUARDARA EL NOMBRE, DESCRIPCION, LISTA DE USUARIOS AÑADIDOS A EL
 LA LISTA DE FASES QUE PERTENECEN AL MISMO,
 UN ESTADO QUE SERA IDENTIFICADO EN LA BD COMO
 POR ULTIMO SE TENDRA LA LISTA DE ROLES QUE PERTENECEN AL PROYECTO</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Proyecto.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Proyecto.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Proyecto.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Proyecto.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Proyecto.choises_data_type">
 <code class="sig-name descname">choises_data_type</code><em class="property"> = (('CREADO', 'CREADO'), ('INICIADO', 'INICIADO'), ('FINALIZADO', 'FINALIZADO'), ('CANCELADO', 'CANCELADO'))</em><a class="headerlink" href="#gestion.models.Proyecto.choises_data_type" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>DEFINE LAS OPCIONES DE LOS ESTADOS DEL PROYECTOS</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Proyecto.descripcion">
 <code class="sig-name descname">descripcion</code><a class="headerlink" href="#gestion.models.Proyecto.descripcion" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>INFORMACION REFERENTE AL PROYECTO A CREAR</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Proyecto.estado">
 <code class="sig-name descname">estado</code><a class="headerlink" href="#gestion.models.Proyecto.estado" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>EL ESTADO DEL PROYECTO SEGUN AVANCE ESTARA VARIANDO, POR DEFAULT QUEDA EN CREADO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Proyecto.fase_set">
 <code class="sig-name descname">fase_set</code><a class="headerlink" href="#gestion.models.Proyecto.fase_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -918,85 +917,85 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="gestion.models.Proyecto.get_estado_display">
 <code class="sig-name descname">get_estado_display</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">field=&lt;django.db.models.fields.CharField: estado&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Proyecto.get_estado_display" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Proyecto.id_proyecto">
 <code class="sig-name descname">id_proyecto</code><a class="headerlink" href="#gestion.models.Proyecto.id_proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>SERA EL IDENTIFICADOR PARA DIFERENCIAR EN LA BD</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Proyecto.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.Proyecto.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>SERA EL NOMBRE DEL PROYECTO A CREAR</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Proyecto.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Proyecto.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Relacion">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Relacion</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Relacion" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Relacion</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Relacion" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MODELO DE RELACION DE ITEMS</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Relacion.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Relacion.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Relacion.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Relacion.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Relacion.fin_item">
 <code class="sig-name descname">fin_item</code><a class="headerlink" href="#gestion.models.Relacion.fin_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ITEM FIN DE RELACION</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Relacion.id_relacion">
 <code class="sig-name descname">id_relacion</code><a class="headerlink" href="#gestion.models.Relacion.id_relacion" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID DE RELACION</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Relacion.inicio_item">
 <code class="sig-name descname">inicio_item</code><a class="headerlink" href="#gestion.models.Relacion.inicio_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ITEM DE INICIO DE RELACION</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Relacion.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Relacion.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.TipoItem">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">TipoItem</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.TipoItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">TipoItem</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.TipoItem" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>»
 Este es el modelo Tipo de  item, con dos atributos id como primary key  y nombre como string</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.TipoItem.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.TipoItem.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.TipoItem.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.TipoItem.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.TipoItem.atributo_set">
 <code class="sig-name descname">atributo_set</code><a class="headerlink" href="#gestion.models.TipoItem.atributo_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -1011,24 +1010,24 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.TipoItem.fase">
 <code class="sig-name descname">fase</code><a class="headerlink" href="#gestion.models.TipoItem.fase" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>atributpp que sirve para hacer referencia de a que fase corresponde el tipo de  item</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.TipoItem.fase_id">
 <code class="sig-name descname">fase_id</code><a class="headerlink" href="#gestion.models.TipoItem.fase_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.TipoItem.id_ti">
 <code class="sig-name descname">id_ti</code><a class="headerlink" href="#gestion.models.TipoItem.id_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>atributo que sive para identificar univocamente a cada tipo Item</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.TipoItem.item_set">
 <code class="sig-name descname">item_set</code><a class="headerlink" href="#gestion.models.TipoItem.item_set" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
@@ -1043,59 +1042,59 @@ many-to-one relation.</p>
 class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.TipoItem.nombre">
 <code class="sig-name descname">nombre</code><a class="headerlink" href="#gestion.models.TipoItem.nombre" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>atributo que sirve para para almacenar el nombre del tipo de item</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.TipoItem.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.TipoItem.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.User_Proyecto">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">User_Proyecto</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.User_Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">User_Proyecto</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.User_Proyecto" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MODELO PROYECTO CON USER EN DONDE SE SOLUCIONA LA RELACION MUCHOS A MUCHOS, GUARDA
 LAS RELACIONES ENTRE USUARIOS Y PROYECTOS</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.User_Proyecto.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.User_Proyecto.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.User_Proyecto.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.User_Proyecto.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.User_Proyecto.activo">
 <code class="sig-name descname">activo</code><a class="headerlink" href="#gestion.models.User_Proyecto.activo" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>SI EL USUARIO ESTA ACTIVO EN EL PROYECTO, CASO CONTRARIO YA NO PERTENECE AL MISMO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.User_Proyecto.id">
 <code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.User_Proyecto.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
 object the first time, the query is executed.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.User_Proyecto.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.User_Proyecto.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.User_Proyecto.proyecto_id">
 <code class="sig-name descname">proyecto_id</code><a class="headerlink" href="#gestion.models.User_Proyecto.proyecto_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>PROYECTO RELACIONADO CON USER</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.User_Proyecto.user_id">
 <code class="sig-name descname">user_id</code><a class="headerlink" href="#gestion.models.User_Proyecto.user_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>USER RELACIONADO CON PROYECTO</p>
@@ -1103,84 +1102,84 @@ object the first time, the query is executed.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Usuario">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Usuario</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Usuario</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>MODELO QUE SE UTILIZA PARA ALMACENAR EL ESTADO DEL USUARIO Y SU PERMISO</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Usuario.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Usuario.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Usuario.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Usuario.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Usuario.esta_aprobado">
 <code class="sig-name descname">esta_aprobado</code><a class="headerlink" href="#gestion.models.Usuario.esta_aprobado" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>VARIABLE QUE INDICA ESTADO DEL USUARIO EN EL SISTEMA</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Usuario.id">
 <code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Usuario.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
 object the first time, the query is executed.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Usuario.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Usuario.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Usuario.user">
 <code class="sig-name descname">user</code><a class="headerlink" href="#gestion.models.Usuario.user" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>HACE REFERENCIA AL MODELO USER DE DJANGO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Usuario.user_id">
 <code class="sig-name descname">user_id</code><a class="headerlink" href="#gestion.models.Usuario.user_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="gestion.models.Versiones">
-<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Versiones</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Versiones" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gestion.models.</code><code class="sig-name descname">Versiones</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.models.Versiones" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>TABLA DE VERSIONES EL CUAL RELACIONA LA VERSION DEL ITEM</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Versiones.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#gestion.models.Versiones.DoesNotExist" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="gestion.models.Versiones.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#gestion.models.Versiones.MultipleObjectsReturned" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Versiones.id">
 <code class="sig-name descname">id</code><a class="headerlink" href="#gestion.models.Versiones.id" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ID AUTOMATICO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Versiones.id_Version">
 <code class="sig-name descname">id_Version</code><a class="headerlink" href="#gestion.models.Versiones.id_Version" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>VERSION DEL ITEM</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Versiones.id_item">
 <code class="sig-name descname">id_item</code><a class="headerlink" href="#gestion.models.Versiones.id_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>ITEM ASIGNADO</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="gestion.models.Versiones.objects">
 <code class="sig-name descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#gestion.models.Versiones.objects" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>

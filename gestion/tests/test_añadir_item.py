@@ -91,7 +91,7 @@ class Test_Crear_Item(TestCase):
 
         mixer.blend('gestion.TipoItem', nombre='ti', fase=fase) # restriccion
 
-        path = reverse('gestion:agg_listar_tipo_item', kwargs={'Fase': fase.id_Fase})
+        path = reverse('gestion:agg_listar_tipo_item', kwargs={'id_fase': fase.id_Fase})
         request = RequestFactory().get(path)
         request.user = mixer.blend(User)
 

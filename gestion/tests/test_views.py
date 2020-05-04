@@ -1,3 +1,4 @@
+'''
 from django.urls import reverse
 from django.test import RequestFactory
 from django.contrib.auth.models import User, AnonymousUser
@@ -10,8 +11,8 @@ from django.contrib.contenttypes.models import ContentType
 
 @pytest.mark.django_db
 class TestViews(TestCase):
-    
-        
+
+
     def test_perfil_authenticated(self):
         """
         Comprueba si se muestra el perfil del usuario solicitante.
@@ -27,8 +28,8 @@ class TestViews(TestCase):
         response  = perfil(request)
         print(response)
         assert response.status_code == 302, "No se ha encontrado la pagina que muestra el perfil del usuario, codigo de respuesta distinto a 302"
-    
-    
+
+
     #path('AggUser/<int:pk>', views.AggUser, name='AggUser'),
     def test_Agg_User(self):
         """
@@ -67,7 +68,7 @@ class TestViews(TestCase):
         response = creacionProyecto(request)
         assert response.status_code == 200
         assert proyecto == proyecto1, "No se ha creado el proyecto"
-    
+
     #path('crear_fase/', views.crearFase, name='crearFase'),
     def test_creacionFase(self):
         """
@@ -84,12 +85,12 @@ class TestViews(TestCase):
             descripcion = 'Esta es la fase 1',
             id_Proyecto = Proyecto.objects.get(id_proyecto = proy.id_proyecto)
         )
-            
+
         mixer.blend('gestion.Fase')
         path = reverse('gestion:crearFase')
         request = RequestFactory().get(path)
 
-        response = crearFase(request) 
+        response = crearFase(request)
 
         assert response.status_code == 200, "No se ha creado la fase, codigo de respuesta http distinto a 200"
 
@@ -98,7 +99,7 @@ class TestViews(TestCase):
         """
         Comprueba que se agregue correctamente un usuario a un proyecto. Recibe el ID de un usuario y muestra los usuarios que
         pueden ser añadidos a él.
-        return: Si no se agrega un usuario a un proyecto se lanza un mensaje de error, caso contrario se omiten mensajes. 
+        return: Si no se agrega un usuario a un proyecto se lanza un mensaje de error, caso contrario se omiten mensajes.
         """
         user = User.objects.create(
             email = 'marcos@marcos.gmail',
@@ -121,7 +122,7 @@ class TestViews(TestCase):
         response = agregarUsuarios(request, pk = 1)
 
         assert response.status_code == 200, "No se ha agregado el usuario solicitado al proyecto, codigo de respuesta http distinto a 200"
-        
+
     #path('crear/atributo/<str:nombre_ti>/<int:cantidad_atributos>/<int:fase_id>',views.add_atribute,name='add_atribute'),
 
     def test_add_atributo(self):
@@ -139,10 +140,10 @@ class TestViews(TestCase):
             tipo_dato = 'DECIMAL',
             ti = TipoItem.objects.get(id_ti = tipoitem1.id_ti)
         )
-        
+
         atributo1 = Atributo.objects.last()
 
-        assert atributo == atributo1 
+        assert atributo == atributo1
 
     def test_usuario_aprobado(self):
         """
@@ -179,12 +180,12 @@ class TestViews(TestCase):
 
         usuario = Usuario.objects.create(
             user = User.objects.get(id = user1.id)
-        ) 
+        )
 
         usuarios = Usuario.objects.filter(esta_aprobado = True)
 
         assert usuarios.count() == 0, "No se encuentra la totalidad de usuarios no aprobados"
-    
+
     def test_estado_proyecto(self):
         """
         Comprueba si se realiza correctamente la modificacion de estado de un proyecto determinado
@@ -211,13 +212,13 @@ class TestViews(TestCase):
 
 #def importar_tipo_item(request,id_fase):
 #path('importar/tipo/item/fase/<int:id_fase>', views.importar_tipo_item, name='importar_tipo_item'),
-   
+
     def test_importar_tipo_de_item(self):
         """
         Comprueba si se ha llevado a cabo correctamente la importacion de un tipo de item en una fase determinada.
         El metodo importar_tipo_item recibe como parametros un request y un id de una fase
         return: Si no se ha llevado a cabo correctamente la importacion retorna un mensaje de error, caso contrario no se visualiza nada.
-        """   
+        """
         proyecto = Proyecto.objects.create(
             nombre = 'Proyecto1',
             descripcion = 'Este es el proyecto1'
@@ -229,17 +230,17 @@ class TestViews(TestCase):
             id_Proyecto = Proyecto.objects.get(id_proyecto = proyecto.id_proyecto)
         )
         print(Fase.objects.get(id_Fase = fase2.id_Fase))
-        
+
         mixer.blend('gestion.TipoItem')
         path = reverse('gestion:importar_tipo_item', kwargs = {'id_fase': 4})
         request = RequestFactory().post(path)
 
         response = importar_tipo_item(request, id_fase = 4)
-        print(response)    
+        print(response)
         assert response.status_code == 302, "No se ha podido importar un tipo de item, el codigo de respuesta Http es distinto a 302"
 
 # def menu(request):
-# path('menu/', views.menu, name='menu'),    
+# path('menu/', views.menu, name='menu'),
     def test_menu(self):
         """
         Comprueba si se ha llevado a cabo correctamente el montado de la vista menu del sistema.
@@ -250,12 +251,12 @@ class TestViews(TestCase):
             email = 'usuario1@usuario1.com',
             password = 'usuario1123'
         )
-        
+
         usuario = Usuario.objects.create(
             user = User.objects.get(id = user1.id)
         )
-        
-       path = reverse('gestion:menu')
+
+        path = reverse('gestion:menu')
         request = RequestFactory().get(path)
 
         request.user = User.objects.last()
@@ -289,7 +290,7 @@ class TestViews(TestCase):
 
     def test_modificar_rol(self):
         """
-        Comprueba si se realiza correctamente la modificacion de un rol. Se compara con None el resultado ya que las funciones 
+        Comprueba si se realiza correctamente la modificacion de un rol. Se compara con None el resultado ya que las funciones
         internas devuelven direcciones de memoria.
         return: Si no se lleva a cabo la modificacion de un rol devuelve un mensaje de error, caso contrario no se visualiza nada.
         """
@@ -302,3 +303,5 @@ class TestViews(TestCase):
         print(response)
 
         assert response != None, "No se ha podido realizar la operacion, retorno de funcion igual a None, debe retornar una direccion de memoria"
+
+'''
