@@ -10,9 +10,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0!nhn#eryynq7@c7tl*qqg^g87!5o3k_-d1hzv7!dj^+74ditz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -33,9 +30,9 @@ INSTALLED_APPS = [
 # Auth0 settings
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove trailing slash from routes
 #modificar con mi app
-SOCIAL_AUTH_AUTH0_DOMAIN = 'ruben-dev.auth0.com'
-SOCIAL_AUTH_AUTH0_KEY = 'q8WImi9pV1hGFO62esYPTyhtoBey1Tlk'
-SOCIAL_AUTH_AUTH0_SECRET = '9sruysUq2lR46e5UmOzMgMmrl9gLaFCMMUP7dq-MpxB-PXYE8foxhg2bHVt8jsAp'
+SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-bmi8oyu1.auth0.com'
+SOCIAL_AUTH_AUTH0_KEY = 'YgcE1EravfahIBTJFWC0QOW8vPEugXYs'
+SOCIAL_AUTH_AUTH0_SECRET = 'RazqUlPx9XgddxLAeDDFab5zaA5ZEnv3x6GZ5ZEfBCox1jc8CYG7CNBc-32LzsFs'
 SOCIAL_AUTH_AUTH0_SCOPE = [
     'openid',
     'profile',
@@ -86,24 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'GestionItem.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-
-"""
-DATOS CAMBIADOS
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prueba2',
-        'USER':'postgres',
-        'PASSWORD':'root',
-        'HOST':'127.0.0.1',
-        'PORT':'5432',
-    }
-}
 
 
 
