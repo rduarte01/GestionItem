@@ -2679,6 +2679,14 @@ def CrearLB(request,pk):
 
 
     form = LBForm(request.POST)
+    """
+    contexto = super(CrearLB, self).get_context_data(**kwargs)
+    idfase = self.kwargs.get('pk', None)
+    contexto['fase'] = idfase
+    #print(idfase)
+    ista_items = Item.objects.filter(fase = idfase, estado = 'Aprobado')
+    contexto['items'] = lista_items
+    """
 
     idfase = pk
     lista_items = Item.objects.filter(fase=idfase, estado='Aprobado')
