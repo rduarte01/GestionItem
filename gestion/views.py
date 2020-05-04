@@ -1356,16 +1356,16 @@ def crearItem(request,Faseid):
         return render(request, 'Error.html', context)
 
 
-    if(fase1SinItems(fases,fase)==True):# si no es de la primera fase y la F1 no tiene items muestra error
-        context = {
-            "mensaje": "LA FASE ANTERIOR NO CONTIENE ITEMS POR ENDE NO PODRA RELACIONAR CON LA PRIMERA FASE, CREE ITEM EN LA FASE ANTERIOR A ESTA Y LUEGO INTENTE NUEVAMENTE",
-            "titulo": "NO HAY ITEMS EN LA FASE ANTERIOR",
-            "titulo_b1": "",
-            "boton1": "",
-            "titulo_b2": "VOLVER A DETALLES DE LA FASE",
-            "boton2": "/detallesFase/"+str(Faseid),
-        }
-        return render(request, 'Error.html', context)
+    #if(fase1SinItems(fases,fase)==True):# si no es de la primera fase y la F1 no tiene items muestra error
+    #    context = {
+    #        "mensaje": "LA FASE ANTERIOR NO CONTIENE ITEMS POR ENDE NO PODRA RELACIONAR CON LA PRIMERA FASE, CREE ITEM EN LA FASE ANTERIOR A ESTA Y LUEGO INTENTE NUEVAMENTE",
+    #        "titulo": "NO HAY ITEMS EN LA FASE ANTERIOR",
+    #        "titulo_b1": "",
+    #        "boton1": "",
+    #        "titulo_b2": "VOLVER A DETALLES DE LA FASE",
+    #        "boton2": "/detallesFase/"+str(Faseid),
+    #    }
+    #    return render(request, 'Error.html', context)
 
     if (hayTiFase(fase)):  # muestra mensaje de error si no hay TI no se puede crear item
         context = {
