@@ -1193,7 +1193,9 @@ def validar_usuario(user):
     '''
     if (User.objects.count() == 2):
         add_permission_admin(user, True)
-        Usuario.objects.create(esta_aprobado=True,user_id=user.id)
+        usuario = Usuario.objects.filter(user_id=user.id).exists()
+        if not usuario:
+            Usuario.objects.create(esta_aprobado=True,user_id=user.id)
 
     usuario=Usuario.objects.filter(user_id=user.id).exists()
     if not usuario:
