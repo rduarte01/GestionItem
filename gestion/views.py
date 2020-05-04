@@ -1505,6 +1505,8 @@ def aggAtributos(request,idTI):
                     return render(request, 'Error.html', context)
         list=["Decimal","Boolean","File","String","Date"]
         for ini in range(len(list)): #SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
+            print('este es el valor de ini'+str(ini))
+            print(list[ini])
             try:
                 tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=list[ini])
                 x=request.POST.getlist(list[ini])
@@ -1635,7 +1637,7 @@ def relacionarItem(request,id_proyecto,id_item):
         return HttpResponse(request, "id de TI invalida",status=400)
 
 
-    if validar_permiso(request.user,"is_gerente",proyecto) or request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',itemActual.fase):
+    if validar_permiso(request.user,"is_gerente",proyecto) or request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',itemActual.fase,request.user):
         print('tiene el permiso de crear_item')
     else:
         context = {
@@ -2755,7 +2757,7 @@ class CrearLB(CreateView):
             p.save()
 
 
-        registrarAuditoriaProyecto(request.user, "Se ha creado una LB con nombre " + nombrelb, fase.id_Proyecto, fase.id_Proyecto.nombre, fase.nombre)
+        registrarAuditoriaProyecto(request.user, "Se ha creado una LB con nombre " + nombrelb, item.fase.id_Proyecto.id_proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
 
 
     #nombreLB = LineaBase1Fase2
@@ -2796,11 +2798,11 @@ def modificarEstadoItem(request, pk):
         if z == 'Finalizado':
             item.estado = z
             item.save()
-            registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Finalizado ", item.fase.id_Proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
+            registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Finalizado ", item.fase.id_Proyecto.id_proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
 
         elif(z == 'Aprobado'):#si la seleccion hecha es aprobar el item
 
-            if request.user.has_perm('aprobar_item',item.fase.id_Proyecto) and validar_rol_fase('aprobar_item',item.fase,request.user):# se consulta si posee el permiso de aprobar un item
+            if validar_permiso(request.user,"is_gerente",item.fase.id_Proyecto) or request.user.has_perm('aprobar_item',item.fase.id_Proyecto) and validar_rol_fase('aprobar_item',item.fase,request.user):# se consulta si posee el permiso de aprobar un item
                 print('tiene el permiso de aprobar_item')
             else:
                 context = {
@@ -2818,7 +2820,8 @@ def modificarEstadoItem(request, pk):
 
                 item.estado = z
                 item.save()
-                registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Aprobado ", item.fase.id_Proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
+                registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Aprobado ", item.fase.id_Proyecto.id_proyecto
+                                           , item.fase.id_Proyecto.nombre, item.fase.nombre)
             else:
                 context = {
                     "mensaje": "EL ITEM DEBE ESTAR FINALIZADO PARA PODER SER APROBADO",
