@@ -1676,6 +1676,7 @@ def relacionarItem(request,id_proyecto,id_item):
 
         if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
             #VERIFICAR SI TIENE RELACION CON LA F1
+            '''
             if(primeraFase(id_proyecto, id_item, some_var)==True):
                 context = {
                     "mensaje": "EL ITEM NO TIENE RELACION CON LA PRIMERA FASE POR ENDE NO ES VALIDO, FAVOR VOLVER A REALIZAR RELACIONES Y VOLVER CONSISTENTE EL ITEM ",
@@ -1686,6 +1687,7 @@ def relacionarItem(request,id_proyecto,id_item):
                     "boton2": "/itemCancelado/",
                 }
                 return render(request, 'Error.html', context)
+            '''
 
         #VERIFICAR SI SE GENERAN CICLOS--------- INCONSISTENCIAS
 
