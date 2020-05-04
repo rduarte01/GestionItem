@@ -1662,7 +1662,7 @@ def relacionarItem(request,id_proyecto,id_item):
         item = Item.objects.filter(id_item=id_item)
 
         #VERIFICAR SI ES DE LA PRIMERA FASE SIN RELACIONES, SINO MOSTRAR ERROR
-        if(lis==some_var):
+'''        if(lis==some_var):
             if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
                 context = {
                     "mensaje": "EL ITEM NO ES DE LA PRIMERA FASE, POR ENDE DEBE DE CONTAR CON RELACION Y TENER DE FORMA DIRECTA O INDIRECTA RELACION CON LA PRIMERA FASE DEL PROYECTO ",
@@ -1673,7 +1673,7 @@ def relacionarItem(request,id_proyecto,id_item):
                     "boton2": "/itemCancelado/",
                 }
                 return render(request, 'Error.html', context)
-
+'''
         if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
             #VERIFICAR SI TIENE RELACION CON LA F1
             '''
