@@ -101,9 +101,9 @@ def estadoProyecto(request,pk):
 
             if (comite == None):
                 context = {
-                    "mensaje": "EL NUMERO DE USUARIOS EN EL COMITE DEBE DE SER IMPAR Y MAYOR A UNO",
-                    "titulo": "ERROR AL SELECCIONAR",
-                    "titulo_b1": "SELECCIONAR USUARIOS",
+                    "mensaje": "CREE EL COMITE DE CAMBIO PARA CONTINUAR",
+                    "titulo": "ERROR NO POSEE COMITE",
+                    "titulo_b1": "CREAR COMITE",
                     "boton1": "/AggComite/" + str(pk),
                     "titulo_b2": "CANCELAR",
                     "boton2": "/detallesProyecto/" + str(pk),
@@ -433,6 +433,7 @@ def get_user(request,pk):
         y cambiar el estado de un usario en especifico recibido como parametro,
         solo se permitira realizar esta accion al administrador de sistema, en caso de que el usuario
         no tenga dicho permiso se mostrara un mensaje de error
+
     :param request:
     :param pk:
     :return:
@@ -545,6 +546,7 @@ def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
         atributos creado es especificado como tercer parametro en la funcion, la funcion solo creara el tipo
         de item, si todos los atributos recibidos son validos, en caso contrario mostrara
         un mensaje de error al usuario.
+
     :param request:
     :param nombre_ti:
     :param cantidad_atributos:
@@ -590,6 +592,7 @@ def recoger_datos_tipo_item(my_form):
     '''
     Sirve para recoger los datos despues de un POST en un formulario de tipo de item, retorna el
         valor del nombre del tipo de item y la cantidad de atributos del tipo de item
+
     :param my_form:
     :return: String,Integer
     '''
@@ -602,6 +605,7 @@ def recoge_datos_atributo(form):
     '''
     Sirve para recoger los datos despues de un POST en un formulario de atributo, retorna el
             valor del nombre del atributo, si es obligatorio, y el tipo de dato
+
     :param form:
     :return: String, boolean,String
     '''
@@ -614,6 +618,7 @@ def recoger_datos_usuario_settings(form):
     '''
     Sirve para recoger los datos despues de un POST en un formulario de UsuarioSetting, retorna tres valores
         dos booleanos para determinar si es gerente y administrador y el estado del usuario
+
     :param form:
     :return: Boolean ,Boolean,String
     '''
@@ -1010,13 +1015,15 @@ def get_fase_proyecto(request,id_fase):
     return render(request,'opcionesFase.html',contexto)
 
 def importar_tipo_item(request,id_fase):
-    '''esta funcion permite importar tipos de item en un proyecto, para ello lista un conjunto
-     de tipos de item , de los tipos de items
+    '''
+    esta funcion permite importar tipos de item en un proyecto, para ello lista un conjunto
+    de tipos de item , de los tipos de items
     disponibles para importar solo se muestran aquellos  aquellos tipos de items de otros proyectos en
     donde el usuario tambien este asociado, tambien filtra los tipos de items cuyo nombre ya no exista en el
     proyecto a donde se quiere importar
     La funcion solo permite importar tipos de items a  a los gerente de Proyecto  Si esta restriccion no se cumple
     se mostrara un mensaje (explicativo) del Error
+
     '''
     ##validacion del estado del proyecto
     try:
@@ -1507,10 +1514,10 @@ def aggAtributos(request,idTI):
             if (tiposAtributo!=None):
                 for valor in range(tiposAtributo.count()):
                     if(list[ini]=="File"):
-                        list = []
+                        list2 = []
                         for atr in tiposAtributo:
                             DOC = request.FILES.getlist(str(atr.id_atributo))
-                            if (DOC != list):
+                            if (DOC != list2):
                                 print("no vacio",DOC[0])
                                 ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
                                 PATH = f'/{ruta}/{DOC[0]}'
@@ -2023,6 +2030,7 @@ def editar_ti(request,id_ti):
        La funcion solo permite editar Tipo de items a los gerente de Proyecto, y tambien valida que solo se podran
        editar aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
        cumplen se mostrara un mensaje (explicativo) del Error
+
     :param request:
     :param id_ti:
     :return: None
@@ -2093,10 +2101,11 @@ def agregar_atributo_ti(request, id_ti):
     atributo se deberan de completar sus caracteristicas(nombre,tipo de dato,obligatoriedad), si no se
     definen todas las carateristicas del atributo, se mostrar un mensaje de error , y le dara la posibilidad
     de  intentarlo de nuevo.
-     La funcion solo permite agregar un atributo al  Tipo de item a los gerente de Proyecto, y tambien valida
-     que solo se podran agregar atributos  aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
-     cumplen se mostrara un mensaje (explicativo) del Error
-     :param request:
+    La funcion solo permite agregar un atributo al  Tipo de item a los gerente de Proyecto, y tambien valida
+    que solo se podran agregar atributos  aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
+    cumplen se mostrara un mensaje (explicativo) del Error
+
+    :param request:
     :param id_ti:
     :return:
     '''
@@ -2151,9 +2160,10 @@ def eliminar_atributo_ti(request,id_ti):
     Esta funcion lista todos los atributos (con una opcion de seleccionar )de un Tipo de Item
     pasado como parametro, para cada atributo seleccionado por el usuario , se eliminara el atributo del
     tipo item
-     La funcion solo permite eliminar atributos de Tipo de items a los gerente de Proyecto, y tambien valida
-     que solo se podran eliminar aquellos  atributos de tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
-       cumplen se mostrara un mensaje (explicativo) del Error
+    La funcion solo permite eliminar atributos de Tipo de items a los gerente de Proyecto, y tambien valida
+    que solo se podran eliminar aquellos  atributos de tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
+    cumplen se mostrara un mensaje (explicativo) del Error
+
     :param request:
     :param id_ti:
     :return:
@@ -2219,9 +2229,10 @@ def eliminar_tipo_item(request,id_ti):
    '''
     Esta funcion permite eliminar un Tipo de Item pasado como parametro, como consecuencia esta funcion tambien
     elimina todos los atributos relacionados a ese Tipo de Item.
-   La funcion solo permite eliminar el tipo de Item  a los gerente de Proyecto, y tambien valida
+    La funcion solo permite eliminar el tipo de Item  a los gerente de Proyecto, y tambien valida
     que solo se podran eliminar aquellos  tipo de item que no esten asociados aun a un Item. Si estas
     ultimas dos restricciones no se cumplen se mostrara un mensaje (explicativo) del Error
+
    :param request:
    :param id_ti:
    :return:
@@ -2335,6 +2346,7 @@ def validar_permiso(user,permiso, proyecto):
         permiso es recibido como segundo parametro en la funcion y el proyecto como tercer parametro  ,
         si el usuario tiene  el permiso  para  el  proyecto recibido entonces la funcion retornara True,
         en caso Contrario retornara False
+
     :param user:
     :param permiso:
     :param proyecto:
@@ -2623,6 +2635,7 @@ def eliminar_rol_proyecto_usuario(id_fase, listaRoles, usuario,user):
      recibe una lista de roles como parametros, que seria los roles que el gerente no marco en el form al
      momento de asignar el rol a un usuario, de esa lista de roles se verifica aquellos que el usuario tiene,
      si es asi, se le saca el rol en esa fase al usuario.
+
     :param id_fase:
     :param listaRoles:
     :param usuario:
@@ -2648,12 +2661,6 @@ class CrearLB(CreateView):
     HACE REFERENCIA A LA CREACIÓN DE UN CONJUNTO DE ITEMS AGRUPADOS QUE TENGAN ESTADO APROBADO, ES UNA ESPECIE DE ENCAPSULAMIENTO DE ESTOS ITEMS, A
     MEDIDA QUE SE VA DESARROLLANDO UN PROYECTO ES NECESARIO ENCAPSULAR LOS ITEMS PARA PODER PASAR A FASES SIGUIENTES.
 
-
-    :param request: metodo http enviado desde el navegador para ejecutar la funcion
-    :type request: dict
-
-    :param pk: id de fase a la cual está relacionada la Linea Base a ser creada
-    :type pk: int
     """
 
     model = LineaBase
@@ -2662,17 +2669,9 @@ class CrearLB(CreateView):
     success_url = reverse_lazy('gestion:detallesFase')
 
     def get_context_data(self, **kwargs):
-        """Se obtiene el contexto enviado a la función.
+        """
+        Se obtiene el contexto enviado a la función.
 
-
-        :param self: se trata del mismo objecto a ser usado, en este caso seria una instancia de LineaBase
-        :type self: LineaBase
-
-        :param **kwargs: se guardan los parametros enviados, en este caso se puede obtener el id de fase desde este parámetro
-        :param **kwargs: dict
-
-        :return: retorna un contexto
-        :rtype: context
         """
 
         contexto = super(CrearLB, self).get_context_data(**kwargs)
@@ -2720,23 +2719,9 @@ class CrearLB(CreateView):
         return contexto
 
     def post(self, request, *args, **kwargs):
-        """Se obtienen los datos cargados del formulario del navegador y se guardan en la base de datos del sistema
-        
+        """
+        Se obtienen los datos cargados del formulario del navegador y se guardan en la base de datos del sistema
 
-        :param self: objeto al cual se está haciendo referencia, en este caso es una instancia de Linea Base
-        :type self: LineaBase
-
-        :param request:  metodo HTTP enviado desde el navegador a la funcion
-        :type request: dict
-
-        :param *args: parametros adicionales recibidos(en este caso ninguno)
-        :type *args: None
-
-        :param **kwargs: parametros adicionales recibidos(en este caso ninguno)
-        :type **kwargs: None
-
-        :return: retorna una redireccion(HTTP 302)
-        :rtype: dict
         """
         
         try:
@@ -2781,7 +2766,8 @@ class CrearLB(CreateView):
 #--------------------Editar Estado de Item------------------
 
 def modificarEstadoItem(request, pk):
-    """La funcion realiza la labor de modificar el estado de cualquier item, los estados disponibles son:
+    """
+    La funcion realiza la labor de modificar el estado de cualquier item, los estados disponibles son:
         - Creado
         - Finalizado
         - Aprobado
@@ -2791,7 +2777,6 @@ def modificarEstadoItem(request, pk):
     :type request: dict
     :param pk: id de item a ser modificado
     :type pk: int
-
     :return: retorna un render con los datos del item a ser modificado
     :rtype: form
     """

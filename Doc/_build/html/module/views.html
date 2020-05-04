@@ -281,14 +281,6 @@ ELECTRONICO DE ACUERDO A UNA ACCION
 <em class="property">class </em><code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">CrearLB</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearLB" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>HACE REFERENCIA A LA CREACIÓN DE UN CONJUNTO DE ITEMS AGRUPADOS QUE TENGAN ESTADO APROBADO, ES UNA ESPECIE DE ENCAPSULAMIENTO DE ESTOS ITEMS, A
 MEDIDA QUE SE VA DESARROLLANDO UN PROYECTO ES NECESARIO ENCAPSULAR LOS ITEMS PARA PODER PASAR A FASES SIGUIENTES.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(en Python versión 3.8)"><em>dict</em></a>) – metodo http enviado desde el navegador para ejecutar la funcion</p></li>
-<li><p><strong>pk</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(en Python versión 3.8)"><em>int</em></a>) – id de fase a la cual está relacionada la Linea Base a ser creada</p></li>
-</ul>
-</dd>
-</dl>
 <dl class="py attribute">
 <dt id="gestion.views.CrearLB.form_class">
 <code class="sig-name descname">form_class</code><a class="headerlink" href="#gestion.views.CrearLB.form_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -299,23 +291,6 @@ MEDIDA QUE SE VA DESARROLLANDO UN PROYECTO ES NECESARIO ENCAPSULAR LOS ITEMS PAR
 <dt id="gestion.views.CrearLB.get_context_data">
 <code class="sig-name descname">get_context_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearLB.get_context_data" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Se obtiene el contexto enviado a la función.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="models.html#gestion.models.LineaBase" title="gestion.models.LineaBase"><em>LineaBase</em></a>) – se trata del mismo objecto a ser usado, en este caso seria una instancia de LineaBase</p></li>
-<li><p><strong>**kwargs</strong> – <p>se guardan los parametros enviados, en este caso se puede obtener el id de fase desde este parámetro</p>
-</p></li>
-<li><p><strong>**kwargs</strong> – <p>dict</p>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Devuelve</dt>
-<dd class="field-even"><p>retorna un contexto</p>
-</dd>
-<dt class="field-odd">Tipo del valor devuelto</dt>
-<dd class="field-odd"><p>context</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -328,24 +303,6 @@ MEDIDA QUE SE VA DESARROLLANDO UN PROYECTO ES NECESARIO ENCAPSULAR LOS ITEMS PAR
 <dt id="gestion.views.CrearLB.post">
 <code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.CrearLB.post" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Se obtienen los datos cargados del formulario del navegador y se guardan en la base de datos del sistema</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="models.html#gestion.models.LineaBase" title="gestion.models.LineaBase"><em>LineaBase</em></a>) – objeto al cual se está haciendo referencia, en este caso es una instancia de Linea Base</p></li>
-<li><p><strong>request</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(en Python versión 3.8)"><em>dict</em></a>) – metodo HTTP enviado desde el navegador a la funcion</p></li>
-<li><p><strong>*args</strong> – <p>parametros adicionales recibidos(en este caso ninguno)</p>
-</p></li>
-<li><p><strong>**kwargs</strong> – <p>parametros adicionales recibidos(en este caso ninguno)</p>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Devuelve</dt>
-<dd class="field-even"><p>retorna una redireccion(HTTP 302)</p>
-</dd>
-<dt class="field-odd">Tipo del valor devuelto</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(en Python versión 3.8)">dict</a></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -650,16 +607,16 @@ CORRESPONDIENTE Y SE REDIRIGE A UNA VENTANA EN LA QUE SE CARGAN LOS ATRIBUTOS DE
 <dd><p>Esta funcion permite agregar un nuevo atributo a un Tipo de Item pasado como parametro, para el nuevo
 atributo se deberan de completar sus caracteristicas(nombre,tipo de dato,obligatoriedad), si no se
 definen todas las carateristicas del atributo, se mostrar un mensaje de error , y le dara la posibilidad
-de  intentarlo de nuevo.</p>
-<blockquote>
-<div><p>La funcion solo permite agregar un atributo al  Tipo de item a los gerente de Proyecto, y tambien valida
+de  intentarlo de nuevo.
+La funcion solo permite agregar un atributo al  Tipo de item a los gerente de Proyecto, y tambien valida
 que solo se podran agregar atributos  aquellos tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
-cumplen se mostrara un mensaje (explicativo) del Error
-:param request:</p>
-</div></blockquote>
+cumplen se mostrara un mensaje (explicativo) del Error</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros</dt>
-<dd class="field-odd"><p><strong>id_ti</strong> – </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – </p></li>
+<li><p><strong>id_ti</strong> – </p></li>
+</ul>
 </dd>
 <dt class="field-even">Devuelve</dt>
 <dd class="field-even"><p></p>
@@ -812,14 +769,10 @@ cumplen se mostrara un mensaje (explicativo) del Error</p>
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">eliminar_atributo_ti</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em>, <em class="sig-param"><span class="n">id_ti</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.eliminar_atributo_ti" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Esta funcion lista todos los atributos (con una opcion de seleccionar )de un Tipo de Item
 pasado como parametro, para cada atributo seleccionado por el usuario , se eliminara el atributo del
-tipo item</p>
-<blockquote>
-<div><p>La funcion solo permite eliminar atributos de Tipo de items a los gerente de Proyecto, y tambien valida
-que solo se podran eliminar aquellos  atributos de tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se</p>
-<blockquote>
-<div><p>cumplen se mostrara un mensaje (explicativo) del Error</p>
-</div></blockquote>
-</div></blockquote>
+tipo item
+La funcion solo permite eliminar atributos de Tipo de items a los gerente de Proyecto, y tambien valida
+que solo se podran eliminar aquellos  atributos de tipo de item que no esten asociados aun a un Item. Si estas ultimas dos restricciones no se
+cumplen se mostrara un mensaje (explicativo) del Error</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros</dt>
 <dd class="field-odd"><ul class="simple">
@@ -861,13 +814,11 @@ si es asi, se le saca el rol en esa fase al usuario.</p>
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">eliminar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em>, <em class="sig-param"><span class="n">id_ti</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.eliminar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><blockquote>
 <div><p>Esta funcion permite eliminar un Tipo de Item pasado como parametro, como consecuencia esta funcion tambien
-elimina todos los atributos relacionados a ese Tipo de Item.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>La funcion solo permite eliminar el tipo de Item  a los gerente de Proyecto, y tambien valida</dt><dd><p>que solo se podran eliminar aquellos  tipo de item que no esten asociados aun a un Item. Si estas
+elimina todos los atributos relacionados a ese Tipo de Item.
+La funcion solo permite eliminar el tipo de Item  a los gerente de Proyecto, y tambien valida
+que solo se podran eliminar aquellos  tipo de item que no esten asociados aun a un Item. Si estas
 ultimas dos restricciones no se cumplen se mostrara un mensaje (explicativo) del Error</p>
-</dd>
-</dl>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros</dt>
 <dd class="field-odd"><ul class="simple">
@@ -983,11 +934,9 @@ no tenga dicho permiso se mostrara un mensaje de error</p>
 <dl class="py function">
 <dt id="gestion.views.importar_tipo_item">
 <code class="sig-prename descclassname">gestion.views.</code><code class="sig-name descname">importar_tipo_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em>, <em class="sig-param"><span class="n">id_fase</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gestion.views.importar_tipo_item" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="simple">
-<dt>esta funcion permite importar tipos de item en un proyecto, para ello lista un conjunto</dt><dd><p>de tipos de item , de los tipos de items</p>
-</dd>
-</dl>
-<p>disponibles para importar solo se muestran aquellos  aquellos tipos de items de otros proyectos en
+<dd><p>esta funcion permite importar tipos de item en un proyecto, para ello lista un conjunto
+de tipos de item , de los tipos de items
+disponibles para importar solo se muestran aquellos  aquellos tipos de items de otros proyectos en
 donde el usuario tambien este asociado, tambien filtra los tipos de items cuyo nombre ya no exista en el
 proyecto a donde se quiere importar
 La funcion solo permite importar tipos de items a  a los gerente de Proyecto  Si esta restriccion no se cumple
