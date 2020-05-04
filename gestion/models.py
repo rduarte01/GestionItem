@@ -324,7 +324,9 @@ class LineaBase(models.Model):
     """
     estado = models.CharField('Estado', max_length = 50, blank = False, null = False, choices = choices_data_type, default = 'Cerrada')
     """HACE REFERENCIA A UN ESTADO EN CONCRETO DE UNA DETERMINADA LINEA BASE, LA MISMA TENDRÁ POR DEFECTO EL ESTADO CERRADA"""
-    
+
+    proyecto =models.ForeignKey(Proyecto, on_delete = models.CASCADE, null=True)
+
     class Meta:
         ordering = ['nombreLB']
         """SE ORDENARAN LAS LINEAS BASE DE ACUERDO AL NOMBRE"""

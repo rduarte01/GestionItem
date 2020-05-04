@@ -2657,78 +2657,57 @@ def eliminar_rol_proyecto_usuario(id_fase, listaRoles, usuario,user):
 
 
 #-----------------------Crear Linea Base-----------------------
-
-class CrearLB(CreateView):
+def ver_lb(request,pk):
     """
-    HACE REFERENCIA A LA CREACIÓN DE UN CONJUNTO DE ITEMS AGRUPADOS QUE TENGAN ESTADO APROBADO, ES UNA ESPECIE DE ENCAPSULAMIENTO DE ESTOS ITEMS, A
-    MEDIDA QUE SE VA DESARROLLANDO UN PROYECTO ES NECESARIO ENCAPSULAR LOS ITEMS PARA PODER PASAR A FASES SIGUIENTES.
-
+    LISTA LOS REGISTROS DE LA TABLA AUDITORIA PARA UN PROYECTO EN ESPECIFICO
+    :param request:
+    :param pk: ID DEL PROYECTO DEL CUAL SE LISTARA LA AUDIRORIA
+    :return: AUDITORIA.HTML
     """
+    proyecto=Proyecto.objects.get(id_proyecto=pk)
+    lineaB=LineaBase.objects.filter(proyecto=proyecto)
+    Lb=iLB_item.objects.all()
 
-    model = LineaBase
-    form_class = LBForm
-    template_name = 'proyectos/crearLB.html'
-    success_url = reverse_lazy('gestion:detallesFase')
+    context={
+        'lb':Lb,
+        'lineaB':lineaB,
+        'proyectos':proyecto,
+    }
+    return render(request, 'items/ver_lb.html', context)
 
-    def get_context_data(self, **kwargs):
-        """
-        Se obtiene el contexto enviado a la función.
+def CrearLB(request,pk):
 
-        """
 
-        contexto = super(CrearLB, self).get_context_data(**kwargs)
-        idfase = self.kwargs.get('pk', None)
-        contexto['fase'] = idfase
-        #print(idfase)
-        lista_items = Item.objects.filter(fase = idfase, estado = 'Aprobado')
-        contexto['items'] = lista_items
+    form = LBForm(request.POST)
 
-        try:
-            fase = Fase.objects.get(id_Fase = idfase)
-            lista = LB_item.objects.all()
-        except :
-            lista = None
-        
-        listaItems = []
+    idfase = pk
+    lista_items = Item.objects.filter(fase=idfase, estado='Aprobado')
 
-        for i in lista_items:
-            ok = True
-            for j in lista:
-                if i.id_item == j.item.id_item:
-                    ok = False
-                    break
-            if ok == True:
-                listaItems.append(i.id_item)
-                print(listaItems)
-        
-        item_verificador = Item.objects.last()
+    try:
+        fase = Fase.objects.get(id_Fase=idfase)
+        lista = LB_item.objects.all()
+    except:
+        lista = None
 
-        contexto['listaitems'] = listaItems
+    ### PERMISO #####
+    # if validar_permiso(request.user,"crear_item",fase.id_Proyecto) or request.user.has_perm('crear_item',fase.id_Proyecto) and validar_rol_fase('crear_lb',fase,request.user):
+    #    print('tiene el permiso de crear_item')
+    # else:
+    #   context = {
+    #      "mensaje": "NO SE POSEE EL PERMISO: crear_lb" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
+    #     "titulo": "SIN PERMISO  ",
+    #     "titulo_b1": "",
+    #    "boton1": "",
+    #    "titulo_b2": "SALIR",
+    #    "boton2": "/detallesFase/"+str(pk),
+    # }
+    # return render(request, 'Error.html', context)
 
-        #if request.user.has_perm('crear_lb',item_verificador.fase.id_Proyecto) and validar_rol_fase('crear_lb',item_verificador.fase,request.user):# se consulta si posee el permiso de crear linea base
-        #   print('tiene el permiso de crear_lb')
-        #else:
-        #   context = {
-        #       "mensaje": "NO SE POSEE EL PERMISO: crear_lb" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
-        #       "titulo": "SIN PERMISO",
-        #       "titulo_b1": "",
-        #       "boton1": "",
-        #       "titulo_b2": "SALIR",
-        #       "boton2": "/proyectos/",
-        #   }
-        #   return render(request, 'Error.html', context)
-
-        return contexto
-
-    def post(self, request, *args, **kwargs):
-        """
-        Se obtienen los datos cargados del formulario del navegador y se guardan en la base de datos del sistema
-
-        """
-        
+    if request.method == 'POST':
+        print("entro")
         try:
             ultimaLB = LineaBase.objects.last()
-        except :
+        except:
             ultimaLB = None
 
         if ultimaLB == None:
@@ -2737,33 +2716,47 @@ class CrearLB(CreateView):
             lb = str(ultimaLB.idLB)
 
         seleccion = request.POST.getlist('checkbox')
-        
-        pk = kwargs['pk']
-
         nombrelb = 'LineaBase' + str(int(lb) + 1) + 'Fase' + str(pk)
-        
-        p = LineaBase(nombreLB = nombrelb)
-
+        p = LineaBase(nombreLB=nombrelb, proyecto=fase.id_Proyecto)
         p.save()
-
         x = LineaBase.objects.last()
 
         for seleccion in seleccion:
-            
-            item = Item.objects.get(id_item = seleccion)
-
-            p = LB_item(item = item, lb = x)
-
+            item = Item.objects.get(id_item=seleccion)
+            p = LB_item(item=item, lb=x)
             p.save()
+            registrarAuditoriaProyecto(request.user, "Se ha creado una LB con nombre " + nombrelb,item.fase.id_Proyecto.id_proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
+
+        return redirect('gestion:detallesFase',pk)
 
 
-        registrarAuditoriaProyecto(request.user, "Se ha creado una LB con nombre " + nombrelb, item.fase.id_Proyecto.id_proyecto, item.fase.id_Proyecto.nombre, item.fase.nombre)
+    listaItems = []
+
+    for i in lista_items:
+        ok = True
+        for j in lista:
+            if i.id_item == j.item.id_item:
+                ok = False
+                break
+        if ok == True:
+            listaItems.append(i.id_item)
+            print(listaItems)
+
+    item_verificador = Item.objects.last()
+    lista=[]
+    context={
+        'listaitems':listaItems,
+        'fase':pk,
+        'items':lista_items,
+        'form':LBForm,
+        'proyectos':fase.id_Proyecto,
+        'list':lista
+    }
 
 
-    #nombreLB = LineaBase1Fase2
-    #idLB = 1 ----> 1 + 1 
-    #Fase = 2
-        return redirect('gestion:listar_proyectos')
+
+    return render(request, 'items/crear_lb.html', context)
+
 
 #--------------------Editar Estado de Item------------------
 

@@ -1,0 +1,121 @@
+{%extends 'proyectos/base.html'%}
+{%block imports%}
+    {% load guardian_tags %}
+{%endblock%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Crear LB</title>
+    {%endblock%}
+
+</head>
+<body>
+                {%block volver_atras %}
+                {%endblock %}
+
+{%block titulo_proyecto %}
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                   <div class="card-body">
+
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                            <td>NOMBRE DE PROYECTO</td>
+                                            <td>DESCRIPCION</td>
+                                            <td>ESTADO</td>
+                                </thead>
+                                <tbody>
+                                    <td>{{proyectos.nombre}}</td>
+                                    <td>{{proyectos.descripcion}}</td>
+                                    <td>{{proyectos.estado}}</td> </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+              </div>
+{%endblock%}
+
+{%block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+              <!-- Dropdown Card Example -->
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Crear Linea Base</h6>
+
+                  <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a></h6>
+
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    {% if listaitems == list %}
+                        <div class="alert alert-info">No hay items para agregar a LB</div>
+                    {% else %}
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <td>ITEMS!</td>
+                        </thead>
+                        <tbody>
+                        <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                                {% for item in items %}
+                                    {% for a in listaitems %}
+                                        {% if item.id_item == a %}
+                                            <br>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{item.id_item}}"
+                                                            id="{{item.id_item}}}">
+                                                        <label class="form-check-label" for="{{item.id_item}}}">
+                                                            <h5>{{ item.nombre }}</h5>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                                <input class="btn btn-primary" type="submit"  value="Guardar">
+                        </form>
+                        </tbody>
+
+                    </table>
+
+                    {% endif %}
+                </div>
+              </div>
+    <script>
+  // Call the dataTables jQuery plugin
+  $(document).ready(function() {
+    $('.table').DataTable({
+      "language": {
+        "sProcessing": "Procesando...",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sEmptyTable": "Ningún dato disponible en esta tabla",
+        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sSearch": "Buscar:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst": "<span class='fa fa-angle-double-left'></span>",
+            "sLast": "<span class='fa fa-angle-double-right'></span>",
+            "sNext": "<span class='fa fa-angle-right'></span>",
+            "sPrevious": "<span class='fa fa-angle-left'></span>"
+        },
+        "oAria": {
+            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+      }
+    });
+  });
+  </script>
+{%endblock%}
+
