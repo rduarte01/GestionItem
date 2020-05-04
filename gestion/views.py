@@ -2454,7 +2454,12 @@ def asignar_rol_proyecto(request,nombre):
     permisos=rol.permissions.all()
     for permiso in permisos:
         assign_perm(permiso.codename,rol,proyecto)
-
+    id_nombre_rol=rol.name.split('_')
+    proyecto=Proyecto.objects.get(id_proyecto=int(id_nombre_rol[0]))
+    registrarAuditoriaProyecto(request.user,
+                               "Se creo el rol :" +str(id_nombre_rol[1]),
+                               proyecto.id_proyecto,proyecto.nombre,
+                               '---')
     return redirect('gestion:menu')
 
 def modificar_rol_proyecto(request,nombre):
@@ -2498,6 +2503,12 @@ def modificar_rol_proyecto(request,nombre):
     print('viejo borrado', lista_permisos_viejos)
     print('actual borrado', list_permisos_actual)
 
+    id_nombre_rol = rol.name.split('_')
+    proyecto = Proyecto.objects.get(id_proyecto=int(id_nombre_rol[0]))
+    registrarAuditoriaProyecto(request.user,
+                               "Se modifico el rol :" + str(id_nombre_rol[1]),
+                               proyecto.id_proyecto, proyecto.nombre,
+                               '---')
     return redirect('gestion:menu')
 
 
