@@ -216,7 +216,6 @@ def menu(request):
     GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PARTE"""
     user = request.user
 
-
     if( user.usuario.esta_aprobado):
         if user.has_perm('gestion.es_administrador'):
             return render(request,'Menu/MenuAdministrador.html')
@@ -871,8 +870,14 @@ def relaciones_trazabilidad(item,DATA,LINK):
 
     for relaciones in relaciones:
         inicio = Item.objects.get(id_item=relaciones.inicio_item)
-        DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' cost:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
-        LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
+        ok = True
+        for i in DATA:
+            if i['key']== inicio.id_item:
+                ok=False
+        if ok:
+            DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' cost:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
+            LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
+
         relaciones_trazabilidad(inicio, DATA,LINK)
 
 def relaciones_trazabilidad_delante(item,DATA,LINK):
@@ -884,8 +889,13 @@ def relaciones_trazabilidad_delante(item,DATA,LINK):
 
     for relaciones in relaciones:
         fin = Item.objects.get(id_item=relaciones.fin_item)
-        DATA.append({'key': fin.id_item, 'name': fin.nombre + ' cost:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
-        LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
+        ok = True
+        for i in DATA:
+            if i['key']== fin.id_item:
+                ok=False
+        if ok:
+            DATA.append({'key': fin.id_item, 'name': fin.nombre + ' cost:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
+            LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
         relaciones_trazabilidad_delante(fin, DATA,LINK)
 
 
