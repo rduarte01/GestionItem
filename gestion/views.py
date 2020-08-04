@@ -928,7 +928,6 @@ def listar_atributos(request,idAtributoTI,id_item):
     }
     return render(request, 'items/listar_atributos.html', context)
 
-
 def ver_proyecto(request,pk):
     """MUESTRA LOS DETALLES DE UN PROYECTO"""
     proyecto=Proyecto.objects.get(id_proyecto=pk)
