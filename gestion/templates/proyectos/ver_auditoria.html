@@ -55,16 +55,33 @@
                     {% if not auditoria %}
                         <div class="alert alert-info">No hay atributos del item</div>
                     {% else %}
-                    <table class="table table-striped table-hover">
+                    <table
+                            id="table"
+                            data-toggle="table"
+                            data-pagination="true"
+                            data-search="true"
+                            data-show-refresh="true"
+                            data-show-export="true"
+                            data-show-columns="true"
+                            data-show-toggle="true"
+                            data-show-fullscreen="true"
+                            data-toolbar=".buttons-toolbar"
+                            data-locale="es-NI"
+                            data-page-list="[10, 25, 50, 100, all]"
+                            data-detail-formatter="detailFormatter"
+                            data-minimum-count-columns="2"
+                            data-show-pagination-switch="true"
+                            data-id-field="id"
+                    >
                         <thead>
-                            <td>Usuario</td>
+                            <th data-field="Usuario" data-sortable="true" >Usuario</th>
+                            <th data-field="ID" data-sortable="true" >ID proyecto</th>
+                            <th data-field="Proyecto" data-sortable="true" >Nombre Proyecto</th>
+                            <th data-field="Fase" data-sortable="true">Nombre Fase</th>
+                            <th>Accion</th>
+                            <th data-field="Fecha" data-sortable="true">Fecha y Hora</th>
 
-                                <td>ID proyecto</td>
-                                <td>Nombre Proyecto</td>
-                                <td>Nombre Fase</td>
 
-                            <td>Accion</td>
-                            <td>Fecha y Hora</td>
                         </thead>
                         <tbody>
                              {%for auditoria in auditoria%}

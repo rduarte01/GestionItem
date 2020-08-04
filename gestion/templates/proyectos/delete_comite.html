@@ -3,62 +3,96 @@
 <head>
     <meta charset="UTF-8">
     {%block title%}
-        <title>Delete comite</title>
+        <title>Comite de proyecto</title>
     {%endblock%}
 </head>
 <body>
-{%block interno%}
-        {% load guardian_tags %}
-        {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
-    {% if "is_gerente" in proyecto_perms %}
 
-        <div class="cities">
-        <table class="table table-bordered">
-            <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-                {%if list%}
-                    <h2>Seleccione usuarios para quitar del comite</h2>
-                    <h3>- Recuerde que el numero de usuarios para un comite debe de ser impar y mayor a un usuario</h3>
-                    <h3>- El gerente del proyecto siempre forma parte del comite</h3>
-                    <tr>
-                        <td><h4>NOMBRE</h4></td>
-                        <td><h4>CORREO</h4></td>
-                    </tr>
-                {%for list in list %}
-                  {%for i in form%}
-                        {%if list == i.user.id%}
-                            {%if idGerente != i.user.id%}
-                                <tr>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.user.id}}" id="{{i.user.id}}}">
-                                            <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5></label>
-                                        </div>
+{% block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+
+        {% if "is_gerente" in proyecto_perms %}
+
+
+
+
+    <div class="card shadow mb-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold text-primary">Lista de Usuarios Para Comite</h6>
+
+                            <p>1- Recuerde que el numero de usuarios para un comite debe de ser impar y mayor a un usuario</p>
+                            <p>2- El gerente del proyecto siempre forma parte del comite</p>
+  </div>
+  <!-- Card Body -->
+  <div class="card-body">
+
+    <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+    {% if not list %}
+    <div class="alert alert-info">NO HAY USUARIOS</div>
+    {% endif %}
+      <table
+                    id="table"
+                    data-toggle="table"
+                    data-pagination="true"
+                    data-search="true"
+                    data-show-refresh="true"
+                    data-show-export="true"
+                    data-show-columns="true"
+                    data-show-toggle="true"
+                    data-show-fullscreen="true"
+                    data-toolbar=".buttons-toolbar"
+                    data-locale="es-NI"
+                    data-page-list="[10, 25, 50, 100, all]"
+                    data-detail-formatter="detailFormatter"
+                    data-minimum-count-columns="2"
+                    data-show-pagination-switch="true"
+                    data-id-field="id"
+                      >
+                      <thead>
+                          <th data-field="fecha_vence" data-sortable="true" >Nombre </th>
+                          <th data-field="importe" data-sortable="true" >Email</th>
+
+                      </thead>
+                      <tbody>
+
+                    {%for list in list %}
+                      {%for i in form%}
+                            {%if list == i.user.id%}
+                                {%if idGerente != i.user.id%}
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="checkbox" value="{{i.user.id}}" id="{{i.user.id}}}">
+                                                <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5></label>
+                                            </div>
                                     </td>
-                                    <td>{{ i.user.email }}</td>
-                                </tr>
-                            {%else%}
-                                <tr>
-                                    <td><strong>Gerente ya incluido: {{ i.user.username }}</strong></td>
-                                    <td>{{ i.user.email }}</td>
-                                </tr>
+                                        <td>{{ i.user.email }}</td>
+                                    </tr>
+                                {%else%}
+                                    <tr>
+                                        <td><strong>Gerente ya incluido: {{ i.user.username }}</strong></td>
+                                        <td>{{ i.user.email }}</td>
+                                    </tr>
+                                {%endif%}
                             {%endif%}
-                        {%endif%}
+                        {%endfor%}
                     {%endfor%}
-                {%endfor%}
-                    <input type="submit" class="btn btn-primary" value="Quitar del comite">
-                {%else%}
-                    <h1>Sin usuarios para quitar del comite</h1>
-                {%endif%}
-            </form>
-        </table>
-         </div>
-        </body>
-        <body>
-    {%else%}
-            <h1>Usted no es gerente de este proyecto, por tanto no puede quitar usuarios al comite</h1>
-            <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
-    {%endif%}
-{%endblock%}
+                    <input type="submit" class="btn btn-primary" value="Quitar">
+                      </tbody>
+                    </table>
+    </form>
+  </div>
+</div>
+
+        {%else%}
+                <h1>Usted no es gerente de este proyecto, por tanto no puede agregar usuarios al comite</h1>
+                <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
+        {%endif%}
+
+    {% endblock interno%}
+
 
 </body>
 </html>

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gestion.apps.GestionConfig',
+    'django.contrib.humanize',
     'social_django',
     'bootstrap4',
     'guardian',
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'GestionItem.middleware.ValidarUserMiddleware',
 ]
 
 ROOT_URLCONF = 'GestionItem.urls'
@@ -97,7 +99,7 @@ DATOS CAMBIADOS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prueba2',
+        'NAME': 'prueba3',
         'USER':'postgres',
         'PASSWORD':'root',
         'HOST':'127.0.0.1',

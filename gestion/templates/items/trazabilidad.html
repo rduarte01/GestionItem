@@ -1,0 +1,162 @@
+{%extends 'proyectos/base.html'%}
+{%block imports%}
+    {% load guardian_tags %}
+{%endblock%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Relaciones item</title>
+    {%endblock%}
+
+</head>
+<body>
+                {%block volver_atras %}
+                {%endblock %}
+
+
+{%block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+              <!-- Dropdown Card Example -->
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Trazabilidad item: {{itemActual.nombre}} </h6>
+                    <h6> IMPACTO ANTERIORES: {{ izq }}  |  IMPACTO POSTERIORES: {{ der }}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a></h6>
+
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    {% if not data %}
+                        <div class="alert alert-info">No hay Relaciones item</div>
+                    {% else %}
+                        <div  id="myDiagramDiv1"  style="width:1060px; height:1050px; background-color: #DAE4E4;"></div>
+
+                    {% endif %}
+                </div>
+              </div>
+    <script>
+  // Call the dataTables jQuery plugin
+  $(document).ready(function() {
+    $('.table').DataTable({
+      "language": {
+        "sProcessing": "Procesando...",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sEmptyTable": "Ningún dato disponible en esta tabla",
+        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sSearch": "Buscar:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst": "<span class='fa fa-angle-double-left'></span>",
+            "sLast": "<span class='fa fa-angle-double-right'></span>",
+            "sNext": "<span class='fa fa-angle-right'></span>",
+            "sPrevious": "<span class='fa fa-angle-left'></span>"
+        },
+        "oAria": {
+            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+      }
+    });
+  });
+
+
+  </script>
+    <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
+    <script>
+        var $ = go.GraphObject.make;  // for conciseness in defining templates
+        diagram = $(go.Diagram, "myDiagramDiv1",  // create a Diagram for the DIV HTML element
+            {
+                "undoManager.isEnabled": true,
+                layout: $(go.TreeLayout, // specify a Diagram.layout that arranges trees
+                    { angle: 90, layerSpacing: 35 })
+            });
+        diagram.nodeTemplate =
+            $(go.Node, "Auto",
+                $(go.Shape, "RoundedRectangle",
+        { fill: "#E3111E" },
+        new go.Binding("fill", "color")),  // shape.fill = data.color
+                $(go.TextBlock, "Default Text",
+                    { margin: 5, stroke: "white", font: "bold 16px sans-serif" },
+                    new go.Binding("text", "name"))
+            );
+        diagram.groupTemplate =
+            $(go.Group, "Horizontal",
+                $(go.Panel, "Auto",
+                    $(go.Shape, "RoundedRectangle",  // surrounds the Placeholder
+                        { parameter1: 14,
+                            fill: "rgba(128,128,128,0.33)" },),
+                    $(go.Placeholder,    // represents the area of all member parts,
+                        { padding: 5})  // with some extra padding around them
+                ),
+                $(go.TextBlock,         // group title
+                    { alignment: go.Spot.Right, font: "Bold 12pt Sans-Serif" },
+                    new go.Binding("text", "key"))
+            );
+        var nodeDataArray = {{ data | safe }}
+        var linkDataArray = {{ link | safe }}
+            diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+
+/*                               var $ = go.GraphObject.make;  // for conciseness in defining templates
+                                        myDiagram = $(go.Diagram, "myDiagramDiv1",  // create a Diagram for the DIV HTML element
+                                                      {
+                                                        initialContentAlignment: go.Spot.Center,  // center the content
+                                                        "undoManager.isEnabled": true  // enable undo & redo
+                                                      });
+
+                                        // define a simple Node template
+                                        myDiagram.nodeTemplate =
+                                          $(go.Node, "Horizontal",
+                                    { background: "#B52F12" },
+
+                                    $(go.TextBlock, "Default Text",
+                                      { margin: 6, stroke: "white", font: "bold 16px sans-serif" },
+                                      new go.Binding("text", "name"))
+                                  );
+
+
+                                        // but use the default Link template, by not setting Diagram.linkTemplate
+
+                                        // create the model data that will be represented by Nodes and Links
+                                        myDiagram.model = new go.GraphLinksModel({{ data | safe }}, {{ link | safe }});
+
+
+                                    var $ = go.GraphObject.make;
+                                var myDiagram =
+                                  $(go.Diagram, "myDiagramDiv",
+                                    {
+                                      "undoManager.isEnabled": true,
+                                      layout: $(go.TreeLayout, // specify a Diagram.layout that arranges trees
+                                                { angle: 90, layerSpacing: 35 })
+                                    });
+
+                                // the template we defined earlier
+                                myDiagram.nodeTemplate =
+                                  $(go.Node, "Horizontal",
+                                    { background: "#B52F12" },
+
+                                    $(go.TextBlock, "Default Text",
+                                      { margin: 6, stroke: "white", font: "bold 16px sans-serif" },
+                                      new go.Binding("text", "name"))
+                                  );
+
+                                var model = $(go.TreeModel);
+                                model.nodeDataArray = {{ data | safe }}
+                                model.linkDataArray ={{ link | safe }}
+
+                                    myDiagram.model = model;
+*/
+
+                        </script>
+
+{%endblock%}
+

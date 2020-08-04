@@ -16,50 +16,63 @@
     {% load guardian_tags %}
     {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
 
-{% if "is_gerente" in proyecto_perms %}
-    <div class="cities">
-    <table class="table table-bordered">
-          <thead>
-        <tr>
+
+    <div class="card shadow mb-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold text-primary">Lista de Comite</h6>
+            {% if "is_gerente" in proyecto_perms %}
+
                 <td><a href="{% url 'gestion:AggComite' proyectos.id_proyecto%}" class="btn btn-primary">✚ CREAR COMITE</a></td>
                 <td><a href="{% url 'gestion:DeleteComite' proyectos.id_proyecto%}" class="btn btn-primary">- QUITAR USUARIOS DEL COMITE</a></td>
-        </tr>
-        </thead>
-    </table>
-    </div>
-{%endif%}
-
-    <div class="cities">
-    <table class="table table-bordered">
-        <form method="POST" action="">{% csrf_token %}
-            {%if list%}
-                <h1>El comite de cambio esta conformado por:</h1>
-                <tr>
-                    <td>NOMBRE</td>
-                    <td>EMAIL</td>
-                </tr>
-                {%for list in list %}
-                    {%for i in form%}
-                        {%if list == i.user.id%}
-                            <tr>
-                                <td>{{i.user.username}}</td>
-                                <td>{{i.user.email}}</td>
-                            </tr>
-                        {%endif%}
-                    {%endfor%}
-                {%endfor%}
-            {%else%}
-                <h1>NO HAY COMITE AUN</h1>
             {%endif%}
-        </form>
-      </table>
-     </div>
-    </body>
-    </html>
-    <body>
+  </div>
+  <!-- Card Body -->
+  <div class="card-body">
+
+
+    {% if not list %}
+    <div class="alert alert-info">NO HAY COMITE AUN</div>
+    {% endif %}
+      <table
+                    id="table"
+                    data-toggle="table"
+                    data-pagination="true"
+                    data-search="true"
+                    data-show-refresh="true"
+                    data-show-export="true"
+                    data-show-columns="true"
+                    data-show-toggle="true"
+                    data-show-fullscreen="true"
+                    data-toolbar=".buttons-toolbar"
+                    data-locale="es-NI"
+                    data-page-list="[10, 25, 50, 100, all]"
+                    data-detail-formatter="detailFormatter"
+                    data-minimum-count-columns="2"
+                    data-show-pagination-switch="true"
+                    data-id-field="id"
+                      >
+                      <thead>
+                          <th data-field="fecha_vence" data-sortable="true" >Nombre </th>
+                          <th data-field="importe" data-sortable="true" >Email</th>
+
+                      </thead>
+                      <tbody>
+
+                        {%for list in list %}
+                            {%for i in form%}
+                                {%if list == i.user.id%}
+                                    <tr>
+                                        <td>{{i.user.username}}</td>
+                                        <td>{{i.user.email}}</td>
+                                    </tr>
+                                {%endif%}
+                            {%endfor%}
+                        {%endfor%}
+                      </tbody>
+                    </table>
+  </div>
+</div>
+
 
 {% endblock interno%}
-
-
-</body>
-</html>

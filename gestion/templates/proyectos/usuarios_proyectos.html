@@ -1,59 +1,73 @@
 {%extends 'proyectos/base.html'%}
 
-<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
     {%block title%}
         <title>Usuarios de Proyecto</title>
     {%endblock%}
 </head>
-<body>
+
 {%block volver_atras %}
             <a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' pk%}" role="button">Volver Atras</a>
 {%endblock %}
 
 {% block interno %}
 
-            <title>Usuarios del proyecto</title>
+ <div class="card shadow mb-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold text-primary">Lista de Usuarios del Proyectos</h6>
 
-            <h1>USUARIOS DEL PROYECTO:</h1>
+  </div>
+  <!-- Card Body -->
+  <div class="card-body">
 
-            <style>
-            #ocultar{display:none;}
-            </style>
+    {% if not list %}
+    <div class="alert alert-info">No Hay Usuarios en el Proyecto</div>
+    {% endif %}
 
+                <table
+                    id="table"
+                    data-toggle="table"
+                    data-pagination="true"
+                    data-search="true"
+                    data-show-refresh="true"
+                    data-show-export="true"
+                    data-show-columns="true"
+                    data-show-toggle="true"
+                    data-show-fullscreen="true"
+                    data-toolbar=".buttons-toolbar"
+                    data-locale="es-NI"
+                    data-page-list="[10, 25, 50, 100, all]"
+                    data-detail-formatter="detailFormatter"
+                    data-minimum-count-columns="2"
+                    data-show-pagination-switch="true"
+                    data-id-field="id"
+                      >
+                        <thead>
+                            <th data-field="fecha_vence" data-sortable="true" >FASES</th>
+                            <th data-field="estado" data-sortable="true" >ESTADO</th>
+                            <th ><td>DESVINCULACIÓN</th>
 
-    <div class="cities">
-    <table class="table table-bordered">
-          <thead>
-
-                <form method="POST" action="">{% csrf_token %}
-                    {%if list%}
-                        <tr>
-                            <td>NOMBRE</td>
-                            <td>EMAIL</td>
-                            <td>DESVINCULACIÓN</td>
-                        </tr>
-
-                        {%for list in list %}
+                        </thead>
+                        <tbody>
+                           {%for list in list %}
                           {%for i in form%}
                                 {%if list == i.id%}
-                        <tr>
-                            <td>{{i.username}}</td>
-                            <td>{{i.email}}</td>
-                            <td><a class="btn btn-primary" href="{% url 'gestion:desvinculacionProyecto' pk i.id%}" role="button">Desvincular del proyecto</a></td>
+                                    <tr>
+                                        <td>{{i.username}}</td>
+                                        <td>{{i.email}}</td>
+                                        <td><a class="btn btn-primary" href="{% url 'gestion:desvinculacionProyecto' pk i.id%}" role="button">Desvincular del proyecto</a></td>
+                                    </tr>
+                                {%endif%}
+                            {%endfor%}
+                            {%endfor%}
+                        </tbody>
+                </table>
+  </div>
+</div>
 
-                        </tr>
-                        {%endif%}
-                    {%endfor%}
-                    {%endfor%}
-                {%else%}
-                     <h1>Solo usted que es gerente forma parte del proyecto! favor añada usuarios.</h1>
-                    {%endif%}
-                </form>
-          </thead>
-    </table>
-    </div>
+
 {% endblock interno %}
 
 </body>

@@ -12,17 +12,45 @@
     {%endblock %}
 
     {% block interno %}
-    <h1>Añade usuarios a tu proyecto!</h1>
-    <div class="cities">
-    <table class="table table-bordered">
-          <thead>
+
+ <div class="card shadow mb-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold text-primary">Añade usuarios a tu proyecto!</h6>
+
+  </div>
+  <!-- Card Body -->
+  <div class="card-body">
           <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-                            {%if list%}
-                                <tr>
-                                    <td><h4>NOMBRE</h4></td>
-                                    <td><h4>CORREO</h4></td>
-                                </tr>
-                                {%for list in list %}
+    {% if not list %}
+    <div class="alert alert-info">No Hay Usuarios que añadir al Proyecto</div>
+    {% endif %}
+                <table
+                    id="table"
+                    data-toggle="table"
+                    data-pagination="true"
+                    data-search="true"
+                    data-show-refresh="true"
+                    data-show-export="true"
+                    data-show-columns="true"
+                    data-show-toggle="true"
+                    data-show-fullscreen="true"
+                    data-toolbar=".buttons-toolbar"
+                    data-locale="es-NI"
+                    data-page-list="[10, 25, 50, 100, all]"
+                    data-detail-formatter="detailFormatter"
+                    data-minimum-count-columns="2"
+                    data-show-pagination-switch="true"
+                    data-id-field="id"
+                      >
+                        <thead>
+                            <th data-field="fecha_vence" data-sortable="true" >Nombre</th>
+                            <th data-field="estado" data-sortable="true" >Correo</th>
+
+
+                        </thead>
+                        <tbody>
+                          {%for list in list %}
                                     {%for i in form%}
                                         {%if list == i.user.id%}
                                             <tr>
@@ -38,13 +66,12 @@
                                     {%endfor%}
                                 {%endfor%}
                                 <input type="submit" class="btn btn-primary" value="Guardar">
-                            {%else%}
-                                <h1>Sin usuarios para añadir al proyecto</h1>
-                            {%endif%}
-                        </form>
-          </thead>
-    </table>
+                        </tbody>
+                </table>
+          </form>
     </div>
+</div>
+
 {% endblock interno %}
 </body>
 </html>
