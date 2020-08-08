@@ -280,6 +280,7 @@ class Versiones(models.Model):
     """VERSION DEL ITEM"""
     id_item= models.IntegerField()
     """ITEM ASIGNADO"""
+    id_padre = models.IntegerField(null=True)
 
 class Comite(models.Model):
     """TABLA QUE TENDRA LA RELACION USUARIO-PROYECTO PERO PARA UN COMITE DE UN PROYECTO EN ESPECIFICO"""

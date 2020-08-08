@@ -100,7 +100,7 @@
                 ),
                 $(go.TextBlock,         // group title
                     { alignment: go.Spot.Right, font: "Bold 12pt Sans-Serif" },
-                    new go.Binding("text", "key"))
+                    new go.Binding("text", "name"))
             );
         var nodeDataArray = {{ data | safe }}
         var linkDataArray = {{ link | safe }}

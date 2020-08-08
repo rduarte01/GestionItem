@@ -824,7 +824,7 @@ def listar_relaciones(request,idItem):
     num=0
     for i in fases:
         num +=1
-        DATA.append({'key': 'FASE'+str(num), 'name': i.nombre , 'isGroup': 'true'}, )
+        DATA.append({'key': 'FASE'+str(i.id_Fase), 'name': i.nombre , 'isGroup': 'true'}, )
 
     relaciones_trazabilidad(itemActual,DATA,LINK)
     izq=0
@@ -862,7 +862,7 @@ def listar_relaciones(request,idItem):
 
 
 def relaciones_trazabilidad(item,DATA,LINK):
-
+    # inicio      fin
     try:
         relaciones = Relacion.objects.filter(fin_item=item.id_item)
     except:
@@ -874,7 +874,7 @@ def relaciones_trazabilidad(item,DATA,LINK):
         for i in DATA:
             if i['key']== inicio.id_item:
                 ok=False
-        if ok:
+        if ok:                                                                                                 #fase12
             DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' cost:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
             LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
 
@@ -1473,16 +1473,8 @@ def relacionarItem(request,id_proyecto,id_item):
     if validar_permiso(request.user,"is_gerente",proyecto) or request.user.has_perm('crear_item',proyecto) and validar_rol_fase('crear_item',itemActual.fase,request.user):
         print('tiene el permiso de crear_item')
     else:
-        context = {
-            "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
-            "titulo": "SIN PERMISO",
-            "titulo_b1": "",
-            "boton1": "",
-            "titulo_b2": "SALIR",
-            "boton2": "/proyectos/",
-        }
-        return render(request, 'Error.html', context)
-
+        messages.error(request,"NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION")
+        return redirect('gestion:detallesFase', atributos.ti.fase.id_Fase)
 
     if request.method == 'POST': #preguntamos primero si la petición Http es POST ||| revienta todo con este
         some_var=request.POST.getlist('checkbox')
@@ -1535,14 +1527,13 @@ def relacionarItem(request,id_proyecto,id_item):
 
         #----------------------------------------------------------#
         ## se puede volver generico si se restringe preguntando si el item es igual al ultimo
-        version=Versiones(id_Version=1,id_item=id_item)#SE GUARDA LA VERSION
+        version=Versiones(id_Version=1,id_item=id_item,id_padre=id_item)#SE GUARDA LA VERSION
         version.save()
         #----------------------------------------------------------#
 
         return redirect('gestion:detallesFase',item[0].fase.id_Fase)
     else:
         return render(request, 'items/relacionarItem.html', {'form': items,'list':list,'itemActual':itemActual})
-
 
 def comite(request,pk):
     """
@@ -1999,7 +1990,7 @@ def SubirArchivo(DOC, PATH):
     :param DOC: ARCHIVO SELECCIONADO POR EL USUARIO
     :param PATH: DIRECCION QUE TENDRA LA CARPETA EN DROPBOX
     """
-
+    # id proy/ id item/ nombre
     dbx = dropbox.Dropbox(TOKEN)
     dbx.files_upload(DOC.file.read(), PATH)
     print("SUBIO A DROPBOX ---> ", DOC)
