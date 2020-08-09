@@ -27,7 +27,7 @@ urlpatterns = [
     path('cancelado/', proyectoCancelado, name='Proyectocancelado'),
     path('/itemCancelado/<int:pk>', itemCancelado, name='itemCancelado'),
 
-    path('DescargarArchivo/<int:id_item>/(?P<archivo>[a-zA-Z0-9])', DescargarArchivo, name='DescargarArchivo'),
+    path('DescargarArchivo/<int:id_atributo>)', DescargarArchivo, name='DescargarArchivo'),
 
     path('crear/TipoItem/<int:id_fase>',views.tipo_item_views_create,name='tipo_item_views_create'),
     path('crear/atributo/<str:nombre_ti>/<str:cantidad_atributos>/<str:fase_id>',views.add_atribute,name='add_atribute'),

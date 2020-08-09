@@ -924,7 +924,9 @@ def listar_atributos(request,idAtributoTI,id_item):
         "atributos":atributos,
         "atributo":atributo,
         'proyectos': itemActual.fase.id_Proyecto,
-        'item':itemActual
+        'item':itemActual,
+        'true':True,
+        'false':False
     }
     return render(request, 'items/listar_atributos.html', context)
 
@@ -1357,7 +1359,7 @@ def aggAtributos(request,idTI):
                                 ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
                                 PATH = f'/{ruta}/{DOC[0]}'
                                 #SubirArchivo(DOC[0], PATH)
-                                #print("--",DOC[0])
+                                print("--",PATH)
 
                                 ##se sube archivo a dropbox en segundo plano
                                 t2 = Thread(
@@ -1366,7 +1368,7 @@ def aggAtributos(request,idTI):
                                 )
                                 t2.start()
 
-                                p = Atributo_Item(idAtributoTI=atr, id_item=item, valor=str(DOC[0]))
+                                p = Atributo_Item(idAtributoTI=atr, id_item=item, valor=str(PATH))
                                 p.save()
                             else:
                                 print("vacio",DOC)
@@ -1954,7 +1956,7 @@ def eliminar_tipo_item(request,id_ti):
        return render(request, "Error.html", context)
 
 
-def DescargarArchivo(request,id_item,archivo):
+def DescargarArchivo(request,id_atributo):
     """
     FUNCION QUE DESCARGA UN ARCHIVO ADJUNTO DE UN ITEM SELECCIONADO, MEDIANTE EL TOKEN DE API DE DESARROLLADOR DE DROPBOX, VERIFICA SI EL ARCHIVO SELECCIONADO
     EXISTE, CASO CONTRARIO MUESTRA VENTANA DE ERROR, MEDIANTE EL NOMBRE DEL ARCHIVO SE GENERA LA DIRECCION DEL ARCHIVO EN DROPBOX QUE ES /ID_PROYECTO/ID_ITEM/NOMBRE-ARCHIVO
@@ -1963,10 +1965,10 @@ def DescargarArchivo(request,id_item,archivo):
     :param archivo: NOMBRE DEL ARCHIVO A DESCARGAR DEL ITEM
     :return: REDIRIGE A LA LISTA DE ATRIBUTOS DEL ITEM
     """
-    item=Item.objects.get(id_item=id_item)
+    atributo=Atributo_Item.objects.get(id_atributo=id_atributo)
     dbx = dropbox.Dropbox(TOKEN)
     try:
-        url = dbx.files_get_temporary_link('/'+str(item.fase.id_Proyecto.id_proyecto)+'/'+str(item.id_item)+'/'+archivo)
+        url = dbx.files_get_temporary_link(atributo.valor)
     except:
         url=None
 
@@ -1977,12 +1979,12 @@ def DescargarArchivo(request,id_item,archivo):
             "titulo_b1": "",
             "boton1": "",
             "titulo_b2": "LISTO",
-            "boton2": "/detallesFase/" + str(item.fase.id_Fase),
+            "boton2": "/detallesFase/" + str(atributo.id_item.fase.id_Fase),
         }
         return render(request, 'Error.html', context)
 
     webbrowser.open_new(url.link)
-    return redirect('gestion:listar_atributos',item.ti.id_ti,item.id_item)
+    return redirect('gestion:listar_atributos',atributo.id_item.ti.id_ti,atributo.id_item.id_item)
 
 def SubirArchivo(DOC, PATH):
     """
