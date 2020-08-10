@@ -52,6 +52,8 @@ urlpatterns = [
     path('detallesFase/<int:idFase>', views.detallesFase, name="detallesFase"),
     path('listar_relaciones/<int:idItem>', views.listar_relaciones, name="listar_relaciones"),
     path('listar_atributos/<int:idAtributoTI>/<int:id_item>', views.listar_atributos, name="listar_atributos"),
+    path('listar_atributos/<int:idAtributoTI>/<int:id_item>/<int:ver>', views.listar_atributos, name="listar_atributos_ver"),
+    
     path('comite/<int:pk>', views.comite, name='comite'),
     path('AggComite/<int:pk>', views.AggComite, name='AggComite'),
     path('desvinculacionComite/<int:pk>/<int:pk_user>', views.desvinculacionComite, name='desvinculacionComite'),

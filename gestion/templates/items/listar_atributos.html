@@ -15,30 +15,42 @@
                 {%block volver_atras %}
                 {%endblock %}
 
-{%block titulo_proyecto %}
-              <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                   <div class="card-body">
 
-                            <table class="table table-striped table-hover">
+
+
+{%block interno%}
+                <form method="POST" action="" onSubmit="return enviado()" enctype="multipart/form-data">{% csrf_token %}
+
+                <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+
+                   <div class="card-body">
+                       <center>
+                                <h6 class="navy" >Puede cambiar los valores del ítem si desea, recuerde que se generará una nueva versión del ítem</h6>
+                       </center>
+                       <style>
+                           .navy{
+                               color: cornflowerblue;
+                           }
+                       </style>
+                       <table class="table table-striped table-hover">
                                 <thead>
-                                            <td>NOMBRE DE PROYECTO</td>
+                                            <td>NOMBRE DE ITEM</td>
                                             <td>DESCRIPCION</td>
                                             <td>ESTADO</td>
+                                            <td>COSTO</td>
                                 </thead>
                                 <tbody>
-                                    <td>{{proyectos.nombre}}</td>
-                                    <td>{{proyectos.descripcion}}</td>
-                                    <td>{{proyectos.estado}}</td> </tr>
+                                    <td><input class="form-control" placeholder="Ingrese nombre" {% if ver %} readonly {% endif %} type="text" name="item_nombre" step="any" value="{{item.nombre}}" required></td>
+                                    <td><input class="form-control" placeholder="Ingrese descripción" {% if ver %} readonly {% endif %} type="text" name="item_descripcion" step="any" value="{{item.descripcion}}" required></td>
+                                    <td><input class="form-control" type="text" name="item_estado" readonly value="{{item.estado}}" required></td>
+                                    <td><input class="form-control"  placeholder="Ingrese costo" {% if ver %} readonly {% endif %} type="number" name="item_costo" step="any" value="{{item.costo}}" required></td>
 
                                 </tbody>
 
                             </table>
                         </div>
-              </div>
-{%endblock%}
-
-{%block interno%}
+                </div>
     {% load guardian_tags %}
     {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
               <!-- Dropdown Card Example -->
@@ -55,7 +67,7 @@
                     {% if not atributos %}
                         <div class="alert alert-info">No hay atributos del item</div>
                     {% else %}
-                    <form method="POST" action="" onSubmit="return enviado()" enctype="multipart/form-data">{% csrf_token %}
+
 
                         <table class="table table-striped table-hover">
                             <thead>
@@ -79,45 +91,49 @@
 
                                             {%if atributo.tipo_dato == 'File' and atributo.es_obligatorio == true %}
                                                             <td>
+
                                                                 <a class="btn btn-circle btn-primary" href="{% url 'gestion:DescargarArchivo' atributos.id_atributo%}"  ><i class="fas fa-download"></i></a>
 
-                                                                <input placeholder="Ingrese el valor"  type="File" name="{{atributos.id_atributo}}"  required>
+                                                    {% if not  ver %}
+                                                    <input placeholder="Ingrese el valor"  type="File" name="{{atributos.id_atributo}}" >
+                                                    {% endif %}
                                                             </td>
 
                                                             {%endif%}
                                             {%if atributo.tipo_dato == 'File' and atributo.es_obligatorio == false %}
                                                 <td>
                                                     <a class="btn btn-secondary" href="{% url 'gestion:DescargarArchivo' atributos.id_atributo%}" role="button" >DESCARGAR</a>
-
+                                                    {% if not  ver %}
                                                     <input placeholder="Ingrese el valor"  type="File" name="{{atributos.id_atributo}}" >
+                                                    {% endif %}
                                                 </td>
 
                                             {%endif%}
                                             {%if atributo.tipo_dato == 'Decimal' and atributo.es_obligatorio == true %}
-                                                <td><input placeholder="Ingrese el valor" type="number" name="Decimal" step="any" value="{{atributos.valor}}" required></td>
+                                                <td><input placeholder="Ingrese el valor" class="form-control"   {% if ver %} readonly {% endif %} type="number" name="Decimal" step="any" value="{{atributos.valor}}" required></td>
                                             {%endif%}
                                             {%if atributo.tipo_dato == 'Decimal' and atributo.es_obligatorio == false %}
-                                                <td><input placeholder="Ingrese el valor" value="{{atributos.valor}}" type="number" name="Decimal" step="any" ></td>
+                                                <td><input placeholder="Ingrese el valor" class="form-control"   {% if ver %} readonly {% endif %} value="{{atributos.valor}}" type="number" name="Decimal" step="any" ></td>
                                             {%endif%}
                                             {%if atributo.tipo_dato == 'Date' and atributo.es_obligatorio == true %}
-                                                <td><input placeholder="Ingrese el valor" value="{{atributos.valor}}" type="date" name="Date" required></td>
+                                                <td><input placeholder="Ingrese el valor" class="form-control"   {% if ver %} readonly {% endif %} value="{{atributos.valor}}" type="date" name="Date" required></td>
                                             {%endif%}
                                             {%if atributo.tipo_dato == 'Date' and atributo.es_obligatorio == false %}
-                                                <td><input placeholder="Ingrese el valor" value="{{atributos.valor}}" type="date" name="Date"></td>
+                                                <td><input placeholder="Ingrese el valor" class="form-control"   {% if ver %} readonly {% endif %} value="{{atributos.valor}}" type="date" name="Date"></td>
                                             {%endif%}
                                             {%if atributo.tipo_dato == 'String' and atributo.es_obligatorio == true %}
-                                                <td><input placeholder="Ingrese el valor" value="{{atributos.valor}}" type="text" name="String" required></td>
+                                                <td><input placeholder="Ingrese el valor" class="form-control"   {% if ver %} readonly {% endif %} value="{{atributos.valor}}" type="text" name="String" required></td>
                                             {%endif%}
                                             {%if atributo.tipo_dato == 'String' and atributo.es_obligatorio == false %}
-                                                <td><input placeholder="Ingrese el valor" value="{{atributos.valor}}" type="text" name="String"></td>
+                                                <td><input placeholder="Ingrese el valor" class="form-control"   {% if ver %} readonly {% endif %} value="{{atributos.valor}}" type="text" name="String"></td>
                                             {%endif%}
                                             {%if atributo.tipo_dato == 'Boolean'%}
                                                     <td>
                                                         <STRONG>SELECCIONE</STRONG>
-                                                        <select name="Boolean" >
-                                                        <option value="{{atributos.valor}}" >{{atributos.valor}}</option>
-                                                        <option value="True" >True</option>
-                                                        <option value="False">False</option>
+                                                        <select class="form-control"    {% if ver %} readonly {% endif %} name="Boolean" >
+                                                        <option class="form-control"   {% if ver %} readonly {% endif %} value="{{atributos.valor}}" >{{atributos.valor}}</option>
+                                                        <option class="form-control"   {% if ver %} readonly {% endif %} value="True" >True</option>
+                                                        <option class="form-control"   {% if ver %} readonly {% endif %} value="False">False</option>
                                                         </select>
                                                     </td>
                                             {%endif%}
@@ -127,8 +143,11 @@
                                             {%endfor%}
                             </tbody>
                         </table>
+                    {% if not ver %}
                         <input type="submit" class="form-control btn-primary" value="Modifica y dale click aqui para cambiar los valores">
-                    </form>
+
+                    {% endif %}
+
                     {% endif %}
                 </div>
               </div>
@@ -163,5 +182,6 @@
     });
   });
   </script>
+                     </form>
 {%endblock%}
 

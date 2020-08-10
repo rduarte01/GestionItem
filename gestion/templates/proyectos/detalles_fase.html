@@ -58,7 +58,7 @@
                             <th data-field="DESCRIPCION" data-sortable="true">Descripción</th>
                             <th data-field="COSTO" data-sortable="true">Costo</th>
                             <th>Tazabilidad / Calc. Impacto</th>
-                            <th>Ver Atributos</th>
+                            <th><center>Atributos</center></th>
                             <th>Cambiar Estado Item</th>
                         </thead>
                         <tbody>
@@ -68,7 +68,8 @@
                                     <td>{{items.descripcion}}</td>
                                     <td>{{items.costo}}</td>
                                    <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Trazabilidad / CI</a></td>
-                                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Atributos TI</a></td>
+                                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Editar Atributos</a>
+                                   <a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.ti.id_ti    items.id_item items.id_item %}" >Ver Atributos</a></td>
                                    <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}">Estado Item</a></td>
 
                                 </tr>
