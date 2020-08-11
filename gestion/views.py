@@ -2626,3 +2626,68 @@ def validar_proyecto_cancelado(id_proyecto):
             "boton2": "/proyectos/",
         }
     return  context
+
+def solicitud(request, pk):
+    item=Item.objects.get(id_item=pk)
+    comite = Comite.objects.filter(id_proyecto=item.fase.id_Proyecto.id_proyecto)
+
+    lista_comite = []
+
+    for i in comite:
+        user = User.objects.get(id=i.id_user)
+        lista_comite.append(user.email)
+    #print(lista_comite)
+    if request.method == 'POST':
+        motivo = request.POST['solicitud']
+        #print(motivo)
+        for i in lista_comite:
+            asunto = 'Se genero solicitud de cambio del usuario '+ str(request.user)
+            mensaje = motivo
+            CorreoMail(asunto,mensaje,i)
+        t = Solicitud_cambio(item=item,usuario=request.user, motivo=motivo)
+        t.save()
+        messages.success(request,'Su solicitud fue enviada correctamente!')
+
+        return redirect('gestion:bandeja_mensajes',item.fase.id_Proyecto.id_proyecto)
+
+    context={
+        'proyectos':item.fase.id_Proyecto,
+        'item':item,
+        'list':lista_comite
+    }
+    return render(request,'items/solicitud_cambio.html',context)
+
+def bandeja_mensajes(request,pk):
+    proyecto = Proyecto.objects.get(id_proyecto=pk)
+    user = User.objects.get(id=request.user.id)
+
+    try:
+        mensajes = Solicitud_cambio.objects.filter(usuario=user,item__fase__id_Proyecto=proyecto)
+    except:
+        mensajes=None
+
+    print(mensajes)
+    context ={
+        'proyectos':proyecto,
+        'mensajes':mensajes,
+    }
+
+    return render(request,'proyectos/bandeja_mensajes.html',context)
+
+
+def bandeja_mensajes_solicitudes(request, pk):
+    proyecto = Proyecto.objects.get(id_proyecto=pk)
+    user = User.objects.get(id=request.user.id)
+
+    try:
+        mensajes = Solicitud_cambio.objects.filter(item__fase__id_Proyecto=proyecto)
+    except:
+        mensajes = None
+
+    print(mensajes)
+    context = {
+        'proyectos': proyecto,
+        'mensajes': mensajes,
+    }
+
+    return render(request, 'proyectos/notificaciones.html', context)

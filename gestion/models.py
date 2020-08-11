@@ -347,3 +347,22 @@ class LB_item(models.Model):
     """ID PERTENECIENE A LA CLASE Item"""
     lb = models.ForeignKey(LineaBase, on_delete = models.CASCADE)
     """ID PERTENECIENTE A LA CLASE LineaBase"""
+
+class Solicitud_cambio(models.Model):
+    item = models.ForeignKey(Item, on_delete = models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete = models.CASCADE)
+    motivo = models.CharField(max_length=10000)
+    a_favor = models.IntegerField(default=0)
+    en_contra = models.IntegerField(default=0)
+    fecha = models.DateTimeField(auto_now_add=True, null=True)
+
+class Solicitud_cambio_votacion(models.Model):
+    usuario = models.ForeignKey(User, on_delete = models.CASCADE)
+    solicitud = models.ForeignKey(Solicitud_cambio, on_delete = models.CASCADE)
+    choices_data_type = (
+        ("Aprobado", "Aprobado"),
+        ("Rechazado", "Rechazado"),
+        ("Pendiente", "Pendiente")
+    )
+    estado = models.CharField('Estado', max_length = 50, choices = choices_data_type, default = 'Pendiente')
+    comentario = models.CharField(max_length=1000,null=True)

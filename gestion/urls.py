@@ -68,7 +68,11 @@ urlpatterns = [
     path('seleccionar/usuario/para/asignar/rol/proyecto/<int:id_fase>',views.seleccionar_usuario_rol,name='seleccionar_usuario_rol'),
     path('crearLB/<int:pk>/', views.CrearLB, name = 'crearLB'),
     path('ver_lb/<int:pk>/', views.ver_lb, name = 'ver_lb'),
+    path('solicitud/<int:pk>/', solicitud, name = 'solicitud_cambio'),
+    path('notificaciones/<int:pk>/', bandeja_mensajes_solicitudes, name = 'notificaciones'),
+    path('bandeja_mensajes/<int:pk>/', bandeja_mensajes, name = 'bandeja_mensajes'),
     path('cambiarEstadoItem/<int:pk>/', views.modificarEstadoItem, name = 'cambiarEstadoItem'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

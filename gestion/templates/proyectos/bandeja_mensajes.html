@@ -1,0 +1,128 @@
+{%extends 'proyectos/base.html'%}
+{%block imports%}
+    {% load guardian_tags %}
+{%endblock%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%block title%}
+        <title>Solicitud de cambio</title>
+    {%endblock%}
+
+</head>
+<body>
+
+
+{%block interno%}
+    {% load guardian_tags %}
+    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+        <!-- Dropdown Card Example -->
+        <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Solicitud de cambio</h6>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                {% if not mensajes %}
+                    <div class="alert alert-info">No hay Solicitud de Cambio!</div>
+                {% else %}
+                    <table
+                            id="table"
+                            data-toggle="table"
+                            data-pagination="true"
+                            data-search="true"
+                            data-show-refresh="true"
+                            data-show-export="true"
+                            data-show-columns="true"
+                            data-show-toggle="true"
+                            data-show-fullscreen="true"
+                            data-toolbar=".buttons-toolbar"
+                            data-locale="es-NI"
+                            data-page-list="[10, 25, 50, 100, all]"
+                            data-detail-formatter="detailFormatter"
+                            data-minimum-count-columns="2"
+                            data-show-pagination-switch="true"
+                            data-id-field="id"
+                    >
+                        <thead>
+                        <th data-field="fecha" data-sortable="true">Fecha</th>
+                            <th data-field="ITEMS" data-sortable="true">Item</th>
+                            <th data-field="DESCRIPCION" data-sortable="true">Motivo</th>
+
+                            <th data-field="COSTO" data-sortable="true">Acción</th>
+
+                        </thead>
+                        <tbody>
+                            {%for items in mensajes %}
+                                <tr>
+                                    <td>{{items.fecha | date:"d/m/Y"  }}</td>
+                                    <td>{{items.item.nombre}}</td>
+                                    <td>{{items.motivo}}</td>
+
+                                   <td><a type="button" class="btn btn-primary"  href="#" >Ver</a></td>
+
+                                </tr>
+
+                            {%endfor%}
+
+                        </tbody>
+                    </table>
+                    {% endif %}
+            </div>
+        </div>
+        <div
+            class="modal fade" id="creacion" role="dialog">
+        </div>              
+              
+{% endblock %}          
+
+<script>
+
+  // Call the dataTables jQuery plugin
+  $(document).ready(function() {
+    $('.table').DataTable({
+      "language": {
+        "sProcessing": "Procesando...",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sEmptyTable": "Ningún dato disponible en esta tabla",
+        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sSearch": "Buscar:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst": "<span class='fa fa-angle-double-left'></span>",
+            "sLast": "<span class='fa fa-angle-double-right'></span>",
+            "sNext": "<span class='fa fa-angle-right'></span>",
+            "sPrevious": "<span class='fa fa-angle-left'></span>"
+        },
+        "oAria": {
+            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        }
+      }
+    });
+  });
+  </script>
+
+{% block extrajs %}
+
+<script type="text/javascript">
+  
+    var $ = jQuery.noConflict();
+    function abrir_modal_creacion(url){
+      $('#creacion').load(url, function(){
+        $(this).modal('show');
+      })
+    }
+
+</script>
+
+{% endblock extrajs %}

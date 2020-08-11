@@ -1,0 +1,29 @@
+{%extends 'proyectos/base.html'%}
+
+{% block interno%}
+  {% load guardian_tags %}
+                {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                   <div class="card-body">
+
+          <center>
+            <h5>Solicitud de Cambio</h5>
+            <p class="lead">
+                Ingrese el motivo del cambio ya que el item <strong>{{item.nombre }}</strong> se encuentra en LB por ende se necesita
+                aprobación de los integrantes del comite, se estara votando y cuando concluya se le enviará un correo
+                de la decisión, favor exprese detalladamente el motivo, podrá visualizar la solicitud desde la bandeja
+                de mensajes
+            </p>
+
+          </center>
+                       <form method="POST" >{% csrf_token %}
+                            <textarea  name="solicitud" required  class="form-control" placeholder="Ingrese el motivo"></textarea>
+                           <br>
+                           <input type="submit" class="form-control btn-primary" value="Enviar solicitud">
+                        </form>
+
+
+          </div>
+          </div>
+{% endblock interno%}
