@@ -452,6 +452,7 @@ def tipo_item_views_create(request,id_fase):
 
     context = validar_proyecto_cancelado(fase.id_Proyecto.id_proyecto)
     if context != {}:
+
         return render(request, 'Error.html', context)
 
     if not validar_permiso(request.user, "is_gerente", fase.id_Proyecto):
@@ -509,7 +510,6 @@ def add_atribute(request,nombre_ti,cantidad_atributos,fase_id):
     if request.method == 'POST':
         my_form_set=my_form(request.POST)
         if(my_form_set.is_valid()):
-            print('aca imprimo')
             if validar_datos_form_atributo(my_form_set):
                 tipo_item=TipoItem(nombre=nombre_ti,fase_id=fase_id)
                 tipo_item.save()
@@ -1751,7 +1751,6 @@ def editar_ti(request,id_ti):
             if not Item.objects.filter(ti_id=id_ti).exists() : ##el item no tiene asociado ningun tipo de item
                 formset_ti = TipoItemForm(instance=tipo_item)
                 formset = AtributeFormSet(queryset=query_atributos)
-                print('se imprime esto')
                 context={
                     'formset':formset,
                     'formset_ti':formset_ti,
@@ -2048,13 +2047,13 @@ def Asignar_Rol_usuario_proyecto(request,id_Fase,id_usuario):
 
     context = validar_proyecto_cancelado(proyecto.id_proyecto)
     if context != {}:
-        return render(request, 'Error.html', context)
+        messages.error(request, 'No se puede trabajar , el proyecto ya esta cancelado')
+        return redirect('gestion:detalles_Proyecto', fase.id_Proyecto.id_proyecto)
 
     if  obtener_todos_roles_proyecto(proyecto.id_proyecto)==[] :
         messages.error(request,'El Proyecto aun no tiene roles, creelos antes de asingar')
         return redirect('gestion:detallesProyecto',fase.id_Proyecto.id_proyecto)
 
-    print('el id del proyecto  es',proyecto.id_proyecto)
     if  request.method=='POST':
         rolNombreProyecto=[]
         rolesProyecto = Group.objects.all() #Otengo Todo los roles del Proyecto
@@ -2107,13 +2106,8 @@ def Asignar_Rol_usuario_proyecto(request,id_Fase,id_usuario):
             }
             return  render(request,'proyectos/asignarRol.html',contexto)
         else:
-            context = {
-                "mensaje": "No eres gerente de proyecto, por lo tanto no puede Asignar Rol en la fase" +str(fase.id_Fase) ,
-                "titulo": "Conflicto de permiso ",
-                "titulo_b2": "Salir",
-                "boton2": "/proyectos/",
-            }
-            return render(request, "Error.html", context)
+            messages.error(request, 'No es gerente de proyecto, no puede asignar roles')
+            return redirect('gestion:detalles_Proyecto', fase.id_Proyecto.id_proyecto)
 
 def asignar_rol_proyecto(request,nombre):
     '''Esta funcion es la encargada se asignar todos los permisos de un rol, pero para un determinado
@@ -2243,7 +2237,8 @@ def seleccionar_usuario_rol(request,id_fase):
     #validar el estado del proyecto
     context = validar_proyecto_cancelado(proyecto.id_proyecto)
     if context != {}:
-        return render(request, 'Error.html', context)
+        messages.error(request, "Ya no se puede trabar en un proyecto cancelado")
+        return redirect('gestion:detalles_Proyecto', proyecto.id_proyecto)
 
     user = request.user  ## USER ACTUAL
     form = Usuario.objects.all()
@@ -2274,14 +2269,8 @@ def seleccionar_usuario_rol(request,id_fase):
             return render(request, 'proyectos/seleccionar_usuario_rol.html',
                           {'form': form, 'list': list, 'pk': pk, "proyectos": proyecto})
         else:
-            context = {
-                "mensaje": "No eres gerente de proyecto, por lo tanto no puede Asignar Rol en la fase" + str(
-                    fase.id_Fase),
-                "titulo": "Conflicto de Permiso ",
-                "titulo_b2": "Salir",
-                "boton2": "/proyectos/",
-            }
-            return render(request, "Error.html", context)
+            messages.error(request, "No es gerente de proyecto, por lo tanto no puede asignar roles")
+            return redirect('gestion:detalles_Proyecto', proyecto.id_proyecto)
 
 
 def eliminar_rol_proyecto_usuario(id_fase, listaRoles, usuario,user):

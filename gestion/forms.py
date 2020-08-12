@@ -167,9 +167,9 @@ class AtributeForm(forms.ModelForm):
         fields=('nombre','es_obligatorio','tipo_dato')
         '''atributos que vamos a desplegar en nuestro form'''
         labels={
-            'nombre':'Nombre del atributo',
-            'es_obligatorio':'Obligatoriedad del Tipo de Item',
-            'tipo_dato':'Tipo de dato del atributo'
+            'nombre':'Nombre del Atributo',
+            'es_obligatorio':'Obligatoriedad del Atributo',
+            'tipo_dato':'Tipo de dato del Atributo'
         }
         '''los labels que se mostraran para cada fields en nuestro html'''
         widgets={
@@ -180,9 +180,7 @@ class AtributeForm(forms.ModelForm):
                 }
             ),
             'es_obligatorio': forms.CheckboxInput(
-                attrs={
-                    'class':'form-check-input'
-                }
+
             ),
             'tipo_dato':forms.Select(
                 attrs={

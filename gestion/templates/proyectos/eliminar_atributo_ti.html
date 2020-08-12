@@ -1,40 +1,48 @@
 {%extends 'proyectos/base.html'%}
 {% block interno %}
-    <br>
-    <center><h2> Lista de atributos del tipo de item <strong>"{{ tipo_item.nombre}}"</strong>  </h2></center>
 
-    <hr>
-    {% if atributos %}
-<div class="cities">
+  <div class="card shadow mb-4">
+  <!-- Card Header - Dropdown -->
+
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Lista de atributos del tipo de item <strong>"{{ tipo_item.nombre}}"</strong></h6>
+      </div>
+  <!-- Card Body -->
+      <div class="card-body">
+          {% if atributos %}
           <form method='POST' onSubmit="return enviado()">
-          {% csrf_token%}
+              {% csrf_token%}
+              <table class="table table-bordered table-striped">
+                  <caption class="text text-primary">  Lista de atributos</caption>
+                  <thead>
+                  <th> Nombre del atributo</th>
+                  <th> Seleccione para eliminar</th>
+                  </thead>
 
-        <table class="table table-bordered">
-            <thead>
-                <th> Nombre del atributo</th>
-                <th> Seleccione para eliminar</th>
-            </thead>
-            {% for atributo in atributos%}
-            <tbody>
-                <tr>
-                    <td> {{atributo.nombre}}</td>
-                    <td>
-                           <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="checkbox" value="{{atributo.id_atributo}}"
-                                       id="{{atributo.id_atributo}}">
-                                <label class="form-check-label" for="{{atributo.id_atributo}}">
-                                    Selecciona para eliminar
-                                </label>
-                            </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <input class="btn btn-primary" type='submit' value='Eliminar'/>
-        </form>
-</div>
-    {%else%}
-            <h2>Este tipo  de item {{tipo_item.nombre}} no tiene atributos para eliminar</h2>
-    {%endif%}
+                  <tbody>
+                  {% for atributo in atributos%}
+                  <tr>
+                      <td> {{atributo.nombre}}</td>
+                      <td>
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" name="checkbox"
+                                     value="{{atributo.id_atributo}}"
+                                     id="{{atributo.id_atributo}}">
+                              <label class="form-check-label" for="{{atributo.id_atributo}}">
+                                  Selecciona para eliminar
+                              </label>
+                          </div>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+              <input class="btn btn-primary" type='submit' value='Eliminar'/>
+          </form>
+
+          {%else%}
+            <div class="alert alert-info"> Este tipo de item {{tipo_item.nombre}} no tiene atributos para eliminar</div>
+          {%endif%}
+      </div>
+  </div>
 {% endblock %}

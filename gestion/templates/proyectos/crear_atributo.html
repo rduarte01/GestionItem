@@ -6,7 +6,14 @@
 
 
 {% block interno %}
-    <div class="cities">
+     <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Atributos</h6>
+
+          </div>
+          <!-- Card Body -->
+          <div class="card-body">
             <form  method='POST' onSubmit="return enviado()">{% csrf_token%}
                 {{ formset.management_form }}
                 {% for form in formset %}
@@ -31,9 +38,6 @@
                 {% endfor %}
                 <input class="btn btn-primary" type='submit' value= 'Save' />
             </form>
-    </div>
+          </div>
+     </div>
 {% endblock %}
-
-<select class="">
-  <option>Default select</option>
-</select>

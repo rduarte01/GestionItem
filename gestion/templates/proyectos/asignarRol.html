@@ -9,29 +9,49 @@
 <body>
 
 {% block interno%}
-    <div class="container">
-            <div class="cities">
-              <h2>Selecciona los Proyectos a asignar al Usuario:</h2><br>
-             <form method="POST">{% csrf_token%}
-                {% for rol in roles %}
-                    {% if rol.ban == 1 %}
-                        <div class="form-group">
-                            <input type="checkbox" name='roles' value="{{rol.nombre_real}}" checked >
-                            <label class="form-check-label">
-                                {{rol.nombre_lindo}}
-                            </label>
-                        </div>
-                    {% else %}
-                        <div class="form-group">
-                            <input type="checkbox" name='roles' value="{{rol.nombre_real}}" >
-                            <label class="form-check-label">
-                                {{rol.nombre_lindo}}
-                            </label>
-                        </div>
-                    {%endif%}
-                 {%endfor%}
-              <input class="btn btn-primary" type='submit' value= 'Save' />
-        </form>
-      </div>
+    <div class="card shadow mb-4">
+
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Selecciona los Roles a asignar al Usuario:</h6>
+          </div>
+          <!-- Card Body -->
+          <div class="card-body">
+
+              <form method="POST">{% csrf_token%}
+                   <table class="table table-bordered">
+                       <thead class="thead-light">
+                            <tr>
+                              <th scope="col">Lista de Roles</th>
+                            </tr>
+                       </thead>
+                       <tbody>
+
+                        {% for rol in roles %}
+                               <tr>
+                                {% if rol.ban == 1 %}
+                                    <div class="form-group">
+                                       <td> <input id="{{rol.nombre_lindo}}" type="checkbox" name='roles' value="{{rol.nombre_real}}" checked >
+                                            <label for="{{rol.nombre_lindo}}" class=" ml-2 form-check-label">
+                                                {{rol.nombre_lindo}}
+                                             </label>
+                                        </td>
+                                    </div>
+                                {% else %}
+                                    <div class="form-group">
+                                        <td> <input id="{{rol.nombre_lindo}}" type="checkbox" name='roles' value="{{rol.nombre_real}}" >
+                                            <label for="{{rol.nombre_lindo}}" class=" ml-2 form-check-label">
+                                                {{rol.nombre_lindo}}
+                                             </label>
+                                        </td>
+                                    </div>
+                                {%endif%}
+                                </tr>
+                            {%endfor%}
+                       </tbody>
+                   </table>
+                  <input class="btn btn-primary" type='submit' value= 'Guardar' />
+              </form>
+          </div>
     </div>
+
 {%endblock%}
