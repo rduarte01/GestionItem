@@ -169,7 +169,6 @@ def estadoProyecto(request,pk):
 
 
 
-
 from threading import *
 
 
@@ -623,6 +622,8 @@ def crearFase(request,nroFase):
     fase = FaseForm(request.POST)
     global CANTIDAD
     cantidad = CANTIDAD
+    cantidad_fases = 4
+
     if fase.is_valid():
         x = Proyecto.objects.last()
         nombreFase = fase.cleaned_data.get("nombre")
@@ -634,14 +635,19 @@ def crearFase(request,nroFase):
             cantidad = cantidad - 1
             CANTIDAD = cantidad
             nroFase=nroFase-1
-            return redirect('gestion:crearFase',nroFase)
+            return redirect('gestion:crearFase', nroFase)
         else:
             assign_perm('is_gerente', request.user, x)
             add_permission_gerente(request.user,False)
             return redirect('gestion:menu')
 
+    #Se crea la variable cantidad fases para pintarla en el template en tiempo real
+    cantidad_fases = cantidad_fases - nroFase
+    cantidad_fases = cantidad_fases + 1
+
     context = {
-    'form': fase
+    'form': fase,
+    'cantidad_fases': cantidad_fases,
     }
     return render(request, 'proyectos/crear_fase.html', context)
 
@@ -1225,11 +1231,11 @@ def crearItem(request,Faseid):
     #if(proyecto.estado != "INICIADO"):
     #    messages.error(request,"EL PROYECTO NO SE ENCUENTRA INICIADO POR ENDE NO SE PUEDE CREAR ITEMS AUN, FAVOR CAMBIE SU ESTADO A INICIADO SI DESEA REALIZAR ESTA ACCION, ESTADO ACTUAL DEL PROYECTO: "+str(proyecto.estado))
     #    return redirect('gestion:detallesFase',fase.id_Proyecto.id_proyecto)
-
+    """
     if(fase1SinItems(fases,fase)==True):# si no es de la primera fase y la F1 no tiene items muestra error
         messages.error(request,"LA FASE ANTERIOR NO CONTIENE ITEMS POR ENDE NO PODRA RELACIONAR CON LA PRIMERA FASE, CREE ITEM EN LA FASE ANTERIOR A ESTA Y LUEGO INTENTE NUEVAMENTE")
         return redirect('gestion:detallesFase',fase.id_Proyecto.id_proyecto)
-
+    """        
     if (hayTiFase(fase)):  # muestra mensaje de error si no hay TI no se puede crear item
         messages.error(request,"LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE")
         return redirect('gestion:detallesFase',fase.id_Proyecto.id_proyecto)
@@ -2415,16 +2421,27 @@ def CrearLB(request,pk):
     print('print ',listaItems)
     item_verificador = Item.objects.last()
     lista=[]
-    context={
+
+    try:
+        LB = LineaBase.objects.all()
+    except:
+        LB = None
+
+    try:
+        LBitem = LB_item.objects.all()
+    except:
+        LBitem = None
+
+    context = {
         'listaitems':listaItems,
         'fase':pk,
         'items':lista_items,
         'form':LBForm,
         'proyectos':fase.id_Proyecto,
-        'list':lista
+        'list':lista,
+        'LB': LB,
+        'LBitem': LBitem,
     }
-
-
 
     return render(request, 'items/crear_lb.html', context)
 
@@ -2449,10 +2466,20 @@ def modificarEstadoItem(request, pk):
 
     form = FormItemFase(request.POST)
     item = Item.objects.get(id_item = pk)
+    try:
+        print(item)
+        print("Item + fase", item.fase)
+        print("Item + fase + proyecto", item.fase.id_Proyecto.id_proyecto)
+        proyectos = Proyecto.objects.get(id_proyecto = item.fase.id_Proyecto.id_proyecto)
+    except:
+        proyectos = None
+
+    print(proyectos)
 
     contexto = {
         'form' : form,
         'item' : item,
+        'proyectos': proyectos,
     }
 
     if form.is_valid():
@@ -2485,8 +2512,12 @@ def modificarEstadoItem(request, pk):
                 item.estado = z
                 item.save()
                 print('actualizA EN LA BD el estado')
-                registrarAuditoriaProyecto(request.user, "Se ha cambiado el estado del item " + item.nombre + " a Aprobado ", item.fase.id_Proyecto.id_proyecto
-                                           , item.fase.id_Proyecto.nombre, item.fase.nombre)
+                registrarAuditoriaProyecto(
+                                        request.user,
+                                        "Se ha cambiado el estado del item " + item.nombre + " a Aprobado ",
+                                        item.fase.id_Proyecto.id_proyecto,
+                                        item.fase.id_Proyecto.nombre, item.fase.nombre
+                )
             else:
                 context = {
                     "mensaje": "EL ITEM DEBE ESTAR FINALIZADO PARA PODER SER APROBADO",

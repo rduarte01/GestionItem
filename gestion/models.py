@@ -77,13 +77,13 @@ class Fase(models.Model):
         que los mismos se manejan por fases. En conclusión: Un usuario puede tener un rol solamente en una fase o en
         varias fases, esto depende del gerente el proyecto, quien es el encargado de asignar los roles a los usuarios"""
 
-    """PERMISOS QUE REQUIERE FASE"""
-    verbose_name = 'Fase'
-    """NOMBRE DEL MODELO DENTRO DE ADMIN"""
-    verbose_name_plural = 'Fases'
-    """NOMBRE DEL MODELO DENTRO DE ADMIN"""
-    ordering = ['id_Fase']
-    """ORDENA POR ID DE FASE"""
+        """PERMISOS QUE REQUIERE FASE"""
+        verbose_name = 'Fase'
+        """NOMBRE DEL MODELO DENTRO DE ADMIN"""
+        verbose_name_plural = 'Fases'
+        """NOMBRE DEL MODELO DENTRO DE ADMIN"""
+        ordering = ['id_Fase']
+        """ORDENA POR ID DE FASE"""
 
 class TipoItem(models.Model):
     """"
@@ -343,6 +343,6 @@ class LB_item(models.Model):
     id = models.AutoField(primary_key = True)
     """ID PERTENECIENTE A LA FASE LB_item"""
     item = models.ForeignKey(Item, on_delete = models.CASCADE)
-    """ID PERTENECIENE A LA CLASE Item"""
+    """ID PERTENECIENTE A LA CLASE Item"""
     lb = models.ForeignKey(LineaBase, on_delete = models.CASCADE)
     """ID PERTENECIENTE A LA CLASE LineaBase"""

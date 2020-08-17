@@ -99,7 +99,7 @@ DATOS CAMBIADOS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prueba3',
+        'NAME': 'prueba5',
         'USER':'postgres',
         'PASSWORD':'root',
         'HOST':'127.0.0.1',

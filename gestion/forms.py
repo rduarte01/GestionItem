@@ -71,14 +71,24 @@ class FormProyecto(forms.ModelForm):
                   ]
         """CAMPOS A MOSTRAR EN EL FORMULARIO"""
         labels= {
-            "nombre":"Ingrese un Nombre para el proyecto",
-            "descripcion":"Ingrese una descripcion para el proyecto",
+            "nombre":"Nombre del Proyecto",
+            "descripcion":"Descripcion del Proyecto",
             "users":"Seleccione los usuarios a añadir",
         }
         """LA ETIQUETA DE CADA CAMPO"""
         widgets={
-            "nombre": forms.TextInput(attrs={'class': 'form-control'}),
-            "descripcion": forms.TextInput(attrs={'class': 'form-control'}),
+            "nombre": forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese un nombre para el proyecto',
+                }
+            ),
+            "descripcion": forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese una descripcion para el proyecto',
+                }
+            ),
             "users": forms.CheckboxSelectMultiple(),
         }
         """LOS WIDGETS PARA CADA CAMPO AJUSTANDO A LO QUE SE NECESITA"""
@@ -144,8 +154,18 @@ class FaseForm(forms.ModelForm):
 
         widgets = {
         #"id_Fase": forms.IntegerField(),
-        "nombre" : forms.TextInput(attrs = {'class': 'form-control'}),
-        "descripcion": forms.TextInput(attrs = {'class': 'form-control'}),
+        "nombre" : forms.TextInput(
+            attrs = {
+                'class': 'form-control',
+                'placeholder': 'Ingrese un nombre para la fase',
+            }
+        ),
+        "descripcion": forms.TextInput(
+            attrs = {
+                'class': 'form-control',
+                'placeholder': 'Ingrese una descripcion para la fase',
+            }
+        ),
         #"estado": forms.TextInput(attrs = {'class': 'form-control'}),
         }
 
