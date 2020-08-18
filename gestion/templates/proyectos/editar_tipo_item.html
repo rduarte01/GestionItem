@@ -1,52 +1,60 @@
 
 {%extends 'proyectos/base.html'%}
 {% block interno%}
-<div class="cities">
-    <hr>
-    <form  method='POST' onSubmit="return enviado()">
+ <form  method='POST' onSubmit="return enviado()">
             {% csrf_token%}
            {{ formset.management_form }}
-           <center> <h2>Tipo de Item</h2> </center>
+        <div class="card shadow mb-4">
+          <!-- Card Header - Dropdown -->
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Tipo de Item</h6>
+          </div>
+          <div class="card-body">
                 <div class="form-group">
                     <label>Nombre del tipo de item:</label>
                         {{ formset_ti.nombre }}
                 </div>
-            <br>
-            <hr>
-            <br>
-            <center> <h2>Atributos</h2></center>
-           {% if formset.total_form_count %}
-                {% for form in formset %}
-                   {{ form.id_atributo }}
-                        <h2> Atributo {{ forloop.counter }}  </h2>
-                        <div class="form-group">
-                            <label>{{form.nombre.label}}</label>
-                            {{form.nombre}}
-                        </div>
-                        <div class="form-group">
-                            {{form.es_obligatorio}}
-                            <label class="form-check-label" for="defaultCheck1">
-                                {{form.es_obligatorio.label}}
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>{{form.tipo_dato.label}}</label>
-                            {{form.tipo_dato}}
-                        </div>
-                        <br>
-                        <hr>
-                {% endfor %}
-            {%else%}
-               <h2> Este tipo de item aun no tiene atributos</h2>
-            {%endif%}
+            </div>
+         </div>
+        <div class="card shadow mb-4">
+          <!-- Card Header - Dropdown -->
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Atributos</h6>
+          </div>
+          <div class="card-body">
+                    {% if formset.total_form_count %}
+                        {% for form in formset %}
+                           {{ form.id_atributo }}
+                                <h2> Atributo {{ forloop.counter }}  </h2>
+                                <div class="form-group">
+                                    <label>{{form.nombre.label}}</label>
+                                    {{form.nombre}}
+                                </div>
+                                <div class="form-group">
+                                    {{form.es_obligatorio}}
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        {{form.es_obligatorio.label}}
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>{{form.tipo_dato.label}}</label>
+                                    {{form.tipo_dato}}
+                                </div>
+                                <br>
+                                <hr>
+                        {% endfor %}
+                    {%else%}
+                        <div class="alert alert-info">Este tipo de item aun no tiene atributos</div>
+                    {%endif%}
+            </div>
+         </div>
+     <div class="card shadow mb-4" >
+         <div class="d-flex justify-content-around">
              <input class="btn btn-primary" type='submit' value= 'Actualizar' />
-             <br>
-            <br>
-            <a href="{% url 'gestion:agregar_atributo_ti'  tipo_item.id_ti %}" class="btn btn-primary">Agregar Atributo</a>
-            <br>
-            <br>
-            <a href="{% url 'gestion:eliminar_atributo_ti'  tipo_item.id_ti %}" class="btn btn-primary">Eliminar Atributo</a>
-        </form>
+             <a href="{% url 'gestion:agregar_atributo_ti'  tipo_item.id_ti %}" class="btn btn-primary">Agregar Atributo</a>
+             <a href="{% url 'gestion:eliminar_atributo_ti'  tipo_item.id_ti %}" class="btn btn-primary">Eliminar Atributo</a>
+         </div>
 
-</div>
+     </div>
+ </form>
 {% endblock interno%}

@@ -12,38 +12,47 @@
     {%endblock %}
 
     {% block interno %}
-    <h1>Seleccione un Usuario de la Lista </h1>
-    <div class="cities">
-    <table class="table table-bordered">
-          <thead>
-          <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
-                            {%if list%}
-                                <tr>
-                                    <td><h4>NOMBRE</h4></td>
-                                    <td><h4>CORREO</h4></td>
-                                </tr>
-                                {%for list in list %}
-                                    {%for i in form%}
-                                        {%if list == i.user.id%}
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="radio" value="{{i.user.id}}" id="{{i.user.id}}}">
-                                                        <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5></label>
-                                                    </div>
-                                                </td>
-                                                <td>{{ i.user.email }}</td>
-                                            </tr>
-                                        {%endif%}
-                                    {%endfor%}
-                                {%endfor%}
-                                <input type="submit" class="btn btn-primary" value="Seleccionar">
-                            {%else%}
-                                <h1>El proyecto no tiene usuarios</h1>
-                            {%endif%}
-                        </form>
-          </thead>
-    </table>
+
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Lista de Usuarios del proyecto</h6>
+      </div>
+  <!-- Card Body -->
+      <div class="card-body">
+          {%if list%}
+              <form method="POST" action="" onSubmit="return enviado()">{% csrf_token %}
+                  <table class="table table-bordered">
+                      <thead>
+                      <tr>
+                          <td><h4>NOMBRE</h4></td>
+                          <td><h4>CORREO</h4></td>
+                      </tr>
+                      {%for list in list %}
+                          {%for i in form%}
+                              {%if list == i.user.id%}
+                              <tr>
+                                  <td>
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="radio" value="{{i.user.id}}"
+                                                 id="{{i.user.id}}}">
+                                          <label class="form-check-label" for="{{i.user.id}}}"><h5>{{ i.user.username }}</h5>
+                                          </label>
+                                      </div>
+                                  </td>
+                                  <td>{{ i.user.email }}</td>
+                              </tr>
+                              {%endif%}
+                          {%endfor%}
+                      {%endfor%}
+                      </thead>
+                  </table>
+                  <input type="submit" class="btn btn-primary" value="Seleccionar">
+              </form>
+          {%else%}
+            <div class="alert alert-info"> El Proyecto no tiene usuarios</div>
+          {%endif%}
+      </div>
     </div>
 {% endblock interno %}
 </body>

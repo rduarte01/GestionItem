@@ -6,44 +6,51 @@
 {% load guardian_tags %}
 {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
 {% if "is_gerente" in proyecto_perms %}
-    <center><h2> Lista de Tipos de Item a importar </h2></center>
-    {%if tipoItems %}
-<div class="cities">
-     <form method='POST' onSubmit="return enviado()">
-            <table class="table table-bordered">
-                <thead>
-                     <th>Nombre del Tipo Item</th>
-                     <th>Proyecto Asociado</th>
-                     <th>Marque para importar</th>
-                </thead>
-                <tbody>
-                    {% for ti in tipoItems%}
-                            {% csrf_token%}
-                            <tr>
-                                <td>{{ti.ti.nombre}} </td>
-                                <td> {{ ti.proyecto.nombre }}</td>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="checkbox" value="{{ti.ti.id_ti}}"
-                                               id="{{ti.ti.id_ti}}">
-                                        <label class="form-check-label" for="{{ti.ti.id_ti}}">
-                                            Selecciona para importar
-                                        </label>
-                                    </div>
-                                </td>
-                            </tr>
-                    {% endfor %}
 
-                </tbody>
-            </table>
-             <input class="btn btn-primary" type='submit' value='Guardar'/>
-        </form>
-    {%else %}
-        <h1>No hay tipos de items disponibles para importar</h1>
-    {% endif %}
-</div>
-    <br>
-    <br>
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Lista de Tipos de Item a importar</h6>
+          </div>
+      <!-- Card Body -->
+          <div class="card-body">
+              {%if tipoItems %}
+                  <form method='POST' onSubmit="return enviado()">
+                      <table class="table table-bordered">
+                          <thead>
+                          <th>Nombre del Tipo Item</th>
+                          <th>Proyecto Asociado</th>
+                          <th>Marque para importar</th>
+                          </thead>
+                          <tbody>
+                          {% for ti in tipoItems%}
+                          {% csrf_token%}
+                          <tr>
+                              <td>{{ti.ti.nombre}}</td>
+                              <td> {{ ti.proyecto.nombre }}</td>
+                              <td>
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="checkbox" value="{{ti.ti.id_ti}}"
+                                             id="{{ti.ti.id_ti}}">
+                                      <label class="form-check-label" for="{{ti.ti.id_ti}}">
+                                          Selecciona para importar
+                                      </label>
+                                  </div>
+                              </td>
+                          </tr>
+                          {% endfor %}
+
+                          </tbody>
+                      </table>
+                      <input class="btn btn-primary" type='submit' value='Importar'/>
+                  </form>
+              {%else %}
+              <div class="alert alert-info">No hay tipos de items disponibles para importar</div>
+              {% endif %}
+          </div>
+    </div>
+
 {%else%}
     <h1> Usted no es gerente de Proyecto para este {{proyecto.nombre}}, No puede importar  Tipos de Item</h1>
 {% endif %}
