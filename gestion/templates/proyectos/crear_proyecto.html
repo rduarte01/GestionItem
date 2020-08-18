@@ -1,22 +1,23 @@
+{% extends 'Menu/base.html' %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
 {% block title %}
-
+    <title>Creacion de Proyecto</title>
 {% endblock title%}
 
-{% block contect %}
+{% block interno %}
     {% if perms.gestion.is_gerente %}
         <div class="jumbotron">
-         <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver Atras</a><h1>Creacion de Proyecto</h1>
+         <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Atras</a><h1>Creacion de Proyecto</h1>
                  <br>
                 <br>
             <form method="POST"  action="" onSubmit="return enviado()">{% csrf_token %}
                 {{ formProyecto.as_p }}
 
-                <h6>Ingrese la cantidad de fases para el proyecto</h6>
-                <input type="number" class="form-control" name="fase" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <h6>Fases del Proyecto</h6>
+                <input type="number" class="form-control" name="fase" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Ingrese la cantidad de fases para el proyecto"> 
                 <br>
                 <br>
                 <br>
@@ -27,7 +28,7 @@
         <h1>Usted no es gerente de este proyecto, por tanto no puede crear proyectos</h1>
         <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
     {% endif %}
-{% endblock %}
+{% endblock interno %}
 
 {% block click %}
 <script LANGUAGE="JavaScript">

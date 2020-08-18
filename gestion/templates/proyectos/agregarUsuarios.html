@@ -1,4 +1,6 @@
 
+{% extends 'Menu/base.html' %}
+
 <title>Agrega Usuarios</title>
 {% load bootstrap4 %}
 {% bootstrap_css %}
@@ -9,7 +11,7 @@
 <style>
 #ocultar{display:none;}
 </style>
-    {% block contect %}
+    {% block interno %}
         {% if perms.gestion.is_gerente %}
             <div>
                 <a class="btn btn-primary" href="{%url 'gestion:Proyectocancelado'%}" role="button">Cancelar</a>
@@ -47,4 +49,4 @@
             <h1>Usted no es gerente de este proyecto, por tanto no puede crear proyectos</h1>
             <a class="btn btn-primary" href="{%url 'gestion:menu'%}" role="button">Volver al menu principal</a>
         {% endif %}
-    {% endblock %}
+    {% endblock interno %}

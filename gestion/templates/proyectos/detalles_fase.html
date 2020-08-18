@@ -15,8 +15,6 @@
 {%block volver_atras %}
 {%endblock %}
 
-
-
 {%block interno%}
     {% load guardian_tags %}
     {% get_obj_perms request.user for proyectos as "proyecto_perms" %}

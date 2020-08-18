@@ -12,30 +12,28 @@
 
 </head>
 <body>
-                {%block volver_atras %}
-                {%endblock %}
+{%block volver_atras %}
+{%endblock %}
 
 {%block titulo_proyecto %}
-              <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                   <div class="card-body">
-
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                            <td>NOMBRE DE PROYECTO</td>
-                                            <td>DESCRIPCION</td>
-                                            <td>ESTADO</td>
-                                </thead>
-                                <tbody>
-                                    <td>{{proyectos.nombre}}</td>
-                                    <td>{{proyectos.descripcion}}</td>
-                                    <td>{{proyectos.estado}}</td> </tr>
-
-                                </tbody>
-
-                            </table>
-                        </div>
-              </div>
+    <div class="card shadow mb-4">
+               <!-- Card Header - Dropdown -->
+        <div class="card-body">
+            
+            <table class="table table-striped table-hover">
+                <thead>
+                    <td>NOMBRE DE PROYECTO</td>
+                    <td>DESCRIPCION</td>
+                    <td>ESTADO</td>
+                </thead>
+                <tbody>
+                    <td>{{proyectos.nombre}}</td>
+                    <td>{{proyectos.descripcion}}</td>
+                    <td>{{proyectos.estado}}</td>            
+                </tbody>
+            </table>
+        </div>
+    </div>
 {%endblock%}
 
 {%block interno%}
@@ -86,6 +84,38 @@
                     </table>
 
                     {% endif %}
+                    <div class="container" id="listaLB">
+                        <h4>Lista de Lineas Base creadas</h4>
+                        {% if LB %}
+                            {% for lb in LB %}
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <td>ID</td>
+                                        <td>Nombre</td>
+                                        <td>Estado</td>
+                                        <td>Proyecto</td>
+                                        <td>Items</td>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ lb.idLB }}</td>
+                                            <td>{{ lb.nombreLB }}</td>
+                                            <td>{{ lb.estado }}</td>
+                                            <td>{{ lb.proyecto.nombre }}</td>
+                                            <td>
+                                                {% for items in LBitem %}
+                                                <li> {{ items.item.nombre }} </li>
+                                                {% endfor %}
+                                            </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            {% endfor %}
+                        {% else %}
+                            <h1>No hay Lineas Base creadas hasta el momento</h1>    
+                        {% endif %}
+
+                    </div>
                 </div>
               </div>
     <script>

@@ -1,24 +1,20 @@
-
-<title>Atributos</title>
+{% extends 'Menu/base.html' %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
 {% block title %}
-<h1>Completa los atributos del TI!</h1>
+    <title>Agregar Atributos </title>
 {% endblock title%}
-
 
 <style>
 #ocultar{display:none;}
 </style>
 
-
-
-
-    {% block contect %}
-        <a class="btn btn-primary" href="{% url 'gestion:itemCancelado' id_item%}" role="button">Cancelar</a>
+    {% block interno %}
+        <a class="btn btn-danger" href="{% url 'gestion:itemCancelado' id_item%}" role="button">Cancelar</a>
         <div class="jumbotron">
+            <h1>Atributos del Item</h1>
             <form method="POST" action="" onSubmit="return enviado()" enctype="multipart/form-data">{% csrf_token %}
                 {% block content %}
                     <table class="table table-bordered">
@@ -33,7 +29,13 @@
                                 <tr>
                                     <td>{{atributos.nombre}}</td>
                                     <td>{{atributos.tipo_dato}}</td>
-                                    <td>{{atributos.es_obligatorio}}</td>
+                                    <td>
+                                        {% if atributos.es_obligatorio == true %}
+                                            <span>Si</span>
+                                        {% else %}
+                                            <span>No</span>
+                                        {% endif %}
+                                    </td>
                                         {%if atributos.tipo_dato == 'File' and atributos.es_obligatorio == true %}
                                             <td><input placeholder="Ingrese el valor" type="File" name="{{atributos.id_atributo}}"  required></td>
                                         {%endif%}
@@ -76,7 +78,7 @@
                 <input type="submit" class="btn btn-primary" value="Siguiente">
             </form>
         </div>
-    {% endblock %}
+    {% endblock interno %}
 <!--{% if perms.gestion.crear_item %}-->
 <!--{% else %}
         <h1>Usted no es tiene el permiso de crear item</h1>

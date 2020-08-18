@@ -2,22 +2,29 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
-
 {% block title %}
-    <h1>Creacion de Item</h1>
+    <title>Creacion de Item</title> 
 {% endblock title%}
 
+{% block interno %}
 
-{% block contect %}
-
-            <a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
-            <div class="jumbotron">
-            <form method="POST"  action="" onSubmit="return enviado()">{% csrf_token %}
+    <div>
+        <h1></h1>
+    </div>
+    <a class="btn btn-primary" href="javascript:history.back()" role="button" style="width: 10%;">Volver Atras</a>
+    <div class="row justify-content-center" style="height: 50%; width: 100%; ">
+    <div class="jumbotron" >
+        <div class="container" style="heigth: 600px; width: 900px;">
+            <h1>Creacion de Items</h1>
+            <form method="POST"  action="" onSubmit="return enviado()">
+                {% csrf_token %}
                 {{ form.as_p }}
                 <input type="submit" class="btn btn-primary" value="Siguiente">
             </form>
-            </div>
-{% endblock %}
+        </div>
+    </div>
+    </div>
+{% endblock interno %}
     <!--{% if perms.gestion.crear_item %}-->
 
     <!--{% else %}
@@ -41,4 +48,3 @@
         }
 </script>
 {% endblock click %}
-

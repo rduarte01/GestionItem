@@ -1,31 +1,40 @@
+{% extends 'Menu/base.html' %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
+
 {% block title %}
-        <h1>Creacion de Fases</h1>
-    {% endblock title %}
+    <title>Creación de Fases</title>
+{% endblock title %}
 
-{% block contect %}
+{% block interno %}
 
-{% if  perms.gestion.is_gerente %}
+    <div class="card shadow mb-4">
 
+    <div class="card-body">
+            {% if  perms.gestion.is_gerente %}
 
-    <title>Crear Fases</title>
-    <meta charset = "UTF-8">
+            <h1>Crear Fases</h1>
+            <meta charset="UTF-8">
 
-        <form method= "POST" onSubmit="return enviado()">
-            {% csrf_token %}
+            <form method="POST" onSubmit="return enviado()">
+                
+                <div>
+                    <h6 class="m-0 font-weight-bold text-primary">Fase: {{ cantidad_fases}}</h6>
+                </div>
+                {% csrf_token %}
 
-            {{ form.as_p}}
+                {{ form.as_p}}
+                <div>
+                    <input class="btn btn-primary" type='submit' value='Guardar'/>
+                </div>
+            </form>
+
             <div>
-                <input class="btn btn-primary" type = 'submit' value = 'Guardar' />
+                <a class="btn btn-danger" href="{%url 'gestion:Proyectocancelado'%}" role="button">Cancelar</a>
             </div>
-        </form>
-
-        <div>
-            <a class="btn btn-primary" href="{%url 'gestion:Proyectocancelado'%}" role="button">Cancelar</a>
         </div>
-
+    </div>
 
 {% else  %}
     <h1>Usted no es gerente de este proyecto, por tanto no puede crear fases</h1>
@@ -36,7 +45,7 @@
         var cuenta=0;
         function enviado() {
                 if (cuenta == 0)
-            {
+            {   
                 cuenta++;
                 return true;
             }
@@ -46,6 +55,13 @@
             }
         }
 </script>
+<script type="text/javascript" id="suma">
+    function Suma(fase, n)
+    {   
+        return (parseInt(document.getElementById(fase)) + parseInt(document.getElementById(n)))
+    }
+
+</script>
 {% endblock click %}
 
-    {% endblock contect %}
+{% endblock interno %}
