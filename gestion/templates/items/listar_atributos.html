@@ -144,7 +144,9 @@
                             </tbody>
                         </table>
                     {% if not ver %}
-                        <input type="submit" class="form-control btn-primary" value="Modifica y dale click aqui para cambiar los valores">
+                    <input type="submit" class="form-control btn-primary" value="Modifica y dale click aqui para cambiar los valores">
+
+                    <a class="form-control btn-warning" href="{% url 'gestion:solicitud_cambio' item.id_item %}"><center><strong>Ítem en LB, ¿Realizar Solicitud de Cambio?</strong></center></a>
 
                     {% endif %}
 
@@ -183,5 +185,6 @@
   });
   </script>
                      </form>
-{%endblock%}
+
+                {%endblock%}
 

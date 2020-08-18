@@ -7,7 +7,7 @@
             <a href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}"> {{proyectos.nombre}}</a></div></div>
             <li><a href="{% url 'gestion:menu' %}">Menu</a></li>
             <li><a href="{% url 'gestion:perfil' %}">Perfil</a></li>
-            <li><a href="{%url 'gestion:listar_proyectos'%}">Trabaje sobre sus proyectos!</a></li>
+            <li><a href="{%url 'gestion:listar_proyectos'%}">Ver proyectos</a></li>
 
             <li><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" >Usuarios del proyecto</a></li>
             {% if "is_gerente" in proyecto_perms %}
@@ -23,6 +23,9 @@
 
             <li><a href="{% url 'gestion:Contactos' %}">Contáctanos</a></li>
             <li><a href="{% url 'gestion:logout' %}">Cerrar Sesion</a></li>
+            <li><a href="{% url 'gestion:bandeja_mensajes' proyectos.id_proyecto %}">Solicitud de Cambio</a></li>
+            <li><a href="{% url 'gestion:notificaciones' proyectos.id_proyecto %}">Bandeja de Notificaciones</a></li>
+
          {%endblock%}
 
 
