@@ -10,14 +10,15 @@
 </head>
 <body>
     {% block url%}
-        <a href="{% url 'gestion:menu' %}"> Gestion Items</a></div></div>
-        <li><a href="{% url 'gestion:perfil' %}">Perfil</a></li>
-        <li><a href="{%url 'gestion:listar_proyectos'%}">Trabaje sobre sus proyectos!</a></li>
+        <a href="{% url 'gestion:menu' %}"> Menú Principal</a></div></div>
+        <li><a href="{% url 'gestion:perfil' %}"><i class="fas fa-user-alt"></i> Perfil</a></li>
+        <li><a href="{%url 'gestion:listar_proyectos'%}"><i class="fas fa-list"></i> Lista de Proyectos</a></li>
         {% if perms.gestion.is_gerente %}
-            <li><a href="{%url 'gestion:CrearProyecto' %}" >Usted es un Gerente! Cree un Proyecto!</a></li>
+            <li><a href="{%url 'gestion:CrearProyecto' %}" ><i class="fas fa-plus"></i> Crear un Proyecto</a></li>
         {% endif %}
-        <li><a href="{% url 'gestion:Contactos' %}">Contáctanos</a></li>
-        <li><a href="{% url 'gestion:logout' %}">Cerrar Sesion</a></li>
+        <li><a href="{% url 'gestion:Contactos' %}"><i class="far fa-address-book"></i> Contáctanos</a></li>
+        <li><a href="{% url 'gestion:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a></li>
+
     {%endblock%}
     {%block interno %}
     <!-- Jumbotron -->

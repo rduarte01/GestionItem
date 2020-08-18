@@ -4,27 +4,42 @@
            {% block url%}
                {% load guardian_tags %}
                 {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
-            <a href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}"> {{proyectos.nombre}}</a></div></div>
-            <li><a href="{% url 'gestion:menu' %}">Menu</a></li>
-            <li><a href="{% url 'gestion:perfil' %}">Perfil</a></li>
-            <li><a href="{%url 'gestion:listar_proyectos'%}">Ver proyectos</a></li>
 
-            <li><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" >Usuarios del proyecto</a></li>
+        <a href="{% url 'gestion:menu' %}"> Menú Principal</a></div></div>
+        <li><a href="{% url 'gestion:perfil' %}"><i class="fas fa-user-alt"></i> Perfil</a></li>
+        <li><a href="{%url 'gestion:listar_proyectos'%}"><i class="fas fa-list"></i> Lista de Proyectos</a></li>
+        {% if perms.gestion.is_gerente %}
+            <li><a href="{%url 'gestion:CrearProyecto' %}" ><i class="fas fa-plus"></i> Crear un Proyecto</a></li>
+        {% endif %}
+        <li><a href="{% url 'gestion:Contactos' %}"><i class="far fa-address-book"></i> Contáctanos</a></li>
+        <li><a href="{% url 'gestion:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a></li>
+
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <a href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}"> Proyecto: <small>{{proyectos.nombre}}</small></a>
+                </div>
+            </div>
+
+
+            <li><a href="{% url 'gestion:UsersProyecto' proyectos.id_proyecto %}" ><i class="fas fa-users-cog"></i> Usuarios del proyecto</a></li>
             {% if "is_gerente" in proyecto_perms %}
                 {% if proyectos.estado != 'CANCELADO' %}
-                   <li><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}">Estado Proyecto</a></li>
-                    <li><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}">✚ Usuarios</a></li>
-                     <li><a href="{% url 'gestion:misRoles' proyectos.id_proyecto %}">✚ Rol</a></li>
+                   <li><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}"><i class="fas fa-calendar-check"></i> Estado Proyecto</a></li>
+                    <li><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}"><i class="fas fa-plus"></i> Usuarios</a></li>
+                     <li><a href="{% url 'gestion:misRoles' proyectos.id_proyecto %}"><i class="fas fa-plus"></i> Rol</a></li>
                 {% endif %}
             {% endif %}
-            <li><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}">Ver TI del proyecto</a></li>
-            <li><a href="{% url 'gestion:comite' proyectos.id_proyecto %}">Comite de cambio</a></li>
-            <li><a href="{% url 'gestion:auditoriaProyecto' proyectos.id_proyecto%}">Auditoria proyecto</a></li>
+            <li><a href="{% url 'gestion:listar_tipo_item' proyectos.id_proyecto %}"><i class="fas fa-window-restore"></i> Ver TI del proyecto</a></li>
+            <li><a href="{% url 'gestion:comite' proyectos.id_proyecto %}"><i class="fas fa-user-secret"></i> Comite de cambio</a></li>
+            <li><a href="{% url 'gestion:auditoriaProyecto' proyectos.id_proyecto%}"><i class="fas fa-clipboard-list"></i> Auditoria proyecto</a></li>
 
-            <li><a href="{% url 'gestion:Contactos' %}">Contáctanos</a></li>
-            <li><a href="{% url 'gestion:logout' %}">Cerrar Sesion</a></li>
-            <li><a href="{% url 'gestion:bandeja_mensajes' proyectos.id_proyecto %}">Solicitud de Cambio</a></li>
-            <li><a href="{% url 'gestion:notificaciones' proyectos.id_proyecto %}">Bandeja de Notificaciones</a></li>
+            <li><a href="{% url 'gestion:bandeja_mensajes' proyectos.id_proyecto %}"><i class="fas fa-reply-all"></i> Solicitud de Cambio</a></li>
+            <li><a href="{% url 'gestion:notificaciones' proyectos.id_proyecto %}"><i class="fas fa-inbox"></i> Bandeja de Notificaciones</a>
+
+                <br>
+                <br>
+                <br>
+            </li>
 
          {%endblock%}
 
@@ -39,6 +54,12 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                    <div class="card-body">
+                           <center>
+                               <i class="fas fa-stream"></i><strong class="navy" > </i> <i class="fas fa-angle-double-left"></i>   Más Opciones de Proyecto - Parte Superior Izquierda </strong>
+                                <input type="submit" class="btn btn-success" id=btn1 value="O seleccione Aquí perra">
+                               <br>
+                               <br>
+                           </center>
 
                             <table class="table table-striped table-hover">
                                 <thead>
@@ -62,3 +83,4 @@
 
                     <h1>sin contenido</h1>
                 {% endblock interno %}
+

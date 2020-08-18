@@ -128,7 +128,7 @@ def estadoProyecto(request,pk):
                 p.estado=z####### SE ASIGNA ESTADO
                 p.save()##### SE GUARDA
                 registrarAuditoriaProyecto(request.user, " cambio el estado a iniciado ", p.id_proyecto, p.nombre, "")
-                return redirect('gestion:listar_proyectos')### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
+                return redirect('gestion:detalles_Proyecto',pk)### VUELVE A LISTAR LOS PROYECTOS DEL USUARIO
 
             context = {
                 "mensaje":"NO POSEE TIPOS DE ITEM CREE AL MENOS UNO PAARA INICIAR EL PROYECTO",
