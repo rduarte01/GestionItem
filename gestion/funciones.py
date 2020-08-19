@@ -8,7 +8,7 @@ from django.shortcuts import  render,redirect
 from gestion.models import *
 from django.contrib.auth.models import User
 import dropbox
-TOKEN="4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
+TOKEN="PmyFRnnhTbYAAAAAAAAAATzqHtLq9zKgZw5oSajE3ClcBDVwOi7vSYxi5todZcsv"
 """TOKEN DE DROPBOX PARA REALIZAR LA CONEXION"""
 
 def validar_permiso(user,permiso, proyecto):

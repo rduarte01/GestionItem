@@ -42,7 +42,7 @@ gestionitems.fpuna@gmail.com
 GestionItem20202
 https://josevc93.github.io/python/Dropbox-y-python/
 """
-TOKEN="4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
+TOKEN="PmyFRnnhTbYAAAAAAAAAATzqHtLq9zKgZw5oSajE3ClcBDVwOi7vSYxi5todZcsv"
 """TOKEN DE DROPBOX PARA REALIZAR LA CONEXION"""
 
 from .funciones import *
@@ -214,6 +214,8 @@ def menu(request):
     """MENU PARA LOS USUARIOS DE ACUERDO A SUS ROLES, PARA ADMINISTRADOR DE SISTEMAS,
     GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PARTE"""
     user = request.user
+   # fase = Fase.objects.filter(id_Proyecto__id_proyecto=1).order_by('id_Fase')
+
 
     if( user.usuario.esta_aprobado):
         if user.has_perm('gestion.es_administrador'):
@@ -1501,7 +1503,7 @@ def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
     list = []
     nroFase = 0
     ok=False
-    for fase in reversed(fases):
+    for fase in fases:# Reverse revento
         print(fase)
         nroFase += 1
         if (itemActual.fase == fase):
@@ -1587,12 +1589,16 @@ def relacionarItem(request,id_proyecto,id_item):
         #print(some_var)
         lis=[]
         proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
-        fases = Fase.objects.filter(id_Proyecto=proyecto)
+        fases = Fase.objects.filter(id_Proyecto=proyecto).order_by('id_Fase')
         item = Item.objects.filter(id_item=id_item)
-
+    # hacer una funcion
+    # [1][2][3]
+    #  [3][2][1]
         #VERIFICAR SI ES DE LA PRIMERA FASE SIN RELACIONES, SINO MOSTRAR ERROR
         if(lis==some_var):
-            if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
+            print(fases[0].id_Fase)
+            print(item[0].fase.id_Fase)
+            if fases[0].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
                 context = {
                     "mensaje": "EL ITEM NO ES DE LA PRIMERA FASE, POR ENDE DEBE DE CONTAR CON RELACION Y TENER DE FORMA DIRECTA O INDIRECTA RELACION CON LA PRIMERA FASE DEL PROYECTO ",
                     "titulo": "ITEM SIN RELACION",
@@ -1603,7 +1609,7 @@ def relacionarItem(request,id_proyecto,id_item):
                 }
                 return render(request, 'Error.html', context)
 
-        if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
+        if fases[0].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
             #VERIFICAR SI TIENE RELACION CON LA F1
             if(primeraFase(id_proyecto, id_item, some_var)==True):
                 context = {
@@ -2097,6 +2103,7 @@ def SubirArchivo(DOC, PATH):
     """
     # id proy/ id item/ nombre
     dbx = dropbox.Dropbox(TOKEN)
+    print(TOKEN)
     dbx.files_upload(DOC.file.read(), PATH)
     print("SUBIO A DROPBOX ---> ", DOC)
 
