@@ -52,23 +52,37 @@
                             data-id-field="id"
                     >
                         <thead>
-                            <th data-field="ITEMS" data-sortable="true">Items</th>
+                            <th data-field="ITEMS" data-sortable="true">Item</th>
                             <th data-field="DESCRIPCION" data-sortable="true">Descripción</th>
                             <th data-field="COSTO" data-sortable="true">Costo</th>
-                            <th>Tazabilidad / Calc. Impacto</th>
+                            <th>Tazabilidad /Calc. Impacto</th>
                             <th><center>Atributos</center></th>
-                            <th>Cambiar Estado Item</th>
+                            <th>Relaciones</th>
+                            <th>Estado</th>
+
                         </thead>
                         <tbody>
                             {%for items in items %}
                                 <tr>
-                                    <td>{{items.nombre}}</td>
-                                    <td>{{items.descripcion}}</td>
-                                    <td>{{items.costo}}</td>
-                                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Trazabilidad / CI</a></td>
-                                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Editar Atributos</a>
-                                   <a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.ti.id_ti    items.id_item items.id_item %}" >Ver Atributos</a></td>
-                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}">Estado Item</a></td>
+                                    <td><center>{{items.nombre}}</center></td>
+                                    <td><center>{{items.descripcion}}</center></td>
+                                    <td><center>{{items.costo}}</center></td>
+
+                                   <td>
+                                        <center>
+                                            <a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" > Ver </a>
+                                        </center>
+                                   </td>
+                                   <td>
+                                       <center>
+                                        <a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Editar</a>
+                                        <a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.ti.id_ti    items.id_item items.id_item %}" >Ver</a>
+                                       </center>
+                                   </td>
+                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:editar_relaciones' items.id_item  %}">Ver - Editar</a></td>
+
+                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}">Cambiar</a></td>
+
 
                                 </tr>
 

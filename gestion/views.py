@@ -827,7 +827,7 @@ def listar_relaciones(request,idItem):
     DATA = []
     LINK = []
 
-    DATA.append({'key': itemActual.id_item, 'name': itemActual.nombre + ' cost:'+str(itemActual.costo), 'group': 'FASE'+str(itemActual.fase.id_Fase), 'color': "#2711E3"}, )
+    DATA.append({'key': itemActual.id_item, 'name': itemActual.nombre + ' costo:'+str(itemActual.costo), 'group': 'FASE'+str(itemActual.fase.id_Fase), 'color': "#2711E3"}, )
     fases = Fase.objects.filter(id_Proyecto=itemActual.fase.id_Proyecto, )
     num=0
     for i in fases:
@@ -837,7 +837,7 @@ def listar_relaciones(request,idItem):
     relaciones_trazabilidad(itemActual,DATA,LINK)
     izq=0
     band=0
-    der=0
+    #der=0
     for i in DATA:
         band += 1
         #print(i['name'])
@@ -848,13 +848,13 @@ def listar_relaciones(request,idItem):
 
     relaciones_trazabilidad_delante(itemActual,DATA,LINK)
     cont=0
-    der=0
+ #   der=0
     for i in DATA:
         cont+=1
         if cont > band:
             it = Item.objects.get(id_item=i['key'])
-            der+=it.costo
-    der += itemActual.costo
+            izq+=it.costo
+#    der += itemActual.costo
 
     context={
         "relaciones":relaciones,
@@ -864,7 +864,8 @@ def listar_relaciones(request,idItem):
         'data':DATA,
         'link':LINK,
         'izq':izq,
-        'der':der,
+     #   'der':der,
+
     }
     return render(request, 'items/trazabilidad.html', context)
 
@@ -883,7 +884,7 @@ def relaciones_trazabilidad(item,DATA,LINK):
             if i['key']== inicio.id_item:
                 ok=False
         if ok:                                                                                                 #fase12
-            DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' cost:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
+            DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' costo:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
             LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
 
         relaciones_trazabilidad(inicio, DATA,LINK)
@@ -902,7 +903,7 @@ def relaciones_trazabilidad_delante(item,DATA,LINK):
             if i['key']== fin.id_item:
                 ok=False
         if ok:
-            DATA.append({'key': fin.id_item, 'name': fin.nombre + ' cost:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
+            DATA.append({'key': fin.id_item, 'name': fin.nombre + ' costo:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
             LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
         relaciones_trazabilidad_delante(fin, DATA,LINK)
 
@@ -944,7 +945,7 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
             #t = Versiones(id_item=item.id_item, id_padre= t.id_padre, version=t.version+1)
             #t.save()
 
-            diccionario_data = verificar_datos_form_atributo_item(request,TI.id_ti,atributos,request.POST,request.FILES)
+            diccionario_data = verificar_datos_form_atributo_item(request,TI.id_ti,atributo,request.POST,request.FILES)
 
             print (diccionario_data)
            
@@ -1019,13 +1020,18 @@ def verificar_datos_form_atributo_item(request,idTI,atributos,reqForm,reqFile):
                     list2 = []
                     for atr in tiposAtributo:
                         DOC = reqFile.getlist(str(atr.id_atributo))
-                      
+                        print(reqFile)
+                        print (DOC)
+                        print (atr.id_atributo)
                         if (DOC != list2):
                             #print("no vacio", DOC[0])
                             #ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
                             #PATH = f'/{ruta}/{DOC[0]}'
                             # SubirArchivo(DOC[0], PATH)
                             #print("--", PATH)
+
+                            # valor nombre idproy/idItem/valor
+                            # valor = idproy/idItem/valor
 
                             ##se sube archivo a dropbox en segundo plano
                             #t2 = Thread(
@@ -2717,3 +2723,44 @@ def bandeja_mensajes_solicitudes(request, pk):
     }
 
     return render(request, 'proyectos/notificaciones.html', context)
+
+def Editar_relaciones(request, pk):
+    template = 'items/relaciones.html'
+    item = Item.objects.get(id_item=pk)
+    relaciones_inicio = Relacion.objects.filter(inicio_item=item.id_item)
+    relaciones_fin = Relacion.objects.filter(fin_item=item.id_item)
+    inicio = []
+    fin = []
+    for i in relaciones_inicio:
+        item_inicio = Item.objects.get(id_item=i.inicio_item)
+        inicio.append({
+            'name':item_inicio.nombre,
+            'desc':item_inicio.descripcion,
+            'cost':item_inicio.costo,
+        })
+
+    for i in relaciones_fin:
+        item_fin = Item.objects.get(id_item=i.fin_item)
+        fin.append({
+            'name':item_fin.nombre,
+            'desc':item_fin.descripcion,
+            'cost':item_fin.costo,
+        })
+
+    todo_item = Item.objects.filter(fase__id_Proyecto=item.fase.id_Proyecto, actual = True).exclude( id_item = item.id_item)
+
+    if request.method == 'POST':
+        var = request.POST.getlist('item')
+        var2 = request.POST.getlist('direccion')
+        print(var)
+        print(var2)
+        return redirect('gestion:editar_relaciones',pk)
+
+    context={
+    'inicio':inicio,
+    'fin':fin,
+    'item':item,
+    'todos':todo_item,
+    'proyectos':item.fase.id_Proyecto,
+    }
+    return render(request,template,context)

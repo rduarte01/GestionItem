@@ -72,6 +72,7 @@ urlpatterns = [
     path('notificaciones/<int:pk>/', bandeja_mensajes_solicitudes, name = 'notificaciones'),
     path('bandeja_mensajes/<int:pk>/', bandeja_mensajes, name = 'bandeja_mensajes'),
     path('cambiarEstadoItem/<int:pk>/', views.modificarEstadoItem, name = 'cambiarEstadoItem'),
+    path('relaciones/item/<int:pk>/', views.Editar_relaciones, name = 'editar_relaciones'),
 
 ]
 if settings.DEBUG:
