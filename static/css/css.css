@@ -876,3 +876,13 @@ html { height: 100%;}
 /*-------------------------------*/
 /*            Overlay            */
 /*-------------------------------*/
+/* Invisible texto */
+figcaption {
+  display:none;
+  transition: all .5s;
+}
+/* Visible texto */
+figure:hover > figcaption {
+  display:block;
+  transition: all .5s;
+}

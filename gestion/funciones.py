@@ -232,6 +232,7 @@ def itemCancelado(request,pk):
 
     try:
         x = Item.objects.get(id_item=pk)
+        fase = x.fase.id_Fase
     except:
         context = {
             "mensaje": "EL ITEM YA NO EXISTE ",
@@ -239,19 +240,6 @@ def itemCancelado(request,pk):
             "titulo_b1": "",
             "boton1": "",
             "titulo_b2": "Salir",
-            "boton2": "/proyectos/",
-        }
-        return render(request, 'Error.html', context)
-
-    if request.user.has_perm('crear_item',x.fase.id_Proyecto) and validar_rol_fase('crear_item',x.fase,request.user):
-        print('tiene el permiso de crear_item')
-    else:
-        context = {
-            "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
-            "titulo": "SIN PERMISO",
-            "titulo_b1": "",
-            "boton1": "",
-            "titulo_b2": "SALIR",
             "boton2": "/proyectos/",
         }
         return render(request, 'Error.html', context)
@@ -270,7 +258,7 @@ def itemCancelado(request,pk):
     for i in instanceItem:
         i.delete()
 
-    return  redirect("gestion:menu")
+    return  redirect("gestion:detallesFase",fase)
 
 
 def primeraFase(id_proyecto,id_item,some_var):

@@ -25,7 +25,7 @@
             {% if "is_gerente" in proyecto_perms %}
                 {% if proyectos.estado != 'CANCELADO' %}
                    <li><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}"><i class="fas fa-calendar-check"></i> Estado Proyecto</a></li>
-                    <li><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}"><i class="fas fa-plus"></i> Usuarios</a></li>
+                    <li><a href="{% url 'gestion:AggUser' proyectos.id_proyecto %}"><i class="fas fa-user-plus"></i> Usuarios</a></li>
                      <li><a href="{% url 'gestion:misRoles' proyectos.id_proyecto %}"><i class="fas fa-plus"></i> Rol</a></li>
                 {% endif %}
             {% endif %}
@@ -46,7 +46,7 @@
 
 
                 {%block volver_atras %}
-                    <a class="btn btn-primary" href="javascript:history.back()" role="button">Volver Atras</a>
+                    <a class="btn btn-primary" href="javascript:history.back()" role="button"><i class="fas fa-undo-alt"></i> Volver Atras</a>
                 {%endblock %}
 
 
@@ -55,9 +55,11 @@
                 <!-- Card Header - Dropdown -->
                    <div class="card-body">
                            <center>
-                               <i class="fas fa-stream"></i><strong class="navy" > </i> <i class="fas fa-angle-double-left"></i>   Más Opciones de Proyecto - Parte Superior Izquierda </strong>
-                                <input type="submit" class="btn btn-success" id=btn1 value="O seleccione Aquí perra">
-                               <br>
+                               <i class="fas fa-stream"></i><strong class="navy" > </i> <i class="fas fa-angle-double-left"></i>   Más Opciones de Proyecto - Parte Superior Izquierda - O Presione aqui --></strong>
+                                <button type="submit" class="btn btn-success" id=btn1 >
+                                <i class="fas fa-info"></i>
+                                </button>
+                                    <br>
                                <br>
                            </center>
 

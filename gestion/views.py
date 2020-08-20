@@ -1347,7 +1347,7 @@ def crearItem(request,Faseid):
     """        
     if (hayTiFase(fase)):  # muestra mensaje de error si no hay TI no se puede crear item
         messages.error(request,"LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE")
-        return redirect('gestion:detallesFase',fase.id_Proyecto.id_proyecto)
+        return redirect('gestion:detallesFase',fase.id_Fase)
 
     form= FormItem(request.POST)
     if form.is_valid():
@@ -1548,11 +1548,13 @@ def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
                 # print("se añadio en list item: ",items[i])
     if (mostrarAnte == True):
         faseAnt = Fase.objects.get(id_Fase=(itemActual.fase.id_Fase - 1))
-        items = Item.objects.filter(actual=True, fase=faseAnt)
+        #items = Item.objects.filter(actual=True, fase=faseAnt)
+        items = LB_item.objects.filter(item__actual=True, item__fase=faseAnt)
         print("se muestrar items de la fase ant: ", items)
         for i in range(items.count()):  ###todos los items del proyecto
-            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
-                list.append(items[i].id_item)
+
+            if items[i].item.fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].item.id_item:
+                list.append(items[i].item.id_item)
                 # print("se añadio en list item: ",items[i])
     print("lista a mostrar: ", list)
 
@@ -2732,7 +2734,7 @@ def Editar_relaciones(request, pk):
     inicio = []
     fin = []
     for i in relaciones_inicio:
-        item_inicio = Item.objects.get(id_item=i.inicio_item)
+        item_inicio = Item.objects.get(id_item=i.fin_item)
         inicio.append({
             'name':item_inicio.nombre,
             'desc':item_inicio.descripcion,
@@ -2740,7 +2742,7 @@ def Editar_relaciones(request, pk):
         })
 
     for i in relaciones_fin:
-        item_fin = Item.objects.get(id_item=i.fin_item)
+        item_fin = Item.objects.get(id_item=i.inicio_item)
         fin.append({
             'name':item_fin.nombre,
             'desc':item_fin.descripcion,
@@ -2764,3 +2766,4 @@ def Editar_relaciones(request, pk):
     'proyectos':item.fase.id_Proyecto,
     }
     return render(request,template,context)
+

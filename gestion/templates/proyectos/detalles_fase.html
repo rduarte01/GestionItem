@@ -24,8 +24,8 @@
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Detalles de Fase: <strong class="red" >{{ fases.nombre }}</strong></h6>
                 <h6 class="m-0 font-weight-bold text-primary"><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></h6>
-                <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:crearLB' fases.id_Fase %}" role="button">Crear Linea Base</a></h6>
-                <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a></h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:crearLB' fases.id_Fase %}" role="button"><i class="fas fa-object-group"></i> Linea Base</a></h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button"><i class="fas fa-undo-alt"></i> Volver Atras</a></h6>
 
             </div>
             <!-- Card Body -->
@@ -55,7 +55,7 @@
                             <th data-field="ITEMS" data-sortable="true">Item</th>
                             <th data-field="DESCRIPCION" data-sortable="true">Descripción</th>
                             <th data-field="COSTO" data-sortable="true">Costo</th>
-                            <th>Tazabilidad /Calc. Impacto</th>
+                            <th>Tazabilidad <i class="fas fa-code-branch"></i> /Calc. Impacto</th>
                             <th><center>Atributos</center></th>
                             <th>Relaciones</th>
                             <th>Estado</th>
@@ -70,18 +70,18 @@
 
                                    <td>
                                         <center>
-                                            <a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" > Ver </a>
+                                            <a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" ><i class="fas fa-eye"></i> Ver </a>
                                         </center>
                                    </td>
                                    <td>
                                        <center>
-                                        <a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Editar</a>
-                                        <a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.ti.id_ti    items.id_item items.id_item %}" >Ver</a>
+                                        <a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" ><i class="fas fa-edit"></i> Editar</a>
+                                        <a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.ti.id_ti    items.id_item items.id_item %}" ><i class="fas fa-eye"></i> Ver</a>
                                        </center>
                                    </td>
-                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:editar_relaciones' items.id_item  %}">Ver - Editar</a></td>
+                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:editar_relaciones' items.id_item  %}"><i class="fas fa-eye"></i> Ver - <i class="fas fa-edit"></i> Editar</a></td>
 
-                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}">Cambiar</a></td>
+                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}"><i class="fas fa-circle-notch"></i> Cambiar</a></td>
 
 
                                 </tr>
