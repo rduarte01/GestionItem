@@ -73,6 +73,8 @@ urlpatterns = [
     path('bandeja_mensajes/<int:pk>/', bandeja_mensajes, name = 'bandeja_mensajes'),
     path('cambiarEstadoItem/<int:pk>/', views.modificarEstadoItem, name = 'cambiarEstadoItem'),
     path('relaciones/item/<int:pk>/', views.Editar_relaciones, name = 'editar_relaciones'),
+    path('relaciones/item/versiones/<int:pk>/<str:id>', views.Editar_relaciones, name = 'editar_relaciones_versiones'),
+    path('versiones/item/<int:pk>/', views.versiones_item, name = 'versiones_item'),
 
 ]
 if settings.DEBUG:

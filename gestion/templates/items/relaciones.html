@@ -12,7 +12,11 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <h7 class="navy" > Relación Item</h7>
-        <a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase%}" role="button"><i class="fas fa-undo-alt"></i> Volver Atras</a>
+        {% if version  %}
+            <a class="btn btn-primary" href="{% url 'gestion:versiones_item' item.id_item%}" role="button"><i class="fas fa-undo-alt"></i> Volver Atras</a>
+        {% else %}
+            <a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase%}" role="button"><i class="fas fa-undo-alt"></i> Volver Atras</a>
+        {% endif %}
     </div>
     <div class="card-body">
     <h7 class="navy" > * Seleccione un Item y la dirección que desea para la relación<br></h7>
@@ -166,7 +170,7 @@
                     </tr>
 
                 </table>
-
+                {% if not version  %}
                     <div id="div_button">
                     <br>
                     <br>
@@ -174,6 +178,7 @@
                         <input type="button" class="btn btn-warning lg" name="addmore" value="+ Relaciones" id="addMore">
                         <button type="submit" class="btn btn-primary " ><i class="fa fa-check-circle"></i> Listo</button>
                     </div>
+                {% endif %}
             </div>
             <!-- Fin Sección Superior -->
 

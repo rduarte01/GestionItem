@@ -812,11 +812,13 @@ def detallesFase(request,idFase):
 @method_decorator(csrf_exempt)
 def listar_relaciones(request,idItem):
     """
-    LISTA LAS RELACIONES DE UN ITEM EN ESPECIFICO MEDIANTE EL ID DEL ITEM
+    Genera la trazabilidad del item mostrando los item antecesores, sucesores, padres e hijos del mismo mediante
+    Gojs al que se le manda la lista de nodos y la lista de relaciones de dichos nodos mediante un csrf_exempt decorator
+    de modo a cifrar el contenido evitando problemas en el template
 
     :param request:
-    :param idItem: ID DEL ITEM DEL CUAL SE LISTARAN SUS RELACIONES
-    :return: LISTAR_RELACIONES.HTML
+    :param idItem: Id del item
+    :return: Trazabilidad.HTML
     """
     relaciones= Relacion.objects.filter()
 
@@ -871,7 +873,15 @@ def listar_relaciones(request,idItem):
 
 
 def relaciones_trazabilidad(item,DATA,LINK):
-    # inicio      fin
+    '''
+    Realiza el recorrido de los items anteriores al item del cual se require la trazabilidad guardando los datos
+    de los items anteriores en DATA en formato de diccionario y en LINK las relaciones de dichos item, utilizando la
+    recursividad se realiza el mismo proceso hasta culminal los items anteriores
+    :param item:
+    :param DATA: lista de nodos
+    :param LINK: lista de relaciones de los nodos from-to
+    :return: Lista
+    '''
     try:
         relaciones = Relacion.objects.filter(fin_item=item.id_item)
     except:
@@ -890,7 +900,15 @@ def relaciones_trazabilidad(item,DATA,LINK):
         relaciones_trazabilidad(inicio, DATA,LINK)
 
 def relaciones_trazabilidad_delante(item,DATA,LINK):
-
+    '''
+    Realiza el recorrido de los items posteriores al item del cual se require la trazabilidad guardando los datos
+    de los items posteriores en DATA en formato de diccionario y en LINK las relaciones de dichos item, utilizando la
+    recursividad se realiza el mismo proceso hasta culminal los items posteriores
+    :param item:
+    :param DATA: lista de nodos
+    :param LINK: lista de relaciones de los nodos from-to
+    :return: Lista
+    '''
     try:
         relaciones = Relacion.objects.filter(inicio_item=item.id_item)
     except:
@@ -2662,6 +2680,14 @@ def validar_proyecto_cancelado(id_proyecto):
     return  context
 
 def solicitud(request, pk):
+    '''
+    Se recibe el id del item en el cual se require realizar un cambio,como el item se encuentra en linea base solicita el permiso
+    para realizar la modificación para ello se le solicita el impacto que tendrá su cambio y deberá de esperar
+    la confirmación del comite, al ingresar el mensaje se generá el correo que se envía a todo el comite de cambio.
+    :param request:
+    :param pk: id del item
+    :return: solicitud_cambio.html
+    '''
     item=Item.objects.get(id_item=pk)
     comite = Comite.objects.filter(id_proyecto=item.fase.id_Proyecto.id_proyecto)
 
@@ -2692,6 +2718,14 @@ def solicitud(request, pk):
     return render(request,'items/solicitud_cambio.html',context)
 
 def bandeja_mensajes(request,pk):
+    '''
+    Mediante el id del proyecto y el request.user se podrán obtener las solicitudes de cambio hechas por el usuario
+    podrá observar el estado de las mismas si se encuentran aprobadas o rechazadas y el mensaje hecha por cada uno
+    las personas que conforman el comite si dejasen comentarios.
+    :param request:
+    :param pk: id proyecto
+    :return: bandeja_mensajes
+    '''
     proyecto = Proyecto.objects.get(id_proyecto=pk)
     user = User.objects.get(id=request.user.id)
 
@@ -2710,6 +2744,15 @@ def bandeja_mensajes(request,pk):
 
 
 def bandeja_mensajes_solicitudes(request, pk):
+    '''
+    Mediante el id del proyecto y el request.user se podrán obtener las solicitudes de cambio hechas por el usuario
+    podrá observar el estado de las mismas si se encuentran aprobadas o rechazadas y el mensaje hecha por cada uno
+    las personas que conforman el comite si dejasen comentarios.
+    :param request:
+    :param pk: id proyecto
+    :return: bandeja_mensajes
+    '''
+
     proyecto = Proyecto.objects.get(id_proyecto=pk)
     user = User.objects.get(id=request.user.id)
 
@@ -2726,7 +2769,16 @@ def bandeja_mensajes_solicitudes(request, pk):
 
     return render(request, 'proyectos/notificaciones.html', context)
 
-def Editar_relaciones(request, pk):
+def Editar_relaciones(request, pk,id=None):
+    '''
+    Función que muestra las relaciones actuales del item y tambien da la opción de modificar o agregar más relaciones,
+    realiza la comprobación de los item a listar, muestra solo los items antecesores en linea base y solo muestra los sucesores
+    si el item actual se encuentra en linea base, una vez seleccionado las relaciones se verifica la consistencia de
+    cada item afectado verificando si cuenta relación con la fase inicial y si no posee ciclos.
+    :param request:
+    :param pk: id item actual
+    :return: editar_relaciones
+    '''
     template = 'items/relaciones.html'
     item = Item.objects.get(id_item=pk)
     relaciones_inicio = Relacion.objects.filter(inicio_item=item.id_item)
@@ -2789,5 +2841,35 @@ def Editar_relaciones(request, pk):
     'todos_sig':todo_item_sig,
     'todos_ant':todo_item_ant,
     'proyectos':item.fase.id_Proyecto,
+    'version': id,
+    }
+    return render(request,template,context)
+
+def versiones_item(request,pk):
+    template='items/versiones_item.html'
+
+    version_item = Versiones.objects.get(id_item=pk)
+
+    versiones = Versiones.objects.filter(id_padre=version_item.id_padre).order_by('id_Version')
+    list=[]
+    for i in versiones:
+        item = Item.objects.get(id_item=i.id_item)
+        list.append({
+            'nombre':item.nombre,
+            'costo':item.costo,
+            'estado':item.estado,
+            'ti_id':item.ti.id_ti,
+            'descripcion':item.descripcion,
+            'id_item':item.id_item,
+            'version':i.id_Version,
+        })
+    item = Item.objects.get(id_item=pk)
+    list2=['1']
+    context={
+        'versiones':list,
+        'item':item,
+        'proyectos':item.fase.id_Proyecto,
+
+
     }
     return render(request,template,context)
