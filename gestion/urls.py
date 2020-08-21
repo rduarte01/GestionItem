@@ -72,7 +72,7 @@ urlpatterns = [
     path('notificaciones/<int:pk>/', bandeja_mensajes_solicitudes, name = 'notificaciones'),
     path('bandeja_mensajes/<int:pk>/', bandeja_mensajes, name = 'bandeja_mensajes'),
     path('cambiarEstadoItem/<int:pk>/', views.modificarEstadoItem, name = 'cambiarEstadoItem'),
-
+    path('verVersiones/Items/<int:id_item>/',views.ver_versiones_item,name="ver_versiones_item"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,13 +1,12 @@
 {%extends 'proyectos/base.html'%}
 {%block imports%}
-    {% load guardian_tags %}
 {%endblock%}
 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     {%block title%}
-        <title>Detalles de Fase</title>
+        <title>Versiones del Item</title>
     {%endblock%}
 
 </head>
@@ -16,23 +15,16 @@
 {%endblock %}
 
 {%block interno%}
-    {% load guardian_tags %}
-    {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
         <!-- Dropdown Card Example -->
         <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Detalles de Fase: <strong class="red" >{{ fases.nombre }}</strong></h6>
-                <h6 class="m-0 font-weight-bold text-primary"><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></h6>
-                <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:crearLB' fases.id_Fase %}" role="button">Crear Linea Base</a></h6>
                 <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button">Volver Atras</a></h6>
 
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                {% if not items %}
-                    <div class="alert alert-info">No hay items en la fase, crealos!</div>
-                {% else %}
                     <table
                             id="table"
                             data-toggle="table"
@@ -52,39 +44,41 @@
                             data-id-field="id"
                     >
                         <thead>
-                            <th data-field="ITEMS" data-sortable="true">Items</th>
+                            <th data-field="ITEMS" data-sortable="true">Item</th>
                             <th data-field="DESCRIPCION" data-sortable="true">Descripción</th>
                             <th data-field="COSTO" data-sortable="true">Costo</th>
-                            <th>Tazabilidad / Calc. Impacto</th>
+                            <th data-field="VERSION"> Version </th>
                             <th><center>Atributos</center></th>
-                            <th>Cambiar Estado Item</th>
-                            <th>Versiones</th>
+                            <th>Reversionar</th>
+
                         </thead>
                         <tbody>
                             {%for items in items %}
                                 <tr>
-                                    <td>{{items.nombre}}</td>
-                                    <td>{{items.descripcion}}</td>
-                                    <td>{{items.costo}}</td>
-                                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" >Trazabilidad / CI</a></td>
-                                   <td><a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" >Editar Atributos</a>
-                                   <a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.ti.id_ti    items.id_item items.id_item %}" >Ver Atributos</a></td>
-                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}">Estado Item</a></td>
-                                    <td> <a type="button" class="btn btn-primary" href="{% url 'gestion:ver_versiones_item' items.id_item %}">Ver Versiones</a></td>
+                                    <td>{{items.item.nombre}}</td>
+                                    <td>{{items.item.descripcion}}</td>
+                                    <td>{{items.item.costo}}</td>
+                                    {% if items.item.id_item == id_item_actual %}
+                                        <td>Actual</td>
+                                    {%else%}
+                                        <td>{{items.version}}</td>
+                                    {%endif%}
+                                    <td><a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.item.ti.id_ti    items.item.id_item items.item.id_item %}" >Ver Atributos</a> </td>
+                                    <td> <a type="button" class="btn btn-primary " href= "{% url 'gestion:reversionar_item' items.item.id_item %}"> Reversionar </a></td>
                                 </tr>
 
                             {%endfor%}
 
                         </tbody>
                     </table>
-                    {% endif %}
+
             </div>
         </div>
         <div
             class="modal fade" id="creacion" role="dialog">
-        </div>              
-              
-{% endblock %}          
+        </div>
+
+{% endblock %}
 
 <script>
 
@@ -122,7 +116,7 @@
 {% block extrajs %}
 
 <script type="text/javascript">
-  
+
     var $ = jQuery.noConflict();
     function abrir_modal_creacion(url){
       $('#creacion').load(url, function(){

@@ -42,7 +42,7 @@ gestionitems.fpuna@gmail.com
 GestionItem20202
 https://josevc93.github.io/python/Dropbox-y-python/
 """
-TOKEN="4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
+TOKEN="PmyFRnnhTbYAAAAAAAAAATzqHtLq9zKgZw5oSajE3ClcBDVwOi7vSYxi5todZcsv"
 """TOKEN DE DROPBOX PARA REALIZAR LA CONEXION"""
 
 from .funciones import *
@@ -795,7 +795,7 @@ def detallesFase(request,idFase):
     """
     fases = Fase.objects.get(id_Fase=idFase)
     proyectos= Proyecto.objects.get(id_proyecto=fases.id_Proyecto.id_proyecto)
-    items=Item.objects.filter(fase=fases)
+    items=Item.objects.filter(fase=fases,actual=True)
 
     context={
         "proyectos":proyectos,
@@ -916,41 +916,76 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
     :param id_item: ID DEL ITEM DEL CUAL SE LISTARA SUS ATRIBUTOS
     :return: LISTAR_ATRIBUTOS.HTML
     """
-    atributos = Atributo_Item.objects.filter(id_item=id_item)
-    TI=TipoItem.objects.get(id_ti=idAtributoTI)
-    atributo= Atributo.objects.filter(ti=TI)
-    itemActual=Item.objects.get(id_item=id_item)
+    print('el id del item es :',id_item)
+    atributos = Atributo_Item.objects.filter(id_item=id_item) #obtiene los valores del atributo del item
+    TI=TipoItem.objects.get(id_ti=idAtributoTI) #obtiene el tipo de item
+    atributo= Atributo.objects.filter(ti=TI) #lista los atributos del tipo de item
+    itemActual=Item.objects.get(id_item=id_item) #el item  a ser modificado
     if(request.method=='POST'):
-        ###### FALTA ARREGLAR PARA QUE FUNCIONE CON VERSIONES
         if request.method == 'POST':
-            # item viejo
-            #item = Item.objects.get(id_item=id_item)  # nuevo item por la edicion
-            #
-            #nombre_item = request.POST.get['nombre_item']
-            #nombre_descripcion = request.POST.get['nombre_descripcion']
-            #nombre_estado = request.POST.get['nombre_estado']
-            #nombre_costo = request.POST.get['nombre_costo']
+            ''' obtengo el item  viejo (itemActual) y actualizo sus valores de boolean a false.'''
+            itemActual.actual=False
+            itemActual.save()
+            '''Ahora en estas variables voy a obtener los valores editados de mi ITEM  '''
+            nombre_item_editado = request.POST.get('item_nombre')
+            descripcion_item_editado = request.POST.get('item_descripcion')
+            estado_item_editado = request.POST.get('item_estado')
+            costo_item_editado = request.POST.get('item_costo')
+            print('nombre es:',nombre_item_editado)
+            ''' crear un nuevo item, con un nuevo id  con los valores recibidos del form'''
+            item_editado = Item(nombre=nombre_item_editado,descripcion=descripcion_item_editado,costo=costo_item_editado,
+                                actual=True,estado=itemActual.estado,fase_id=TI.fase_id,ti_id=TI.id_ti)
+            item_editado.save()
 
-            # item anterior false
-            #itemActual.actual = False
-            #itemActual.save()
+            ''' Crear un nuevo registro en la tabla versiones con los valores correspondientes del id_padre y version'''
+            version_item_actual= Versiones.objects.get(id_item=itemActual.id_item) #obtengo el registro del item actual
+            varsion_item_editado = Versiones(id_item=item_editado.id_item, id_padre= version_item_actual.id_padre,
+                                             id_Version=version_item_actual.id_Version+1)
+            varsion_item_editado.save()
 
-            #item = Item(nombre=nombre_item, )
+            diccionario_data = verificar_datos_form_atributo_item(request,TI.id_ti,atributo,request.POST,request.FILES)
+            print('el diccionario data es: ',diccionario_data)
+            for data in diccionario_data:
+                if(data['AtributoTI'].tipo_dato=='File'): #si es de tipo File ,entonces armo la ruta para subir el archivo
+                   if(data['valor_atributo_item'] != 'Sin archivos adjuntos'): # si se recibe algo es porque el edito el archivo, por lo tanto creamos una nueva ruta en la nube
+                        ruta = str(TI.fase.id_Proyecto.id_proyecto) + "/" + str(item_editado.id_item)
+                        doc = data['valor_atributo_item']
+                        PATH = f'/{ruta}/{doc[0]}'
+                        ''' proceso de subir archivo a dropbox'''
+                        #SubirArchivo(doc[0], PATH)
+                        print('-----',PATH)
+                        ##se sube archivo a dropbox en segundo plano
+                        t2 = Thread(
+                           target=SubirArchivo,
+                            args=(doc[0], PATH),
+                         )
+                        t2.start()
+                        atributo_item_editado = Atributo_Item(idAtributoTI=data['AtributoTI'], id_item=item_editado,
+                                                              valor=PATH)
+                        atributo_item_editado.save()
+                   else:
+                        atributo_item_editado = Atributo_Item(idAtributoTI=data['AtributoTI'], id_item=item_editado,
+                                                              valor=Atributo_Item.objects.get(id_item=itemActual,idAtributoTI=data['AtributoTI']).valor)
+                        print('el editado sin modificar',atributo_item_editado.valor)
+                        atributo_item_editado.save()
+                else:
+                    print('atributo_id:',data['AtributoTI'].id_atributo,' valor:',data['valor_atributo_item'])
+                    atributo_item_editado=Atributo_Item(idAtributoTI=data['AtributoTI'], id_item=item_editado,
+                                                        valor=data['valor_atributo_item'])
+                    atributo_item_editado.save()
+            '''aca se actulizan las relaciones del item'''
+            itemActual_inicio=Relacion.objects.filter(inicio_item=itemActual.id_item) #obtengo todos los items en donde el es el origen
+            for relacion in itemActual_inicio:
+                nueva_relacion=Relacion(incio_item=item_editado.id_item,fin_item=relacion.fin_item)
+                nueva_relacion.save()
 
-            # version
-            #t = Versiones.objects.get(id_item=itemActual.id_item)
-            #t = Versiones(id_item=item.id_item, id_padre= t.id_padre, version=t.version+1)
-            #t.save()
+            itemActual_fin = Relacion.objects.filter(fin_item=itemActual.id_item)  # obtengo todos los items en donde el es el fin
+            for relacion in itemActual_fin:
+                nueva_relacion = Relacion(incio_item=relacion.fin_item, fin_item=item_editado.id_item)
+                nueva_relacion.save()
 
-            diccionario_data = verificar_datos_form_atributo_item(request,TI.id_ti,atributos,request.POST,request.FILES)
+            return redirect('gestion:detallesFase',TI.fase_id)
 
-            print (diccionario_data)
-           
-
-            #print(request.POST)
-            #return redirect('gestion:listar_atributos',idAtributoTI,item.id_item)
-
-    ### falta desvincular relacion o agregar nueva y cambiar version
 
     context = {
         "atributos":atributos,
@@ -963,6 +998,33 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
     }
     return render(request, 'items/listar_atributos.html', context)
 
+def ver_versiones_item(request,id_item):
+    id_padre_item=Versiones.objects.get(id_item=id_item).id_padre
+
+    versiones_item=Versiones.objects.filter(id_padre=id_padre_item).order_by('id_Version')
+    item_actual = Item.objects.get(id_item=id_item)
+    fases = Fase.objects.get(id_Fase=item_actual.fase_id)
+    proyectos= Proyecto.objects.get(id_proyecto=fases.id_Proyecto.id_proyecto)
+    items = []
+
+    for row in range(len(versiones_item)):
+        items.append({'item': Item.objects.get(id_item=versiones_item[row].id_item),
+                     'version': versiones_item[row].id_Version
+                     }
+                )
+
+    context={
+        "proyectos":proyectos,
+        "fases":fases,
+        'vesion_item':versiones_item,
+        'id_item_actual':id_item,
+        'items':items
+    }
+    return render(request,'items/detalles_version_item.html',context)
+
+def reversionar_item(request,id_item):
+    print('aca reversiono')
+
 def ver_proyecto(request,pk):
     """MUESTRA LOS DETALLES DE UN PROYECTO"""
     proyecto=Proyecto.objects.get(id_proyecto=pk)
@@ -973,51 +1035,55 @@ def ver_proyecto(request,pk):
     }
     return render(request,'opcionesProyecto.html',contexto)
 
-def verificar_datos_form_atributo_item(request,idTI,atributos,reqForm,reqFile):
+def verificar_datos_form_atributo_item(request,idTI,atributo,reqForm,reqFile):
     itemID = Item.objects.last()
     ti = TipoItem.objects.get(id_ti=idTI)
     contador = 0
     print('-------->',reqFile)
-    for c in atributos:
+    for c in atributo:
         print(c.id_atributo)
         contador = contador + 1
     # item viejo
     #item = Item.objects.get(id_item=id_item)  # nuevo item por la edicion
     #
     list = []
-    for atributos in atributos:  # SE RECORRE POR VALOR INGRESADO CONSULTANDO SI ES OBLIGARORIO Y ESTA VACIO-->MUESTRA ERROR
+    for atributo in atributo:  # SE RECORRE POR VALOR INGRESADO CONSULTANDO SI ES OBLIGARORIO Y ESTA VACIO-->MUESTRA ERROR
         ok = False
-        if (atributos.tipo_dato == 'Boolean'):
-            x = reqForm.getlist(atributos.tipo_dato)
-            tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=atributos.tipo_dato)
+        if (atributo.tipo_dato == 'Boolean'):
+            x = reqForm.getlist(atributo.tipo_dato)
+            tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=atributo.tipo_dato)
             print(x)
             for ini in range(len(x)):
                 if (x[ini] == '' and tiposAtributo[ini].es_obligatorio == True):
                     ok = True
-                    nombre = tiposAtributo[ini].nombre
-            if (ok == True):
+                    nombre = tiposAtributo[ini].nombre #para mandarle al mensaje
+            if (ok == True): #si es true entonces muestro un mensaje de error
                 messages.error(request,
                                "EL ATRIBUTO ES OBLIGATRIO FAVOR INGRESE UN VALOR PARA EL ATRIBUTO: " + nombre)
                 return redirect('gestion:aggAtributos', idTI)
     diccionario_data =[]
-    list = ["Decimal", "Boolean", "File", "String", "Date"]
+    list_tipo_datos = ["Decimal", "Boolean", "File", "String", "Date"]
     for ini in range(
-            len(list)):  # SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
+            len(list_tipo_datos)):  # SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
         print('este es el valor de ini' + str(ini))
-        print(list[ini])
+        print(list_tipo_datos[ini])
         try:
-            tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=list[ini])
-            x = reqForm.getlist(list[ini])
+            tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=list_tipo_datos[ini]) ##obtengo los atributos del TI
+            datos_form = reqForm.getlist(list_tipo_datos[ini]) # obtengo del form todos esos atributos introducidos de acuerdo al tipo de dato
         except:
             tiposAtributo = None
 
         if (tiposAtributo != None):
             for valor in range(tiposAtributo.count()):
-                if (list[ini] == "File"):
+                if (list_tipo_datos[ini] == "File"):
                     list2 = []
                     for atr in tiposAtributo:
+                        print(atr.id_atributo)
                         DOC = reqFile.getlist(str(atr.id_atributo))
-                      
+                        print('aca imprimo el id',atr.id_atributo)
+                        print('aca impirmo el archivo:',reqFile)
+                        print('aca imprimo doc:',DOC)
+
                         if (DOC != list2):
                             #print("no vacio", DOC[0])
                             #ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
@@ -1031,19 +1097,19 @@ def verificar_datos_form_atributo_item(request,idTI,atributos,reqForm,reqFile):
                             #    args=(DOC[0], PATH),
                             #)
                             #t2.start()
-                            diccionario_data.append({'idAtributoTI': atr,'valor':str(DOC)})
+                            diccionario_data.append({'AtributoTI': atr,'valor_atributo_item':DOC})
                             #p = Atributo_Item(idAtributoTI=atr, id_item=item, valor=str(PATH))
                             #p.save()
                         else:
                             print("vacio", DOC)
                             #p = Atributo_Item(idAtributoTI=atr, id_item=item, valor="Sin archivos adjuntos")
                             #p.save()
-                            diccionario_data.append({'idAtributoTI': atr,'valor':"Sin archivos adjuntos"})
+                            diccionario_data.append({'AtributoTI': atr,'valor_atributo_item':"Sin archivos adjuntos"})
                     break
                 else:
                     #p = Atributo_Item(idAtributoTI=tiposAtributo[valor], id_item=item, valor=str(x[valor]))
                     #p.save()
-                    diccionario_data.append({'idAtributoTI': tiposAtributo[valor], 'valor': str(x[valor])})
+                    diccionario_data.append({'AtributoTI': tiposAtributo[valor], 'valor_atributo_item': str(datos_form[valor])}) ## que pasa aca??
     return diccionario_data
 
 def get_fase_proyecto(request,id_fase):
@@ -1348,7 +1414,11 @@ def crearItem(request,Faseid):
         datosFormulario= form.cleaned_data
         fase= Fase.objects.get(id_Fase=Faseid)
         item=Item(nombre=datosFormulario.get('nombre'),descripcion=datosFormulario.get('descripcion'),costo=datosFormulario.get('costo'),fase=fase)
+
         item.save()
+        varsion_item = Versiones(id_item=item.id_item, id_padre=item.id_item,
+                                         id_Version=1)
+        varsion_item.save()
         return redirect('gestion:agg_listar_tipo_item',Faseid)
     contexto={
         "form":form
@@ -1464,6 +1534,7 @@ def aggAtributos(request,idTI):
                                 PATH = f'/{ruta}/{DOC[0]}'
                                 #SubirArchivo(DOC[0], PATH)
                                 print("--",PATH)
+
 
                                 ##se sube archivo a dropbox en segundo plano
                                 t2 = Thread(
