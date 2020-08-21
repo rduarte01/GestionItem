@@ -19,6 +19,7 @@
     <h7 class="navy" > * Tenga en cuenta que:<br></h7>
     <h7 class="navy" > 1- No debe haber ciclos<br></h7>
     <h7 class="navy" > 2- Todos los items deben de contar con relación directa o indirecta a la fase 1<br></h7>
+    <h7 class="navy" > 3- Los items de fases anteriores o posteriores deben estar en Linea Base, importa el sentido que se le asigne<br></h7>
         <div class="content">
 
             <!-- Sección Superior -->
@@ -26,20 +27,85 @@
 
                 <table class="table table-striped table-hover">
                     <thead>
-                    <td>ITEM ACTUAL</td>
-                    <td>DESCRIPCION</td>
-                    <td>ESTADO</td>
-                    <td>COSTO</td>
+
+                    <td><center>ITEM ACTUAL</center></td>
+                    <td><center>DESCRIPCION</center></td>
+                    <td><center>ESTADO</center></td>
+                    <td><center>COSTO</center></td>
+                    <td><center>FASE</center></td>
+
                     </thead>
                     <tbody>
                     <td><input class="form-control" placeholder="Ingrese nombre"  readonly  type="text" name="item_nombre" step="any" value="{{item.nombre}}" required></td>
                     <td><input class="form-control" placeholder="Ingrese descripción" readonly type="text" name="item_descripcion" step="any" value="{{item.descripcion}}" required></td>
                     <td><input class="form-control" type="text" name="item_estado" readonly value="{{item.estado}}" required></td>
                     <td><input class="form-control"  placeholder="Ingrese costo" readonly  type="number" name="item_costo" step="any" value="{{item.costo}}" required></td>
+                    <td><input class="form-control"  placeholder="Ingrese costo" readonly  type="text" name="fas" step="any" value="{{item.fase.nombre}}" required></td>
                     </tbody>
+
                 </table>
+                <div class="navy form-control" >Lista de Relaciones Actuales del Item:<h7 class="red" > {{item.nombre}}</h7></div>
+                <br>
+                <br>
+                {% for items in inicio%}
 
+                <table >
+                    <tr>
 
+                        <td>
+                            <input class="form-control" placeholder="Ingrese nombre"  readonly  type="text" name="item_nombre" step="any" value="{{item.nombre}}" required>
+                        </td>
+                        <td>
+                            <select name="direccion"  class="form-control">
+                                <option value="1">Inicio ---> Fin</option>
+                                <option value="3">Quitar Relación </option>
+                                <option value="2">Fin <--- Inicio</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="item"  class="form-control">
+                                <option value="{{items.id}}">{{items.name}} | Fase: {{ items.fase }}</option>
+                                {% for item in todos %}
+                                    <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+
+                    </tr>
+
+                </table>
+            {% endfor %}
+            {% for items in fin%}
+                <table >
+                    <tr>
+
+                        <td>
+                            <input class="form-control" placeholder="Ingrese nombre"  readonly  type="text" name="item_nombre" step="any" value="{{item.nombre}}" required>
+                        </td>
+                        <td>
+                            <select name="direccion" class="form-control">
+                                <option value="2">Fin <--- Inicio</option>
+                                <option value="1">Inicio ---> Fin</option>
+                                <option value="3">Quitar Relación </option>
+
+                            </select>
+                        </td>
+                        <td>
+                            <select name="item"  class="form-control">
+                                <option value="{{items.id}}">{{items.name}} | Fase: {{ items.fase }}</option>
+                                {% for item in todos %}
+                                    <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }} </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            {% endfor %}
+                <br>
+                <br>
+                <div class="green form-control" >+ Agrega más Relaciones para el Item, selecciona el ítem con el cual relacionar y la dirección que tendrá la relación</h7></div>
+                <br>
+                <br>
                 <table  id="addparts">
                     <tr>
 
@@ -49,15 +115,15 @@
                         <td>
                             <select name="direccion"  class="form-control">
                                 <option value="0">Seleccione Dirección  ---> <--- </option>
-                                <option value="<--">Inicio <--- Fin</option>
-                                <option value="-->">Inicio ---> Fin</option>
+                                <option value="2">Fin <--- Inicio</option>
+                                <option value="1">Inicio ---> Fin</option>
                             </select>
                         </td>
                         <td>
                             <select name="item" id="enc_cliente" class="form-control">
                                 <option value="0">Seleccione Item a Relacionar</option>
                                 {% for item in todos %}
-                                <option value="{{item.nombre}}">{{ item.nombre }} </option>
+                                <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
                                 {% endfor %}
                             </select>
                         </td>
@@ -75,64 +141,7 @@
                     </div>
             </div>
             <!-- Fin Sección Superior -->
-            <!-- Inicio Detalle -->
-            <hr>
-            <div class="row p-1">
 
-                <div class="col-lg-12">
-                <h7 class="navy" >Lista de relaciones del Item Actual:<h7 class="red" > {{item.nombre}}</h7></h7>
-                    <table
-                        data-toggle="table"
-                        data-pagination="true"
-                        data-search="true"
-                        data-show-columns="true"
-                        data-show-toggle="true"
-                        data-show-fullscreen="true"
-                        data-locale="es-NI"
-                        >
-                        <thead>
-                            <th data-sortable="true" data-field="codigo">Item</th>
-
-                            <th data-field="subtotal">Sentido</th>
-                            <th data-field="descuento">Item actual</th>
-                            <th data-field="descuentoi">Elimiar Relación</th>
-
-                        </thead>
-                        <tbody>
-                            {% for items in inicio%}
-                            <tr>
-                                <td>{{ items.name  }}</td>
-
-                                <td><center class="red" ><---</center></td>
-                                <td>{{ item.nombre  }}</td>
-                            <td>
-                                <a type="button" class="btn btn-primary">
-
-                                </a>
-                            </td>
-                            </tr>
-                            {% endfor %}
-                            {% for items in fin%}
-                            <tr>
-                                <td>{{ items.name  }}</td>
-
-                                <td><center class="red" >---></center></td>
-                                <td>{{ item.nombre  }}</td>
-
-                            <td>
-                                <center>
-                                    <a type="button" href="#" class="btn btn-danger">
-                                    x
-                                    </a>
-                                </center>
-                            </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- Fin Detalle -->
         </div>
     </div>
 </div>

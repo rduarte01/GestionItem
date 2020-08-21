@@ -2736,9 +2736,12 @@ def Editar_relaciones(request, pk):
     for i in relaciones_inicio:
         item_inicio = Item.objects.get(id_item=i.fin_item)
         inicio.append({
+
             'name':item_inicio.nombre,
             'desc':item_inicio.descripcion,
             'cost':item_inicio.costo,
+            'id':item_inicio.id_item,
+            'fase':item_inicio.fase.nombre,
         })
 
     for i in relaciones_fin:
@@ -2747,6 +2750,8 @@ def Editar_relaciones(request, pk):
             'name':item_fin.nombre,
             'desc':item_fin.descripcion,
             'cost':item_fin.costo,
+            'id':item_fin.id_item,
+            'fase': item_fin.fase.nombre,
         })
 
     todo_item = Item.objects.filter(fase__id_Proyecto=item.fase.id_Proyecto, actual = True).exclude( id_item = item.id_item)
@@ -2754,8 +2759,8 @@ def Editar_relaciones(request, pk):
     if request.method == 'POST':
         var = request.POST.getlist('item')
         var2 = request.POST.getlist('direccion')
-        print(var)
-        print(var2)
+        print('Items: ',var)
+        print('Sentidos: ',var2)
         return redirect('gestion:editar_relaciones',pk)
 
     context={
@@ -2766,4 +2771,3 @@ def Editar_relaciones(request, pk):
     'proyectos':item.fase.id_Proyecto,
     }
     return render(request,template,context)
-
