@@ -19,7 +19,10 @@
     <h7 class="navy" > * Tenga en cuenta que:<br></h7>
     <h7 class="navy" > 1- No debe haber ciclos<br></h7>
     <h7 class="navy" > 2- Todos los items deben de contar con relación directa o indirecta a la fase 1<br></h7>
-    <h7 class="navy" > 3- Los items de fases anteriores o posteriores deben estar en Linea Base, importa el sentido que se le asigne<br></h7>
+    <h7 class="navy" > 3- Los items de fases anteriores se listarán solo los que esten en Linea Base<br></h7>
+    <h7 class="navy" > 4- Los items de fases posteriores solo se podrán relacionar si el item actual se encuentra en Linea Base, caso contrario no se mostraran<br></h7>
+    <h7 class="navy" > 5- Se mostrarán todos los items de la fase actual<br></h7>
+
         <div class="content">
 
             <!-- Sección Superior -->
@@ -57,16 +60,30 @@
                         </td>
                         <td>
                             <select name="direccion"  class="form-control">
-                                <option value="1">Inicio ---> Fin</option>
-                                <option value="3">Quitar Relación </option>
-                                <option value="2">Fin <--- Inicio</option>
+                                {% if items.fase_id > item.fase.id_Fase %}
+                                    <option value="1">Inicio ---> Fin</option>
+                                    <option value="3">Quitar Relación </option>
+                                {% elif items.fase_id < item.fase.id_Fase %}
+                                    <option value="2">Fin <--- Inicio</option>
+                                    <option value="3">Quitar Relación </option>
+                                {% else %}
+                                    <option value="1">Inicio ---> Fin</option>
+                                    <option value="3">Quitar Relación </option>
+                                    <option value="2">Fin <--- Inicio</option>
+                                {% endif %}
                             </select>
                         </td>
                         <td>
                             <select name="item"  class="form-control">
                                 <option value="{{items.id}}">{{items.name}} | Fase: {{ items.fase }}</option>
-                                {% for item in todos %}
-                                    <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
+                                {% for item in todos_actual %}
+                                <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
+                                {% endfor %}
+                                {% for item in todos_ant %}
+                                <option value="{{item.item.id_item}}">{{ item.item.nombre }} | Fase: {{ item.item.fase.nombre }}  </option>
+                                {% endfor %}
+                                {% for item in todos_sig %}
+                                <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
                                 {% endfor %}
                             </select>
                         </td>
@@ -84,17 +101,29 @@
                         </td>
                         <td>
                             <select name="direccion" class="form-control">
-                                <option value="2">Fin <--- Inicio</option>
-                                <option value="1">Inicio ---> Fin</option>
-                                <option value="3">Quitar Relación </option>
-
+                                {% if items.fase_id > item.fase.id_Fase %}
+                                    <option value="1">Inicio ---> Fin</option>
+                                    <option value="3">Quitar Relación </option>
+                                {% elif items.fase_id < item.fase.id_Fase %}
+                                    <option value="2">Fin <--- Inicio</option>
+                                    <option value="3">Quitar Relación </option>
+                                {% else %}
+                                    <option value="2">Fin <--- Inicio</option>
+                                    <option value="1">Inicio ---> Fin</option>
+                                    <option value="3">Quitar Relación </option>
+                                {% endif %}
                             </select>
                         </td>
                         <td>
                             <select name="item"  class="form-control">
                                 <option value="{{items.id}}">{{items.name}} | Fase: {{ items.fase }}</option>
-                                {% for item in todos %}
-                                    <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }} </option>
+                                {% for item in todos_actual %}
+                                <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
+                                {% endfor %}
+                                {% for item in todos_ant %}
+                                <option value="{{item.item.id_item}}">{{ item.item.nombre }} | Fase: {{ item.item.fase.nombre }}  </option>                                {% endfor %}
+                                {% for item in todos_sig %}
+                                <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
                                 {% endfor %}
                             </select>
                         </td>
@@ -122,7 +151,13 @@
                         <td>
                             <select name="item" id="enc_cliente" class="form-control">
                                 <option value="0">Seleccione Item a Relacionar</option>
-                                {% for item in todos %}
+                                {% for item in todos_actual %}
+                                <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
+                                {% endfor %}
+                                {% for item in todos_ant %}
+                                <option value="{{item.item.id_item}}">{{ item.item.nombre }} | Fase: {{ item.item.fase.nombre }}  </option>
+                                {% endfor %}
+                                {% for item in todos_sig %}
                                 <option value="{{item.id_item}}">{{ item.nombre }} | Fase: {{ item.fase.nombre }}  </option>
                                 {% endfor %}
                             </select>

@@ -272,8 +272,8 @@ def primeraFase(id_proyecto,id_item,some_var):
     :return: FALSO SI ENCUENTRA, TRUE SI NO
     """
     proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
-    fases = Fase.objects.filter(id_Proyecto=proyecto)
-    todosItems = Item.objects.filter(fase=fases[fases.count() - 1],actual=True)  # todos los items de la primera fase
+    fases = Fase.objects.filter(id_Proyecto=proyecto).order_by('id_Fase')
+    todosItems = Item.objects.filter(fase=fases[0],actual=True)  # todos los items de la primera fase
 
     for item in todosItems:
         if(busqueda(item,id_item,some_var)==True):#id_item al cual llegar y some var sus nuevas relaciones

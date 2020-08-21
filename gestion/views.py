@@ -1576,7 +1576,7 @@ def relacionarItem(request,id_proyecto,id_item):
     """
     try:
         proyecto=Proyecto.objects.get(id_proyecto=id_proyecto)#se obtiene el proyecto
-        fases=Fase.objects.filter(id_Proyecto=proyecto)#se obtienen las fases del proyecto
+        fases=Fase.objects.filter(id_Proyecto=proyecto).order_by('id_Fase')#se obtienen las fases del proyecto
         itemActual=Item.objects.get(id_item=id_item)
         list=[]
         list=lista_items_relacion(itemActual,fases,id_proyecto,id_item)
@@ -2742,6 +2742,7 @@ def Editar_relaciones(request, pk):
             'cost':item_inicio.costo,
             'id':item_inicio.id_item,
             'fase':item_inicio.fase.nombre,
+            'fase_id': item_inicio.fase.id_Fase,
         })
 
     for i in relaciones_fin:
@@ -2752,22 +2753,41 @@ def Editar_relaciones(request, pk):
             'cost':item_fin.costo,
             'id':item_fin.id_item,
             'fase': item_fin.fase.nombre,
+            'fase_id': item_fin.fase.id_Fase,
         })
 
-    todo_item = Item.objects.filter(fase__id_Proyecto=item.fase.id_Proyecto, actual = True).exclude( id_item = item.id_item)
+    todo_item_actual = Item.objects.filter(fase__id_Fase=item.fase.id_Fase, actual = True).exclude( id_item = item.id_item)
+    try:
+        item_LB = LB_item.objects.get(item = item)
+    except:
+        item_LB = None
+
+    if item_LB:
+        todo_item_sig = Item.objects.filter(fase__id_Fase=(item.fase.id_Fase+1), actual = True)
+    else:
+        todo_item_sig = None
+
+    # anterior filtrar en LB - listo
+    todo_item_ant = LB_item.objects.filter(item__fase__id_Fase=(item.fase.id_Fase-1), item__actual = True)
 
     if request.method == 'POST':
         var = request.POST.getlist('item')
         var2 = request.POST.getlist('direccion')
         print('Items: ',var)
         print('Sentidos: ',var2)
+        #funcioon verificar ant, suc con relacion seleccionada
+        # fase 1 | [2] -> | 3 verificar - listo
+        #funcion ve verificacion de consistencia, todos relacion con F1
+
         return redirect('gestion:editar_relaciones',pk)
 
     context={
     'inicio':inicio,
     'fin':fin,
     'item':item,
-    'todos':todo_item,
+    'todos_actual':todo_item_actual,
+    'todos_sig':todo_item_sig,
+    'todos_ant':todo_item_ant,
     'proyectos':item.fase.id_Proyecto,
     }
     return render(request,template,context)
