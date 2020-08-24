@@ -16,6 +16,7 @@
                 {%endblock %}
 
 {%block titulo_proyecto %}
+
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                    <div class="card-body">
@@ -39,6 +40,7 @@
 {%endblock%}
 
 {%block interno%}
+
     {% load guardian_tags %}
     {% get_obj_perms request.user for proyectos as "proyecto_perms" %}
               <!-- Dropdown Card Example -->

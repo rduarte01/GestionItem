@@ -51,17 +51,17 @@
                     data-id-field="id"
                       >
                         <thead>
-                            <th data-field="fecha_vence" data-sortable="true" >FASES</th>
-                            <th data-field="estado" data-sortable="true" >ESTADO</th>
-                            <th >ESTADO DE FASES</th>
+                            <th data-field="fecha_vence" data-sortable="true" >Fases</th>
+                            <th data-field="estado" data-sortable="true" >Estado de Fase</th>
+                            <th >Estado de Fases</th>
                             {% if "is_gerente" in proyecto_perms %}
                                 {% if proyectos.estado != 'CANCELADO' %}
 
-                                    <th>TIPO DE ITEM</th>
-                                    <th>ROLES</th>
+                                    <th>Tipo de Item</th>
+                                    <th>Roles de Usuario</th>
                                 {% endif %}
                             {% endif %}
-                            <th>TRABAJAR!</th>
+                            <th>Detalles de Fase</th>
                         </thead>
                         <tbody>
                            {%for fases in fases %}
@@ -71,18 +71,27 @@
 
                                     <td>{{fases.estado}}</td>
                                     {% if "is_gerente" in proyecto_perms %}
-                                        <td><a href=""class="btn btn-primary">CAMBIAR ESTADO</a></td>
+                                        <td><a href=""class="btn btn-primary"><i class="fas fa-circle-notch"></i> Cambiar</a></td>
                                     {%else%}
-                                        <td>No es gerente</td>
+                                        <td><i class="fas fa-eye-slash"></i> No es gerente</td>
                                     {%endif%}
                                     {% if "is_gerente" in proyecto_perms %}
                                         {% if proyectos.estado != 'CANCELADO' %}
-                                            <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary">Crear TI </a>
-                                            <a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-danger"> Importar TI</a> </td>
-                                            <td><a href="{% url 'gestion:seleccionar_usuario_rol' fases.id_Fase %}" class="btn btn-primary">Asignar Usuario</a> </td>
+                                            <td><a href="{% url 'gestion:tipo_item_views_create' fases.id_Fase %}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear </a>
+                                            <a href="{% url 'gestion:importar_tipo_item' fases.id_Fase %}" class="btn btn-danger"> <i class="fas fa-file-import"></i> Importar</a> </td>
+                                            <td><a href="{% url 'gestion:seleccionar_usuario_rol' fases.id_Fase %}" class="btn btn-primary"><i class="fas fa-address-card"></i> Asignar</a> </td>
                                         {% endif %}
                                     {% endif %}
-                                    <td><a href="{% url 'gestion:detallesFase' fases.id_Fase %}" class="btn btn-primary">DETALLES</a></td>
+                                    <td>
+
+                                        <center>
+
+                                            <a href="{% url 'gestion:detallesFase' fases.id_Fase %}" title="Ver Items y detalles de los items" class="btn btn-primary"><i class="fas fa-running"></i> Ir</a>
+
+                                        </center>
+
+
+                                    </td>
                                 </tr>
                             {%endif%}
                         {%endfor%}

@@ -42,7 +42,7 @@ gestionitems.fpuna@gmail.com
 GestionItem20202
 https://josevc93.github.io/python/Dropbox-y-python/
 """
-TOKEN="4BJ-WaMHHDAAAAAAAAAADHjatAzpvWFcLRnLg-HxMI5mjihNv0ib_E3rTAV0MVbf"
+TOKEN="PmyFRnnhTbYAAAAAAAAAATzqHtLq9zKgZw5oSajE3ClcBDVwOi7vSYxi5todZcsv"
 """TOKEN DE DROPBOX PARA REALIZAR LA CONEXION"""
 
 from .funciones import *
@@ -214,6 +214,8 @@ def menu(request):
     """MENU PARA LOS USUARIOS DE ACUERDO A SUS ROLES, PARA ADMINISTRADOR DE SISTEMAS,
     GERENTE DE PROYECTO, USUARIO QUE FORMA PARTE DEL SISTEMA Y DEL QUE NO FORMA PARTE"""
     user = request.user
+   # fase = Fase.objects.filter(id_Proyecto__id_proyecto=1).order_by('id_Fase')
+
 
     if( user.usuario.esta_aprobado):
         if user.has_perm('gestion.es_administrador'):
@@ -810,11 +812,13 @@ def detallesFase(request,idFase):
 @method_decorator(csrf_exempt)
 def listar_relaciones(request,idItem):
     """
-    LISTA LAS RELACIONES DE UN ITEM EN ESPECIFICO MEDIANTE EL ID DEL ITEM
+    Genera la trazabilidad del item mostrando los item antecesores, sucesores, padres e hijos del mismo mediante
+    Gojs al que se le manda la lista de nodos y la lista de relaciones de dichos nodos mediante un csrf_exempt decorator
+    de modo a cifrar el contenido evitando problemas en el template
 
     :param request:
-    :param idItem: ID DEL ITEM DEL CUAL SE LISTARAN SUS RELACIONES
-    :return: LISTAR_RELACIONES.HTML
+    :param idItem: Id del item
+    :return: Trazabilidad.HTML
     """
     relaciones= Relacion.objects.filter()
 
@@ -825,7 +829,7 @@ def listar_relaciones(request,idItem):
     DATA = []
     LINK = []
 
-    DATA.append({'key': itemActual.id_item, 'name': itemActual.nombre + ' cost:'+str(itemActual.costo), 'group': 'FASE'+str(itemActual.fase.id_Fase), 'color': "#2711E3"}, )
+    DATA.append({'key': itemActual.id_item, 'name': itemActual.nombre + ' costo:'+str(itemActual.costo), 'group': 'FASE'+str(itemActual.fase.id_Fase), 'color': "#2711E3"}, )
     fases = Fase.objects.filter(id_Proyecto=itemActual.fase.id_Proyecto, )
     num=0
     for i in fases:
@@ -835,7 +839,7 @@ def listar_relaciones(request,idItem):
     relaciones_trazabilidad(itemActual,DATA,LINK)
     izq=0
     band=0
-    der=0
+    #der=0
     for i in DATA:
         band += 1
         #print(i['name'])
@@ -846,13 +850,13 @@ def listar_relaciones(request,idItem):
 
     relaciones_trazabilidad_delante(itemActual,DATA,LINK)
     cont=0
-    der=0
+ #   der=0
     for i in DATA:
         cont+=1
         if cont > band:
             it = Item.objects.get(id_item=i['key'])
-            der+=it.costo
-    der += itemActual.costo
+            izq+=it.costo
+#    der += itemActual.costo
 
     context={
         "relaciones":relaciones,
@@ -862,13 +866,22 @@ def listar_relaciones(request,idItem):
         'data':DATA,
         'link':LINK,
         'izq':izq,
-        'der':der,
+     #   'der':der,
+
     }
     return render(request, 'items/trazabilidad.html', context)
 
 
 def relaciones_trazabilidad(item,DATA,LINK):
-    # inicio      fin
+    '''
+    Realiza el recorrido de los items anteriores al item del cual se require la trazabilidad guardando los datos
+    de los items anteriores en DATA en formato de diccionario y en LINK las relaciones de dichos item, utilizando la
+    recursividad se realiza el mismo proceso hasta culminal los items anteriores
+    :param item:
+    :param DATA: lista de nodos
+    :param LINK: lista de relaciones de los nodos from-to
+    :return: Lista
+    '''
     try:
         relaciones = Relacion.objects.filter(fin_item=item.id_item)
     except:
@@ -881,13 +894,21 @@ def relaciones_trazabilidad(item,DATA,LINK):
             if i['key']== inicio.id_item:
                 ok=False
         if ok:                                                                                                 #fase12
-            DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' cost:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
+            DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' costo:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
             LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
 
         relaciones_trazabilidad(inicio, DATA,LINK)
 
 def relaciones_trazabilidad_delante(item,DATA,LINK):
-
+    '''
+    Realiza el recorrido de los items posteriores al item del cual se require la trazabilidad guardando los datos
+    de los items posteriores en DATA en formato de diccionario y en LINK las relaciones de dichos item, utilizando la
+    recursividad se realiza el mismo proceso hasta culminal los items posteriores
+    :param item:
+    :param DATA: lista de nodos
+    :param LINK: lista de relaciones de los nodos from-to
+    :return: Lista
+    '''
     try:
         relaciones = Relacion.objects.filter(inicio_item=item.id_item)
     except:
@@ -900,7 +921,7 @@ def relaciones_trazabilidad_delante(item,DATA,LINK):
             if i['key']== fin.id_item:
                 ok=False
         if ok:
-            DATA.append({'key': fin.id_item, 'name': fin.nombre + ' cost:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
+            DATA.append({'key': fin.id_item, 'name': fin.nombre + ' costo:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
             LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
         relaciones_trazabilidad_delante(fin, DATA,LINK)
 
@@ -942,7 +963,7 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
             #t = Versiones(id_item=item.id_item, id_padre= t.id_padre, version=t.version+1)
             #t.save()
 
-            diccionario_data = verificar_datos_form_atributo_item(request,TI.id_ti,atributos,request.POST,request.FILES)
+            diccionario_data = verificar_datos_form_atributo_item(request,TI.id_ti,atributo,request.POST,request.FILES)
 
             print (diccionario_data)
            
@@ -1017,13 +1038,18 @@ def verificar_datos_form_atributo_item(request,idTI,atributos,reqForm,reqFile):
                     list2 = []
                     for atr in tiposAtributo:
                         DOC = reqFile.getlist(str(atr.id_atributo))
-                      
+                        print(reqFile)
+                        print (DOC)
+                        print (atr.id_atributo)
                         if (DOC != list2):
                             #print("no vacio", DOC[0])
                             #ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
                             #PATH = f'/{ruta}/{DOC[0]}'
                             # SubirArchivo(DOC[0], PATH)
                             #print("--", PATH)
+
+                            # valor nombre idproy/idItem/valor
+                            # valor = idproy/idItem/valor
 
                             ##se sube archivo a dropbox en segundo plano
                             #t2 = Thread(
@@ -1339,7 +1365,7 @@ def crearItem(request,Faseid):
     """        
     if (hayTiFase(fase)):  # muestra mensaje de error si no hay TI no se puede crear item
         messages.error(request,"LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE")
-        return redirect('gestion:detallesFase',fase.id_Proyecto.id_proyecto)
+        return redirect('gestion:detallesFase',fase.id_Fase)
 
     form= FormItem(request.POST)
     if form.is_valid():
@@ -1501,7 +1527,7 @@ def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
     list = []
     nroFase = 0
     ok=False
-    for fase in reversed(fases):
+    for fase in fases:# Reverse revento
         print(fase)
         nroFase += 1
         if (itemActual.fase == fase):
@@ -1540,11 +1566,13 @@ def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
                 # print("se añadio en list item: ",items[i])
     if (mostrarAnte == True):
         faseAnt = Fase.objects.get(id_Fase=(itemActual.fase.id_Fase - 1))
-        items = Item.objects.filter(actual=True, fase=faseAnt)
+        #items = Item.objects.filter(actual=True, fase=faseAnt)
+        items = LB_item.objects.filter(item__actual=True, item__fase=faseAnt)
         print("se muestrar items de la fase ant: ", items)
         for i in range(items.count()):  ###todos los items del proyecto
-            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
-                list.append(items[i].id_item)
+
+            if items[i].item.fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].item.id_item:
+                list.append(items[i].item.id_item)
                 # print("se añadio en list item: ",items[i])
     print("lista a mostrar: ", list)
 
@@ -1566,7 +1594,7 @@ def relacionarItem(request,id_proyecto,id_item):
     """
     try:
         proyecto=Proyecto.objects.get(id_proyecto=id_proyecto)#se obtiene el proyecto
-        fases=Fase.objects.filter(id_Proyecto=proyecto)#se obtienen las fases del proyecto
+        fases=Fase.objects.filter(id_Proyecto=proyecto).order_by('id_Fase')#se obtienen las fases del proyecto
         itemActual=Item.objects.get(id_item=id_item)
         list=[]
         list=lista_items_relacion(itemActual,fases,id_proyecto,id_item)
@@ -1587,12 +1615,16 @@ def relacionarItem(request,id_proyecto,id_item):
         #print(some_var)
         lis=[]
         proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
-        fases = Fase.objects.filter(id_Proyecto=proyecto)
+        fases = Fase.objects.filter(id_Proyecto=proyecto).order_by('id_Fase')
         item = Item.objects.filter(id_item=id_item)
-
+    # hacer una funcion
+    # [1][2][3]
+    #  [3][2][1]
         #VERIFICAR SI ES DE LA PRIMERA FASE SIN RELACIONES, SINO MOSTRAR ERROR
         if(lis==some_var):
-            if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
+            print(fases[0].id_Fase)
+            print(item[0].fase.id_Fase)
+            if fases[0].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
                 context = {
                     "mensaje": "EL ITEM NO ES DE LA PRIMERA FASE, POR ENDE DEBE DE CONTAR CON RELACION Y TENER DE FORMA DIRECTA O INDIRECTA RELACION CON LA PRIMERA FASE DEL PROYECTO ",
                     "titulo": "ITEM SIN RELACION",
@@ -1603,7 +1635,7 @@ def relacionarItem(request,id_proyecto,id_item):
                 }
                 return render(request, 'Error.html', context)
 
-        if fases[fases.count()-1].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
+        if fases[0].id_Fase!= item[0].fase.id_Fase:#sino es igual a la primera fase muestra error
             #VERIFICAR SI TIENE RELACION CON LA F1
             if(primeraFase(id_proyecto, id_item, some_var)==True):
                 context = {
@@ -2097,6 +2129,7 @@ def SubirArchivo(DOC, PATH):
     """
     # id proy/ id item/ nombre
     dbx = dropbox.Dropbox(TOKEN)
+    print(TOKEN)
     dbx.files_upload(DOC.file.read(), PATH)
     print("SUBIO A DROPBOX ---> ", DOC)
 
@@ -2647,6 +2680,14 @@ def validar_proyecto_cancelado(id_proyecto):
     return  context
 
 def solicitud(request, pk):
+    '''
+    Se recibe el id del item en el cual se require realizar un cambio,como el item se encuentra en linea base solicita el permiso
+    para realizar la modificación para ello se le solicita el impacto que tendrá su cambio y deberá de esperar
+    la confirmación del comite, al ingresar el mensaje se generá el correo que se envía a todo el comite de cambio.
+    :param request:
+    :param pk: id del item
+    :return: solicitud_cambio.html
+    '''
     item=Item.objects.get(id_item=pk)
     comite = Comite.objects.filter(id_proyecto=item.fase.id_Proyecto.id_proyecto)
 
@@ -2677,6 +2718,14 @@ def solicitud(request, pk):
     return render(request,'items/solicitud_cambio.html',context)
 
 def bandeja_mensajes(request,pk):
+    '''
+    Mediante el id del proyecto y el request.user se podrán obtener las solicitudes de cambio hechas por el usuario
+    podrá observar el estado de las mismas si se encuentran aprobadas o rechazadas y el mensaje hecha por cada uno
+    las personas que conforman el comite si dejasen comentarios.
+    :param request:
+    :param pk: id proyecto
+    :return: bandeja_mensajes
+    '''
     proyecto = Proyecto.objects.get(id_proyecto=pk)
     user = User.objects.get(id=request.user.id)
 
@@ -2695,6 +2744,15 @@ def bandeja_mensajes(request,pk):
 
 
 def bandeja_mensajes_solicitudes(request, pk):
+    '''
+    Mediante el id del proyecto y el request.user se podrán obtener las solicitudes de cambio hechas por el usuario
+    podrá observar el estado de las mismas si se encuentran aprobadas o rechazadas y el mensaje hecha por cada uno
+    las personas que conforman el comite si dejasen comentarios.
+    :param request:
+    :param pk: id proyecto
+    :return: bandeja_mensajes
+    '''
+
     proyecto = Proyecto.objects.get(id_proyecto=pk)
     user = User.objects.get(id=request.user.id)
 
@@ -2710,3 +2768,108 @@ def bandeja_mensajes_solicitudes(request, pk):
     }
 
     return render(request, 'proyectos/notificaciones.html', context)
+
+def Editar_relaciones(request, pk,id=None):
+    '''
+    Función que muestra las relaciones actuales del item y tambien da la opción de modificar o agregar más relaciones,
+    realiza la comprobación de los item a listar, muestra solo los items antecesores en linea base y solo muestra los sucesores
+    si el item actual se encuentra en linea base, una vez seleccionado las relaciones se verifica la consistencia de
+    cada item afectado verificando si cuenta relación con la fase inicial y si no posee ciclos.
+    :param request:
+    :param pk: id item actual
+    :return: editar_relaciones
+    '''
+    template = 'items/relaciones.html'
+    item = Item.objects.get(id_item=pk)
+    relaciones_inicio = Relacion.objects.filter(inicio_item=item.id_item)
+    relaciones_fin = Relacion.objects.filter(fin_item=item.id_item)
+    inicio = []
+    fin = []
+    for i in relaciones_inicio:
+        item_inicio = Item.objects.get(id_item=i.fin_item)
+        inicio.append({
+
+            'name':item_inicio.nombre,
+            'desc':item_inicio.descripcion,
+            'cost':item_inicio.costo,
+            'id':item_inicio.id_item,
+            'fase':item_inicio.fase.nombre,
+            'fase_id': item_inicio.fase.id_Fase,
+        })
+
+    for i in relaciones_fin:
+        item_fin = Item.objects.get(id_item=i.inicio_item)
+        fin.append({
+            'name':item_fin.nombre,
+            'desc':item_fin.descripcion,
+            'cost':item_fin.costo,
+            'id':item_fin.id_item,
+            'fase': item_fin.fase.nombre,
+            'fase_id': item_fin.fase.id_Fase,
+        })
+
+    todo_item_actual = Item.objects.filter(fase__id_Fase=item.fase.id_Fase, actual = True).exclude( id_item = item.id_item)
+    try:
+        item_LB = LB_item.objects.get(item = item)
+    except:
+        item_LB = None
+
+    if item_LB:
+        todo_item_sig = Item.objects.filter(fase__id_Fase=(item.fase.id_Fase+1), actual = True)
+    else:
+        todo_item_sig = None
+
+    # anterior filtrar en LB - listo
+    todo_item_ant = LB_item.objects.filter(item__fase__id_Fase=(item.fase.id_Fase-1), item__actual = True)
+
+    if request.method == 'POST':
+        var = request.POST.getlist('item')
+        var2 = request.POST.getlist('direccion')
+        print('Items: ',var)
+        print('Sentidos: ',var2)
+        #funcioon verificar ant, suc con relacion seleccionada
+        # fase 1 | [2] -> | 3 verificar - listo
+        #funcion ve verificacion de consistencia, todos relacion con F1
+
+        return redirect('gestion:editar_relaciones',pk)
+
+    context={
+    'inicio':inicio,
+    'fin':fin,
+    'item':item,
+    'todos_actual':todo_item_actual,
+    'todos_sig':todo_item_sig,
+    'todos_ant':todo_item_ant,
+    'proyectos':item.fase.id_Proyecto,
+    'version': id,
+    }
+    return render(request,template,context)
+
+def versiones_item(request,pk):
+    template='items/versiones_item.html'
+
+    version_item = Versiones.objects.get(id_item=pk)
+
+    versiones = Versiones.objects.filter(id_padre=version_item.id_padre).order_by('id_Version')
+    list=[]
+    for i in versiones:
+        item = Item.objects.get(id_item=i.id_item)
+        list.append({
+            'nombre':item.nombre,
+            'costo':item.costo,
+            'estado':item.estado,
+            'ti_id':item.ti.id_ti,
+            'descripcion':item.descripcion,
+            'id_item':item.id_item,
+            'version':i.id_Version,
+        })
+    item = Item.objects.get(id_item=pk)
+    list2=['1']
+    context={
+        'versiones':list,
+        'item':item,
+        'proyectos':item.fase.id_Proyecto,
+
+
+    }
+    return render(request,template,context)

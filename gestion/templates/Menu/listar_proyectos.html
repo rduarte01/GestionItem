@@ -77,12 +77,16 @@
                                                 {% if proyectos.estado == "CANCELADO"  %}
                                                     <th>CANCELADO</th>
                                                 {%else%}
-                                                    <th><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}"class="btn btn-primary">Estados</a></th>
+                                                    <th><a href="{% url 'gestion:estado_Proyecto' proyectos.id_proyecto%}"class="btn btn-primary"><i class="fas fa-circle-notch"></i> Estados</a></th>
                                                 {%endif%}
                                         {%else%}
-                                            <th>No es gerente</th>
+                                            <th><i class="fas fa-eye-slash"></i> No es gerente</th>
                                         {%endif%}
-                                            <th><a href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" class="btn btn-primary">Ver detalles</a></th>
+                                            <th>
+                                                <center>
+                                                        <a href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto%}" title="Ver Fases y detalles del proyecto" class="btn btn-primary"><i class="fas fa-running"></i> Ir</a>
+                                                </center>
+                                            </th>
                                         </tr>
                                     {% endif %}
                                 {%endfor%}
