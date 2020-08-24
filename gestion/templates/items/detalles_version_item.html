@@ -64,7 +64,7 @@
                                         <td>{{items.version}}</td>
                                     {%endif%}
                                     <td><a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.item.ti.id_ti    items.item.id_item items.item.id_item %}" >Ver Atributos</a> </td>
-                                    <td> <a type="button" class="btn btn-primary " href= "{% url 'gestion:reversionar_item' items.item.id_item %}"> Reversionar </a></td>
+                                    <td> <a type="button" class="btn btn-primary " href= "{% url 'gestion:reversionar_item' items.item.id_item id_item_actual %}"> Reversionar </a></td>
                                 </tr>
 
                             {%endfor%}

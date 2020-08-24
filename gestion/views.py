@@ -981,7 +981,7 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
 
             itemActual_fin = Relacion.objects.filter(fin_item=itemActual.id_item)  # obtengo todos los items en donde el es el fin
             for relacion in itemActual_fin:
-                nueva_relacion = Relacion(incio_item=relacion.fin_item, fin_item=item_editado.id_item)
+                nueva_relacion = Relacion(incio_item=relacion.inicio_item, fin_item=item_editado.id_item)
                 nueva_relacion.save()
 
             return redirect('gestion:detallesFase',TI.fase_id)
@@ -1022,8 +1022,50 @@ def ver_versiones_item(request,id_item):
     }
     return render(request,'items/detalles_version_item.html',context)
 
-def reversionar_item(request,id_item):
-    print('aca reversiono')
+def reversionar_item(request,id_item_reversionar,id_item_actual):
+
+    ''' aca tienen que ir toda las validaciones'''
+    if(id_item_reversionar==id_item_actual):
+        messages.error(request,'Este Item es el Actual,no se puede reversionar')
+        return redirect('gestion:ver_versiones_item', id_item=id_item_actual)
+
+
+    itemActual=Item.objects.get(id_item=id_item_actual)
+    itemToReversionar=Item.objects.get(id_item=id_item_reversionar)
+    ''' Actualizo el estado del itemActual a false '''
+    itemActual.actual=False
+    itemActual.save()
+    ''' clono el item a reversionar para crear uno nuevo '''
+    itemToReversionar.id_item=None
+    itemToReversionar.actual=True
+    itemToReversionar.save()
+
+    '''clono todos los valores del atributo del item '''
+    atributos_valor_item=Atributo_Item.objects.filter(id_item_id=id_item_reversionar)
+    for atributo in atributos_valor_item:
+        atributo.id_atributo=None
+        atributo.save()
+    ''' creo  un nuevo registro en la tabla version'''
+    item_version_actual=Versiones.objects.get(id_item=id_item_actual)
+    print('antes:',item_version_actual.id, item_version_actual.id_Version)
+    item_version_actual.id=None
+    item_version_actual.id_Version+=1
+    item_version_actual.id_item=itemToReversionar.id_item
+    item_version_actual.save()
+    print('despues',item_version_actual.id, item_version_actual.id_Version)
+    '''actualizar las las relaciones '''
+
+    itemToReversionar_inicio = Relacion.objects.filter( inicio_item=id_item_reversionar)  # obtengo todos los item  en donde el item a reversionar es el origen
+    for relacion in itemToReversionar_inicio:
+        nueva_relacion = Relacion(incio_item=itemToReversionar.id_item, fin_item=relacion.fin_item) #coloco como incio el nuevo Id
+        nueva_relacion.save()
+
+    itemToReversionar_fin = Relacion.objects.filter(fin_item=id_item_reversionar)  # obtengo todos los items en donde el item a reversionar es el fin
+    for relacion in itemToReversionar_fin:
+        nueva_relacion = Relacion(incio_item=relacion.inicio_item, fin_item=itemToReversionar.id_item)# actualizo el fin con el nuevo Id
+        nueva_relacion.save()
+
+    return redirect('gestion:ver_versiones_item',id_item=itemToReversionar.id_item)
 
 def ver_proyecto(request,pk):
     """MUESTRA LOS DETALLES DE UN PROYECTO"""
