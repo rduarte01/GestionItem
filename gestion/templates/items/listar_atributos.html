@@ -92,10 +92,10 @@
                                             {%if atributo.tipo_dato == 'File' and atributo.es_obligatorio == true %}
                                                             <td>
 
-                                                                <a class="btn btn-circle btn-primary" href="{% url 'gestion:DescargarArchivo' atributos.id_atributo%}"  ><i class="fas fa-download"></i></a>
+                                                                <a class="btn btn-circle btn-primary" href="{% url 'gestion:DescargarArchivo' atributos.id_atributo%}"  ><i class="fas fa-download"></i>   </a>
 
                                                     {% if not  ver %}
-                                                    <input placeholder="Ingrese el valor"  type="File" name="{{atributos.idAtributoTI.id_atributo}}" >
+                                                                <input placeholder="Ingrese el valor"  type="File" name="{{atributos.idAtributoTI.id_atributo}}" >
                                                     {% endif %}
                                                             </td>
 
