@@ -1041,9 +1041,12 @@ def reversionar_item(request,id_item_reversionar,id_item_actual):
     itemToReversionar.save()
 
     '''clono todos los valores del atributo del item '''
-    atributos_valor_item=Atributo_Item.objects.filter(id_item_id=id_item_reversionar)
+    atributos_valor_item=Atributo_Item.objects.filter(id_item=id_item_reversionar)
+    print(atributos_valor_item)
     for atributo in atributos_valor_item:
+        print(atributo)
         atributo.id_atributo=None
+        atributo.id_item=itemToReversionar
         atributo.save()
     ''' creo  un nuevo registro en la tabla version'''
     item_version_actual=Versiones.objects.get(id_item=id_item_actual)
@@ -1458,9 +1461,10 @@ def crearItem(request,Faseid):
         item=Item(nombre=datosFormulario.get('nombre'),descripcion=datosFormulario.get('descripcion'),costo=datosFormulario.get('costo'),fase=fase)
 
         item.save()
-        varsion_item = Versiones(id_item=item.id_item, id_padre=item.id_item,
-                                         id_Version=1)
-        varsion_item.save()
+
+        #varsion_item = Versiones(id_item=item.id_item, id_padre=item.id_item,
+        #                                 id_Version=1)
+        #varsion_item.save()
         return redirect('gestion:agg_listar_tipo_item',Faseid)
     contexto={
         "form":form
