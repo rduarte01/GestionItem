@@ -96,15 +96,17 @@
 
                                                     {% if not  ver %}
                                                                 <input placeholder="Ingrese el valor"  type="File" name="{{atributos.idAtributoTI.id_atributo}}" >
-                                                    {% endif %}
+                                                    <a type="button" href="#"  class="btn btn-danger" ><i class="fas fa-trash-alt"></i></a>
+                                                                {% endif %}
                                                             </td>
 
                                                             {%endif%}
                                             {%if atributo.tipo_dato == 'File' and atributo.es_obligatorio == false %}
-                                                <td>
+                                                <a>
                                                     <a class="btn btn-secondary" href="{% url 'gestion:DescargarArchivo' atributos.id_atributo%}" role="button" >DESCARGAR</a>
                                                     {% if not  ver %}
                                                     <input placeholder="Ingrese el valor"  type="File" name="{{atributos.idAtributoTI.id_atributo}}" >
+                                                    <a type="button" href="#"  class="btn btn-danger" ><i class="fas fa-trash-alt"></i></a>
                                                     {% endif %}
                                                 </td>
 

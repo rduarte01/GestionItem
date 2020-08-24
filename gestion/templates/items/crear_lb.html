@@ -88,13 +88,30 @@
                         <h4>Lista de Lineas Base creadas</h4>
                         {% if LB %}
                             {% for lb in LB %}
-                                <table class="table table-striped table-hover">
+                                <table
+                                                            id="table"
+                            data-toggle="table"
+                            data-pagination="true"
+                            data-search="true"
+                            data-show-refresh="true"
+                            data-show-export="true"
+                            data-show-columns="true"
+                            data-show-toggle="true"
+                            data-show-fullscreen="true"
+                            data-toolbar=".buttons-toolbar"
+                            data-locale="es-NI"
+                            data-page-list="[10, 25, 50, 100, all]"
+                            data-detail-formatter="detailFormatter"
+                            data-minimum-count-columns="2"
+                            data-show-pagination-switch="true"
+                            data-id-field="id"
+                                >
                                     <thead>
-                                        <td>ID</td>
-                                        <td>Nombre</td>
-                                        <td>Estado</td>
-                                        <td>Proyecto</td>
-                                        <td>Items</td>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Estado</th>
+                                        <th>Proyecto</th>
+                                        <th>Items</th>
                                     </thead>
                                     <tbody>
                                         <tr>

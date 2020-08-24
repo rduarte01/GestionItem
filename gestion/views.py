@@ -997,12 +997,12 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
             '''aca se actulizan las relaciones del item'''
             itemActual_inicio=Relacion.objects.filter(inicio_item=itemActual.id_item) #obtengo todos los items en donde el es el origen
             for relacion in itemActual_inicio:
-                nueva_relacion=Relacion(incio_item=item_editado.id_item,fin_item=relacion.fin_item)
+                nueva_relacion=Relacion(inicio_item=item_editado.id_item,fin_item=relacion.fin_item)
                 nueva_relacion.save()
 
             itemActual_fin = Relacion.objects.filter(fin_item=itemActual.id_item)  # obtengo todos los items en donde el es el fin
             for relacion in itemActual_fin:
-                nueva_relacion = Relacion(incio_item=relacion.inicio_item, fin_item=item_editado.id_item)
+                nueva_relacion = Relacion(inicio_item=relacion.inicio_item, fin_item=item_editado.id_item)
                 nueva_relacion.save()
 
             return redirect('gestion:detallesFase',TI.fase_id)
@@ -1039,6 +1039,7 @@ def ver_versiones_item(request,id_item):
         "fases":fases,
         'vesion_item':versiones_item,
         'id_item_actual':id_item,
+        'item_actual':Item.objects.get(id_item=id_item),
         'items':items
     }
     return render(request,'items/detalles_version_item.html',context)
@@ -1081,12 +1082,12 @@ def reversionar_item(request,id_item_reversionar,id_item_actual):
 
     itemToReversionar_inicio = Relacion.objects.filter( inicio_item=id_item_reversionar)  # obtengo todos los item  en donde el item a reversionar es el origen
     for relacion in itemToReversionar_inicio:
-        nueva_relacion = Relacion(incio_item=itemToReversionar.id_item, fin_item=relacion.fin_item) #coloco como incio el nuevo Id
+        nueva_relacion = Relacion(inicio_item=itemToReversionar.id_item, fin_item=relacion.fin_item) #coloco como incio el nuevo Id
         nueva_relacion.save()
 
     itemToReversionar_fin = Relacion.objects.filter(fin_item=id_item_reversionar)  # obtengo todos los items en donde el item a reversionar es el fin
     for relacion in itemToReversionar_fin:
-        nueva_relacion = Relacion(incio_item=relacion.inicio_item, fin_item=itemToReversionar.id_item)# actualizo el fin con el nuevo Id
+        nueva_relacion = Relacion(inicio_item=relacion.inicio_item, fin_item=itemToReversionar.id_item)# actualizo el fin con el nuevo Id
         nueva_relacion.save()
 
     return redirect('gestion:ver_versiones_item',id_item=itemToReversionar.id_item)
@@ -2553,7 +2554,7 @@ def ver_lb(request,pk):
     """
     proyecto=Proyecto.objects.get(id_proyecto=pk)
     lineaB=LineaBase.objects.filter(proyecto=proyecto)
-    Lb=iLB_item.objects.all()
+    Lb=iLB_item.objects.filter(lb=lineaB,item__actual=True)
 
     context={
         'lb':Lb,
@@ -2584,7 +2585,7 @@ def CrearLB(request,pk):
     """
 
     idfase = pk
-    lista_items = Item.objects.filter(fase=idfase, estado='Aprobado')
+    lista_items = Item.objects.filter(fase=idfase, estado='Aprobado',actual=True)
 
     try:
         fase = Fase.objects.get(id_Fase=idfase)
