@@ -822,7 +822,7 @@ def listar_relaciones(request,idItem):
     """
     relaciones= Relacion.objects.filter()
 
-    item=Item.objects.all()
+    item=Item.objects.filter(actual=True)
     itemActual=Item.objects.get(id_item=idItem)
     ### falta desvincular relacion o agregar nueva y cambiar version
 
@@ -882,22 +882,25 @@ def relaciones_trazabilidad(item,DATA,LINK):
     :param LINK: lista de relaciones de los nodos from-to
     :return: Lista
     '''
-    try:
-        relaciones = Relacion.objects.filter(fin_item=item.id_item)
-    except:
-        relaciones = None
+    if item.actual != False:
+        try:
+            relaciones = Relacion.objects.filter(fin_item=item.id_item)
+        except:
+            relaciones = None
 
-    for relaciones in relaciones:
-        inicio = Item.objects.get(id_item=relaciones.inicio_item)
-        ok = True
-        for i in DATA:
-            if i['key']== inicio.id_item:
-                ok=False
-        if ok:                                                                                                 #fase12
-            DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' costo:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
-            LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
+        for relaciones in relaciones:
 
-        relaciones_trazabilidad(inicio, DATA,LINK)
+            inicio = Item.objects.get(id_item=relaciones.inicio_item)
+            if inicio.actual != False:
+                ok = True
+                for i in DATA:
+                    if i['key']== inicio.id_item:
+                        ok=False
+                if ok:                                                                                                 #fase12
+                    DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' costo:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
+                    LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
+
+                relaciones_trazabilidad(inicio, DATA,LINK)
 
 def relaciones_trazabilidad_delante(item,DATA,LINK):
     '''
@@ -909,21 +912,23 @@ def relaciones_trazabilidad_delante(item,DATA,LINK):
     :param LINK: lista de relaciones de los nodos from-to
     :return: Lista
     '''
-    try:
-        relaciones = Relacion.objects.filter(inicio_item=item.id_item)
-    except:
-        relaciones = None
+    if item.actual != False:
+        try:
+            relaciones = Relacion.objects.filter(inicio_item=item.id_item)
+        except:
+            relaciones = None
 
-    for relaciones in relaciones:
-        fin = Item.objects.get(id_item=relaciones.fin_item)
-        ok = True
-        for i in DATA:
-            if i['key']== fin.id_item:
-                ok=False
-        if ok:
-            DATA.append({'key': fin.id_item, 'name': fin.nombre + ' costo:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
-            LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
-        relaciones_trazabilidad_delante(fin, DATA,LINK)
+        for relaciones in relaciones:
+            fin = Item.objects.get(id_item=relaciones.fin_item)
+            ok = True
+            if fin.actual != False:
+                for i in DATA:
+                    if i['key']== fin.id_item:
+                        ok=False
+                if ok:
+                    DATA.append({'key': fin.id_item, 'name': fin.nombre + ' costo:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
+                    LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
+                relaciones_trazabilidad_delante(fin, DATA,LINK)
 
 
 
@@ -2897,32 +2902,37 @@ def Editar_relaciones(request, pk,id=None):
     '''
     template = 'items/relaciones.html'
     item = Item.objects.get(id_item=pk)
+    fases = Fase.objects.filter(id_Proyecto=item.fase.id_Proyecto).order_by('id_Fase')
     relaciones_inicio = Relacion.objects.filter(inicio_item=item.id_item)
+
     relaciones_fin = Relacion.objects.filter(fin_item=item.id_item)
+
     inicio = []
     fin = []
     for i in relaciones_inicio:
         item_inicio = Item.objects.get(id_item=i.fin_item)
-        inicio.append({
+        if item_inicio.actual == True:
+            inicio.append({
 
-            'name':item_inicio.nombre,
-            'desc':item_inicio.descripcion,
-            'cost':item_inicio.costo,
-            'id':item_inicio.id_item,
-            'fase':item_inicio.fase.nombre,
-            'fase_id': item_inicio.fase.id_Fase,
-        })
+                'name':item_inicio.nombre,
+                'desc':item_inicio.descripcion,
+                'cost':item_inicio.costo,
+                'id':item_inicio.id_item,
+                'fase':item_inicio.fase.nombre,
+                'fase_id': item_inicio.fase.id_Fase,
+            })
 
     for i in relaciones_fin:
         item_fin = Item.objects.get(id_item=i.inicio_item)
-        fin.append({
-            'name':item_fin.nombre,
-            'desc':item_fin.descripcion,
-            'cost':item_fin.costo,
-            'id':item_fin.id_item,
-            'fase': item_fin.fase.nombre,
-            'fase_id': item_fin.fase.id_Fase,
-        })
+        if item_fin.actual == True:
+            fin.append({
+                'name':item_fin.nombre,
+                'desc':item_fin.descripcion,
+                'cost':item_fin.costo,
+                'id':item_fin.id_item,
+                'fase': item_fin.fase.nombre,
+                'fase_id': item_fin.fase.id_Fase,
+            })
 
     todo_item_actual = Item.objects.filter(fase__id_Fase=item.fase.id_Fase, actual = True).exclude( id_item = item.id_item)
     try:
@@ -2943,10 +2953,42 @@ def Editar_relaciones(request, pk,id=None):
         var2 = request.POST.getlist('direccion')
         print('Items: ',var)
         print('Sentidos: ',var2)
+        list_fin=[]
+        list_delete=[]
+        for i in range(len(var2)):
+            print(i)
+            if var2[i] == str(2) or var2[i] == str(22):#yo soy fin
+                list_fin.append(var[i])
+            if var2[i] == str(3) or var2[i] == str(22):#borra
+                list_delete.append(var[i])
+
+        print(fases[0])
+        print(item.fase.id_Fase)
+        if(fases[0].id_Fase != item.fase.id_Fase):
+            if primeraFase(item.fase.id_Proyecto.id_proyecto,1,list_fin)==True:
+                messages.error(request,'No hay consistencia item editando no llega a la primera fase')
+                return redirect('gestion:editar_relaciones',pk)
+            #item nuevo consistente
+            #falso
+        if list_delete != []:
+            for i in list_delete:
+                lista = Relacion.objects.filter(fin_item = int(i)).exclude(inicio_item=item.id_item)
+                for x in lista:
+                    item_lista = Item.objects.get(id_item = x)
+                    if item_lista.actual == False:
+                        lista.remove(x)
+                if primeraFase(item.fase.id_Proyecto.id_proyecto, 1, lista) == True:
+                    messages.error(request, 'Item siguiente sin relacion con la fase 1')
+                    return redirect('gestion:editar_relaciones', pk)
+
+
+        # item nueva version
+
         #funcioon verificar ant, suc con relacion seleccionada
         # fase 1 | [2] -> | 3 verificar - listo
         #funcion ve verificacion de consistencia, todos relacion con F1
 
+        messages.success(request,'Hay consistencia en la edición de relaciones')
         return redirect('gestion:editar_relaciones',pk)
 
     context={

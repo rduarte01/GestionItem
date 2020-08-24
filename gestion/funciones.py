@@ -296,14 +296,21 @@ def busqueda(item,id_item,some_var):
     except:
         relaciones = None
 
-    for relaciones in relaciones:
-        instanceItem= Item.objects.get(id_item=relaciones.fin_item)
-        if(busqueda(instanceItem,id_item,some_var)==True):
-            return True
-
     for id in some_var:
         if(str(id)==str(item.id_item)):######preguntar si es de otra fase si no se puede desde la misma porque --->apunta al contrario
             return True
+
+    for relaciones in relaciones:
+
+        try:
+            instanceItem= Item.objects.get(id_item=relaciones.fin_item, actual=True)
+        except:
+            instanceItem =None
+        if instanceItem:
+            if(busqueda(instanceItem,id_item,some_var)==True):
+                return True
+
+
 
     return False
 
