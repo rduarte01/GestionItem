@@ -20,7 +20,7 @@
             <form method="POST" onSubmit="return enviado()">
                 
                 <div>
-                    <h6 class="m-0 font-weight-bold text-primary">Fase: {{ cantidad_fases}}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Fase: {{ cantidad_fases-1}}</h6>
                 </div>
                 {% csrf_token %}
 

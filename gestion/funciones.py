@@ -285,8 +285,9 @@ def primeraFase(id_proyecto,id_item,some_var):
     """
     proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
     fases = Fase.objects.filter(id_Proyecto=proyecto)
-    todosItems = Item.objects.filter(fase=fases[fases.count() - 1],actual=True)  # todos los items de la primera fase
-
+    print("LA pRimera:",fases[0])
+    todosItems = Item.objects.filter(fase=fases[0],actual=True)  # todos los items de la primera fase, SE ARREGLA CONTADOR
+    print(todosItems)
     for item in todosItems:
         if(busqueda(item,id_item,some_var)==True):#id_item al cual llegar y some var sus nuevas relaciones
             return False
@@ -307,9 +308,9 @@ def busqueda(item,id_item,some_var):
         relaciones = Relacion.objects.filter(inicio_item=item.id_item)
     except:
         relaciones = None
-
     for relaciones in relaciones:
         instanceItem= Item.objects.get(id_item=relaciones.fin_item)
+        print("CUALES SON:", relaciones.fin_item)
         if(busqueda(instanceItem,id_item,some_var)==True):
             return True
 
