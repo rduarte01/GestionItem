@@ -2955,33 +2955,42 @@ def Editar_relaciones(request, pk,id=None):
         print('Sentidos: ',var2)
         list_fin=[]
         list_delete=[]
+        bandera = True
         for i in range(len(var2)):
-            print(i)
+            try:
+                item_agregado = Item.objects.get(id_item=var[i])
+            except:
+                item_agregado = item
+
             if var2[i] == str(2) or var2[i] == str(22):#yo soy fin
                 list_fin.append(var[i])
             if var2[i] == str(3) or var2[i] == str(22):#borra
                 list_delete.append(var[i])
+            if item.fase.id_Fase > item_agregado.fase.id_Fase and var2[i] == str(1):
+                bandera = False
+            if item.fase.id_Fase < item_agregado.fase.id_Fase and var2[i] == str(2):
+                bandera = False
 
-        print(fases[0])
-        print(item.fase.id_Fase)
-        if(fases[0].id_Fase != item.fase.id_Fase):
-            if primeraFase(item.fase.id_Proyecto.id_proyecto,1,list_fin)==True:
-                messages.error(request,'No hay consistencia item editando no llega a la primera fase')
-                return redirect('gestion:editar_relaciones',pk)
-            #item nuevo consistente
-            #falso
-        if list_delete != []:
-            for i in list_delete:
-                lista = Relacion.objects.filter(fin_item = int(i)).exclude(inicio_item=item.id_item)
-                for x in lista:
-                    item_lista = Item.objects.get(id_item = x)
-                    if item_lista.actual == False:
-                        lista.remove(x)
-                if primeraFase(item.fase.id_Proyecto.id_proyecto, 1, lista) == True:
-                    messages.error(request, 'Item siguiente sin relacion con la fase 1')
-                    return redirect('gestion:editar_relaciones', pk)
-
-
+        if bandera:
+            if(fases[0].id_Fase != item.fase.id_Fase):
+                if primeraFase(item.fase.id_Proyecto.id_proyecto,1,list_fin)==True:
+                    messages.error(request,'No hay consistencia item editando no llega a la primera fase')
+                    return redirect('gestion:editar_relaciones',pk)
+                #item nuevo consistente
+                #falso
+            if list_delete != []:
+                for i in list_delete:
+                    lista = Relacion.objects.filter(fin_item = int(i)).exclude(inicio_item=item.id_item)
+                    for x in lista:
+                        item_lista = Item.objects.get(id_item = x)
+                        if item_lista.actual == False:
+                            lista.remove(x)
+                    if primeraFase(item.fase.id_Proyecto.id_proyecto, 1, lista) == True:
+                        messages.error(request, 'Item siguiente sin relacion con la fase 1')
+                        return redirect('gestion:editar_relaciones', pk)
+        else:
+            messages.error(request,'Direccion de la relacion incorrecta')
+            return redirect('gestion:editar_relaciones', pk)
         # item nueva version
 
         #funcioon verificar ant, suc con relacion seleccionada
