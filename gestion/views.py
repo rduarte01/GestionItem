@@ -898,7 +898,7 @@ def relaciones_trazabilidad(item,DATA,LINK):
                         ok=False
                 if ok:                                                                                                 #fase12
                     DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' costo:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
-                    LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
+                LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
 
                 relaciones_trazabilidad(inicio, DATA,LINK)
 
@@ -927,7 +927,8 @@ def relaciones_trazabilidad_delante(item,DATA,LINK):
                         ok=False
                 if ok:
                     DATA.append({'key': fin.id_item, 'name': fin.nombre + ' costo:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
-                    LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
+                LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
+
                 relaciones_trazabilidad_delante(fin, DATA,LINK)
 
 
