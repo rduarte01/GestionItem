@@ -330,7 +330,7 @@ def ciclos(item,var, var2):
 
         for j in relaciones: #Se recorre todas las relaciones de ese item
             item_fin = Item.objects.get(id_item= j.fin_item) #Se obtiene el itemfin de esa relacion
-            if item_fin.actual == True and item_fin.fase == item.fase and item_fin != item.id_item: # si el item fin es Actual, distinto del item editando, y de las misma fase se agrega a la lista
+            if item_fin.actual == True and item_fin.fase == item.fase and item_fin.id_item != item.id_item: # si el item fin es Actual, distinto del item editando, y de las misma fase se agrega a la lista
                 inicio.append(j.inicio_item)
                 fin.append(j.fin_item)
 
@@ -348,12 +348,21 @@ def ciclos(item,var, var2):
             if var2[i] == str(2):
                 inicio.append(item_agregado.id_item)
                 fin.append(item.id_item)
-
+    print("Inicio: ", inicio )
+    print("Fin: ", fin )
     for i in range(len(inicio)):
-        if inicio[i] == item.id_item:
-           # if verificar_ciclo(fin[i],inicio[i],inicio,fin): #Falta crear Funcion verificar ciclo
+        if inicio[i] == item.id_item or fin[i] == item.id_item:
+            if verificar_ciclo(fin[i],inicio[i],inicio,fin):
                 return True
-        if fin[i] == item.id_item:
-           #if verificar_ciclo(inicio[i],fin[i],inicio,fin):
+    return False
+
+def verificar_ciclo(nodo_actual,Objetivo, lista_ini, lista_fin):
+
+    for i in range(len(lista_ini)):
+        if(lista_ini[i] == nodo_actual):
+            if(lista_fin[i] == Objetivo):
+
                 return True
+            else:
+                return verificar_ciclo(lista_fin[i], Objetivo, lista_ini, lista_fin)
     return False

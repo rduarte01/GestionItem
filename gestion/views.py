@@ -2996,9 +2996,23 @@ def Editar_relaciones(request, pk,id=None):
         #funcioon verificar ant, suc con relacion seleccionada
         # fase 1 | [2] -> | 3 verificar - listo
         #funcion ve verificacion de consistencia, todos relacion con F1
+
+        #Verificar si es que un item de la misma fase apunta a un item con estado mas avanzado que el item
+        """    for i in range(len(var2)-1):
+            try:
+                item_agregado = Item.objects.get(id_item=var[i])
+            except:
+                item_agregado = item
+            if item.id_item != item_agregado.id_item:
+                if item.estado == "Finalizado" or item:
+                    if item_agregado == "Creado" and var2[i] == 2:
+                        messages.error(request, 'Item en estado Creado no puede apuntar a item en Estado Finalizado')
+                        return redirect('gestion:editar_relaciones', pk)
+        """
+
         #Ciclos
         if ciclos(item,var, var2):
-            messages.error(request, 'Hay ciclos')
+            messages.error(request, 'Hay ciclos, verifique las relaciones')
             return redirect('gestion:editar_relaciones', pk)
 
 
