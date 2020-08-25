@@ -797,7 +797,7 @@ def detallesFase(request,idFase):
     """
     fases = Fase.objects.get(id_Fase=idFase)
     proyectos= Proyecto.objects.get(id_proyecto=fases.id_Proyecto.id_proyecto)
-    items=Item.objects.filter(fase=fases)
+    items=Item.objects.filter(fase=fases,actual=True)
 
     context={
         "proyectos":proyectos,
@@ -812,15 +812,17 @@ def detallesFase(request,idFase):
 @method_decorator(csrf_exempt)
 def listar_relaciones(request,idItem):
     """
-    LISTA LAS RELACIONES DE UN ITEM EN ESPECIFICO MEDIANTE EL ID DEL ITEM
+    Genera la trazabilidad del item mostrando los item antecesores, sucesores, padres e hijos del mismo mediante
+    Gojs al que se le manda la lista de nodos y la lista de relaciones de dichos nodos mediante un csrf_exempt decorator
+    de modo a cifrar el contenido evitando problemas en el template
 
     :param request:
-    :param idItem: ID DEL ITEM DEL CUAL SE LISTARAN SUS RELACIONES
-    :return: LISTAR_RELACIONES.HTML
+    :param idItem: Id del item
+    :return: Trazabilidad.HTML
     """
     relaciones= Relacion.objects.filter()
 
-    item=Item.objects.all()
+    item=Item.objects.filter(actual=True)
     itemActual=Item.objects.get(id_item=idItem)
     ### falta desvincular relacion o agregar nueva y cambiar version
 
@@ -871,41 +873,62 @@ def listar_relaciones(request,idItem):
 
 
 def relaciones_trazabilidad(item,DATA,LINK):
-    # inicio      fin
-    try:
-        relaciones = Relacion.objects.filter(fin_item=item.id_item)
-    except:
-        relaciones = None
+    '''
+    Realiza el recorrido de los items anteriores al item del cual se require la trazabilidad guardando los datos
+    de los items anteriores en DATA en formato de diccionario y en LINK las relaciones de dichos item, utilizando la
+    recursividad se realiza el mismo proceso hasta culminal los items anteriores
+    :param item:
+    :param DATA: lista de nodos
+    :param LINK: lista de relaciones de los nodos from-to
+    :return: Lista
+    '''
+    if item.actual != False:
+        try:
+            relaciones = Relacion.objects.filter(fin_item=item.id_item)
+        except:
+            relaciones = None
 
-    for relaciones in relaciones:
-        inicio = Item.objects.get(id_item=relaciones.inicio_item)
-        ok = True
-        for i in DATA:
-            if i['key']== inicio.id_item:
-                ok=False
-        if ok:                                                                                                 #fase12
-            DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' costo:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
-            LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
+        for relaciones in relaciones:
 
-        relaciones_trazabilidad(inicio, DATA,LINK)
+            inicio = Item.objects.get(id_item=relaciones.inicio_item)
+            if inicio.actual != False:
+                ok = True
+                for i in DATA:
+                    if i['key']== inicio.id_item:
+                        ok=False
+                if ok:                                                                                                 #fase12
+                    DATA.append({'key': inicio.id_item, 'name': inicio.nombre + ' costo:'+str(inicio.costo), 'group': 'FASE'+str(inicio.fase.id_Fase)}, )
+                    LINK.append({'from': inicio.id_item, 'to':item.id_item  }, )
+
+                relaciones_trazabilidad(inicio, DATA,LINK)
 
 def relaciones_trazabilidad_delante(item,DATA,LINK):
+    '''
+    Realiza el recorrido de los items posteriores al item del cual se require la trazabilidad guardando los datos
+    de los items posteriores en DATA en formato de diccionario y en LINK las relaciones de dichos item, utilizando la
+    recursividad se realiza el mismo proceso hasta culminal los items posteriores
+    :param item:
+    :param DATA: lista de nodos
+    :param LINK: lista de relaciones de los nodos from-to
+    :return: Lista
+    '''
+    if item.actual != False:
+        try:
+            relaciones = Relacion.objects.filter(inicio_item=item.id_item)
+        except:
+            relaciones = None
 
-    try:
-        relaciones = Relacion.objects.filter(inicio_item=item.id_item)
-    except:
-        relaciones = None
-
-    for relaciones in relaciones:
-        fin = Item.objects.get(id_item=relaciones.fin_item)
-        ok = True
-        for i in DATA:
-            if i['key']== fin.id_item:
-                ok=False
-        if ok:
-            DATA.append({'key': fin.id_item, 'name': fin.nombre + ' costo:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
-            LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
-        relaciones_trazabilidad_delante(fin, DATA,LINK)
+        for relaciones in relaciones:
+            fin = Item.objects.get(id_item=relaciones.fin_item)
+            ok = True
+            if fin.actual != False:
+                for i in DATA:
+                    if i['key']== fin.id_item:
+                        ok=False
+                if ok:
+                    DATA.append({'key': fin.id_item, 'name': fin.nombre + ' costo:'+str(fin.costo), 'group': 'FASE'+str(fin.fase.id_Fase)}, )
+                    LINK.append({'from': item.id_item, 'to':fin.id_item  }, )
+                relaciones_trazabilidad_delante(fin, DATA,LINK)
 
 
 
@@ -919,41 +942,76 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
     :param id_item: ID DEL ITEM DEL CUAL SE LISTARA SUS ATRIBUTOS
     :return: LISTAR_ATRIBUTOS.HTML
     """
-    atributos = Atributo_Item.objects.filter(id_item=id_item)
-    TI=TipoItem.objects.get(id_ti=idAtributoTI)
-    atributo= Atributo.objects.filter(ti=TI)
-    itemActual=Item.objects.get(id_item=id_item)
+    print('el id del item es :',id_item)
+    atributos = Atributo_Item.objects.filter(id_item=id_item) #obtiene los valores del atributo del item
+    TI=TipoItem.objects.get(id_ti=idAtributoTI) #obtiene el tipo de item
+    atributo= Atributo.objects.filter(ti=TI) #lista los atributos del tipo de item
+    itemActual=Item.objects.get(id_item=id_item) #el item  a ser modificado
     if(request.method=='POST'):
-        ###### FALTA ARREGLAR PARA QUE FUNCIONE CON VERSIONES
         if request.method == 'POST':
-            # item viejo
-            #item = Item.objects.get(id_item=id_item)  # nuevo item por la edicion
-            #
-            #nombre_item = request.POST.get['nombre_item']
-            #nombre_descripcion = request.POST.get['nombre_descripcion']
-            #nombre_estado = request.POST.get['nombre_estado']
-            #nombre_costo = request.POST.get['nombre_costo']
+            ''' obtengo el item  viejo (itemActual) y actualizo sus valores de boolean a false.'''
+            itemActual.actual=False
+            itemActual.save()
+            '''Ahora en estas variables voy a obtener los valores editados de mi ITEM  '''
+            nombre_item_editado = request.POST.get('item_nombre')
+            descripcion_item_editado = request.POST.get('item_descripcion')
+            estado_item_editado = request.POST.get('item_estado')
+            costo_item_editado = request.POST.get('item_costo')
+            print('nombre es:',nombre_item_editado)
+            ''' crear un nuevo item, con un nuevo id  con los valores recibidos del form'''
+            item_editado = Item(nombre=nombre_item_editado,descripcion=descripcion_item_editado,costo=costo_item_editado,
+                                actual=True,estado=itemActual.estado,fase_id=TI.fase_id,ti_id=TI.id_ti)
+            item_editado.save()
 
-            # item anterior false
-            #itemActual.actual = False
-            #itemActual.save()
-
-            #item = Item(nombre=nombre_item, )
-
-            # version
-            #t = Versiones.objects.get(id_item=itemActual.id_item)
-            #t = Versiones(id_item=item.id_item, id_padre= t.id_padre, version=t.version+1)
-            #t.save()
+            ''' Crear un nuevo registro en la tabla versiones con los valores correspondientes del id_padre y version'''
+            version_item_actual= Versiones.objects.get(id_item=itemActual.id_item) #obtengo el registro del item actual
+            varsion_item_editado = Versiones(id_item=item_editado.id_item, id_padre= version_item_actual.id_padre,
+                                             id_Version=version_item_actual.id_Version+1)
+            varsion_item_editado.save()
 
             diccionario_data = verificar_datos_form_atributo_item(request,TI.id_ti,atributo,request.POST,request.FILES)
+            print('el diccionario data es: ',diccionario_data)
+            for data in diccionario_data:
+                if(data['AtributoTI'].tipo_dato=='File'): #si es de tipo File ,entonces armo la ruta para subir el archivo
+                   if(data['valor_atributo_item'] != 'Sin archivos adjuntos'): # si se recibe algo es porque el edito el archivo, por lo tanto creamos una nueva ruta en la nube
+                        ruta = str(TI.fase.id_Proyecto.id_proyecto) + "/" + str(item_editado.id_item)
+                        doc = data['valor_atributo_item']
+                        PATH = f'/{ruta}/{doc[0]}'
+                        ''' proceso de subir archivo a dropbox'''
+                        #SubirArchivo(doc[0], PATH)
+                        print('-----',PATH)
+                        ##se sube archivo a dropbox en segundo plano
+                        t2 = Thread(
+                           target=SubirArchivo,
+                            args=(doc[0], PATH),
+                         )
+                        t2.start()
+                        atributo_item_editado = Atributo_Item(idAtributoTI=data['AtributoTI'], id_item=item_editado,
+                                                              valor=PATH)
+                        atributo_item_editado.save()
+                   else:
+                        atributo_item_editado = Atributo_Item(idAtributoTI=data['AtributoTI'], id_item=item_editado,
+                                                              valor=Atributo_Item.objects.get(id_item=itemActual,idAtributoTI=data['AtributoTI']).valor)
+                        print('el editado sin modificar',atributo_item_editado.valor)
+                        atributo_item_editado.save()
+                else:
+                    print('atributo_id:',data['AtributoTI'].id_atributo,' valor:',data['valor_atributo_item'])
+                    atributo_item_editado=Atributo_Item(idAtributoTI=data['AtributoTI'], id_item=item_editado,
+                                                        valor=data['valor_atributo_item'])
+                    atributo_item_editado.save()
+            '''aca se actulizan las relaciones del item'''
+            itemActual_inicio=Relacion.objects.filter(inicio_item=itemActual.id_item) #obtengo todos los items en donde el es el origen
+            for relacion in itemActual_inicio:
+                nueva_relacion=Relacion(inicio_item=item_editado.id_item,fin_item=relacion.fin_item)
+                nueva_relacion.save()
 
-            print (diccionario_data)
-           
+            itemActual_fin = Relacion.objects.filter(fin_item=itemActual.id_item)  # obtengo todos los items en donde el es el fin
+            for relacion in itemActual_fin:
+                nueva_relacion = Relacion(inicio_item=relacion.inicio_item, fin_item=item_editado.id_item)
+                nueva_relacion.save()
 
-            #print(request.POST)
-            #return redirect('gestion:listar_atributos',idAtributoTI,item.id_item)
+            return redirect('gestion:detallesFase',TI.fase_id)
 
-    ### falta desvincular relacion o agregar nueva y cambiar version
 
     context = {
         "atributos":atributos,
@@ -966,6 +1024,79 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
     }
     return render(request, 'items/listar_atributos.html', context)
 
+def ver_versiones_item(request,id_item):
+    id_padre_item=Versiones.objects.get(id_item=id_item).id_padre
+
+    versiones_item=Versiones.objects.filter(id_padre=id_padre_item).order_by('id_Version')
+    item_actual = Item.objects.get(id_item=id_item)
+    fases = Fase.objects.get(id_Fase=item_actual.fase_id)
+    proyectos= Proyecto.objects.get(id_proyecto=fases.id_Proyecto.id_proyecto)
+    items = []
+
+    for row in range(len(versiones_item)):
+        items.append({'item': Item.objects.get(id_item=versiones_item[row].id_item),
+                     'version': versiones_item[row].id_Version
+                     }
+                )
+
+    context={
+        "proyectos":proyectos,
+        "fases":fases,
+        'vesion_item':versiones_item,
+        'id_item_actual':id_item,
+        'item_actual':Item.objects.get(id_item=id_item),
+        'items':items
+    }
+    return render(request,'items/detalles_version_item.html',context)
+
+def reversionar_item(request,id_item_reversionar,id_item_actual):
+
+    ''' aca tienen que ir toda las validaciones'''
+    if(id_item_reversionar==id_item_actual):
+        messages.error(request,'Este Item es el Actual,no se puede reversionar')
+        return redirect('gestion:ver_versiones_item', id_item=id_item_actual)
+
+
+    itemActual=Item.objects.get(id_item=id_item_actual)
+    itemToReversionar=Item.objects.get(id_item=id_item_reversionar)
+    ''' Actualizo el estado del itemActual a false '''
+    itemActual.actual=False
+    itemActual.save()
+    ''' clono el item a reversionar para crear uno nuevo '''
+    itemToReversionar.id_item=None
+    itemToReversionar.actual=True
+    itemToReversionar.save()
+
+    '''clono todos los valores del atributo del item '''
+    atributos_valor_item=Atributo_Item.objects.filter(id_item=id_item_reversionar)
+    print(atributos_valor_item)
+    for atributo in atributos_valor_item:
+        print(atributo)
+        atributo.id_atributo=None
+        atributo.id_item=itemToReversionar
+        atributo.save()
+    ''' creo  un nuevo registro en la tabla version'''
+    item_version_actual=Versiones.objects.get(id_item=id_item_actual)
+    print('antes:',item_version_actual.id, item_version_actual.id_Version)
+    item_version_actual.id=None
+    item_version_actual.id_Version+=1
+    item_version_actual.id_item=itemToReversionar.id_item
+    item_version_actual.save()
+    print('despues',item_version_actual.id, item_version_actual.id_Version)
+    '''actualizar las las relaciones '''
+
+    itemToReversionar_inicio = Relacion.objects.filter( inicio_item=id_item_reversionar)  # obtengo todos los item  en donde el item a reversionar es el origen
+    for relacion in itemToReversionar_inicio:
+        nueva_relacion = Relacion(inicio_item=itemToReversionar.id_item, fin_item=relacion.fin_item) #coloco como incio el nuevo Id
+        nueva_relacion.save()
+
+    itemToReversionar_fin = Relacion.objects.filter(fin_item=id_item_reversionar)  # obtengo todos los items en donde el item a reversionar es el fin
+    for relacion in itemToReversionar_fin:
+        nueva_relacion = Relacion(inicio_item=relacion.inicio_item, fin_item=itemToReversionar.id_item)# actualizo el fin con el nuevo Id
+        nueva_relacion.save()
+
+    return redirect('gestion:ver_versiones_item',id_item=itemToReversionar.id_item)
+
 def ver_proyecto(request,pk):
     """MUESTRA LOS DETALLES DE UN PROYECTO"""
     proyecto=Proyecto.objects.get(id_proyecto=pk)
@@ -976,53 +1107,55 @@ def ver_proyecto(request,pk):
     }
     return render(request,'opcionesProyecto.html',contexto)
 
-def verificar_datos_form_atributo_item(request,idTI,atributos,reqForm,reqFile):
+def verificar_datos_form_atributo_item(request,idTI,atributo,reqForm,reqFile):
     itemID = Item.objects.last()
     ti = TipoItem.objects.get(id_ti=idTI)
     contador = 0
     print('-------->',reqFile)
-    for c in atributos:
+    for c in atributo:
         print(c.id_atributo)
         contador = contador + 1
     # item viejo
     #item = Item.objects.get(id_item=id_item)  # nuevo item por la edicion
     #
     list = []
-    for atributos in atributos:  # SE RECORRE POR VALOR INGRESADO CONSULTANDO SI ES OBLIGARORIO Y ESTA VACIO-->MUESTRA ERROR
+    for atributo in atributo:  # SE RECORRE POR VALOR INGRESADO CONSULTANDO SI ES OBLIGARORIO Y ESTA VACIO-->MUESTRA ERROR
         ok = False
-        if (atributos.tipo_dato == 'Boolean'):
-            x = reqForm.getlist(atributos.tipo_dato)
-            tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=atributos.tipo_dato)
+        if (atributo.tipo_dato == 'Boolean'):
+            x = reqForm.getlist(atributo.tipo_dato)
+            tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=atributo.tipo_dato)
             print(x)
             for ini in range(len(x)):
                 if (x[ini] == '' and tiposAtributo[ini].es_obligatorio == True):
                     ok = True
-                    nombre = tiposAtributo[ini].nombre
-            if (ok == True):
+                    nombre = tiposAtributo[ini].nombre #para mandarle al mensaje
+            if (ok == True): #si es true entonces muestro un mensaje de error
                 messages.error(request,
                                "EL ATRIBUTO ES OBLIGATRIO FAVOR INGRESE UN VALOR PARA EL ATRIBUTO: " + nombre)
                 return redirect('gestion:aggAtributos', idTI)
     diccionario_data =[]
-    list = ["Decimal", "Boolean", "File", "String", "Date"]
+    list_tipo_datos = ["Decimal", "Boolean", "File", "String", "Date"]
     for ini in range(
-            len(list)):  # SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
+            len(list_tipo_datos)):  # SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
         print('este es el valor de ini' + str(ini))
-        print(list[ini])
+        print(list_tipo_datos[ini])
         try:
-            tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=list[ini])
-            x = reqForm.getlist(list[ini])
+            tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=list_tipo_datos[ini]) ##obtengo los atributos del TI
+            datos_form = reqForm.getlist(list_tipo_datos[ini]) # obtengo del form todos esos atributos introducidos de acuerdo al tipo de dato
         except:
             tiposAtributo = None
 
         if (tiposAtributo != None):
             for valor in range(tiposAtributo.count()):
-                if (list[ini] == "File"):
+                if (list_tipo_datos[ini] == "File"):
                     list2 = []
                     for atr in tiposAtributo:
+                        print(atr.id_atributo)
                         DOC = reqFile.getlist(str(atr.id_atributo))
-                        print(reqFile)
-                        print (DOC)
-                        print (atr.id_atributo)
+                        print('aca imprimo el id',atr.id_atributo)
+                        print('aca impirmo el archivo:',reqFile)
+                        print('aca imprimo doc:',DOC)
+
                         if (DOC != list2):
                             #print("no vacio", DOC[0])
                             #ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
@@ -1039,19 +1172,19 @@ def verificar_datos_form_atributo_item(request,idTI,atributos,reqForm,reqFile):
                             #    args=(DOC[0], PATH),
                             #)
                             #t2.start()
-                            diccionario_data.append({'idAtributoTI': atr,'valor':str(DOC)})
+                            diccionario_data.append({'AtributoTI': atr,'valor_atributo_item':DOC})
                             #p = Atributo_Item(idAtributoTI=atr, id_item=item, valor=str(PATH))
                             #p.save()
                         else:
                             print("vacio", DOC)
                             #p = Atributo_Item(idAtributoTI=atr, id_item=item, valor="Sin archivos adjuntos")
                             #p.save()
-                            diccionario_data.append({'idAtributoTI': atr,'valor':"Sin archivos adjuntos"})
+                            diccionario_data.append({'AtributoTI': atr,'valor_atributo_item':"Sin archivos adjuntos"})
                     break
                 else:
                     #p = Atributo_Item(idAtributoTI=tiposAtributo[valor], id_item=item, valor=str(x[valor]))
                     #p.save()
-                    diccionario_data.append({'idAtributoTI': tiposAtributo[valor], 'valor': str(x[valor])})
+                    diccionario_data.append({'AtributoTI': tiposAtributo[valor], 'valor_atributo_item': str(datos_form[valor])}) ## que pasa aca??
     return diccionario_data
 
 def get_fase_proyecto(request,id_fase):
@@ -1347,7 +1480,7 @@ def crearItem(request,Faseid):
     """        
     if (hayTiFase(fase)):  # muestra mensaje de error si no hay TI no se puede crear item
         messages.error(request,"LA FASE NO CONTIENE NINGUN TI Y  UN ITEM NECESARIAMENTE REQUIERE UNA, ASI QUE CREELA E INTENTE NUEVAMENTE")
-        return redirect('gestion:detallesFase',fase.id_Proyecto.id_proyecto)
+        return redirect('gestion:detallesFase',fase.id_Fase)
 
     form= FormItem(request.POST)
     if form.is_valid():
@@ -1356,7 +1489,12 @@ def crearItem(request,Faseid):
         datosFormulario= form.cleaned_data
         fase= Fase.objects.get(id_Fase=Faseid)
         item=Item(nombre=datosFormulario.get('nombre'),descripcion=datosFormulario.get('descripcion'),costo=datosFormulario.get('costo'),fase=fase)
+
         item.save()
+
+        #varsion_item = Versiones(id_item=item.id_item, id_padre=item.id_item,
+        #                                 id_Version=1)
+        #varsion_item.save()
         return redirect('gestion:agg_listar_tipo_item',Faseid)
     contexto={
         "form":form
@@ -1473,6 +1611,7 @@ def aggAtributos(request,idTI):
                                 #SubirArchivo(DOC[0], PATH)
                                 print("--",PATH)
 
+
                                 ##se sube archivo a dropbox en segundo plano
                                 t2 = Thread(
                                     target=SubirArchivo,
@@ -1548,11 +1687,13 @@ def lista_items_relacion(itemActual, fases,id_proyecto,id_item):
                 # print("se añadio en list item: ",items[i])
     if (mostrarAnte == True):
         faseAnt = Fase.objects.get(id_Fase=(itemActual.fase.id_Fase - 1))
-        items = Item.objects.filter(actual=True, fase=faseAnt)
+        #items = Item.objects.filter(actual=True, fase=faseAnt)
+        items = LB_item.objects.filter(item__actual=True, item__fase=faseAnt)
         print("se muestrar items de la fase ant: ", items)
         for i in range(items.count()):  ###todos los items del proyecto
-            if items[i].fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].id_item:
-                list.append(items[i].id_item)
+
+            if items[i].item.fase.id_Proyecto.id_proyecto == id_proyecto and id_item != items[i].item.id_item:
+                list.append(items[i].item.id_item)
                 # print("se añadio en list item: ",items[i])
     print("lista a mostrar: ", list)
 
@@ -1574,7 +1715,7 @@ def relacionarItem(request,id_proyecto,id_item):
     """
     try:
         proyecto=Proyecto.objects.get(id_proyecto=id_proyecto)#se obtiene el proyecto
-        fases=Fase.objects.filter(id_Proyecto=proyecto)#se obtienen las fases del proyecto
+        fases=Fase.objects.filter(id_Proyecto=proyecto).order_by('id_Fase')#se obtienen las fases del proyecto
         itemActual=Item.objects.get(id_item=id_item)
         list=[]
         list=lista_items_relacion(itemActual,fases,id_proyecto,id_item)
@@ -2418,7 +2559,7 @@ def ver_lb(request,pk):
     """
     proyecto=Proyecto.objects.get(id_proyecto=pk)
     lineaB=LineaBase.objects.filter(proyecto=proyecto)
-    Lb=iLB_item.objects.all()
+    Lb=iLB_item.objects.filter(lb=lineaB,item__actual=True)
 
     context={
         'lb':Lb,
@@ -2449,7 +2590,7 @@ def CrearLB(request,pk):
     """
 
     idfase = pk
-    lista_items = Item.objects.filter(fase=idfase, estado='Aprobado')
+    lista_items = Item.objects.filter(fase=idfase, estado='Aprobado',actual=True)
 
     try:
         fase = Fase.objects.get(id_Fase=idfase)
@@ -2660,6 +2801,14 @@ def validar_proyecto_cancelado(id_proyecto):
     return  context
 
 def solicitud(request, pk):
+    '''
+    Se recibe el id del item en el cual se require realizar un cambio,como el item se encuentra en linea base solicita el permiso
+    para realizar la modificación para ello se le solicita el impacto que tendrá su cambio y deberá de esperar
+    la confirmación del comite, al ingresar el mensaje se generá el correo que se envía a todo el comite de cambio.
+    :param request:
+    :param pk: id del item
+    :return: solicitud_cambio.html
+    '''
     item=Item.objects.get(id_item=pk)
     comite = Comite.objects.filter(id_proyecto=item.fase.id_Proyecto.id_proyecto)
 
@@ -2690,6 +2839,14 @@ def solicitud(request, pk):
     return render(request,'items/solicitud_cambio.html',context)
 
 def bandeja_mensajes(request,pk):
+    '''
+    Mediante el id del proyecto y el request.user se podrán obtener las solicitudes de cambio hechas por el usuario
+    podrá observar el estado de las mismas si se encuentran aprobadas o rechazadas y el mensaje hecha por cada uno
+    las personas que conforman el comite si dejasen comentarios.
+    :param request:
+    :param pk: id proyecto
+    :return: bandeja_mensajes
+    '''
     proyecto = Proyecto.objects.get(id_proyecto=pk)
     user = User.objects.get(id=request.user.id)
 
@@ -2708,6 +2865,15 @@ def bandeja_mensajes(request,pk):
 
 
 def bandeja_mensajes_solicitudes(request, pk):
+    '''
+    Mediante el id del proyecto y el request.user se podrán obtener las solicitudes de cambio hechas por el usuario
+    podrá observar el estado de las mismas si se encuentran aprobadas o rechazadas y el mensaje hecha por cada uno
+    las personas que conforman el comite si dejasen comentarios.
+    :param request:
+    :param pk: id proyecto
+    :return: bandeja_mensajes
+    '''
+
     proyecto = Proyecto.objects.get(id_proyecto=pk)
     user = User.objects.get(id=request.user.id)
 
@@ -2724,43 +2890,144 @@ def bandeja_mensajes_solicitudes(request, pk):
 
     return render(request, 'proyectos/notificaciones.html', context)
 
-def Editar_relaciones(request, pk):
+def Editar_relaciones(request, pk,id=None):
+    '''
+    Función que muestra las relaciones actuales del item y tambien da la opción de modificar o agregar más relaciones,
+    realiza la comprobación de los item a listar, muestra solo los items antecesores en linea base y solo muestra los sucesores
+    si el item actual se encuentra en linea base, una vez seleccionado las relaciones se verifica la consistencia de
+    cada item afectado verificando si cuenta relación con la fase inicial y si no posee ciclos.
+    :param request:
+    :param pk: id item actual
+    :return: editar_relaciones
+    '''
     template = 'items/relaciones.html'
     item = Item.objects.get(id_item=pk)
+    fases = Fase.objects.filter(id_Proyecto=item.fase.id_Proyecto).order_by('id_Fase')
     relaciones_inicio = Relacion.objects.filter(inicio_item=item.id_item)
+
     relaciones_fin = Relacion.objects.filter(fin_item=item.id_item)
+
     inicio = []
     fin = []
     for i in relaciones_inicio:
-        item_inicio = Item.objects.get(id_item=i.inicio_item)
-        inicio.append({
-            'name':item_inicio.nombre,
-            'desc':item_inicio.descripcion,
-            'cost':item_inicio.costo,
-        })
+        item_inicio = Item.objects.get(id_item=i.fin_item)
+        if item_inicio.actual == True:
+            inicio.append({
+
+                'name':item_inicio.nombre,
+                'desc':item_inicio.descripcion,
+                'cost':item_inicio.costo,
+                'id':item_inicio.id_item,
+                'fase':item_inicio.fase.nombre,
+                'fase_id': item_inicio.fase.id_Fase,
+            })
 
     for i in relaciones_fin:
-        item_fin = Item.objects.get(id_item=i.fin_item)
-        fin.append({
-            'name':item_fin.nombre,
-            'desc':item_fin.descripcion,
-            'cost':item_fin.costo,
-        })
+        item_fin = Item.objects.get(id_item=i.inicio_item)
+        if item_fin.actual == True:
+            fin.append({
+                'name':item_fin.nombre,
+                'desc':item_fin.descripcion,
+                'cost':item_fin.costo,
+                'id':item_fin.id_item,
+                'fase': item_fin.fase.nombre,
+                'fase_id': item_fin.fase.id_Fase,
+            })
 
-    todo_item = Item.objects.filter(fase__id_Proyecto=item.fase.id_Proyecto, actual = True).exclude( id_item = item.id_item)
+    todo_item_actual = Item.objects.filter(fase__id_Fase=item.fase.id_Fase, actual = True).exclude( id_item = item.id_item)
+    try:
+        item_LB = LB_item.objects.get(item = item)
+    except:
+        item_LB = None
+
+    if item_LB:
+        todo_item_sig = Item.objects.filter(fase__id_Fase=(item.fase.id_Fase+1), actual = True)
+    else:
+        todo_item_sig = None
+
+    # anterior filtrar en LB - listo
+    todo_item_ant = LB_item.objects.filter(item__fase__id_Fase=(item.fase.id_Fase-1), item__actual = True)
 
     if request.method == 'POST':
         var = request.POST.getlist('item')
         var2 = request.POST.getlist('direccion')
-        print(var)
-        print(var2)
+        print('Items: ',var)
+        print('Sentidos: ',var2)
+        list_fin=[]
+        list_delete=[]
+        for i in range(len(var2)):
+            print(i)
+            if var2[i] == str(2) or var2[i] == str(22):#yo soy fin
+                list_fin.append(var[i])
+            if var2[i] == str(3) or var2[i] == str(22):#borra
+                list_delete.append(var[i])
+
+        print(fases[0])
+        print(item.fase.id_Fase)
+        if(fases[0].id_Fase != item.fase.id_Fase):
+            if primeraFase(item.fase.id_Proyecto.id_proyecto,1,list_fin)==True:
+                messages.error(request,'No hay consistencia item editando no llega a la primera fase')
+                return redirect('gestion:editar_relaciones',pk)
+            #item nuevo consistente
+            #falso
+        if list_delete != []:
+            for i in list_delete:
+                lista = Relacion.objects.filter(fin_item = int(i)).exclude(inicio_item=item.id_item)
+                for x in lista:
+                    item_lista = Item.objects.get(id_item = x)
+                    if item_lista.actual == False:
+                        lista.remove(x)
+                if primeraFase(item.fase.id_Proyecto.id_proyecto, 1, lista) == True:
+                    messages.error(request, 'Item siguiente sin relacion con la fase 1')
+                    return redirect('gestion:editar_relaciones', pk)
+
+
+        # item nueva version
+
+        #funcioon verificar ant, suc con relacion seleccionada
+        # fase 1 | [2] -> | 3 verificar - listo
+        #funcion ve verificacion de consistencia, todos relacion con F1
+
+        messages.success(request,'Hay consistencia en la edición de relaciones')
         return redirect('gestion:editar_relaciones',pk)
 
     context={
     'inicio':inicio,
     'fin':fin,
     'item':item,
-    'todos':todo_item,
+    'todos_actual':todo_item_actual,
+    'todos_sig':todo_item_sig,
+    'todos_ant':todo_item_ant,
     'proyectos':item.fase.id_Proyecto,
+    'version': id,
+    }
+    return render(request,template,context)
+
+def versiones_item(request,pk):
+    template='items/versiones_item.html'
+
+    version_item = Versiones.objects.get(id_item=pk)
+
+    versiones = Versiones.objects.filter(id_padre=version_item.id_padre).order_by('id_Version')
+    list=[]
+    for i in versiones:
+        item = Item.objects.get(id_item=i.id_item)
+        list.append({
+            'nombre':item.nombre,
+            'costo':item.costo,
+            'estado':item.estado,
+            'ti_id':item.ti.id_ti,
+            'descripcion':item.descripcion,
+            'id_item':item.id_item,
+            'version':i.id_Version,
+        })
+    item = Item.objects.get(id_item=pk)
+    list2=['1']
+    context={
+        'versiones':list,
+        'item':item,
+        'proyectos':item.fase.id_Proyecto,
+
+
     }
     return render(request,template,context)

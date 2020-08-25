@@ -72,7 +72,11 @@ urlpatterns = [
     path('notificaciones/<int:pk>/', bandeja_mensajes_solicitudes, name = 'notificaciones'),
     path('bandeja_mensajes/<int:pk>/', bandeja_mensajes, name = 'bandeja_mensajes'),
     path('cambiarEstadoItem/<int:pk>/', views.modificarEstadoItem, name = 'cambiarEstadoItem'),
+    path('verVersiones/Items/<int:id_item>/',views.ver_versiones_item,name="ver_versiones_item"),
+    path('reversionar/item/<int:id_item_reversionar>/<int:id_item_actual>/',views.reversionar_item,name='reversionar_item'),
     path('relaciones/item/<int:pk>/', views.Editar_relaciones, name = 'editar_relaciones'),
+    path('relaciones/item/versiones/<int:pk>/<str:id>', views.Editar_relaciones, name = 'editar_relaciones_versiones'),
+    path('versiones/item/<int:pk>/', views.versiones_item, name = 'versiones_item'),
 
 ]
 if settings.DEBUG:

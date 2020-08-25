@@ -232,6 +232,7 @@ def itemCancelado(request,pk):
 
     try:
         x = Item.objects.get(id_item=pk)
+        fase = x.fase.id_Fase
     except:
         context = {
             "mensaje": "EL ITEM YA NO EXISTE ",
@@ -239,19 +240,6 @@ def itemCancelado(request,pk):
             "titulo_b1": "",
             "boton1": "",
             "titulo_b2": "Salir",
-            "boton2": "/proyectos/",
-        }
-        return render(request, 'Error.html', context)
-
-    if request.user.has_perm('crear_item',x.fase.id_Proyecto) and validar_rol_fase('crear_item',x.fase,request.user):
-        print('tiene el permiso de crear_item')
-    else:
-        context = {
-            "mensaje": "NO SE POSEE EL PERMISO: crear_item" + " SOLICITE EL PERMISO CORRESPONDINTE PARA REALIZAR LA ACCION",
-            "titulo": "SIN PERMISO",
-            "titulo_b1": "",
-            "boton1": "",
-            "titulo_b2": "SALIR",
             "boton2": "/proyectos/",
         }
         return render(request, 'Error.html', context)
@@ -270,7 +258,7 @@ def itemCancelado(request,pk):
     for i in instanceItem:
         i.delete()
 
-    return  redirect("gestion:menu")
+    return  redirect("gestion:detallesFase",fase)
 
 
 def primeraFase(id_proyecto,id_item,some_var):
@@ -284,10 +272,8 @@ def primeraFase(id_proyecto,id_item,some_var):
     :return: FALSO SI ENCUENTRA, TRUE SI NO
     """
     proyecto = Proyecto.objects.get(id_proyecto=id_proyecto)
-    fases = Fase.objects.filter(id_Proyecto=proyecto)
-    print("LA pRimera:",fases[0])
-    todosItems = Item.objects.filter(fase=fases[0],actual=True)  # todos los items de la primera fase, SE ARREGLA CONTADOR
-    print(todosItems)
+    fases = Fase.objects.filter(id_Proyecto=proyecto).order_by('id_Fase')
+    todosItems = Item.objects.filter(fase=fases[0],actual=True)  # todos los items de la primera fase
     for item in todosItems:
         if(busqueda(item,id_item,some_var)==True):#id_item al cual llegar y some var sus nuevas relaciones
             return False
@@ -308,15 +294,22 @@ def busqueda(item,id_item,some_var):
         relaciones = Relacion.objects.filter(inicio_item=item.id_item)
     except:
         relaciones = None
-    for relaciones in relaciones:
-        instanceItem= Item.objects.get(id_item=relaciones.fin_item)
-        print("CUALES SON:", relaciones.fin_item)
-        if(busqueda(instanceItem,id_item,some_var)==True):
-            return True
 
     for id in some_var:
         if(str(id)==str(item.id_item)):######preguntar si es de otra fase si no se puede desde la misma porque --->apunta al contrario
             return True
+
+    for relaciones in relaciones:
+
+        try:
+            instanceItem= Item.objects.get(id_item=relaciones.fin_item, actual=True)
+        except:
+            instanceItem =None
+        if instanceItem:
+            if(busqueda(instanceItem,id_item,some_var)==True):
+                return True
+
+
 
     return False
 

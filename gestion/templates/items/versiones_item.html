@@ -6,9 +6,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    {%block title%}
-        <title>Detalles de Fase</title>
-    {%endblock%}
 
 </head>
 <body>
@@ -22,16 +19,14 @@
         <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Detalles de Fase: <strong class="red" >{{ fases.nombre }}</strong></h6>
-                <h6 class="m-0 font-weight-bold text-primary"><a href="{% url 'gestion:crearItem' fases.id_Fase %}" class="btn btn-primary">✚ Item</a></h6>
-                <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:crearLB' fases.id_Fase %}" role="button"><i class="fas fa-object-group"></i> Linea Base</a></h6>
-                <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:detalles_Proyecto' proyectos.id_proyecto %}" role="button"><i class="fas fa-undo-alt"></i> Volver Atras</a></h6>
+                <h6 class="m-0 font-weight-bold text-primary">Versiones del ítem: <strong class="red" >{{ item.nombre }}</strong></h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-primary" href="{% url 'gestion:detallesFase' item.fase.id_Fase %}" role="button"><i class="fas fa-undo-alt"></i> Volver Atras</a></h6>
 
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                {% if not items %}
-                    <div class="alert alert-info">No hay items en la fase, crealos!</div>
+                {% if not versiones %}
+                    <div class="alert alert-info">No hay versiones</div>
                 {% else %}
                     <table
                             id="table"
@@ -51,42 +46,34 @@
                             data-show-pagination-switch="true"
                             data-id-field="id"
                     >
-                        CI: Cálculo de Impacto
                         <thead>
+                            <th data-field="Versión" data-sortable="true">Versión</th>
                             <th data-field="ITEMS" data-sortable="true">Item</th>
                             <th data-field="DESCRIPCION" data-sortable="true">Descripción</th>
                             <th data-field="COSTO" data-sortable="true">Costo</th>
-                            <th>Tazabilidad <i class="fas fa-code-branch"></i> /CI</th>
+
                             <th><center>Atributos</center></th>
                             <th>Relaciones</th>
                             <th>Estado</th>
-                            <th>Historial Item</th>
 
                         </thead>
                         <tbody>
-                            {%for items in items %}
+                            {%for items in versiones %}
                                 <tr>
+                                    <td><center class="red" ><strong>{{items.version}}</strong></center></td>
                                     <td><center>{{items.nombre}}</center></td>
                                     <td><center>{{items.descripcion}}</center></td>
                                     <td><center>{{items.costo}}</center></td>
 
-                                   <td>
-                                        <center>
-                                            <a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_relaciones' items.id_item %}" ><i class="fas fa-eye"></i> Ver </a>
-                                        </center>
-                                   </td>
+
                                    <td>
                                        <center>
-                                        <a type="button" class="btn btn-primary"  href="{% url 'gestion:listar_atributos' items.ti.id_ti    items.id_item  %}" ><i class="fas fa-edit"></i> Editar</a>
-                                        <a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.ti.id_ti    items.id_item items.id_item %}" ><i class="fas fa-eye"></i> Ver</a>
+                                        <a type="button" class="btn btn-secondary"  href="{% url 'gestion:listar_atributos_ver' items.ti_id    items.id_item items.id_item %}" ><i class="fas fa-eye"></i> Ver</a>
                                        </center>
                                    </td>
-                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:editar_relaciones' items.id_item  %}"><i class="fas fa-eye"></i> Ver - <i class="fas fa-edit"></i> Editar</a></td>
+                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:editar_relaciones_versiones' items.id_item items.nombre%}"><i class="fas fa-eye"></i> Ver - <i class="fas fa-edit"></i> Editar</a></td>
 
-                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:cambiarEstadoItem' items.id_item  %}"><i class="fas fa-circle-notch"></i> Cambiar</a></td>
-
-                                   <td><a type="button" class="btn btn-primary" href="{% url 'gestion:ver_versiones_item' items.id_item  %}"><i class="fas fa-eye"></i> Ver</a></td>
-
+                                    <td><center>{{items.estado}}</center></td>
 
                                 </tr>
 
