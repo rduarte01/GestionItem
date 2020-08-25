@@ -3017,7 +3017,29 @@ def Editar_relaciones(request, pk,id=None):
 
 
         messages.success(request,'Hay consistencia en la edición de relaciones')
-        return redirect('gestion:editar_relaciones',pk)
+        item.actual = False
+        item.save()
+        item_nuevo = Item(nombre= item.nombre, descripcion=item.descripcion,actual=True, estado= item.estado,ti=item.ti, costo=item.costo
+                          ,fase = item.fase)
+        item_nuevo.save()
+        for i in range(len(var)):
+            if var2[i] == str(2) or var2[i] == str(22):#yo soy fin
+                relacion_nueva = Relacion(inicio_item = int(var[i]), fin_item = item_nuevo.id_item )
+                relacion_nueva.save()
+            if var2[i] == str(1) or var2[i] == str(11):#yo soy inicio
+                relacion_nueva = Relacion(inicio_item=item_nuevo.id_item, fin_item= int(var[i]) )
+                relacion_nueva.save()
+
+
+        atributos = Atributo_Item.objects.filter(id_item= item)
+        for i in atributos:
+            atributo_nuevo = Atributo_Item(id_item=item_nuevo, idAtributoTI = i.idAtributoTI, valor = i.valor )
+            atributo_nuevo.save()
+
+        version_vieja = Versiones.objects.get(id_item = item.id_item)
+        version_nueva = Versiones(id_item = item_nuevo.id_item, id_Version = version_vieja.id_Version + 1 , id_padre = version_vieja.id_padre )
+        version_nueva.save()
+        return redirect('gestion:editar_relaciones',version_nueva.id_item)
 
     context={
     'inicio':inicio,
