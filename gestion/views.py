@@ -2967,30 +2967,27 @@ def Editar_relaciones(request, pk,id=None):
             if var2[i] == str(3) or var2[i] == str(22):#borra
                 list_delete.append(var[i])
             if item.fase.id_Fase > item_agregado.fase.id_Fase and var2[i] == str(1):
-                bandera = False
+                messages.error(request, 'Direccion de la relacion incorrecta')
+                return redirect('gestion:editar_relaciones', pk)
             if item.fase.id_Fase < item_agregado.fase.id_Fase and var2[i] == str(2):
-                bandera = False
+                messages.error(request, 'Direccion de la relacion incorrecta')
+                return redirect('gestion:editar_relaciones', pk)
 
-        if bandera:
-            if(fases[0].id_Fase != item.fase.id_Fase):
-                if primeraFase(item.fase.id_Proyecto.id_proyecto,1,list_fin)==True:
-                    messages.error(request,'No hay consistencia item editando no llega a la primera fase')
-                    return redirect('gestion:editar_relaciones',pk)
-                #item nuevo consistente
-                #falso
-            if list_delete != []:
-                for i in list_delete:
-                    lista = Relacion.objects.filter(fin_item = int(i)).exclude(inicio_item=item.id_item)
-                    for x in lista:
-                        item_lista = Item.objects.get(id_item = x)
-                        if item_lista.actual == False:
-                            lista.remove(x)
-                    if primeraFase(item.fase.id_Proyecto.id_proyecto, 1, lista) == True:
-                        messages.error(request, 'Item siguiente sin relacion con la fase 1')
-                        return redirect('gestion:editar_relaciones', pk)
-        else:
-            messages.error(request,'Direccion de la relacion incorrecta')
-            return redirect('gestion:editar_relaciones', pk)
+        if(fases[0].id_Fase != item.fase.id_Fase):
+            if primeraFase(item.fase.id_Proyecto.id_proyecto,1,list_fin)==True:
+                messages.error(request,'No hay consistencia item editando no llega a la primera fase')
+                return redirect('gestion:editar_relaciones',pk)
+
+        if list_delete != []:
+            for i in list_delete:
+                lista = Relacion.objects.filter(fin_item = int(i)).exclude(inicio_item=item.id_item)
+                for x in lista:
+                    item_lista = Item.objects.get(id_item = x)
+                    if item_lista.actual == False:
+                        lista.remove(x)
+                if primeraFase(item.fase.id_Proyecto.id_proyecto, 1, lista) == True:
+                    messages.error(request, 'Item siguiente sin relacion con la fase 1')
+                    return redirect('gestion:editar_relaciones', pk)
         # item nueva version
 
         #funcioon verificar ant, suc con relacion seleccionada
@@ -3009,6 +3006,12 @@ def Editar_relaciones(request, pk,id=None):
                         messages.error(request, 'Item en estado Creado no puede apuntar a item en Estado Finalizado')
                         return redirect('gestion:editar_relaciones', pk)
         """
+        #Verificar si el item editando tiene mas de una relacion con un mismo item
+        for i in range(len(var2)-1):
+            for j in range(i, len(var2)):
+                if var[i] == var[j]:
+                    messages.error(request, 'Hay items con mas de una relacion con el item editando' )
+                    return redirect('gestion:editar_relaciones', pk)
 
         #Ciclos
         if ciclos(item,var, var2):
@@ -3016,7 +3019,7 @@ def Editar_relaciones(request, pk,id=None):
             return redirect('gestion:editar_relaciones', pk)
 
 
-        messages.success(request,'Hay consistencia en la edición de relaciones')
+        #Item actualizado Correctamente, se da una nueva version al item
         item.actual = False
         item.save()
         item_nuevo = Item(nombre= item.nombre, descripcion=item.descripcion,actual=True, estado= item.estado,ti=item.ti, costo=item.costo
@@ -3039,6 +3042,7 @@ def Editar_relaciones(request, pk,id=None):
         version_vieja = Versiones.objects.get(id_item = item.id_item)
         version_nueva = Versiones(id_item = item_nuevo.id_item, id_Version = version_vieja.id_Version + 1 , id_padre = version_vieja.id_padre )
         version_nueva.save()
+        messages.success(request, 'Item actualizado satisfactoriamente')
         return redirect('gestion:editar_relaciones',version_nueva.id_item)
 
     context={
