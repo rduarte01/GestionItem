@@ -2996,6 +2996,11 @@ def Editar_relaciones(request, pk,id=None):
         #funcioon verificar ant, suc con relacion seleccionada
         # fase 1 | [2] -> | 3 verificar - listo
         #funcion ve verificacion de consistencia, todos relacion con F1
+        #Ciclos
+        if ciclos(item,var, var2):
+            messages.error(request, 'Hay ciclos')
+            return redirect('gestion:editar_relaciones', pk)
+
 
         messages.success(request,'Hay consistencia en la edición de relaciones')
         return redirect('gestion:editar_relaciones',pk)

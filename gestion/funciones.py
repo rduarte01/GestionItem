@@ -8,6 +8,8 @@ from django.shortcuts import  render,redirect
 from gestion.models import *
 from django.contrib.auth.models import User
 import dropbox
+
+
 TOKEN="PmyFRnnhTbYAAAAAAAAAATzqHtLq9zKgZw5oSajE3ClcBDVwOi7vSYxi5todZcsv"
 """TOKEN DE DROPBOX PARA REALIZAR LA CONEXION"""
 
@@ -315,25 +317,43 @@ def busqueda(item,id_item,some_var):
 
 
 ### se usara mas tarde en la parte de relaciones
-def ciclos(item,i,some_var):
+def ciclos(item,var, var2):
     """FUNCION PARA ENCONTRAR CICLOS DE FORMA RECURSIVA"""
-    try:
-        relaciones = Relacion.objects.filter(inicio_item=i.id_item)
-    except:
-        relaciones = None
+    item_de_la_Fase = Item.objects.filter(fase = item.fase, actual = True)# Todos los items de la fase del item que se esta editando
+    inicio = []
+    fin = []
+    for i in item_de_la_Fase:  # Recorrer todos los items filtrados
+        try:
+            relaciones = Relacion.objects.filter(inicio_item=i.id_item).exclude(inicio_item = item.id_item) #Todas las relaciones donde el item es inicio excepto el del item sea el item editando
+        except:
+            relaciones = None
 
-    if(relaciones != None):### si no tiene relaciones, compara
-        for relaciones in relaciones:
-            instanceItem= Item.objects.get(id_item=relaciones.fin_item)
-            if(ciclos(item,instanceItem,some_var)==True):
+        for j in relaciones: #Se recorre todas las relaciones de ese item
+            item_fin = Item.objects.get(id_item= j.fin_item) #Se obtiene el itemfin de esa relacion
+            if item_fin.actual == True and item_fin.fase == item.fase and item_fin != item.id_item: # si el item fin es Actual, distinto del item editando, y de las misma fase se agrega a la lista
+                inicio.append(j.inicio_item)
+                fin.append(j.fin_item)
+
+
+    for i in range(len(var2)): # Agregar a la lista las relaciones editadas nuevas
+        try:
+            item_agregado = Item.objects.get(id_item=var[i])
+        except:
+            item_agregado = item
+        if item_agregado.fase.id_Fase == item.fase.id_Fase and item_agregado != item:
+            if var2[i] == str(1):
+                inicio.append(item.id_item)
+                fin.append(item_agregado.id_item)
+
+            if var2[i] == str(2):
+                inicio.append(item_agregado.id_item)
+                fin.append(item.id_item)
+
+    for i in range(len(inicio)):
+        if inicio[i] == item.id_item:
+           # if verificar_ciclo(fin[i],inicio[i],inicio,fin): #Falta crear Funcion verificar ciclo
                 return True
-
-    if(item.id_item==i.id_item):
-        return True
-    else:
-        for x in some_var:
-            if(str(x)==str(i.id_item)):
-               return True
-
+        if fin[i] == item.id_item:
+           #if verificar_ciclo(inicio[i],fin[i],inicio,fin):
+                return True
     return False
-
