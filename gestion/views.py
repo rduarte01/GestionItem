@@ -973,12 +973,12 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
             print('el diccionario data es: ',diccionario_data)
             for data in diccionario_data:
                 if(data['AtributoTI'].tipo_dato=='File'): #si es de tipo File ,entonces armo la ruta para subir el archivo
-                   if(data['valor_atributo_item'] != 'Sin archivos adjuntos'): # si se recibe algo es porque el edito el archivo, por lo tanto creamos una nueva ruta en la nube
+                   if(data['valor_atributo_item'] != 'Sin archivos adjuntos' and data['valor_atributo_item'] != 'Archivo Elminado' ): # si se recibe algo es porque el edito el archivo, por lo tanto creamos una nueva ruta en la nube
                         ruta = str(TI.fase.id_Proyecto.id_proyecto) + "/" + str(item_editado.id_item)
                         doc = data['valor_atributo_item']
                         PATH = f'/{ruta}/{doc[0]}'
                         ''' proceso de subir archivo a dropbox'''
-                        #SubirArchivo(doc[0], PATH)
+                        SubirArchivo(doc[0], PATH)
                         print('-----',PATH)
                         ##se sube archivo a dropbox en segundo plano
                         t2 = Thread(
@@ -989,6 +989,11 @@ def listar_atributos(request,idAtributoTI,id_item,ver = None):
                         atributo_item_editado = Atributo_Item(idAtributoTI=data['AtributoTI'], id_item=item_editado,
                                                               valor=PATH)
                         atributo_item_editado.save()
+                   elif(data['valor_atributo_item'] == 'Archivo Elminado'):
+                       atributo_item_editado = Atributo_Item(idAtributoTI=data['AtributoTI'],
+                                                             id_item=item_editado,
+                                                             valor='Sin archivos adjuntos')
+                       atributo_item_editado.save()
                    else:
                         atributo_item_editado = Atributo_Item(idAtributoTI=data['AtributoTI'], id_item=item_editado,
                                                               valor=Atributo_Item.objects.get(id_item=itemActual,idAtributoTI=data['AtributoTI']).valor)
@@ -1053,7 +1058,7 @@ def reversionar_item(request,id_item_reversionar,id_item_actual):
 
     ''' aca tienen que ir toda las validaciones'''
     if(id_item_reversionar==id_item_actual):
-        messages.error(request,'Este Item es el Actual,no se puede reversionar')
+        messages.error(request,'Este Item es el Actual,no se puede revertir')
         return redirect('gestion:ver_versiones_item', id_item=id_item_actual)
 
 
@@ -1111,9 +1116,9 @@ def verificar_datos_form_atributo_item(request,idTI,atributo,reqForm,reqFile):
     itemID = Item.objects.last()
     ti = TipoItem.objects.get(id_ti=idTI)
     contador = 0
-    print('-------->',reqFile)
+    #print('-------->',reqFile)
     for c in atributo:
-        print(c.id_atributo)
+     #   print(c.id_atributo)
         contador = contador + 1
     # item viejo
     #item = Item.objects.get(id_item=id_item)  # nuevo item por la edicion
@@ -1124,7 +1129,7 @@ def verificar_datos_form_atributo_item(request,idTI,atributo,reqForm,reqFile):
         if (atributo.tipo_dato == 'Boolean'):
             x = reqForm.getlist(atributo.tipo_dato)
             tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=atributo.tipo_dato)
-            print(x)
+      #      print(x)
             for ini in range(len(x)):
                 if (x[ini] == '' and tiposAtributo[ini].es_obligatorio == True):
                     ok = True
@@ -1137,8 +1142,8 @@ def verificar_datos_form_atributo_item(request,idTI,atributo,reqForm,reqFile):
     list_tipo_datos = ["Decimal", "Boolean", "File", "String", "Date"]
     for ini in range(
             len(list_tipo_datos)):  # SI INGRESO VALORES CORRECTAMENTE LOS GUARDA RELACIONANDO CON EL ITEM CORRESPONDIENTE
-        print('este es el valor de ini' + str(ini))
-        print(list_tipo_datos[ini])
+       # print('este es el valor de ini' + str(ini))
+        #print(list_tipo_datos[ini])
         try:
             tiposAtributo = Atributo.objects.filter(ti_id=idTI, tipo_dato=list_tipo_datos[ini]) ##obtengo los atributos del TI
             datos_form = reqForm.getlist(list_tipo_datos[ini]) # obtengo del form todos esos atributos introducidos de acuerdo al tipo de dato
@@ -1149,14 +1154,23 @@ def verificar_datos_form_atributo_item(request,idTI,atributo,reqForm,reqFile):
             for valor in range(tiposAtributo.count()):
                 if (list_tipo_datos[ini] == "File"):
                     list2 = []
+                    cont=-1
+                    #etiqueta = reqForm.getlist('file-opcion')
                     for atr in tiposAtributo:
-                        print(atr.id_atributo)
+                        #print('nombre del atributo',atr.nombre,'obligatoriedad',atr.es_obligatorio)
+                        cont+=1
+         #               print(atr.id_atributo)
                         DOC = reqFile.getlist(str(atr.id_atributo))
-                        print('aca imprimo el id',atr.id_atributo)
-                        print('aca impirmo el archivo:',reqFile)
-                        print('aca imprimo doc:',DOC)
-
-                        if (DOC != list2):
+                        etiqueta = reqForm.getlist(str(atr.id_atributo)) #esta etiqueta nos dice si el usuario marco el boton de eliminar para este archivo
+                        #print('form',request.POST)
+                        #print('id es:',atr.id_atributo)
+                        #print('aca imprimo veo que marco: ',etiqueta)
+                        #print('nombre del atributo', atr.nombre, 'obligatoriedad', atr.es_obligatorio)
+                        #print('aca imprimo el id',atr.id_atributo)
+                        #print('aca impirmo el archivo:',reqFile)
+                        #print('aca imprimo el nombre',DOC[0].name)
+                        #print('aca imprimo doc:',DOC)
+                        if (DOC != list2): #hay archivo que el usuario selecciono
                             #print("no vacio", DOC[0])
                             #ruta = str(ti.fase.id_Proyecto.id_proyecto) + "/" + str(itemID.id_item)
                             #PATH = f'/{ruta}/{DOC[0]}'
@@ -1175,11 +1189,20 @@ def verificar_datos_form_atributo_item(request,idTI,atributo,reqForm,reqFile):
                             diccionario_data.append({'AtributoTI': atr,'valor_atributo_item':DOC})
                             #p = Atributo_Item(idAtributoTI=atr, id_item=item, valor=str(PATH))
                             #p.save()
-                        else:
-                            print("vacio", DOC)
+                        else: # el usuario no selcciono ningun archivo o marco el boton eliminar
+                            #print("vacio", DOC)
                             #p = Atributo_Item(idAtributoTI=atr, id_item=item, valor="Sin archivos adjuntos")
                             #p.save()
-                            diccionario_data.append({'AtributoTI': atr,'valor_atributo_item':"Sin archivos adjuntos"})
+                            #print('nombre del atributo archivo',atr.nombre)
+                            #print(etiqueta[cont])
+
+                            if (etiqueta== ['','eliminado'] and atr.es_obligatorio==False):
+                                diccionario_data.append({'AtributoTI': atr, 'valor_atributo_item': "Archivo Elminado"})
+                                #print('entro en el primer if')
+                                print('nombre del atributo archivo del primer if', atr.nombre)
+                            else :
+                                #print('nombre del atributo del archivo del segundo if',atr.nombre)
+                                diccionario_data.append({'AtributoTI': atr,'valor_atributo_item':"Sin archivos adjuntos"})
                     break
                 else:
                     #p = Atributo_Item(idAtributoTI=tiposAtributo[valor], id_item=item, valor=str(x[valor]))

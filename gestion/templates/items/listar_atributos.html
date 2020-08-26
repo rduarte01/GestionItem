@@ -76,6 +76,7 @@
                                 <td>TIPO DE DATO</td>
                                 <td>ES OBLIGATORIO?</td>
                                 <td>VALORES</td>
+                                <td></td>
                             </thead>
                             <tbody>
                             
@@ -93,22 +94,24 @@
                                                             <td>
 
                                                                 <a class="btn btn-circle btn-primary" href="{% url 'gestion:DescargarArchivo' atributos.id_atributo%}"  ><i class="fas fa-download"></i>   </a>
-
                                                     {% if not  ver %}
-                                                                <input placeholder="Ingrese el valor"  type="File" name="{{atributos.idAtributoTI.id_atributo}}" >
-                                                    <a type="button" href="#"  class="btn btn-danger" ><i class="fas fa-trash-alt"></i></a>
+                                                                <input placeholder="Ingrese el valor" class="input-file"  type="File" name="{{atributos.idAtributoTI.id_atributo}}" valor="{{atributos.idAtributoTI.id_atributo}}" >
+                                                                <input type="text" name="" obligatorio="si" value="no-eliminado" id="{{atributos.idAtributoTI.id_atributo}}" hidden>
+                                                                <a type="button" href="#"  class="btn btn-danger delete-file" ><i class="fas fa-trash-alt "></i></a>
                                                                 {% endif %}
                                                             </td>
-
+                                                            <td><p class="valor-archivo" value="{{ atributos.valor }}"></p></td>
                                                             {%endif%}
                                             {%if atributo.tipo_dato == 'File' and atributo.es_obligatorio == false %}
-                                                <a>
-                                                    <a class="btn btn-secondary" href="{% url 'gestion:DescargarArchivo' atributos.id_atributo%}" role="button" >DESCARGAR</a>
+                                                <td>
+                                                    <a class="btn btn-circle btn-primary" href="{% url 'gestion:DescargarArchivo' atributos.id_atributo%}" role="button" ><i class="fas fa-download"></i>  </a>
                                                     {% if not  ver %}
-                                                    <input placeholder="Ingrese el valor"  type="File" name="{{atributos.idAtributoTI.id_atributo}}" >
-                                                    <a type="button" href="#"  class="btn btn-danger" ><i class="fas fa-trash-alt"></i></a>
+                                                    <input placeholder="Ingrese el valor"  class="input-file" type="File" name="{{atributos.idAtributoTI.id_atributo}}" eliminado="false" >
+                                                    <input type="text"  name="{{atributos.idAtributoTI.id_atributo}}" obligatorio="no" value="no-eliminado" id="{{atributos.idAtributoTI.id_atributo}} " hidden>
+                                                    <a type="button" href="#"  class="btn btn-danger delete-file" ><i class="fas fa-trash-alt "></i></a>
                                                     {% endif %}
                                                 </td>
+                                                 <td><p class="valor-archivo" value="{{ atributos.valor }}"></p></td>
 
                                             {%endif%}
                                             {%if atributo.tipo_dato == 'Decimal' and atributo.es_obligatorio == true %}
@@ -156,6 +159,61 @@
                 </div>
               </div>
     <script>
+
+        var boton_eliminar=document.getElementsByClassName('delete-file')
+        var boton_input_files=document.getElementsByClassName('input-file')
+
+        function eliminar_archivo(boton){
+            input_file=boton.previousElementSibling
+            input_file_name=boton.previousElementSibling.getAttribute('name')
+            console.log(boton.previousElementSibling.getAttribute('value'))
+            console.log(boton.previousElementSibling.setAttribute('value','eliminado'))
+            console.log(boton.previousElementSibling.getAttribute('value'))
+            if(input_file.getAttribute('obligatorio')=="si"){
+                alert('Atributo obligatorio, no puede eliminars')
+            }else{
+                input_file.parentElement.nextElementSibling.firstElementChild.textContent="Sin Archivo"
+                console.dir(input_file.previousElementSibling)
+                input_file.previousElementSibling.value=null
+            }
+        }
+        window.addEventListener('load',function () {
+            console.log('si cargo')
+            let archivos_clases=document.getElementsByClassName('valor-archivo')
+            for (let i = 0; i < archivos_clases.length; i++) {
+                console.dir(archivos_clases[i].getAttribute('value')); //second console output
+
+                if(archivos_clases[i].getAttribute('value')=='Sin archivos adjuntos'){
+                    archivos_clases[i].textContent= 'Sin Archivo'
+                }
+                else{
+                    archivos_clases[i].textContent=archivos_clases[i].getAttribute('value').split('/')[3]
+                }
+            }
+        })
+        //eventos sobre el boton rojo al eliminar
+        for (let i = 0; i < boton_eliminar.length; i++) {
+            //console.dir(boton_eliminar[i]); //second console output
+            boton_eliminar[i].addEventListener('click', function(){
+                eliminar_archivo(boton_eliminar[i])
+            })
+        }
+        //enventos sobre el boton input file
+        for (let i = 0; i < boton_input_files.length; i++) {
+            //console.dir(boton_eliminar[i]); //second console output
+            boton_input_files[i].addEventListener('change', function() {
+                //console.dir(boton_input_files[i].files[0])
+                boton_input_files[i].parentElement.nextElementSibling.firstElementChild.textContent=boton_input_files[i].files[0].name
+            })
+            boton_input_files[i].addEventListener('click', function() {
+                //console.dir(boton_input_files[i].files[0])
+                boton_input_files[i].parentElement.nextElementSibling.firstElementChild.textContent='Sin archivo'
+            })
+        }
+
+
+
+
   // Call the dataTables jQuery plugin
   $(document).ready(function() {
     $('.table').DataTable({
